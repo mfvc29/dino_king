@@ -261,11 +261,21 @@ class Player {
             let nextX = this.x + targetVx;
             let nextY = this.y + targetVy;
 
-            if (!tileMap.isSolid(nextX, this.y)) {
+            const canMoveX = !tileMap.isSolid(nextX, this.y);
+            const canMoveY = !tileMap.isSolid(this.x, nextY);
+
+            if (canMoveX) {
                 this.x = nextX;
                 moved = true;
             }
-            if (!tileMap.isSolid(this.x, nextY)) {
+            if (canMoveY) {
+                this.y = nextY;
+                moved = true;
+            }
+
+            // Sistema de rescate anti-atascos: si el jugador quedó solapado en un obstáculo, permitirle salir
+            if (!moved && tileMap.isSolid(this.x, this.y)) {
+                this.x = nextX;
                 this.y = nextY;
                 moved = true;
             }

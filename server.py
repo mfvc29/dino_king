@@ -38,12 +38,70 @@ class GameHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             self.send_response(200)
             self.send_header('Content-Type', 'application/json')
             self.send_header('Content-Length', str(len(data)))
-            self.send_header('Access-Control-Allow-Origin', '*')
             self.end_headers()
             self.wfile.write(data)
             return
 
+        # Endpoint para listar dinámicamente tilesets en assets/maps/
+        elif self.path == '/api/tilesets':
+            maps_dir = os.path.join(DIRECTORY, 'assets', 'maps')
+            pngs = sorted([os.path.basename(f) for f in glob.glob(os.path.join(maps_dir, '*.png'))])
+            data = json.dumps(pngs).encode('utf-8')
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json')
+            self.send_header('Content-Length', str(len(data)))
+            self.end_headers()
+            self.wfile.write(data)
+            return
+
+        # Endpoint para obtener el mapa guardado world_map.json
+        elif self.path == '/api/map':
+            map_path = os.path.join(DIRECTORY, 'assets', 'maps', 'world_map.json')
+            if os.path.exists(map_path):
+                with open(map_path, 'rb') as f:
+                    data = f.read()
+                self.send_response(200)
+                self.send_header('Content-Type', 'application/json')
+                self.send_header('Content-Length', str(len(data)))
+                self.end_headers()
+                self.wfile.write(data)
+                return
+            else:
+                self.send_error(404, "Mapa no encontrado")
+                return
+
         super().do_GET()
+
+    def do_POST(self):
+        # Endpoint para guardar mapa desde el Editor de Mapas estilo Advance Map
+        if self.path == '/api/map':
+            try:
+                content_length = int(self.headers.get('Content-Length', 0))
+                body = self.rfile.read(content_length)
+                map_json = json.loads(body.decode('utf-8'))
+
+                map_path = os.path.join(DIRECTORY, 'assets', 'maps', 'world_map.json')
+                with open(map_path, 'w', encoding='utf-8') as f:
+                    json.dump(map_json, f)
+
+                resp = json.dumps({"status": "ok", "message": "¡Mapa guardado exitosamente en world_map.json!"}).encode('utf-8')
+                self.send_response(200)
+                self.send_header('Content-Type', 'application/json')
+                self.send_header('Content-Length', str(len(resp)))
+                self.end_headers()
+                self.wfile.write(resp)
+                print("  🗺️ ¡Mapa guardado y sincronizado desde el Editor de Mapas!")
+                return
+            except Exception as e:
+                err_resp = json.dumps({"status": "error", "message": str(e)}).encode('utf-8')
+                self.send_response(500)
+                self.send_header('Content-Type', 'application/json')
+                self.send_header('Content-Length', str(len(err_resp)))
+                self.end_headers()
+                self.wfile.write(err_resp)
+                return
+
+        super().do_POST()
 
     def end_headers(self):
         self.send_header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')

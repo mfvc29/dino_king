@@ -96,6 +96,65 @@ class TileMap {
         this.tallGrassGrid = [];
 
         this.generateRealMap();
+        this.loadSavedMap();
+    }
+
+    async loadSavedMap() {
+        if (typeof window === 'undefined' || typeof fetch === 'undefined') return;
+        try {
+            const res = await fetch('/api/map');
+            if (res.ok) {
+                const data = await res.json();
+                this.applyMapData(data);
+                console.log('🗺️ ¡Mapa personalizado cargado desde world_map.json!');
+            }
+        } catch (e) {
+            console.warn('Usando mapa procedimental base:', e);
+        }
+    }
+
+    applyMapData(data) {
+        if (!data || !data.ground) return;
+        this.cols = data.cols || this.cols;
+        this.rows = data.rows || this.rows;
+        this.width = this.cols * this.tileSize;
+        this.height = this.rows * this.tileSize;
+
+        for (let r = 0; r < this.rows; r++) {
+            if (!this.groundGrid[r]) this.groundGrid[r] = [];
+            if (!this.decorGrid[r]) this.decorGrid[r] = [];
+            if (!this.solidGrid[r]) this.solidGrid[r] = [];
+            if (!this.tallGrassGrid[r]) this.tallGrassGrid[r] = [];
+
+            for (let c = 0; c < this.cols; c++) {
+                const g = data.ground[r] ? data.ground[r][c] : null;
+                if (g && Array.isArray(g)) {
+                    const isWater = (g[0] === 'water' || g[0] === 'water+.png');
+                    this.groundGrid[r][c] = {
+                        tileset: isWater ? 'water' : 'grass',
+                        r: g[1],
+                        c: g[2],
+                        isWater: isWater
+                    };
+                }
+
+                const d = data.decor[r] ? data.decor[r][c] : null;
+                if (d && Array.isArray(d)) {
+                    const isWater = (d[0] === 'water' || d[0] === 'water+.png');
+                    this.decorGrid[r][c] = {
+                        tileset: isWater ? 'water' : 'grass',
+                        r: d[1],
+                        c: d[2],
+                        isWater: isWater
+                    };
+                } else {
+                    this.decorGrid[r][c] = null;
+                }
+
+                this.solidGrid[r][c] = (data.solid && data.solid[r]) ? (data.solid[r][c] === 1) : false;
+                this.tallGrassGrid[r][c] = (data.tallGrass && data.tallGrass[r]) ? (data.tallGrass[r][c] === 1) : false;
+            }
+        }
     }
 
     generateRealMap() {
@@ -166,22 +225,12 @@ class TileMap {
         // ============================================================
         // 3. ZONA CENTRAL: PUEBLO RAÍZ (Plaza de los Entrenadores)
         // ============================================================
-        // Gran Plaza adoquinada central
+        // Gran Plaza adoquinada central completamente abierta, limpia y transitable
         for (let r = 40; r <= 48; r++) {
             for (let c = 54; c <= 66; c++) {
                 this.groundGrid[r][c] = TILES.PATH_CENTER;
-            }
-        }
-        // Fuente / Monumento central de piedra en la plaza
-        for (let r = 43; r <= 45; r++) {
-            for (let c = 59; c <= 61; c++) {
-                if (r === 44 && c === 60) {
-                    this.groundGrid[r][c] = TILES.WATER_DEEP_ANIM;
-                    this.decorGrid[r][c] = TILES.WATER_LOTUS_PINK; // Loto rosa flotante en la fuente
-                } else {
-                    this.decorGrid[r][c] = TILES.ROCK_SMALL;
-                    this.solidGrid[r][c] = true;
-                }
+                this.decorGrid[r][c] = null;
+                this.solidGrid[r][c] = false;
             }
         }
 
@@ -488,7 +537,7 @@ class TileMap {
         };
     }
 
-    isSolid(x, y, w = 20, h = 14) {
+    isSolid(x, y, w = 14, h = 10) {
         const checkPoints = [
             { x: x - w / 2, y: y - h / 2 },
             { x: x + w / 2, y: y - h / 2 },

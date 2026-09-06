@@ -1,0 +1,584 @@
+/* ============================================================ */
+/* DINO KING - ADVANCE MAP STUDIO CSS                          */
+/* Diseño retro arcade & herramienta de desarrollo GBA         */
+/* ============================================================ */
+
+:root {
+    --bg-dark: #0b0f19;
+    --bg-panel: #131826;
+    --bg-panel-hover: #1c2336;
+    --border-color: #2b354f;
+    --border-highlight: #ffbe0b;
+    --cyan: #00e5ff;
+    --gold: #ffbe0b;
+    --green: #2ec4b6;
+    --red: #e63946;
+    --text: #e2e8f0;
+    --text-muted: #8892b0;
+    --font-mono: 'Courier New', Courier, monospace;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    overflow: hidden;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    user-select: none;
+}
+
+/* ============================================================ */
+/* BARRA SUPERIOR (HEADER)                                      */
+/* ============================================================ */
+.editor-header {
+    background: var(--bg-panel);
+    border-bottom: 2px solid var(--border-color);
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 58px;
+    gap: 16px;
+    z-index: 20;
+    flex-shrink: 0;
+}
+
+.editor-branding {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.editor-icon {
+    font-size: 1.8rem;
+}
+
+.editor-branding h1 {
+    font-size: 1.05rem;
+    color: #fff;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.badge {
+    background: linear-gradient(135deg, #f72585, #7209b7);
+    color: #fff;
+    font-size: 0.65rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-weight: bold;
+}
+
+.subtitle {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+}
+
+/* Selector de Capas */
+.layer-control-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #0d121f;
+    padding: 4px 10px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.group-label {
+    font-size: 0.68rem;
+    font-weight: bold;
+    color: var(--gold);
+    font-family: var(--font-mono);
+}
+
+.layer-tabs {
+    display: flex;
+    gap: 4px;
+}
+
+.layer-tab-btn {
+    background: #171e30;
+    border: 1px solid #28334f;
+    color: #94a3b8;
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.15s;
+}
+
+.layer-tab-btn:hover {
+    background: #232c45;
+    color: #fff;
+}
+
+.layer-tab-btn.active {
+    background: #202b48;
+    border-color: var(--cyan);
+    color: #fff;
+    box-shadow: 0 0 10px rgba(0, 229, 255, 0.25);
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.ground-dot { background: #55a630; }
+.decor-dot { background: #ffbe0b; }
+.collision-dot { background: #e63946; }
+
+/* Grupo de Herramientas */
+.tools-group {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: #0d121f;
+    padding: 4px 8px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.tool-btn {
+    background: #171e30;
+    border: 1px solid #28334f;
+    color: #cbd5e1;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    transition: all 0.12s;
+}
+
+.tool-btn:hover {
+    background: #232c45;
+    border-color: var(--gold);
+    transform: translateY(-1px);
+}
+
+.tool-btn.active {
+    background: #2b3658;
+    border-color: var(--gold);
+    box-shadow: 0 0 8px rgba(255, 190, 11, 0.35);
+}
+
+.tool-divider {
+    width: 1px;
+    height: 20px;
+    background: var(--border-color);
+    margin: 0 4px;
+}
+
+/* Acciones de Archivo */
+.file-actions-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.action-btn {
+    background: #1e263d;
+    border: 1px solid #334166;
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.15s;
+}
+
+.action-btn:hover {
+    background: #283454;
+    border-color: #4a5c8c;
+    transform: translateY(-1px);
+}
+
+.btn-save {
+    background: linear-gradient(135deg, #2b78e4, #00d4ff);
+    border-color: #00d4ff;
+    color: #0b0f19;
+    font-weight: 800;
+}
+
+.btn-save:hover {
+    background: linear-gradient(135deg, #3b88f4, #2be4ff);
+    box-shadow: 0 0 12px rgba(0, 212, 255, 0.4);
+}
+
+.btn-play {
+    background: linear-gradient(135deg, #10b981, #059669);
+    border-color: #10b981;
+    color: #fff;
+}
+
+.btn-play:hover {
+    background: linear-gradient(135deg, #059669, #047857);
+}
+
+/* ============================================================ */
+/* CUERPO PRINCIPAL                                             */
+/* ============================================================ */
+.editor-main {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+}
+
+/* BARRA LATERAL (PALETA) */
+.editor-sidebar {
+    width: 320px;
+    background: var(--bg-panel);
+    border-right: 2px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 14px;
+    overflow-y: auto;
+    flex-shrink: 0;
+    z-index: 10;
+}
+
+.sidebar-section {
+    background: #0d121f;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 12px;
+}
+
+.sidebar-header h3 {
+    font-size: 0.82rem;
+    color: var(--gold);
+    font-family: var(--font-mono);
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+}
+
+.retro-select {
+    width: 100%;
+    background: #192135;
+    border: 1px solid #334268;
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    outline: none;
+    cursor: pointer;
+    margin-top: 4px;
+}
+
+.tileset-palette-container {
+    width: 100%;
+    max-height: 240px;
+    overflow: auto;
+    background: #060911;
+    border: 1px solid #202a45;
+    border-radius: 6px;
+    margin-top: 10px;
+    position: relative;
+    cursor: crosshair;
+}
+
+#paletteCanvas {
+    display: block;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
+
+.palette-hint {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    margin-top: 6px;
+    line-height: 1.3;
+}
+
+/* Permisos de Paso estilo Advance Map */
+.perm-desc {
+    font-size: 0.74rem;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+}
+
+.perm-types-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.perm-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #171f33;
+    border: 1px solid #283556;
+    padding: 8px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.12s;
+}
+
+.perm-card:hover {
+    border-color: var(--gold);
+    background: #202b45;
+}
+
+.perm-card.active {
+    border-color: var(--gold);
+    background: #283457;
+    box-shadow: 0 0 8px rgba(255, 190, 11, 0.25);
+}
+
+.perm-box {
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-weight: bold;
+    font-size: 1rem;
+    color: #fff;
+}
+
+.solid-box { background: rgba(230, 57, 70, 0.85); border: 2px solid #e63946; }
+.walkable-box { background: rgba(46, 196, 182, 0.4); border: 2px solid #2ec4b6; }
+.grass-box { background: rgba(85, 166, 48, 0.85); border: 2px solid #55a630; }
+
+.perm-card div strong {
+    display: block;
+    font-size: 0.82rem;
+}
+
+.perm-card div span {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+}
+
+.btn-secondary {
+    background: #212c47;
+    border: 1px solid #36466f;
+    color: #00e5ff;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.btn-secondary:hover {
+    background: #2c3a5e;
+    border-color: #00e5ff;
+}
+
+/* Previsualización del Pincel */
+.brush-preview-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+#brushPreviewCanvas {
+    background: #060911;
+    border: 1px solid #283457;
+    border-radius: 6px;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
+
+.brush-info {
+    font-size: 0.76rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+}
+
+.brush-info strong {
+    color: #fff;
+}
+
+/* Minimapa / Navegador Rápido */
+.minimap-wrapper {
+    background: #000;
+    border: 1px solid #283556;
+    border-radius: 4px;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+#editorMinimap {
+    display: block;
+    width: 100%;
+    height: auto;
+    image-rendering: pixelated;
+}
+
+.minimap-hint {
+    display: block;
+    font-size: 0.68rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+/* ============================================================ */
+/* LIENZO PRINCIPAL (VIEWPORT)                                  */
+/* ============================================================ */
+.editor-viewport {
+    flex: 1;
+    background: #070a12;
+    overflow: auto;
+    position: relative;
+    cursor: default;
+    background-image: 
+        radial-gradient(#1e263d 1px, transparent 1px);
+    background-size: 24px 24px;
+}
+
+.editor-viewport.panning {
+    cursor: grab;
+}
+
+.canvas-zoom-wrapper {
+    position: absolute;
+    top: 50px;
+    left: 50px;
+    transform-origin: 0 0;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+    border: 2px solid #283556;
+    background: #111827;
+}
+
+#mapCanvas {
+    display: block;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
+
+/* Controles Flotantes de Zoom */
+.floating-view-controls {
+    position: absolute;
+    bottom: 24px;
+    right: 24px;
+    background: rgba(19, 24, 38, 0.92);
+    border: 1px solid var(--border-color);
+    backdrop-filter: blur(8px);
+    border-radius: 8px;
+    padding: 6px 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 15;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.6);
+}
+
+.floating-btn {
+    background: #1d253b;
+    border: 1px solid #334269;
+    color: #fff;
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.95rem;
+    transition: all 0.12s;
+}
+
+.floating-btn:hover {
+    background: #2b385a;
+    border-color: var(--cyan);
+}
+
+.zoom-level-text {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    font-weight: bold;
+    color: var(--gold);
+    min-width: 44px;
+    text-align: center;
+}
+
+/* ============================================================ */
+/* BARRA DE ESTADO INFERIOR                                     */
+/* ============================================================ */
+.editor-statusbar {
+    height: 32px;
+    background: #0d121f;
+    border-top: 1px solid var(--border-color);
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    flex-shrink: 0;
+    z-index: 20;
+}
+
+.status-left, .status-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.status-item strong {
+    color: var(--cyan);
+}
+
+.status-toast {
+    color: #2ec4b6;
+    font-weight: bold;
+    transition: opacity 0.3s;
+}
+
+/* ============================================================ */
+/* SCROLLBARS RETRO                                             */
+/* ============================================================ */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #0a0e1a;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #242f4c;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #394a78;
+}

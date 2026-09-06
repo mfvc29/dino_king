@@ -604,8 +604,20 @@ class Game {
         } else if (tab === 'map') {
             const currentZone = this.tileMap.getZoneAt(this.localPlayer.x, this.localPlayer.y);
             panel.innerHTML = `
-                <h3 style="color:#ffbe0b; margin-bottom:6px;">🗺️ Región de la Ruta 1 (6 Grandes Zonas)</h3>
-                <p style="color:#8892b0; margin-bottom:12px; font-size:0.82rem;">Zona actual: <strong style="color:#00e5ff;">${currentZone ? currentZone.name : 'Ruta 1'}</strong></p>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+                    <div>
+                        <h3 style="color:#ffbe0b; margin-bottom:4px;">🗺️ Región de la Ruta 1 (6 Grandes Zonas)</h3>
+                        <p style="color:#8892b0; font-size:0.82rem;">Zona actual: <strong style="color:#00e5ff;">${currentZone ? currentZone.name : 'Ruta 1'}</strong></p>
+                    </div>
+                    <div style="display:flex; gap:8px;">
+                        <button id="menuReloadMapBtn" class="btn-editor-toggle" style="background:#252e48; border-color:#3c486e;" title="Recargar los últimos cambios guardados del mapa">
+                            🔄 Sincronizar Mapa
+                        </button>
+                        <a href="/editor.html" target="_blank" class="btn-editor-toggle" title="Abrir herramienta Advance Map Studio">
+                            🛠️ Creador de Mapas
+                        </a>
+                    </div>
+                </div>
                 <div class="menu-zones-list">
                     <div class="menu-zone-card">
                         <div><strong>🏡 Pueblo Raíz (Centro)</strong><br><span style="color:#94a3b8; font-size:0.78rem;">Plaza central, fuente de agua, jardines florales y encrucijada principal.</span></div>
@@ -633,6 +645,18 @@ class Game {
                     </div>
                 </div>
             `;
+            const reloadBtn = document.getElementById('menuReloadMapBtn');
+            if (reloadBtn) {
+                reloadBtn.addEventListener('click', async () => {
+                    reloadBtn.textContent = '⏳ Cargando...';
+                    await this.tileMap.loadSavedMap();
+                    this.notifyStatus('🗺️ ¡Mapa sincronizado con los cambios guardados!');
+                    reloadBtn.textContent = '✓ ¡Sincronizado!';
+                    setTimeout(() => {
+                        reloadBtn.textContent = '🔄 Sincronizar Mapa';
+                    }, 2000);
+                });
+            }
         } else if (tab === 'trainer') {
             panel.innerHTML = `
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">

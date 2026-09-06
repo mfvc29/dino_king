@@ -984,4 +984,27 @@ kbd {
     opacity: 0.85;
 }
 
+.btn-editor-toggle {
+    background: linear-gradient(135deg, #7209b7, #f72585);
+    color: #fff;
+    border: 1px solid #f72585;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.15s;
+    cursor: pointer;
+}
+
+.btn-editor-toggle:hover {
+    background: linear-gradient(135deg, #8b14db, #ff4d94);
+    box-shadow: 0 0 10px rgba(247, 37, 133, 0.4);
+    transform: translateY(-1px);
+}
+
+
 
