@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dino King - Multijugador & Mapa Real GRASS+</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- ============================================================ -->
+    <!-- PANTALLA 1: CREACIÓN / SELECCIÓN DE PERSONAJE                -->
+    <!-- ============================================================ -->
+    <div id="characterSelectScreen" class="overlay-screen">
+        <div class="character-card-modal">
+            <header class="modal-header">
+                <div class="title-container">
+                    <h1>🦖 DINO KING</h1>
+                    <span class="badge">MULTIJUGADOR</span>
+                </div>
+                <p class="subtitle">Elige a tu personaje y únete al mundo compartido de la Ruta 1</p>
+                <button id="fullscreenToggleBtn" class="btn-fullscreen-header" title="Alternar Pantalla Completa">⛶ Pantalla Completa</button>
+            </header>
+
+            <div class="creator-layout">
+                <!-- Columna Izquierda: Personajes disponibles -->
+                <div class="creator-column archetypes-col">
+                    <h3>1. Selecciona tu Personaje (Sprites LPC):</h3>
+                    <div id="archetypeCards" class="archetypes-grid">
+                        <!-- Cargado automáticamente desde assets/characters/ por characterSelect.js -->
+                    </div>
+
+                    <div class="custom-sprite-box">
+                        <label for="customSpriteInput">O carga otro Sprite LPC (PNG):</label>
+                        <input type="file" id="customSpriteInput" accept="image/png" class="file-input">
+                        <span id="customSpriteLabel" class="custom-note">Compatible con Universal LPC Generator (64x64)</span>
+                    </div>
+                </div>
+
+                <!-- Columna Derecha: Vista Previa y Nombre -->
+                <div class="creator-column preview-col">
+                    <h3>2. Vista Previa en Vivo:</h3>
+                    <div class="preview-box">
+                        <canvas id="previewCanvas" width="160" height="180"></canvas>
+                        <span class="preview-badge">Animación LPC (Caminar 360°)</span>
+                    </div>
+
+                    <div class="name-input-group">
+                        <label for="trainerNameInput">Nombre de tu Entrenador:</label>
+                        <input type="text" id="trainerNameInput" value="Martín" maxlength="16" class="text-input" placeholder="Tu nombre...">
+                    </div>
+
+                    <button id="startAdventureBtn" class="btn-start-adventure">
+                        🎮 ¡ENTRAR AL MUNDO!
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- PANTALLA 2: MUNDO / OVERWORLD MULTIJUGADOR                   -->
+    <!-- ============================================================ -->
+    <header class="game-top-header">
+        <div class="title-container">
+            <h1>🦖 Dino King</h1>
+            <span class="badge">MUNDO REAL GRASS+</span>
+        </div>
+        <div class="header-right-controls">
+            <span id="netStatus" class="net-badge">🟡 Conectando...</span>
+            <button id="inGameFullscreenBtn" class="btn-fullscreen-toggle" title="Pantalla Completa">⛶ Pantalla Completa</button>
+        </div>
+    </header>
+
+    <div class="game-wrapper" id="gameContainer">
+        <!-- Barra de Información de Exploración y Stats Stardew Valley -->
+        <div class="exploration-hud">
+            <div class="hud-item">
+                <span class="hud-label">Jugador:</span>
+                <span class="hud-value highlight" id="hudPlayerName">Martín</span>
+            </div>
+            <div class="hud-item hud-stats-group">
+                <span class="hud-badge-level" id="hudLevelBadge">Nv. 1</span>
+                <div class="hud-bars-container">
+                    <div class="hud-mini-bar-wrap" title="Puntos de Salud (HP)">
+                        <span class="hud-mini-label">HP</span>
+                        <div class="hud-mini-bar-bg"><div class="hud-mini-bar-fill hp" id="hudHpFill" style="width: 100%;"></div></div>
+                        <span class="hud-mini-num" id="hudHpText">120/120</span>
+                    </div>
+                    <div class="hud-mini-bar-wrap" title="Energía (Stamina)">
+                        <span class="hud-mini-label">EN</span>
+                        <div class="hud-mini-bar-bg"><div class="hud-mini-bar-fill energy" id="hudEnergyFill" style="width: 100%;"></div></div>
+                        <span class="hud-mini-num" id="hudEnergyText">240/240</span>
+                    </div>
+                    <div class="hud-mini-bar-wrap" title="Experiencia (EXP)">
+                        <span class="hud-mini-label">EXP</span>
+                        <div class="hud-mini-bar-bg"><div class="hud-mini-bar-fill exp" id="hudExpFill" style="width: 0%;"></div></div>
+                        <span class="hud-mini-num" id="hudExpText">0/100</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hud-item">
+                <span class="hud-label">Zona:</span>
+                <span class="hud-value" id="currentZone">📍 Pueblo Raíz - Plaza Central</span>
+            </div>
+            <div class="hud-item">
+                <span class="hud-label">Coords:</span>
+                <span class="hud-value" id="playerCoords">X: 60, Y: 46</span>
+            </div>
+        </div>
+
+        <!-- Canvas Principal del Mundo (Cámara y Radar integrados) -->
+        <canvas id="gameCanvas" width="960" height="540"></canvas>
+        <div id="gameStatus" class="status-msg"></div>
+
+        <!-- Menú de Aventura (Tecla ENTER) -->
+        <div id="gameMenuOverlay" class="game-menu-overlay" style="display: none;">
+            <div class="retro-menu-window">
+                <div class="menu-header">
+                    <div class="menu-title-box">
+                        <span class="menu-icon">⚡</span>
+                        <h2>MENÚ DE AVENTURA & PROGRESIÓN</h2>
+                    </div>
+                    <span class="menu-hint">Presiona <kbd>ENTER</kbd> o <kbd>ESC</kbd> para volver</span>
+                </div>
+
+                <div class="menu-body">
+                    <!-- Barra de pestañas vertical -->
+                    <div class="menu-tabs">
+                        <button class="menu-tab-btn active" data-tab="stats">
+                            <span class="tab-icon">⚡</span>
+                            <span class="tab-label">Clase & Stats</span>
+                        </button>
+                        <button class="menu-tab-btn" data-tab="missions">
+                            <span class="tab-icon">📜</span>
+                            <span class="tab-label">Misiones</span>
+                        </button>
+                        <button class="menu-tab-btn" data-tab="bag">
+                            <span class="tab-icon">🎒</span>
+                            <span class="tab-label">Mochila</span>
+                        </button>
+                        <button class="menu-tab-btn" data-tab="map">
+                            <span class="tab-icon">🗺️</span>
+                            <span class="tab-label">Mapa Zonas</span>
+                        </button>
+                        <button class="menu-tab-btn" data-tab="trainer">
+                            <span class="tab-icon">👤</span>
+                            <span class="tab-label">Entrenador & Sprites</span>
+                        </button>
+                        <button class="menu-tab-btn" data-tab="settings">
+                            <span class="tab-icon">⚙️</span>
+                            <span class="tab-label">Opciones</span>
+                        </button>
+                        <button class="menu-tab-btn tab-close" id="menuCloseBtn">
+                            <span class="tab-icon">✖</span>
+                            <span class="tab-label">Cerrar Menú</span>
+                        </button>
+                    </div>
+
+                    <!-- Panel de Contenido de la pestaña activa -->
+                    <div class="menu-panel" id="menuPanel">
+                        <!-- Renderizado dinámicamente -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts del Juego -->
+    <script src="js/camera.js"></script>
+    <script src="js/tilemap.js"></script>
+    <script src="js/minimap.js"></script>
+    <script src="js/lpcRenderer.js"></script>
+    <script src="js/characterSelect.js"></script>
+    <script src="js/input.js"></script>
+    <script src="js/player.js"></script>
+    <script src="js/game.js"></script>
+</body>
+</html>

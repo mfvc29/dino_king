@@ -1,0 +1,987 @@
+:root {
+    --bg-dark: #0b0d14;
+    --card-bg: #141824;
+    --border-color: #2b334d;
+    --p1-color: #00d4ff;
+    --p2-color: #ff3864;
+    --gold: #ffbe0b;
+    --accent-green: #2ec4b6;
+    --text-main: #f0f4f8;
+    --text-muted: #8892b0;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    padding: 16px;
+}
+
+/* Encabezado Superior */
+.game-top-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 960px;
+    max-width: 100%;
+    margin-bottom: 12px;
+}
+
+.title-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.title-container h1 {
+    font-size: 2.1rem;
+    font-weight: 900;
+    letter-spacing: 2px;
+    background: linear-gradient(135deg, #ffbe0b, #fb5607, #ff006e);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-transform: uppercase;
+}
+
+.badge {
+    background: #ff5400;
+    color: #fff;
+    font-size: 0.75rem;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.btn-fullscreen-toggle, .btn-fullscreen-header {
+    background: #1e2436;
+    border: 1px solid #3d496e;
+    color: var(--gold);
+    padding: 7px 14px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-fullscreen-toggle:hover, .btn-fullscreen-header:hover {
+    background: #2a334d;
+    border-color: var(--gold);
+    transform: scale(1.03);
+}
+
+/* ============================================================ */
+/* OVERLAY: PANTALLA DE CREACIÓN Y SELECCIÓN DE PERSONAJE       */
+/* ============================================================ */
+.overlay-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(7, 9, 15, 0.95);
+    backdrop-filter: blur(8px);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.character-card-modal {
+    background: var(--card-bg);
+    border: 2px solid #3c486e;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.8), 0 0 24px rgba(255, 190, 11, 0.2);
+    border-radius: 12px;
+    width: 880px;
+    max-width: 95vw;
+    max-height: 92vh;
+    overflow-y: auto;
+    padding: 24px 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 14px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.modal-header .subtitle {
+    font-size: 0.92rem;
+    color: var(--text-muted);
+}
+
+.creator-layout {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 24px;
+}
+
+@media (max-width: 768px) {
+    .creator-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+.creator-column h3 {
+    font-size: 1.05rem;
+    margin-bottom: 12px;
+    color: var(--gold);
+    letter-spacing: 0.5px;
+}
+
+/* Grid de Tarjetas de Arquetipos */
+.archetypes-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.archetype-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: #1c2234;
+    border: 2px solid #2d3652;
+    border-radius: 8px;
+    padding: 10px 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.archetype-card:hover {
+    background: #252d45;
+    border-color: #4a5982;
+    transform: translateX(4px);
+}
+
+.archetype-card.selected {
+    border-color: var(--gold);
+    background: #252b40;
+    box-shadow: 0 0 12px rgba(255, 190, 11, 0.35);
+}
+
+.card-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+    flex-shrink: 0;
+}
+
+.card-info h4 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 2px;
+}
+
+.card-info p {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.3;
+}
+
+.custom-sprite-box {
+    margin-top: 14px;
+    padding: 12px;
+    background: #111420;
+    border: 1px dashed #3f4d75;
+    border-radius: 8px;
+}
+
+.custom-sprite-box label {
+    display: block;
+    font-size: 0.82rem;
+    color: var(--p1-color);
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+.custom-note {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+/* Columna de Vista Previa */
+.preview-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #111420;
+    border: 1px solid #2a334d;
+    border-radius: 10px;
+    padding: 20px;
+    justify-content: space-between;
+}
+
+.preview-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+canvas#previewCanvas {
+    background: radial-gradient(circle, #242c44 20%, #151928 80%);
+    border: 2px solid #3e4c73;
+    border-radius: 8px;
+    box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.8);
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
+
+.preview-badge {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+
+.name-input-group {
+    width: 100%;
+    margin-top: 14px;
+}
+
+.name-input-group label {
+    display: block;
+    font-size: 0.85rem;
+    color: #cbd5e1;
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+.text-input {
+    width: 100%;
+    background: #1c2234;
+    border: 2px solid #3c486e;
+    color: #fff;
+    padding: 10px 14px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 6px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.text-input:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 8px rgba(255, 190, 11, 0.3);
+}
+
+.btn-start-adventure {
+    width: 100%;
+    margin-top: 16px;
+    background: linear-gradient(135deg, #ffbe0b, #fb5607);
+    color: #0b0d14;
+    border: none;
+    border-radius: 8px;
+    padding: 14px 20px;
+    font-size: 1.05rem;
+    font-weight: 900;
+    letter-spacing: 1px;
+    cursor: pointer;
+    text-transform: uppercase;
+    box-shadow: 0 6px 18px rgba(251, 86, 7, 0.4);
+    transition: transform 0.1s, filter 0.2s;
+}
+
+.btn-start-adventure:hover {
+    filter: brightness(1.15);
+    transform: scale(1.02);
+}
+
+.btn-start-adventure:active {
+    transform: scale(0.98);
+}
+
+/* ============================================================ */
+/* CONTENEDOR DEL MUNDO / OVERWORLD                             */
+/* ============================================================ */
+.game-wrapper {
+    position: relative;
+    background: #000;
+    border: 3px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.7), 0 0 20px rgba(255, 190, 11, 0.12);
+    overflow: hidden;
+    width: 960px;
+    max-width: 100%;
+}
+
+/* Soporte de Pantalla Completa nativa */
+:fullscreen .game-wrapper,
+:-webkit-full-screen .game-wrapper {
+    width: 100vw !important;
+    height: 100vh !important;
+    max-width: 100vw !important;
+    border: none;
+    border-radius: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+:fullscreen canvas#gameCanvas,
+:-webkit-full-screen canvas#gameCanvas {
+    max-height: calc(100vh - 45px);
+    width: auto !important;
+    height: auto !important;
+    aspect-ratio: 16 / 9;
+}
+
+/* Barra de Exploración Superior */
+.exploration-hud {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(15, 17, 26, 0.95);
+    border-bottom: 2px solid var(--border-color);
+    padding: 10px 18px;
+    font-size: 0.9rem;
+    width: 100%;
+}
+
+.hud-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.hud-label {
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.hud-value {
+    color: #ffffff;
+    font-weight: 700;
+    font-family: monospace;
+}
+
+.hud-value.highlight {
+    color: var(--p1-color);
+}
+
+#currentZone {
+    color: var(--gold);
+}
+
+/* ============================================================ */
+/* BARRAS DE STATS ESTILO STARDEW VALLEY EN EL HUD              */
+/* ============================================================ */
+.hud-stats-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.hud-badge-level {
+    background: linear-gradient(135deg, #ffbe0b, #fb5607);
+    color: #0b0d14;
+    font-weight: 900;
+    font-size: 0.76rem;
+    padding: 2px 7px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+    box-shadow: 0 0 8px rgba(255, 190, 11, 0.4);
+}
+
+.hud-bars-container {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.hud-mini-bar-wrap {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: #0f131f;
+    border: 1px solid #28334f;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.hud-mini-label {
+    font-size: 0.68rem;
+    font-weight: bold;
+    color: #94a3b8;
+}
+
+.hud-mini-bar-bg {
+    width: 48px;
+    height: 7px;
+    background: #080a12;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.hud-mini-bar-fill {
+    height: 100%;
+    transition: width 0.25s ease-out;
+}
+
+.hud-mini-bar-fill.hp {
+    background: linear-gradient(90deg, #e63946, #ff4d6d);
+}
+
+.hud-mini-bar-fill.energy {
+    background: linear-gradient(90deg, #2ec4b6, #70e000);
+}
+
+.hud-mini-bar-fill.exp {
+    background: linear-gradient(90deg, #00b4d8, #0077b6);
+}
+
+.hud-mini-num {
+    font-size: 0.68rem;
+    font-family: monospace;
+    color: #e2e8f0;
+    font-weight: 600;
+}
+
+/* Canvas nítido de píxeles */
+canvas#gameCanvas {
+    display: block;
+    width: 100%;
+    height: auto;
+    background-color: #1a4714;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
+
+/* Dashboard Inferior de Controles */
+.controls-dashboard {
+    width: 960px;
+    max-width: 100%;
+    margin-top: 16px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+}
+
+.dash-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 16px;
+}
+
+.dash-card h3 {
+    font-size: 1rem;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dash-card h3.p1-title {
+    color: var(--p1-color);
+}
+
+.dash-card h3.p2-title {
+    color: var(--p2-color);
+}
+
+.dash-card h3.opts-title {
+    color: var(--gold);
+}
+
+.key-list {
+    list-style: none;
+    font-size: 0.88rem;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.key-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+kbd {
+    background: #252c42;
+    border: 1px solid #3c486e;
+    border-radius: 4px;
+    padding: 2px 7px;
+    font-size: 0.8rem;
+    font-family: monospace;
+    color: #fff;
+    box-shadow: 0 2px 0 #181d2e;
+}
+
+.file-input {
+    width: 100%;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+}
+
+.file-input::file-selector-button {
+    background: #2b334d;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.78rem;
+    margin-right: 8px;
+    transition: background 0.2s;
+}
+
+.file-input::file-selector-button:hover {
+    background: #3b4668;
+}
+
+/* Opciones y Select */
+.options-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.88rem;
+}
+
+.custom-select {
+    background: #252c42;
+    border: 1px solid #3c486e;
+    border-radius: 4px;
+    color: #fff;
+    padding: 5px 8px;
+    font-size: 0.85rem;
+    outline: none;
+}
+
+.status-msg {
+    position: absolute;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(15, 23, 42, 0.9);
+    border: 1px solid #00d4ff;
+    color: #00d4ff;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    pointer-events: none;
+    z-index: 10;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
+}
+
+.status-msg:empty {
+    display: none;
+}
+
+.generator-guide {
+    width: 960px;
+    max-width: 100%;
+    margin-top: 16px;
+    background: #131722;
+    border-left: 4px solid var(--gold);
+    border-radius: 6px;
+    padding: 14px 18px;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: #c0c7d6;
+}
+
+.generator-guide a {
+    color: #00d4ff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.generator-guide a:hover {
+    text-decoration: underline;
+}
+
+/* Controles de cabecera derecha */
+.header-right-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.net-badge {
+    background: #141a29;
+    border: 1px solid #2a3552;
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    font-weight: bold;
+    color: #ffbe0b;
+    letter-spacing: 0.5px;
+}
+
+/* ============================================================ */
+/* MENÚ DE AVENTURA EN EL JUEGO (TECLA ENTER)                   */
+/* ============================================================ */
+.game-menu-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(8, 11, 20, 0.88);
+    backdrop-filter: blur(6px);
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    animation: menuFadeIn 0.18s ease-out;
+}
+
+@keyframes menuFadeIn {
+    from { opacity: 0; transform: scale(0.98); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.retro-menu-window {
+    background: #141824;
+    border: 2px solid #3c486e;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.85), 0 0 24px rgba(0, 212, 255, 0.2);
+    border-radius: 12px;
+    width: 860px;
+    max-width: 95%;
+    max-height: 90%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 18px;
+    background: #0d101a;
+    border-bottom: 2px solid #2b334d;
+}
+
+.menu-title-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.menu-title-box h2 {
+    font-size: 1.15rem;
+    font-weight: 900;
+    letter-spacing: 1px;
+    color: var(--gold);
+    margin: 0;
+}
+
+.menu-hint {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+}
+
+.menu-body {
+    display: flex;
+    flex: 1;
+    min-height: 380px;
+    max-height: 440px;
+    overflow: hidden;
+}
+
+.menu-tabs {
+    width: 210px;
+    background: #10141f;
+    border-right: 1px solid #2b334d;
+    display: flex;
+    flex-direction: column;
+    padding: 12px 8px;
+    gap: 6px;
+}
+
+.menu-tab-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: transparent;
+    border: 1px solid transparent;
+    color: #94a3b8;
+    padding: 9px 12px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.15s;
+}
+
+.menu-tab-btn:hover {
+    background: #1c2236;
+    color: #fff;
+}
+
+.menu-tab-btn.active {
+    background: #252e48;
+    border-color: #00d4ff;
+    color: #00e5ff;
+    box-shadow: 0 0 10px rgba(0, 229, 255, 0.25);
+}
+
+.menu-tab-btn.tab-close {
+    margin-top: auto;
+    border-top: 1px solid #2b334d;
+    color: #ff5470;
+}
+
+.menu-tab-btn.tab-close:hover {
+    background: #381522;
+    color: #ff3366;
+}
+
+.menu-panel {
+    flex: 1;
+    padding: 18px 22px;
+    overflow-y: auto;
+    color: var(--text-main);
+    font-size: 0.88rem;
+}
+
+/* Fichas y tarjetas dentro del menú */
+.menu-dino-card {
+    background: #192033;
+    border: 1px solid #3c486e;
+    border-radius: 8px;
+    padding: 16px;
+    display: flex;
+    gap: 18px;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.menu-dino-avatar {
+    font-size: 3rem;
+    background: #26324f;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    border: 1px solid #4a5c88;
+}
+
+.menu-dino-info {
+    flex: 1;
+}
+
+.menu-dino-info h3 {
+    color: #00e5ff;
+    font-size: 1.15rem;
+    margin-bottom: 4px;
+}
+
+.menu-hp-bar-bg {
+    background: #0b0f19;
+    height: 10px;
+    border-radius: 5px;
+    overflow: hidden;
+    margin: 6px 0;
+    border: 1px solid #334155;
+}
+
+.menu-hp-bar-fill {
+    background: linear-gradient(90deg, #2ec4b6, #70e000);
+    height: 100%;
+    width: 100%;
+}
+
+.menu-items-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px;
+}
+
+.menu-item-slot {
+    background: #181d2c;
+    border: 1px solid #2b354d;
+    padding: 12px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.15s;
+}
+
+.menu-item-slot:hover {
+    border-color: #ffbe0b;
+    background: #20273b;
+}
+
+.menu-item-icon {
+    font-size: 1.6rem;
+}
+
+.menu-zones-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.menu-zone-card {
+    background: #181e2e;
+    border-left: 4px solid #00d4ff;
+    padding: 10px 14px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.menu-sprites-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 10px;
+    max-height: 280px;
+    overflow-y: auto;
+    padding: 4px;
+}
+
+.menu-sprite-item {
+    background: #192033;
+    border: 1px solid #323d5b;
+    border-radius: 6px;
+    padding: 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-size: 0.76rem;
+}
+
+.menu-sprite-item:hover {
+    border-color: #00e5ff;
+    background: #222c47;
+    transform: scale(1.02);
+}
+
+.menu-sprite-item.active {
+    border-color: #00e5ff;
+    background: #1e3a5f;
+    box-shadow: 0 0 8px rgba(0, 229, 255, 0.4);
+}
+
+/* Clases Stardew Valley en Menú */
+.menu-class-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.menu-class-card {
+    background: #192033;
+    border: 1px solid #323e5e;
+    border-radius: 8px;
+    padding: 10px 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.menu-class-card:hover {
+    border-color: #ffbe0b;
+    background: #202b45;
+}
+
+.menu-class-card.active {
+    border-color: #ffbe0b;
+    background: #282f48;
+    box-shadow: 0 0 10px rgba(255, 190, 11, 0.25);
+}
+
+/* Habilidades Stardew Valley */
+.menu-skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.menu-skill-card {
+    background: #161c2c;
+    border: 1px solid #28334a;
+    border-radius: 6px;
+    padding: 10px;
+}
+
+.menu-skill-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.84rem;
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+.menu-skill-bar-bg {
+    background: #090c14;
+    height: 6px;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.menu-skill-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #ffbe0b, #2ec4b6);
+}
+
+/* Misiones */
+.menu-missions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.menu-mission-card {
+    background: #181f30;
+    border: 1px solid #2c3854;
+    border-left: 4px solid #2ec4b6;
+    padding: 12px 14px;
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.menu-mission-card.done {
+    border-left-color: #ffbe0b;
+    opacity: 0.85;
+}
+
+
