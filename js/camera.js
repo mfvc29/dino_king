@@ -29,10 +29,12 @@ class Camera {
         this.x += (desiredX - this.x) * this.smooth;
         this.y += (desiredY - this.y) * this.smooth;
 
-        // Limitar dentro de los bordes del mapa
+        this.clamp();
+    }
+
+    clamp() {
         const maxCamX = Math.max(0, this.worldWidth - this.viewportWidth / this.zoom);
         const maxCamY = Math.max(0, this.worldHeight - this.viewportHeight / this.zoom);
-
         this.x = Math.max(0, Math.min(this.x, maxCamX));
         this.y = Math.max(0, Math.min(this.y, maxCamY));
     }

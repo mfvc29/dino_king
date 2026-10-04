@@ -90,36 +90,125 @@ class TileMap {
         this.waterTilesetImage.src = 'assets/maps/Water+.png';
 
         // Capas del mapa
+        this.currentMapId = 'world_map';
+        this.warps = [];
+        this.npcs = [];            // Personajes de eventos (datos crudos del JSON)
+        this.npcBlockers = new Set(); // Losas "col,row" ocupadas por NPCs
+        this.layers = null;
         this.groundGrid = [];
         this.decorGrid = [];
         this.solidGrid = [];
         this.tallGrassGrid = [];
 
+        // Cache de imágenes de tilesets dinámicos
+        this.tilesetsCache = {};
+
         this.generateRealMap();
         this.loadSavedMap();
     }
 
+    getTilesetImage(rawName) {
+        if (!rawName) return this.tilesetImage;
+        let name = rawName.toLowerCase();
+        if (name.endsWith('.png')) name = name.slice(0, -4);
+        if (name === 'grass+' || name === 'grass') return this.tilesetImage;
+        if (name === 'water+' || name === 'water') return this.waterTilesetImage;
+
+        if (this.tilesetsCache[name]) return this.tilesetsCache[name];
+
+        const img = new Image();
+        img.src = `assets/maps/${name}.png`;
+        this.tilesetsCache[name] = img;
+        return img;
+    }
+
     async loadSavedMap() {
-        if (typeof window === 'undefined' || typeof fetch === 'undefined') return;
+        await this.loadMapById('world_map');
+    }
+
+    async loadMapById(mapId) {
+        if (typeof window === 'undefined' || typeof fetch === 'undefined') return false;
         try {
-            const res = await fetch('/api/map');
+            const cleanId = (mapId || 'world_map').replace('.json', '');
+            const token = this.loadToken = (this.loadToken || 0) + 1;
+            const res = await fetch(`/api/map?id=${encodeURIComponent(cleanId)}`);
             if (res.ok) {
                 const data = await res.json();
+                if (token !== this.loadToken) return false; // llegó una carga más reciente
+                this.currentMapId = cleanId;
                 this.applyMapData(data);
-                console.log('🗺️ ¡Mapa personalizado cargado desde world_map.json!');
+                console.log(`🗺️ ¡Mapa "${cleanId}" cargado correctamente!`);
+                if (typeof this.onMapLoaded === 'function') {
+                    this.onMapLoaded(this);
+                }
+                return true;
             }
         } catch (e) {
             console.warn('Usando mapa procedimental base:', e);
         }
+        return false;
+    }
+
+    getWarpAt(col, row) {
+        if (!this.warps || this.warps.length === 0) return null;
+        return this.warps.find(w => w.x === col && w.y === row) || null;
     }
 
     applyMapData(data) {
-        if (!data || !data.ground) return;
+        if (!data) return;
         this.cols = data.cols || this.cols;
         this.rows = data.rows || this.rows;
         this.width = this.cols * this.tileSize;
         this.height = this.rows * this.tileSize;
+        if (data.sourceTileSize) {
+            this.sourceTileSize = data.sourceTileSize;
+        }
+        if (data.tilesetTileSizes) {
+            this.tilesetTileSizes = Object.assign({}, this.tilesetTileSizes || {});
+            for (const [k, v] of Object.entries(data.tilesetTileSizes)) {
+                this.tilesetTileSizes[k] = v;
+                const kLower = k.toLowerCase();
+                this.tilesetTileSizes[kLower] = v;
+                const clean = kLower.endsWith('.png') ? kLower.slice(0, -4) : kLower;
+                this.tilesetTileSizes[clean] = v;
+            }
+        }
+        if (data.spawn && typeof data.spawn.x === 'number' && typeof data.spawn.y === 'number') {
+            this.spawn = { x: data.spawn.x, y: data.spawn.y };
+        }
+        this.mapName = data.name || this.currentMapId;
 
+        // Cargar capas dinámicas si existen (formato multicapa v2)
+        if (data.layers && Array.isArray(data.layers) && data.layers.length > 0) {
+            this.layers = data.layers.map(lData => {
+                const grid = [];
+                for (let r = 0; r < this.rows; r++) {
+                    grid[r] = [];
+                    for (let c = 0; c < this.cols; c++) {
+                        const cell = lData.grid && lData.grid[r] ? lData.grid[r][c] : null;
+                        if (cell && Array.isArray(cell)) {
+                            const isWater = (cell[0] === 'water' || cell[0] === 'water+.png');
+                            grid[r][c] = {
+                                tileset: cell[0],
+                                r: cell[1],
+                                c: cell[2],
+                                srcSize: cell[3],
+                                isWater: isWater
+                            };
+                        } else {
+                            grid[r][c] = null;
+                        }
+                    }
+                }
+                return {
+                    name: lData.name,
+                    visible: lData.visible !== false,
+                    grid: grid
+                };
+            });
+        }
+
+        // Rellenar también groundGrid, decorGrid, solidGrid y tallGrassGrid
         for (let r = 0; r < this.rows; r++) {
             if (!this.groundGrid[r]) this.groundGrid[r] = [];
             if (!this.decorGrid[r]) this.decorGrid[r] = [];
@@ -127,34 +216,44 @@ class TileMap {
             if (!this.tallGrassGrid[r]) this.tallGrassGrid[r] = [];
 
             for (let c = 0; c < this.cols; c++) {
-                const g = data.ground[r] ? data.ground[r][c] : null;
-                if (g && Array.isArray(g)) {
-                    const isWater = (g[0] === 'water' || g[0] === 'water+.png');
-                    this.groundGrid[r][c] = {
-                        tileset: isWater ? 'water' : 'grass',
-                        r: g[1],
-                        c: g[2],
-                        isWater: isWater
-                    };
+                if (data.ground && data.ground[r]) {
+                    const g = data.ground[r][c];
+                    if (g && Array.isArray(g)) {
+                        const isWater = (g[0] === 'water' || g[0] === 'water+.png');
+                        this.groundGrid[r][c] = {
+                            tileset: isWater ? 'water' : 'grass',
+                            r: g[1],
+                            c: g[2],
+                            isWater: isWater
+                        };
+                    }
                 }
 
-                const d = data.decor[r] ? data.decor[r][c] : null;
-                if (d && Array.isArray(d)) {
-                    const isWater = (d[0] === 'water' || d[0] === 'water+.png');
-                    this.decorGrid[r][c] = {
-                        tileset: isWater ? 'water' : 'grass',
-                        r: d[1],
-                        c: d[2],
-                        isWater: isWater
-                    };
-                } else {
-                    this.decorGrid[r][c] = null;
+                if (data.decor && data.decor[r]) {
+                    const d = data.decor[r][c];
+                    if (d && Array.isArray(d)) {
+                        const isWater = (d[0] === 'water' || d[0] === 'water+.png');
+                        this.decorGrid[r][c] = {
+                            tileset: isWater ? 'water' : 'grass',
+                            r: d[1],
+                            c: d[2],
+                            isWater: isWater
+                        };
+                    } else {
+                        this.decorGrid[r][c] = null;
+                    }
                 }
 
                 this.solidGrid[r][c] = (data.solid && data.solid[r]) ? (data.solid[r][c] === 1) : false;
                 this.tallGrassGrid[r][c] = (data.tallGrass && data.tallGrass[r]) ? (data.tallGrass[r][c] === 1) : false;
             }
         }
+
+        // Warps
+        this.warps = Array.isArray(data.warps) ? data.warps : [];
+
+        // Personajes de eventos (entrenadores / NPCs)
+        this.npcs = Array.isArray(data.npcs) ? data.npcs : [];
     }
 
     generateRealMap() {
@@ -477,66 +576,6 @@ class TileMap {
         }
     }
 
-    getZoneAt(x, y) {
-        const col = Math.floor(x / this.tileSize);
-        const row = Math.floor(y / this.tileSize);
-
-        if (col >= 44 && col <= 76 && row >= 36 && row <= 54) {
-            return {
-                id: 'town',
-                name: '🏡 Pueblo Raíz - Plaza Central',
-                banner: '🏡 PUEBLO RAÍZ'
-            };
-        }
-        if (col <= 44 && row <= 36) {
-            return {
-                id: 'lake',
-                name: '🌊 Lago Espejo - Bahía Jurásica',
-                banner: '🌊 LAGO ESPEJO'
-            };
-        }
-        if (col >= 76 && row <= 36) {
-            return {
-                id: 'jungle',
-                name: '🌿 Selva Jurásica - Bosque Sombrío',
-                banner: '🌿 SELVA JURÁSICA'
-            };
-        }
-        if (col <= 44 && row >= 54) {
-            return {
-                id: 'sanctuary',
-                name: '🦕 Santuario Jurásico - Corrales Dino',
-                banner: '🦕 SANTUARIO JURÁSICO'
-            };
-        }
-        if (col >= 76 && row >= 54) {
-            return {
-                id: 'canyon',
-                name: '🪨 Cañón Prehistórico - Cantera Rocosa',
-                banner: '🪨 CAÑÓN PREHISTÓRICO'
-            };
-        }
-        if (row < 36) {
-            return {
-                id: 'route_north',
-                name: '🌺 Ruta 1 Norte - Pradera Floral',
-                banner: '🌺 RUTA 1 NORTE'
-            };
-        }
-        if (row > 54) {
-            return {
-                id: 'route_south',
-                name: '🌾 Ruta 1 Sur - Sendero del Valle',
-                banner: '🌾 RUTA 1 SUR'
-            };
-        }
-        return {
-            id: 'route_main',
-            name: '📍 Ruta 1 - Cruce Central',
-            banner: '📍 RUTA 1'
-        };
-    }
-
     isSolid(x, y, w = 14, h = 10) {
         const checkPoints = [
             { x: x - w / 2, y: y - h / 2 },
@@ -553,6 +592,9 @@ class TileMap {
                 return true;
             }
             if (this.solidGrid[row][col]) {
+                return true;
+            }
+            if (this.npcBlockers.has(`${col},${row}`)) {
                 return true;
             }
         }
@@ -577,6 +619,27 @@ class TileMap {
         const sz = this.tileSize;
         const srcSz = this.sourceTileSize;
 
+        // Si existen capas dinámicas (formato multicapa), dibujarlas en orden secuencial
+        if (this.layers && this.layers.length > 0) {
+            for (let i = 0; i < this.layers.length; i++) {
+                const layer = this.layers[i];
+                if (layer.visible === false) continue;
+
+                for (let r = startRow; r <= endRow; r++) {
+                    for (let c = startCol; c <= endCol; c++) {
+                        const cell = layer.grid[r][c];
+                        if (!cell) continue;
+
+                        const px = c * sz;
+                        const py = r * sz;
+                        this.drawTileCell(ctx, cell, px, py, sz, srcSz, r, c);
+                    }
+                }
+            }
+            return;
+        }
+
+        // Modo Fallback: suelo y decoración
         for (let r = startRow; r <= endRow; r++) {
             for (let c = startCol; c <= endCol; c++) {
                 const px = c * sz;
@@ -585,50 +648,56 @@ class TileMap {
                 const ground = this.groundGrid[r][c];
                 const decor = this.decorGrid[r][c];
 
-                // 1. Dibujar tile de suelo
                 if (ground) {
-                    if (ground.tileset === 'water' && this.waterTilesetLoaded && this.waterTilesetImage) {
-                        let gr = ground.r;
-                        let gc = ground.c;
-                        // Efecto suave de rizo / oleaje de agua
-                        if (gr === 3 && gc === 3) {
-                            const wave = (Math.floor(Date.now() / 450) + r + c) % 2;
-                            if (wave === 1) gr = 4;
-                        }
-                        ctx.drawImage(
-                            this.waterTilesetImage,
-                            gc * srcSz, gr * srcSz, srcSz, srcSz,
-                            px, py, sz, sz
-                        );
-                    } else if (this.tilesetLoaded && this.tilesetImage) {
-                        ctx.drawImage(
-                            this.tilesetImage,
-                            ground.c * srcSz, ground.r * srcSz, srcSz, srcSz,
-                            px, py, sz, sz
-                        );
-                    } else {
-                        // Render procedural si la imagen está cargando
-                        ctx.fillStyle = ground && ground.isWater ? '#1d6fca' : '#4fa22d';
-                        ctx.fillRect(px, py, sz, sz);
-                    }
+                    this.drawTileCell(ctx, ground, px, py, sz, srcSz, r, c);
                 }
 
-                // 2. Dibujar decoración / obstáculo / nenúfares / lotos
                 if (decor) {
-                    if (decor.tileset === 'water' && this.waterTilesetLoaded && this.waterTilesetImage) {
-                        ctx.drawImage(
-                            this.waterTilesetImage,
-                            decor.c * srcSz, decor.r * srcSz, srcSz, srcSz,
-                            px, py, sz, sz
-                        );
-                    } else if (this.tilesetLoaded && this.tilesetImage) {
-                        ctx.drawImage(
-                            this.tilesetImage,
-                            decor.c * srcSz, decor.r * srcSz, srcSz, srcSz,
-                            px, py, sz, sz
-                        );
-                    }
+                    this.drawTileCell(ctx, decor, px, py, sz, srcSz, r, c);
                 }
+            }
+        }
+    }
+
+    drawTileCell(ctx, cell, px, py, sz, srcSz, r, c) {
+        let gr = cell.r;
+        let gc = cell.c;
+        const isWater = (cell.tileset === 'water' || cell.isWater);
+
+        let cellSrcSz = cell.srcSize;
+        if (!cellSrcSz) {
+            if (this.tilesetTileSizes) {
+                let tsKey = (cell.tileset || '').toLowerCase();
+                let tsKeyClean = tsKey.endsWith('.png') ? tsKey.slice(0, -4) : tsKey;
+                cellSrcSz = this.tilesetTileSizes[cell.tileset] || this.tilesetTileSizes[tsKey] || this.tilesetTileSizes[tsKeyClean];
+            }
+            if (!cellSrcSz) {
+                cellSrcSz = srcSz || this.sourceTileSize || 16;
+            }
+        }
+
+        if (isWater && this.waterTilesetLoaded && this.waterTilesetImage) {
+            // Efecto suave de rizo / oleaje de agua
+            if (gr === 3 && gc === 3) {
+                const wave = (Math.floor(Date.now() / 450) + r + c) % 2;
+                if (wave === 1) gr = 4;
+            }
+            ctx.drawImage(
+                this.waterTilesetImage,
+                gc * cellSrcSz, gr * cellSrcSz, cellSrcSz, cellSrcSz,
+                px, py, sz, sz
+            );
+        } else {
+            const img = this.getTilesetImage(cell.tileset);
+            if (img && img.complete && img.naturalWidth !== 0) {
+                ctx.drawImage(
+                    img,
+                    gc * cellSrcSz, gr * cellSrcSz, cellSrcSz, cellSrcSz,
+                    px, py, sz, sz
+                );
+            } else {
+                ctx.fillStyle = isWater ? '#1d6fca' : '#4fa22d';
+                ctx.fillRect(px, py, sz, sz);
             }
         }
     }

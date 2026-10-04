@@ -1,0 +1,1431 @@
+{
+  "elements": {
+    "fuego": {
+      "name": "Fuego",
+      "icon": "🔥",
+      "color": "#ef4444",
+      "statCaps": [
+        7,
+        8,
+        6,
+        8,
+        6
+      ]
+    },
+    "agua": {
+      "name": "Agua",
+      "icon": "💧",
+      "color": "#0ea5e9",
+      "statCaps": [
+        7,
+        6,
+        7,
+        6,
+        7
+      ]
+    },
+    "rayo": {
+      "name": "Rayo",
+      "icon": "⚡",
+      "color": "#eab308",
+      "statCaps": [
+        8,
+        6,
+        9,
+        6,
+        9
+      ]
+    },
+    "tierra": {
+      "name": "Tierra",
+      "icon": "⛰️",
+      "color": "#8b5cf6",
+      "statCaps": [
+        7,
+        8,
+        6,
+        8,
+        6
+      ]
+    },
+    "planta": {
+      "name": "Planta",
+      "icon": "🌿",
+      "color": "#22c55e",
+      "statCaps": [
+        8,
+        7,
+        6,
+        7,
+        6
+      ]
+    },
+    "viento": {
+      "name": "Viento",
+      "icon": "🌪️",
+      "color": "#93c5fd",
+      "statCaps": [
+        6,
+        7,
+        7,
+        7,
+        7
+      ]
+    },
+    "especial": {
+      "name": "Especial",
+      "icon": "✨",
+      "color": "#f472b6",
+      "statCaps": [
+        7,
+        7,
+        7,
+        7,
+        7
+      ]
+    },
+    "normal": {
+      "name": "Normal",
+      "icon": "🦴",
+      "color": "#94a3b8",
+      "statCaps": [
+        5,
+        5,
+        5,
+        5,
+        5
+      ]
+    }
+  },
+  "dinos": [
+    {
+      "id": "carcharodontosaurus",
+      "name": "Carcharodontosaurus",
+      "image": "fuego/carcharodontosaurus_dinosaur_king.jpg",
+      "element": "fuego",
+      "card": "cards/fuego/carcharodontosaurus_dinosaur_king.jpg",
+      "stats": [
+        7,
+        4,
+        5,
+        7,
+        6
+      ]
+    },
+    {
+      "id": "daspletosaurus",
+      "name": "Daspletosaurus",
+      "image": "fuego/daspletosaurus_dinosaur_king.jpg",
+      "element": "fuego",
+      "card": "cards/fuego/daspletosaurus_dinosaur_king.jpg",
+      "stats": [
+        5,
+        6,
+        5,
+        5,
+        6
+      ]
+    },
+    {
+      "id": "gigas",
+      "name": "Gigas",
+      "image": "fuego/gigas_dinosaur_king.jpg",
+      "element": "fuego",
+      "card": "cards/fuego/gigas_dinosaur_king.jpg",
+      "stats": [
+        7,
+        8,
+        5,
+        8,
+        6
+      ]
+    },
+    {
+      "id": "mapusaurus",
+      "name": "Mapusaurus",
+      "image": "fuego/mapusaurus_dinosaur_king.jpg",
+      "element": "fuego",
+      "card": "cards/fuego/mapusaurus_dinosaur_king.jpg",
+      "stats": [
+        5,
+        7,
+        6,
+        8,
+        5
+      ]
+    },
+    {
+      "id": "rajasaurus",
+      "name": "Rajasaurus",
+      "image": "fuego/rajasaurus_dinosaur_king.jpg",
+      "element": "fuego",
+      "card": "cards/fuego/rajasaurus_dinosaur_king.jpg",
+      "stats": [
+        6,
+        4,
+        4,
+        6,
+        5
+      ]
+    },
+    {
+      "id": "saurophaganax",
+      "name": "Saurophaganax",
+      "image": "fuego/saurophaganax_dinosaur_king.jpg",
+      "element": "fuego",
+      "card": "cards/fuego/saurophaganax_dinosaur_king.jpg",
+      "stats": [
+        6,
+        5,
+        6,
+        8,
+        6
+      ]
+    },
+    {
+      "id": "torvosaurus",
+      "name": "Torvosaurus",
+      "image": "fuego/torvosaurus_dinosaur_king.jpg",
+      "element": "fuego",
+      "card": "cards/fuego/torvosaurus_dinosaur_king.jpg",
+      "stats": [
+        4,
+        4,
+        6,
+        4,
+        4
+      ]
+    },
+    {
+      "id": "tyrannosaurus_rex",
+      "name": "Tyrannosaurus Rex",
+      "image": "fuego/tyrannosurus_rex_dinosaur_king.jpg",
+      "element": "fuego",
+      "card": "cards/fuego/tyrannosurus_rex_dinosaur_king.jpg",
+      "stats": [
+        7,
+        8,
+        6,
+        8,
+        6
+      ]
+    },
+    {
+      "id": "yangchuanosaurus",
+      "name": "Yangchuanosaurus",
+      "image": "fuego/yangchuanosaurus_dinosaur_king.jpg",
+      "element": "fuego",
+      "card": "cards/fuego/yangchuanosaurus_dinosaur_king.jpg",
+      "stats": [
+        6,
+        8,
+        4,
+        7,
+        4
+      ]
+    },
+    {
+      "id": "amargasaurus",
+      "name": "Amargasaurus",
+      "image": "agua/amargasaurus_dinosaur_king.jpg",
+      "element": "agua",
+      "card": "cards/agua/amargasaurus_dinosaur_king.jpg",
+      "stats": [
+        4,
+        5,
+        7,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "ampelosaurus",
+      "name": "Ampelosaurus",
+      "image": "agua/ampelosaurus_dinosaur_king.jpg",
+      "element": "agua",
+      "card": "cards/agua/ampelosaurus_dinosaur_king.jpg",
+      "stats": [
+        5,
+        4,
+        6,
+        4,
+        7
+      ]
+    },
+    {
+      "id": "baryonyx",
+      "name": "Baryonyx",
+      "image": "agua/baryonyx_dinosaur_king.jpg",
+      "element": "agua",
+      "card": "cards/agua/baryonyx_dinosaur_king.jpg",
+      "stats": [
+        6,
+        5,
+        4,
+        5,
+        5
+      ]
+    },
+    {
+      "id": "isisaurus",
+      "name": "Isisaurus",
+      "image": "agua/isisaurus_dinosaur_king.jpg",
+      "element": "agua",
+      "card": "cards/agua/isisaurus_dinosaur_king.jpg",
+      "stats": [
+        5,
+        6,
+        7,
+        5,
+        4
+      ]
+    },
+    {
+      "id": "jobaria",
+      "name": "Jobaria",
+      "image": "agua/jobaria_dinosaur_king.jpg",
+      "element": "agua",
+      "card": "cards/agua/jobaria_dinosaur_king.jpg",
+      "stats": [
+        6,
+        6,
+        5,
+        5,
+        6
+      ]
+    },
+    {
+      "id": "saltasaurus",
+      "name": "Saltasaurus",
+      "image": "agua/saltasaurus_dinosaur_king.jpg",
+      "element": "agua",
+      "card": "cards/agua/saltasaurus_dinosaur_king.jpg",
+      "stats": [
+        7,
+        6,
+        6,
+        6,
+        7
+      ]
+    },
+    {
+      "id": "shunosaurus",
+      "name": "Shunosaurus",
+      "image": "agua/shunosaurus_dinosaur_king.jpg",
+      "element": "agua",
+      "card": "cards/agua/shunosaurus_dinosaur_king.jpg",
+      "stats": [
+        4,
+        4,
+        7,
+        4,
+        4
+      ]
+    },
+    {
+      "id": "spinosaurus",
+      "name": "Spinosaurus",
+      "image": "agua/spinosaurus_dinosaur_king.jpg",
+      "element": "agua",
+      "card": "cards/agua/spinosaurus_dinosaur_king.jpg",
+      "stats": [
+        7,
+        6,
+        7,
+        6,
+        7
+      ]
+    },
+    {
+      "id": "suchomimus",
+      "name": "Suchomimus",
+      "image": "agua/suchomimus_dinosaur_king.jpg",
+      "element": "agua",
+      "card": "cards/agua/suchomimus_dinosaur_king.jpg",
+      "stats": [
+        6,
+        4,
+        5,
+        6,
+        6
+      ]
+    },
+    {
+      "id": "achelousaurus",
+      "name": "Achelousaurus",
+      "image": "rayo/achelousaurus_dinosaur_king.jpg",
+      "element": "rayo",
+      "card": "cards/rayo/achelousaurus_dinosaur_king.jpg",
+      "stats": [
+        5,
+        4,
+        4,
+        4,
+        7
+      ]
+    },
+    {
+      "id": "anchiceratops",
+      "name": "Anchiceratops",
+      "image": "rayo/anchiceratops_dinosaur_king.jpg",
+      "element": "rayo",
+      "card": "cards/rayo/anchiceratops_dinosaur_king.jpg",
+      "stats": [
+        4,
+        5,
+        6,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "maximus",
+      "name": "Maximus",
+      "image": "rayo/maximus_dinosaur_king.jpg",
+      "element": "rayo",
+      "card": "cards/rayo/maximus_dinosaur_king.jpg",
+      "stats": [
+        7,
+        6,
+        9,
+        6,
+        9
+      ]
+    },
+    {
+      "id": "nedoceratops",
+      "name": "Nedoceratops",
+      "image": "rayo/nedoceratops_dinosaur_king.jpg",
+      "element": "rayo",
+      "card": "cards/rayo/nedoceratops_dinosaur_king.jpg",
+      "stats": [
+        6,
+        5,
+        5,
+        5,
+        6
+      ]
+    },
+    {
+      "id": "pachyrhinosaurus",
+      "name": "Pachyrhinosaurus",
+      "image": "rayo/pachyrhinosaurus_dinosaur_king.jpg",
+      "element": "rayo",
+      "card": "cards/rayo/pachyrhinosaurus_dinosaur_king.jpg",
+      "stats": [
+        8,
+        4,
+        7,
+        6,
+        6
+      ]
+    },
+    {
+      "id": "pentaceratops",
+      "name": "Pentaceratops",
+      "image": "rayo/pentaceratops_dinosaur_king.jpg",
+      "element": "rayo",
+      "card": "cards/rayo/pentaceratops_dinosaur_king.jpg",
+      "stats": [
+        5,
+        5,
+        5,
+        4,
+        8
+      ]
+    },
+    {
+      "id": "styracosaurus",
+      "name": "Styracosaurus",
+      "image": "rayo/styracosaurus_dinosaur_king.jpg",
+      "element": "rayo",
+      "card": "cards/rayo/styracosaurus_dinosaur_king.jpg",
+      "stats": [
+        8,
+        5,
+        9,
+        6,
+        9
+      ]
+    },
+    {
+      "id": "torosaurus",
+      "name": "Torosaurus",
+      "image": "rayo/torosaurus_dinosaur_king_by.jpg",
+      "element": "rayo",
+      "card": "cards/rayo/torosaurus_dinosaur_king_by.jpg",
+      "stats": [
+        4,
+        5,
+        9,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "triceratops",
+      "name": "Triceratops",
+      "image": "rayo/triceratops_dinosaur_king.jpg",
+      "element": "rayo",
+      "card": "cards/rayo/triceratops_dinosaur_king.jpg",
+      "stats": [
+        8,
+        6,
+        9,
+        6,
+        9
+      ]
+    },
+    {
+      "id": "ankylosaurus",
+      "name": "Ankylosaurus",
+      "image": "tierra/ankylosaurus_dinosaur_king.jpg",
+      "element": "tierra",
+      "card": "cards/tierra/ankylosaurus_dinosaur_king.jpg",
+      "stats": [
+        4,
+        8,
+        5,
+        7,
+        6
+      ]
+    },
+    {
+      "id": "armatus",
+      "name": "Armatus",
+      "image": "tierra/armatus_dinosaur_king.jpg",
+      "element": "tierra",
+      "card": "cards/tierra/armatus_dinosaur_king.jpg",
+      "stats": [
+        7,
+        7,
+        6,
+        8,
+        6
+      ]
+    },
+    {
+      "id": "edmontonia",
+      "name": "Edmontonia",
+      "image": "tierra/edmontonia_dinosaur_king.jpg",
+      "element": "tierra",
+      "card": "cards/tierra/edmontonia_dinosaur_king.jpg",
+      "stats": [
+        4,
+        7,
+        5,
+        4,
+        6
+      ]
+    },
+    {
+      "id": "euoplocephalus",
+      "name": "Euoplocephalus",
+      "image": "tierra/euoplocephalus_dinosaur_king.jpg",
+      "element": "tierra",
+      "card": "cards/tierra/euoplocephalus_dinosaur_king.jpg",
+      "stats": [
+        4,
+        6,
+        4,
+        8,
+        4
+      ]
+    },
+    {
+      "id": "lexovisaurus",
+      "name": "Lexovisaurus",
+      "image": "tierra/lexovisaurus_dinosaur_king.jpg",
+      "element": "tierra",
+      "card": "cards/tierra/lexovisaurus_dinosaur_king.jpg",
+      "stats": [
+        7,
+        4,
+        6,
+        8,
+        5
+      ]
+    },
+    {
+      "id": "saichania",
+      "name": "Saichania",
+      "image": "tierra/saichania_dinosaur_king.jpg",
+      "element": "tierra",
+      "card": "cards/tierra/saichania_dinosaur_king.jpg",
+      "stats": [
+        6,
+        8,
+        6,
+        8,
+        6
+      ]
+    },
+    {
+      "id": "stegosaurus",
+      "name": "Stegosaurus",
+      "image": "tierra/stegosaurus_dinosaur_king.jpg",
+      "element": "tierra",
+      "card": "cards/tierra/stegosaurus_dinosaur_king.jpg",
+      "stats": [
+        7,
+        5,
+        6,
+        6,
+        5
+      ]
+    },
+    {
+      "id": "tuojiangosaurus",
+      "name": "Tuojiangosaurus",
+      "image": "tierra/tuojiangosaurus_dinosaur_king.jpg",
+      "element": "tierra",
+      "card": "cards/tierra/tuojiangosaurus_dinosaur_king.jpg",
+      "stats": [
+        6,
+        8,
+        5,
+        7,
+        5
+      ]
+    },
+    {
+      "id": "altirhinus",
+      "name": "Altirhinus",
+      "image": "planta/altirhinus_dinosaur_king.jpg",
+      "element": "planta",
+      "card": "cards/planta/altirhinus_dinosaur_king.jpg",
+      "stats": [
+        4,
+        5,
+        5,
+        4,
+        4
+      ]
+    },
+    {
+      "id": "fukuisaurus",
+      "name": "Fukuisaurus",
+      "image": "planta/fukuisaurus_dinosaur_king.jpg",
+      "element": "planta",
+      "card": "cards/planta/fukuisaurus_dinosaur_king.jpg",
+      "stats": [
+        8,
+        7,
+        5,
+        7,
+        4
+      ]
+    },
+    {
+      "id": "iguanodon",
+      "name": "Iguanodon",
+      "image": "planta/iguanodon_dinosaur_king.jpg",
+      "element": "planta",
+      "card": "cards/planta/iguanodon_dinosaur_king.jpg",
+      "stats": [
+        7,
+        6,
+        4,
+        7,
+        5
+      ]
+    },
+    {
+      "id": "lanzhousaurus",
+      "name": "Lanzhousaurus",
+      "image": "planta/lanzhousaurus_dinosaur_king.jpg",
+      "element": "planta",
+      "card": "cards/planta/lanzhousaurus_dinosaur_king.jpg",
+      "stats": [
+        7,
+        5,
+        5,
+        5,
+        6
+      ]
+    },
+    {
+      "id": "maiasaura",
+      "name": "Maiasaura",
+      "image": "planta/maiasaura_with_baby_dinosaur_king.jpg",
+      "element": "planta",
+      "card": "cards/planta/maiasaura_with_baby_dinosaur_king.jpg",
+      "stats": [
+        8,
+        5,
+        4,
+        6,
+        4
+      ]
+    },
+    {
+      "id": "parasaurolophus",
+      "name": "Parasaurolophus",
+      "image": "planta/parasaurolophus_dinosaur_king.jpg",
+      "element": "planta",
+      "card": "cards/planta/parasaurolophus_dinosaur_king.jpg",
+      "stats": [
+        8,
+        7,
+        6,
+        7,
+        6
+      ]
+    },
+    {
+      "id": "saurolophus_naranja",
+      "name": "Saurolophus Naranja",
+      "image": "planta/sauralophus_orange_dinosaur_king.jpg",
+      "element": "planta",
+      "card": "cards/planta/sauralophus_orange_dinosaur_king.jpg",
+      "stats": [
+        6,
+        7,
+        5,
+        7,
+        5
+      ]
+    },
+    {
+      "id": "saurolophus_verde",
+      "name": "Saurolophus Verde",
+      "image": "planta/saurolophus_green_dinosaur_king.jpg",
+      "element": "planta",
+      "card": "cards/planta/saurolophus_green_dinosaur_king.jpg",
+      "stats": [
+        4,
+        5,
+        4,
+        6,
+        6
+      ]
+    },
+    {
+      "id": "shantungosaurus",
+      "name": "Shantungosaurus",
+      "image": "planta/shantungosaurus_dinosaur_king.jpg",
+      "element": "planta",
+      "card": "cards/planta/shantungosaurus_dinosaur_king.jpg",
+      "stats": [
+        4,
+        4,
+        5,
+        4,
+        4
+      ]
+    },
+    {
+      "id": "afrovenator",
+      "name": "Afrovenator",
+      "image": "viento/afrovenator_dinosaur_king.jpg",
+      "element": "viento",
+      "card": "cards/viento/afrovenator_dinosaur_king.jpg",
+      "stats": [
+        5,
+        4,
+        7,
+        6,
+        4
+      ]
+    },
+    {
+      "id": "allosaurus",
+      "name": "Allosaurus",
+      "image": "viento/allosaurus_dinosaur_king.jpg",
+      "element": "viento",
+      "card": "cards/viento/allosaurus_dinosaur_king.jpg",
+      "stats": [
+        5,
+        5,
+        7,
+        6,
+        6
+      ]
+    },
+    {
+      "id": "carnotaurus",
+      "name": "Carnotaurus",
+      "image": "viento/carnotaurus_dinosaur_king.jpg",
+      "element": "viento",
+      "card": "cards/viento/carnotaurus_dinosaur_king.jpg",
+      "stats": [
+        6,
+        7,
+        7,
+        7,
+        7
+      ]
+    },
+    {
+      "id": "ceratosaurus",
+      "name": "Ceratosaurus",
+      "image": "viento/ceratosaurus_dinosaur_king.jpg",
+      "element": "viento",
+      "card": "cards/viento/ceratosaurus_dinosaur_king.jpg",
+      "stats": [
+        4,
+        4,
+        4,
+        4,
+        4
+      ]
+    },
+    {
+      "id": "deltadromeus",
+      "name": "Deltadromeus",
+      "image": "viento/deltadromeus_dinosaur_king.jpg",
+      "element": "viento",
+      "card": "cards/viento/deltadromeus_dinosaur_king.jpg",
+      "stats": [
+        5,
+        5,
+        6,
+        6,
+        4
+      ]
+    },
+    {
+      "id": "gojirasaurus",
+      "name": "Gojirasaurus",
+      "image": "viento/gojirasaurus_dinosaur_king.jpg",
+      "element": "viento",
+      "card": "cards/viento/gojirasaurus_dinosaur_king.jpg",
+      "stats": [
+        5,
+        6,
+        6,
+        6,
+        5
+      ]
+    },
+    {
+      "id": "majungasaurus",
+      "name": "Majungasaurus",
+      "image": "viento/majungasaurus_dinosaur_king.jpg",
+      "element": "viento",
+      "card": "cards/viento/majungasaurus_dinosaur_king.jpg",
+      "stats": [
+        5,
+        7,
+        7,
+        6,
+        7
+      ]
+    },
+    {
+      "id": "megaraptor",
+      "name": "Megaraptor",
+      "image": "viento/megaraptor_dinosaur_king.jpg",
+      "element": "viento",
+      "card": "cards/viento/megaraptor_dinosaur_king.jpg",
+      "stats": [
+        6,
+        5,
+        7,
+        7,
+        5
+      ]
+    },
+    {
+      "id": "utahraptor",
+      "name": "Utahraptor",
+      "image": "viento/utahraptor_dinosaur_king.jpg",
+      "element": "viento",
+      "card": "cards/viento/utahraptor_dinosaur_king.jpg",
+      "stats": [
+        6,
+        7,
+        6,
+        7,
+        7
+      ]
+    },
+    {
+      "id": "cryolophosaurus",
+      "name": "Cryolophosaurus",
+      "image": "especial/cryolophosaurus_dinosaur_king.jpg",
+      "element": "especial",
+      "card": "cards/especial/cryolophosaurus_dinosaur_king.jpg",
+      "frontSide": "right",
+      "stats": [
+        6,
+        6,
+        6,
+        7,
+        6
+      ]
+    },
+    {
+      "id": "deinonychus",
+      "name": "Deinonychus",
+      "image": "especial/deinonychus_dinosaur_king.jpg",
+      "element": "especial",
+      "card": "cards/especial/deinonychus_dinosaur_king.jpg",
+      "frontSide": "right",
+      "stats": [
+        6,
+        4,
+        6,
+        6,
+        7
+      ]
+    },
+    {
+      "id": "megalosaurus",
+      "name": "Megalosaurus",
+      "image": "especial/megalosaurus_dinosaur_king.jpg",
+      "element": "especial",
+      "card": "cards/especial/megalosaurus_dinosaur_king.jpg",
+      "frontSide": "right",
+      "stats": [
+        7,
+        5,
+        4,
+        7,
+        5
+      ]
+    },
+    {
+      "id": "pachycephalosaurus",
+      "name": "Pachycephalosaurus",
+      "image": "especial/pachycephalosaurus_dinosaur_king.jpg",
+      "element": "especial",
+      "card": "cards/especial/pachycephalosaurus_dinosaur_king.jpg",
+      "frontSide": "right",
+      "stats": [
+        6,
+        6,
+        7,
+        7,
+        5
+      ]
+    },
+    {
+      "id": "therizinosaurus",
+      "name": "Therizinosaurus",
+      "image": "especial/therizinosaurus_dinosaur_king.jpg",
+      "element": "especial",
+      "card": "cards/especial/therizinosaurus_dinosaur_king.jpg",
+      "frontSide": "right",
+      "stats": [
+        6,
+        6,
+        4,
+        7,
+        4
+      ]
+    },
+    {
+      "id": "velociraptor",
+      "name": "Velociraptor",
+      "image": "normal/velociraptor_dinosaur_king.jpg",
+      "element": "normal",
+      "card": "cards/normal/velociraptor_dinosaur_king.jpg",
+      "stats": [
+        5,
+        4,
+        5,
+        4,
+        5
+      ]
+    }
+  ],
+  "attacks": [
+    {
+      "id": "bola_fuego",
+      "name": "Bola de Fuego",
+      "element": "fuego",
+      "power": 40,
+      "category": "especial",
+      "level": 1
+    },
+    {
+      "id": "colmillo_igneo",
+      "name": "Colmillo Ígneo",
+      "element": "fuego",
+      "power": 45,
+      "category": "fisico",
+      "level": 5
+    },
+    {
+      "id": "garra_ardiente",
+      "name": "Garra Ardiente",
+      "element": "fuego",
+      "power": 50,
+      "category": "fisico",
+      "level": 8
+    },
+    {
+      "id": "volcan_furioso",
+      "name": "Volcán Furioso",
+      "element": "fuego",
+      "power": 60,
+      "category": "especial",
+      "level": 12
+    },
+    {
+      "id": "llamarada",
+      "name": "Llamarada Solar",
+      "element": "fuego",
+      "power": 70,
+      "category": "especial",
+      "level": 20
+    },
+    {
+      "id": "chorro_agua",
+      "name": "Chorro de Agua",
+      "element": "agua",
+      "power": 40,
+      "category": "especial",
+      "level": 1
+    },
+    {
+      "id": "acua_cola",
+      "name": "Acua Cola",
+      "element": "agua",
+      "power": 45,
+      "category": "fisico",
+      "level": 5
+    },
+    {
+      "id": "hidropulso",
+      "name": "Hidropulso",
+      "element": "agua",
+      "power": 50,
+      "category": "especial",
+      "level": 8
+    },
+    {
+      "id": "tsunami",
+      "name": "Tsunami Prehistórico",
+      "element": "agua",
+      "power": 60,
+      "category": "especial",
+      "level": 12
+    },
+    {
+      "id": "cascada",
+      "name": "Cascada Jurásica",
+      "element": "agua",
+      "power": 70,
+      "category": "fisico",
+      "level": 20
+    },
+    {
+      "id": "choque_electrico",
+      "name": "Choque Eléctrico",
+      "element": "rayo",
+      "power": 40,
+      "category": "especial",
+      "level": 1
+    },
+    {
+      "id": "cuerno_voltio",
+      "name": "Cuerno Voltio",
+      "element": "rayo",
+      "power": 45,
+      "category": "fisico",
+      "level": 5
+    },
+    {
+      "id": "chispazo",
+      "name": "Chispazo",
+      "element": "rayo",
+      "power": 50,
+      "category": "especial",
+      "level": 8
+    },
+    {
+      "id": "canon_relampago",
+      "name": "Cañón Relámpago",
+      "element": "rayo",
+      "power": 60,
+      "category": "especial",
+      "level": 12
+    },
+    {
+      "id": "tormenta_electrica",
+      "name": "Tormenta Eléctrica",
+      "element": "rayo",
+      "power": 70,
+      "category": "especial",
+      "level": 20
+    },
+    {
+      "id": "avalancha",
+      "name": "Avalancha de Rocas",
+      "element": "tierra",
+      "power": 40,
+      "category": "fisico",
+      "level": 1
+    },
+    {
+      "id": "bofeton_lodo",
+      "name": "Bofetón de Lodo",
+      "element": "tierra",
+      "power": 45,
+      "category": "especial",
+      "level": 5
+    },
+    {
+      "id": "cabezazo_roca",
+      "name": "Cabezazo Roca",
+      "element": "tierra",
+      "power": 50,
+      "category": "fisico",
+      "level": 8
+    },
+    {
+      "id": "terremoto",
+      "name": "Terremoto",
+      "element": "tierra",
+      "power": 60,
+      "category": "fisico",
+      "level": 12
+    },
+    {
+      "id": "fisura",
+      "name": "Fisura Tectónica",
+      "element": "tierra",
+      "power": 70,
+      "category": "fisico",
+      "level": 20
+    },
+    {
+      "id": "latigo_cepa",
+      "name": "Látigo Cepa",
+      "element": "planta",
+      "power": 40,
+      "category": "fisico",
+      "level": 1
+    },
+    {
+      "id": "hoja_afilada",
+      "name": "Hoja Afilada",
+      "element": "planta",
+      "power": 45,
+      "category": "fisico",
+      "level": 5
+    },
+    {
+      "id": "rayo_solar",
+      "name": "Rayo Solar",
+      "element": "planta",
+      "power": 50,
+      "category": "especial",
+      "level": 8
+    },
+    {
+      "id": "tormenta_hojas",
+      "name": "Tormenta de Hojas",
+      "element": "planta",
+      "power": 60,
+      "category": "especial",
+      "level": 12
+    },
+    {
+      "id": "raiz_gigante",
+      "name": "Raíz Gigante",
+      "element": "planta",
+      "power": 70,
+      "category": "fisico",
+      "level": 20
+    },
+    {
+      "id": "cuchilla_aire",
+      "name": "Cuchilla de Aire",
+      "element": "viento",
+      "power": 40,
+      "category": "fisico",
+      "level": 1
+    },
+    {
+      "id": "ataque_aereo",
+      "name": "Ataque Aéreo",
+      "element": "viento",
+      "power": 45,
+      "category": "fisico",
+      "level": 5
+    },
+    {
+      "id": "rafaga",
+      "name": "Ráfaga",
+      "element": "viento",
+      "power": 50,
+      "category": "especial",
+      "level": 8
+    },
+    {
+      "id": "ciclon",
+      "name": "Ciclón Jurásico",
+      "element": "viento",
+      "power": 60,
+      "category": "especial",
+      "level": 12
+    },
+    {
+      "id": "huracan",
+      "name": "Huracán Prehistórico",
+      "element": "viento",
+      "power": 70,
+      "category": "especial",
+      "level": 20
+    },
+    {
+      "id": "poder_ancestral",
+      "name": "Poder Ancestral",
+      "element": "especial",
+      "power": 35,
+      "category": "especial",
+      "level": 1
+    },
+    {
+      "id": "zarpazo_primigenio",
+      "name": "Zarpazo Primigenio",
+      "element": "especial",
+      "power": 40,
+      "category": "fisico",
+      "level": 5
+    },
+    {
+      "id": "furia_jurasica",
+      "name": "Furia Jurásica",
+      "element": "especial",
+      "power": 50,
+      "category": "fisico",
+      "level": 10
+    },
+    {
+      "id": "pulso_fosil",
+      "name": "Pulso Fósil",
+      "element": "especial",
+      "power": 60,
+      "category": "especial",
+      "level": 20
+    },
+    {
+      "id": "rugido",
+      "name": "Rugido Intimidante",
+      "element": "normal",
+      "power": 0,
+      "category": "estado",
+      "level": 1
+    },
+    {
+      "id": "embestida",
+      "name": "Embestida",
+      "element": "normal",
+      "power": 20,
+      "category": "fisico",
+      "level": 1
+    },
+    {
+      "id": "mordisco",
+      "name": "Mordisco",
+      "element": "normal",
+      "power": 25,
+      "category": "fisico",
+      "level": 1
+    },
+    {
+      "id": "coletazo",
+      "name": "Coletazo",
+      "element": "normal",
+      "power": 25,
+      "category": "fisico",
+      "level": 3
+    },
+    {
+      "id": "pisoton",
+      "name": "Pisotón",
+      "element": "normal",
+      "power": 30,
+      "category": "fisico",
+      "level": 6
+    },
+    {
+      "id": "grito_salvaje",
+      "name": "Grito Salvaje",
+      "element": "normal",
+      "power": 0,
+      "category": "estado",
+      "level": 8
+    },
+    {
+      "id": "doble_golpe",
+      "name": "Doble Golpe",
+      "element": "normal",
+      "power": 35,
+      "category": "fisico",
+      "level": 10
+    },
+    {
+      "id": "hiper_colmillo",
+      "name": "Hiper Colmillo",
+      "element": "normal",
+      "power": 50,
+      "category": "fisico",
+      "level": 15
+    },
+    {
+      "id": "futabasaurus_super_cannon",
+      "name": "Futabasaurus Super Cannon",
+      "element": "agua",
+      "power": 70,
+      "category": "especial",
+      "level": 1,
+      "moveCard": true,
+      "image": "agua/futabasaurus_super_cannon_dinosaur_king.jpg",
+      "card": "cards/agua/futabasaurus_super_cannon_dinosaur_king.jpg"
+    },
+    {
+      "id": "ocean_panic",
+      "name": "Ocean Panic",
+      "element": "agua",
+      "power": 70,
+      "category": "especial",
+      "level": 1,
+      "moveCard": true,
+      "image": "agua/ocean_panic_dinosaur_king.jpg",
+      "card": "cards/agua/ocean_panic_dinosaur_king.jpg"
+    },
+    {
+      "id": "shockwave",
+      "name": "Shockwave",
+      "element": "agua",
+      "power": 70,
+      "category": "especial",
+      "level": 1,
+      "moveCard": true,
+      "image": "agua/shockwave_dinosaur_king.jpg",
+      "card": "cards/agua/shockwave_dinosaur_king.jpg"
+    },
+    {
+      "id": "big_foot_assault",
+      "name": "Big Foot Assault",
+      "element": "planta",
+      "power": 70,
+      "category": "fisico",
+      "level": 1,
+      "moveCard": true,
+      "image": "planta/big_foot_assault_dinosaur_king.jpg",
+      "card": "cards/planta/big_foot_assault_dinosaur_king.jpg"
+    },
+    {
+      "id": "green_impulse",
+      "name": "Green Impulse",
+      "element": "planta",
+      "power": 70,
+      "category": "especial",
+      "level": 1,
+      "moveCard": true,
+      "image": "planta/green_impulse_dinosaur_king.jpg",
+      "card": "cards/planta/green_impulse_dinosaur_king.jpg"
+    },
+    {
+      "id": "metal_wing",
+      "name": "Metal Wing",
+      "element": "planta",
+      "power": 70,
+      "category": "fisico",
+      "level": 1,
+      "moveCard": true,
+      "image": "planta/metal_wing_dinosaur_king.jpg",
+      "card": "cards/planta/metal_wing_dinosaur_king.jpg"
+    },
+    {
+      "id": "super_impact",
+      "name": "Super Impact",
+      "element": "planta",
+      "power": 70,
+      "category": "fisico",
+      "level": 1,
+      "moveCard": true,
+      "image": "planta/super_impact_dinosaur_king.jpg",
+      "card": "cards/planta/super_impact_dinosaur_king.jpg"
+    },
+    {
+      "id": "anhanguera_dive",
+      "name": "Anhanguera Dive",
+      "element": "normal",
+      "power": 50,
+      "category": "fisico",
+      "level": 1,
+      "moveCard": true,
+      "image": "normal/anhanguera_dive_dinosaur_king.jpg",
+      "card": "cards/normal/anhanguera_dive_dinosaur_king.jpg"
+    },
+    {
+      "id": "tag_team",
+      "name": "Tag Team",
+      "element": "normal",
+      "power": 50,
+      "category": "fisico",
+      "level": 1,
+      "moveCard": true,
+      "image": "normal/tag_team_dinosaur_king.jpg",
+      "card": "cards/normal/tag_team_dinosaur_king.jpg"
+    },
+    {
+      "id": "venom_fang",
+      "name": "Venom Fang",
+      "element": "normal",
+      "power": 50,
+      "category": "fisico",
+      "level": 1,
+      "moveCard": true,
+      "image": "normal/venom_fang_dinosaur_king.jpg",
+      "card": "cards/normal/venom_fang_dinosaur_king.jpg"
+    }
+  ],
+  "typeChart": {
+    "_comentario": "beats: cada elemento hace daño eficaz a los de su lista. alwaysEffective: siempre eficaz. El resto (incluido normal) es neutro.",
+    "effective": 1.5,
+    "neutral": 1,
+    "beats": {
+      "fuego": [
+        "planta"
+      ],
+      "planta": [
+        "agua",
+        "tierra"
+      ],
+      "agua": [
+        "fuego"
+      ],
+      "tierra": [
+        "fuego",
+        "viento",
+        "rayo"
+      ],
+      "viento": [
+        "planta"
+      ],
+      "rayo": [
+        "agua"
+      ]
+    },
+    "alwaysEffective": [
+      "especial"
+    ]
+  },
+  "stats": {
+    "_comentario": "Estadísticas base [salud, ataque físico, defensa física, ataque especial, defensa especial] entre min y statCaps del elemento (máx. 10). Valor real = base x nivel.",
+    "min": 4,
+    "max": 10
+  },
+  "categories": {
+    "fisico": {
+      "name": "Físico",
+      "icon": "💪"
+    },
+    "especial": {
+      "name": "Especial",
+      "icon": "🔮"
+    },
+    "estado": {
+      "name": "Estado",
+      "icon": "🌀"
+    }
+  }
+}

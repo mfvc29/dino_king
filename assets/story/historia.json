@@ -1,0 +1,468 @@
+{
+    "_comentario": "Historia de Dino Rey. Textos: {player} = tu nombre, {rival} = tu rival, {stones} = piedras conseguidas, {left} = piedras que faltan. Cada salto de línea (\\n) es una página de diálogo. Condiciones: flag, notFlag, defeated, notDefeated, stones (mínimo), stonesBelow, hasDino, noDino. Acciones: setFlag, starter, challenge, giveItem, giveMove, giveXp, notify, ending.",
+    "title": "Dino Rey",
+    "newGame": {
+        "map": "casa_martin",
+        "x": 8,
+        "y": 7,
+        "direction": "down"
+    },
+    "prologue": "La región de Pangea ha descubierto un misterioso mineral que permite revivir, domesticar y almacenar dinosaurios mediante cartas holográficas.\nLos Dino Tamers recorren el mundo capturando y entrenando a los mejores especímenes para competir en el Gran Torneo Mesozoico.\nAnoche, los hermanos {player} y {rival} encontraron unas cartas antiguas extremadamente raras en el sótano de su casa...\nSiete Piedras Elementales esperan a quien quiera convertirse en el verdadero DINO REY.\n{player}, tu aventura comienza ahora.",
+    "mapNames": {
+        "casa_martin": "Casa de {player} y {rival}",
+        "world_map": "Pueblo Meteoro",
+        "ruta_1": "Ruta 1",
+        "cueva_meteoro": "Cueva Meteoro",
+        "torneo": "Estadio del Gran Torneo Mesozoico"
+    },
+    "stoneNames": {
+        "fuego": "Piedra de Fuego",
+        "agua": "Piedra de Agua",
+        "rayo": "Piedra de Rayo",
+        "tierra": "Piedra de Tierra",
+        "planta": "Piedra de Planta",
+        "viento": "Piedra de Viento",
+        "especial": "Piedra Especial"
+    },
+    "guardians": {
+        "npc_mukpuhmt": "fuego",
+        "npc_mukpwgpa": "agua",
+        "npc_mukpypqr": "rayo",
+        "npc_mukq0iea": "tierra",
+        "npc_mukpppad": "planta",
+        "npc_mukm1r5x": "viento",
+        "npc_mukq2ndc": "especial"
+    },
+    "chapters": [
+        {
+            "id": "despertar",
+            "title": "Capítulo 1 · El despertar",
+            "objective": "Habla con mamá (Blanche) antes de salir de casa.",
+            "doneIf": {
+                "flag": "talkedMom"
+            }
+        },
+        {
+            "id": "profesora",
+            "title": "Capítulo 1 · Las cartas del sótano",
+            "objective": "Sal de casa: el Dr. Cretácico quiere analizar las cartas antiguas del sótano.",
+            "doneIf": {
+                "flag": "starter"
+            }
+        },
+        {
+            "id": "rival",
+            "title": "Capítulo 1 · Duelo entre hermanos",
+            "objective": "Tu hermano {rival} quiere probar su dino: ¡véncelo junto a la casa!",
+            "doneIf": {
+                "defeated": "rival_1"
+            }
+        },
+        {
+            "id": "piedras",
+            "title": "Capítulo 2 · Los Guardianes",
+            "objective": "Vence a los Guardianes para ganar Piedras Elementales ({stones}/7). Usa la hierba alta para entrenar.",
+            "doneIf": {
+                "stones": 3
+            }
+        },
+        {
+            "id": "banda",
+            "title": "Capítulo 3 · La Banda Meteoro",
+            "objective": "¡La Banda Meteoro acosa al Maestro Eldon! Detén al recluta Darius (oeste del pueblo).",
+            "doneIf": {
+                "defeated": "grunt_zarpa"
+            }
+        },
+        {
+            "id": "cueva",
+            "title": "Capítulo 4 · La Cueva Meteoro",
+            "objective": "Darius huyó a la Cueva Meteoro (norte del pueblo, cruzando la Ruta 1). Vence al comandante Helmep.",
+            "doneIf": {
+                "defeated": "admin_helmep"
+            }
+        },
+        {
+            "id": "piedras2",
+            "title": "Capítulo 5 · Las siete piedras",
+            "objective": "Reúne las Piedras Elementales que faltan ({stones}/7). Te faltan {left}.",
+            "doneIf": {
+                "stones": 7
+            }
+        },
+        {
+            "id": "rival2",
+            "title": "Capítulo 6 · Promesa de hermanos",
+            "objective": "Tu hermano {rival} te espera en la plaza del pueblo para un último duelo.",
+            "doneIf": {
+                "defeated": "rival_2"
+            }
+        },
+        {
+            "id": "draco",
+            "title": "Capítulo 7 · El Rey Usurpador",
+            "objective": "Rolando quiere robar las piedras. Enfréntalo frente al Templo del Meteorito (centro-este del pueblo).",
+            "doneIf": {
+                "defeated": "boss_draco"
+            }
+        },
+        {
+            "id": "fin",
+            "title": "Epílogo · Dino Rey",
+            "objective": "¡Eres el Dino Rey! Completa tu almanaque y gana el Gran Torneo Mesozoico (estadio al sur del pueblo).",
+            "doneIf": {
+                "flag": "never"
+            }
+        }
+    ],
+    "npcs": [
+        {
+            "id": "mama",
+            "map": "casa_martin",
+            "x": 11,
+            "y": 5,
+            "name": "Blanche",
+            "sprite": "Blanche.png",
+            "direction": "down",
+            "type": "npc",
+            "talk": [
+                {
+                    "if": {
+                        "notFlag": "talkedMom"
+                    },
+                    "text": "¡Por fin despiertas, {player}, hijo!\nAnoche tú y {rival} bajaron al sótano y encontraron esas cartas antiguas, ¿verdad? ¡Brillaban muchísimo!\nEl Dr. Cretácico vino a verlas. Te espera afuera, junto a la casa. Tu hermano ya salió corriendo.\nToma, llévate esto para el camino. ¡Y cuida mucho a los dinos!",
+                    "actions": [
+                        {
+                            "setFlag": "talkedMom"
+                        },
+                        {
+                            "giveItem": "garra_ancestral"
+                        }
+                    ]
+                },
+                {
+                    "if": {
+                        "noDino": true
+                    },
+                    "text": "El Dr. Cretácico te espera afuera. ¡Corre, que {rival} te va a ganar!"
+                },
+                {
+                    "if": {
+                        "stonesBelow": 7
+                    },
+                    "text": "Llevas {stones} de 7 Piedras Elementales. ¡Estoy muy orgullosa de mis dos hijos!\nRecuerda: si un ataque es eficaz contra el rival lo derribas y ganas UNA MÁS."
+                },
+                {
+                    "if": {
+                        "notDefeated": "boss_draco"
+                    },
+                    "text": "¡Las siete piedras! Ten cuidado ahí afuera; dicen que la Banda Meteoro está tramando algo."
+                },
+                {
+                    "text": "¡{player}, el Dino Rey! ¡Ya lo decía yo!"
+                }
+            ]
+        },
+        {
+            "id": "profesora_ambar",
+            "map": "world_map",
+            "x": 92,
+            "y": 66,
+            "name": "Dr. Cretácico",
+            "sprite": "Jack.png",
+            "direction": "left",
+            "type": "npc",
+            "showIf": {
+                "flag": "talkedMom"
+            },
+            "talk": [
+                {
+                    "if": {
+                        "notFlag": "starter"
+                    },
+                    "text": "¡Ah, {player}! Justo estaba recalibrando las Cartas Fósiles.\n¡Estas cartas del sótano son extremadamente raras! Con el mineral de Pangea puedo revivir al dinosaurio que guardan.\n¡Listo! Tu carta despertó. Cuídalo bien: subirá de nivel y aprenderá ataques nuevos.",
+                    "actions": [
+                        {
+                            "starter": true
+                        }
+                    ]
+                },
+                {
+                    "if": {
+                        "notDefeated": "rival_1"
+                    },
+                    "text": "{rival} también despertó su carta. ¡Seguro que quiere medirse contigo!"
+                },
+                {
+                    "text": "¡Ah, {player}! ¿Qué te trae por aquí? ¿Encontraste algo nuevo?\nEl equilibrio en tu equipo es vital. Déjame ver tu colección... ¿A quién enviaremos a descansar a las reservas?",
+                    "actions": [
+                        {
+                            "almanac": {
+                                "speaker": "Dr. Cretácico",
+                                "after": "¡Transferencia de datos completa! Cuida bien de tu equipo, sus niveles de ataque base son formidables.\nRecuerda: hay siete Guardianes con Piedras Elementales (llevas {stones}). Ataca las debilidades para ganar UNA MÁS."
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "vendedora_ambar",
+            "map": "world_map",
+            "x": 95,
+            "y": 67,
+            "name": "Vendedora Ámbar",
+            "sprite": "Irena.png",
+            "direction": "left",
+            "type": "npc",
+            "talk": [
+                {
+                    "text": "¡Bienvenidos al Emporio Ámbar! ¡Tengo los mejores objetos y cartas de movimiento de toda la región!",
+                    "actions": [
+                        {
+                            "shop": {
+                                "name": "Emporio Ámbar",
+                                "lines": {
+                                    "greet": "¡Bienvenidos al Emporio Ámbar! Ganas Dino-Créditos venciendo a entrenadores y dinos salvajes.",
+                                    "buy": "¿Te llevas eso? Excelente elección. A los de tipo Carnívoro les encanta este ítem.",
+                                    "noMoney": "Ups... parece que te faltan Dino-Créditos en tu cuenta. ¡Ve a ganar unas cuantas batallas contra los entrenadores de la Ruta 1 y vuelve!",
+                                    "bye": "¡Que tus fósiles nunca se conviertan en polvo! ¡Vuelve cuando necesites suministros!"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "rival_1",
+            "map": "world_map",
+            "x": 91,
+            "y": 68,
+            "name": "{rival}",
+            "sprite": "{rivalSprite}",
+            "direction": "up",
+            "type": "trainer",
+            "sightRange": 0,
+            "showIf": {
+                "flag": "starter",
+                "notDefeated": "rival_1"
+            },
+            "dialog": "¡{player}! Mi carta también despertó.\n{rivalEntrarVs}",
+            "defeatDialog": "{rivalPerderVs}\nVoy a reunir las siete piedras antes que tú. ¡Ya verás!",
+            "team": [
+                {
+                    "species": "{rivalStarter}",
+                    "level": 4
+                }
+            ],
+            "rewardExp": 60,
+            "onDefeat": [
+                {
+                    "notify": "📜 Nuevo objetivo: vence a los Guardianes de las Piedras Elementales."
+                }
+            ],
+            "winDialog": "{rivalGanarVs}",
+            "ai": "normal"
+        },
+        {
+            "id": "grunt_zarpa",
+            "map": "world_map",
+            "x": 19,
+            "y": 32,
+            "name": "Recluta Darius",
+            "sprite": "Darius.png",
+            "direction": "down",
+            "type": "trainer",
+            "sightRange": 3,
+            "showIf": {
+                "stones": 3,
+                "notDefeated": "grunt_zarpa"
+            },
+            "dialog": "¡Alto ahí! Soy Darius, de la Banda Meteoro.\nEse viejo Maestro Eldon no quiere decirnos dónde cayó el meteorito.\n¡Y tú tienes piedras que el jefe Rolando quiere! ¡Dámelas!",
+            "defeatDialog": "¡Grrr! Me voy a la Cueva Meteoro a avisar al comandante Helmep...\n¡Ni se te ocurra seguirme!",
+            "team": [
+                {
+                    "species": "velociraptor",
+                    "level": 8,
+                    "attacks": [
+                        "mordisco",
+                        "coletazo",
+                        "pisoton"
+                    ]
+                },
+                {
+                    "species": "rajasaurus",
+                    "level": 9,
+                    "attacks": [
+                        "bola_fuego",
+                        "colmillo_igneo",
+                        "garra_ardiente"
+                    ]
+                }
+            ],
+            "moveCard": "venom_fang",
+            "rewardExp": 120,
+            "onDefeat": [
+                {
+                    "giveMove": "venom_fang"
+                },
+                {
+                    "notify": "🃏 Darius dejó caer Venom Fang. 📜 Síguelo a la Cueva Meteoro, al norte por la Ruta 1."
+                }
+            ],
+            "ai": "dificil"
+        },
+        {
+            "id": "admin_helmep",
+            "map": "cueva_meteoro",
+            "x": 14,
+            "y": 5,
+            "name": "Comandante Helmep",
+            "sprite": "Helmep.png",
+            "direction": "down",
+            "type": "trainer",
+            "sightRange": 4,
+            "showIf": {
+                "defeated": "grunt_zarpa",
+                "notDefeated": "admin_helmep"
+            },
+            "dialog": "Vaya, vaya... el que derrotó a Darius.\nSoy Helmep, comandante de la Banda Meteoro. Este meteorito es nuestro.\nCon su energía, Rolando despertará al dinosaurio más poderoso de todos. ¡No te dejaré pasar!",
+            "defeatDialog": "Mi máscara... mis dinos... ¡Imposible!\nNo importa. Rolando ya tiene lo que necesitaba del meteorito.\nCuando reúnas las siete piedras, él irá a buscarte.",
+            "team": [
+                {
+                    "species": "megalosaurus",
+                    "level": 15,
+                    "attacks": [
+                        "pulso_fosil",
+                        "zarpazo_primigenio",
+                        "furia_jurasica"
+                    ]
+                },
+                {
+                    "species": "saichania",
+                    "level": 14,
+                    "attacks": [
+                        "terremoto",
+                        "cabezazo_roca",
+                        "rugido"
+                    ]
+                },
+                {
+                    "species": "majungasaurus",
+                    "level": 15,
+                    "attacks": [
+                        "ciclon",
+                        "rafaga",
+                        "doble_golpe"
+                    ]
+                }
+            ],
+            "moveCard": "tag_team",
+            "rewardExp": 200,
+            "onDefeat": [
+                {
+                    "giveXp": 30
+                },
+                {
+                    "notify": "📜 Helmep huyó. Sigue reuniendo Piedras Elementales."
+                }
+            ],
+            "ai": "experto"
+        },
+        {
+            "id": "rival_2",
+            "map": "world_map",
+            "x": 60,
+            "y": 47,
+            "name": "{rival}",
+            "sprite": "{rivalSprite}",
+            "direction": "down",
+            "type": "trainer",
+            "sightRange": 4,
+            "showIf": {
+                "stones": 7,
+                "defeated": "admin_helmep",
+                "notDefeated": "rival_2"
+            },
+            "dialog": "¡{player}! Me ganaste reuniendo las piedras... pero antes de enfrentarte a Rolando tienes que superar a tu hermano.\n{rivalEntrarVs}",
+            "defeatDialog": "{rivalPerderVs}\nAhora sí estás listo. Rolando espera frente al Templo del Meteorito. ¡Ve y gana por los dos!",
+            "team": [
+                {
+                    "species": "{rivalStarter}",
+                    "level": 17
+                },
+                {
+                    "species": "spinosaurus",
+                    "level": 16
+                },
+                {
+                    "species": "utahraptor",
+                    "level": 16
+                }
+            ],
+            "moveCard": "green_impulse",
+            "rewardExp": 250,
+            "winDialog": "{rivalGanarVs}",
+            "ai": "experto"
+        },
+        {
+            "id": "boss_draco",
+            "map": "world_map",
+            "x": 80,
+            "y": 36,
+            "name": "Rolando, el Rey Usurpador",
+            "sprite": "Rolando.png",
+            "direction": "down",
+            "type": "trainer",
+            "sightRange": 3,
+            "showIf": {
+                "defeated": "rival_2",
+                "notDefeated": "boss_draco"
+            },
+            "dialog": "Así que tú eres {player}, quien reunió las siete piedras.\nYo soy Rolando, líder de la Banda Meteoro. ¡El verdadero Dino Rey!\nCon las piedras controlaré a todos los dinos del mundo.\n¡Entrégamelas... o te las arrebataré!",
+            "defeatDialog": "Imposible... Mis dinos... me abandonan...\nTal vez la corona nunca fue para alguien como yo.",
+            "team": [
+                {
+                    "species": "gigas",
+                    "level": 19,
+                    "attacks": [
+                        "garra_ardiente",
+                        "volcan_furioso",
+                        "rugido"
+                    ]
+                },
+                {
+                    "species": "spinosaurus",
+                    "level": 18,
+                    "attacks": [
+                        "hidropulso",
+                        "tsunami",
+                        "acua_cola"
+                    ]
+                },
+                {
+                    "species": "tyrannosaurus_rex",
+                    "level": 20,
+                    "attacks": [
+                        "llamarada",
+                        "volcan_furioso",
+                        "hiper_colmillo"
+                    ]
+                }
+            ],
+            "moveCard": "ocean_panic",
+            "rewardExp": 500,
+            "onDefeat": [
+                {
+                    "setFlag": "dinoRey"
+                },
+                {
+                    "ending": true
+                }
+            ],
+            "ai": "experto"
+        }
+    ],
+    "ending": "Las siete Piedras Elementales brillan sobre el templo...\nLa luz forma una corona en el cielo y desciende sobre ti.\n¡{player}, ahora eres el DINO REY!\nTu hermano {rival} y mamá Blanche corren a abrazarte.\nLa aventura continúa: completa el almanaque y vuelve a desafiar a todos."
+}

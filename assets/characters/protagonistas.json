@@ -1,0 +1,42 @@
+{
+    "_comentario": "Los hermanos Fer y Ander (assets/characters/historia_y_dialogos.md). El que no elijas será tu rival. 'starter' = dino inicial; si no existe en dinos.json se usa 'starterFallback'. 'lines' = diálogos de batalla (vs = contra el hermano).",
+    "protagonistas": [
+        {
+            "id": "fer",
+            "title": "El Estratega",
+            "defaultName": "Fer",
+            "sprite": "Fer.png",
+            "color": "#38bdf8",
+            "element": "viento",
+            "starter": "deltadromeus",
+            "description": "Hermano mayor. Analítico, calmado bajo presión y siempre piensa dos pasos adelante. Explota las debilidades elementales.",
+            "lines": {
+                "entrar": "Un buen Tamer estudia a su oponente antes del primer turno. ¡Veamos de qué estás hecho!",
+                "entrarVs": "No creas que voy a contenerme solo porque eres mi hermano, Ander. ¡Prepárate!",
+                "ganar": "La estrategia siempre supera a la fuerza bruta. Fue un combate interesante.",
+                "ganarVs": "Buen intento, hermanito. Sigue practicando, algún día lograrás alcanzar mi nivel.",
+                "perder": "Interesante... tu táctica fue superior. Tendré que ajustar mi equipo.",
+                "perderVs": "¡Vaya! Realmente no vi venir ese movimiento. Has mejorado mucho, te lo reconozco."
+            }
+        },
+        {
+            "id": "ander",
+            "title": "El Impulsivo",
+            "defaultName": "Ander",
+            "sprite": "Ander.png",
+            "color": "#ff6b35",
+            "element": "fuego",
+            "starter": "acrocanthosaurus",
+            "starterFallback": "carcharodontosaurus",
+            "description": "Hermano menor. Energético, apasionado y directo. Confía en la fuerza bruta y nunca se rinde.",
+            "lines": {
+                "entrar": "¡No hay dinosaurio más fuerte que el mío! ¡Vamos a aplastarlos de un solo golpe!",
+                "entrarVs": "¡Ya me cansé de tus estrategias, Fer! ¡Esta vez te voy a barrer del mapa!",
+                "ganar": "¡Jaja! ¡Te lo dije! ¡Contra el poder puro no hay defensa que valga!",
+                "ganarVs": "¡SÍ! ¡Por fin te gané! ¿Quién es el estratega ahora, eh? ¡El poder manda!",
+                "perder": "¡Ahhh! ¡Estuvimos a un solo ataque de ganar! ¡Solo tuviste suerte!",
+                "perderVs": "¡Trampa! ¡Usaste demasiadas tácticas raras! ¡La próxima vez usaré un T-Rex más grande y verás!"
+            }
+        }
+    ]
+}

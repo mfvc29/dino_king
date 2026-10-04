@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dino King - Advance Map Studio (Herramienta Externa)</title>
+    <link rel="stylesheet" href="css/editor.css">
+</head>
+<body>
+    <!-- Barra Superior / Header de Herramientas -->
+    <header class="editor-header">
+        <div class="editor-branding">
+            <span class="editor-icon">🗺️</span>
+            <div>
+                <h1>Dino King <span class="badge">ADVANCE MAP STUDIO</span></h1>
+                <p class="subtitle">Herramienta Externa de Edición Multicapa & Diseño de Niveles</p>
+            </div>
+        </div>
+
+        <!-- Herramientas de Dibujo -->
+        <div class="tools-group">
+            <button class="tool-btn active" id="toolPencil" title="Lápiz (P): Pintar tiles o bloques">✏️</button>
+            <button class="tool-btn" id="toolFill" title="Bote de Pintura (F): Relleno de áreas">🪣</button>
+            <button class="tool-btn" id="toolEraser" title="Borrador (E): Limpiar tile de la capa activa">🧹</button>
+            <button class="tool-btn" id="toolPicker" title="Pipeta (I): Clonar tile del mapa">🔍</button>
+            <div class="tool-divider"></div>
+            <button class="tool-btn" id="toolWarp" title="Warps & Puertas (W): Colocar o editar teletransportes a otros mapas">🌀</button>
+            <button class="tool-btn" id="toolNpc" title="Personajes & Eventos de Combate (N): Colocar entrenadores y NPCs fijos">🧑</button>
+            <div class="tool-divider"></div>
+            <button class="tool-btn" id="btnUndo" title="Deshacer (Ctrl+Z)">↩️</button>
+            <button class="tool-btn" id="btnRedo" title="Rehacer (Ctrl+Y)">↪️</button>
+            <div class="tool-divider"></div>
+            <button class="tool-btn active" id="btnToggleGrid" title="Mostrar/Ocultar Cuadrícula">📐</button>
+            <button class="tool-btn active" id="btnToggleCollisionsOverlay" title="Mostrar/Ocultar Permisos">🚫</button>
+            <button class="tool-btn active" id="btnToggleWarpsOverlay" title="Mostrar/Ocultar Puertas y Warps">🚪</button>
+            <button class="tool-btn active" id="btnToggleNpcsOverlay" title="Mostrar/Ocultar Personajes y Eventos">👥</button>
+        </div>
+
+        <!-- Controles de Proyecto y Publicación -->
+        <div class="file-actions-group">
+            <div class="project-selector-wrap">
+                <span class="proj-label">MAPA:</span>
+                <select id="projectSelect" class="retro-select-mini"></select>
+            </div>
+            <button class="action-btn btn-new-map" id="btnNewMap" title="Crear un nuevo mapa (interior de casa, cueva, ruta...)">
+                ➕ Nuevo Mapa
+            </button>
+            <button class="action-btn btn-draft" id="btnSaveDraft" title="Guardar cambios en tu borrador (no afecta al juego)">
+                💾 Guardar
+            </button>
+            <button class="action-btn btn-deploy" id="btnDeployGame" title="¡Publicar al juego! Aplica este mapa en Dino King">
+                🚀 Publicar al Juego
+            </button>
+            <button class="action-btn" id="btnExportJson" title="Descargar copia local en JSON">
+                📥 Exportar
+            </button>
+            <label class="action-btn btn-import-label" title="Importar mapa desde archivo JSON">
+                📂 Importar
+                <input type="file" id="fileImportJson" accept=".json" style="display:none;">
+            </label>
+        </div>
+    </header>
+
+    <!-- Cuerpo Principal del Editor -->
+    <main class="editor-main">
+        <!-- Barra Lateral Izquierda (Paleta de Tilesets) -->
+        <aside class="editor-sidebar">
+            <!-- Pestaña / Selector de Tileset -->
+            <div class="sidebar-section">
+                <div class="sidebar-header" style="display: flex; justify-content: space-between; align-items: center;">
+                    <h3>🎨 PALETA DE TILESETS</h3>
+                    <label class="btn-add-asset" title="Añadir nueva hoja de sprites (.PNG)">
+                        ➕ Añadir PNG
+                        <input type="file" id="inputNewTileset" accept="image/png" style="display:none;">
+                    </label>
+                </div>
+                <div class="tileset-select-wrapper">
+                    <label for="tilesetSelector">Tileset Activo:</label>
+                    <select id="tilesetSelector" class="retro-select">
+                        <option value="GRASS+.png">GRASS+.png</option>
+                        <option value="Water+.png">Water+.png</option>
+                    </select>
+                </div>
+
+                <!-- Configuración de Dimensión / Cuadrícula de Tile -->
+                <div class="palette-setting-box">
+                    <div class="palette-control-label">
+                        <span>📐 Cuadrícula / Tile:</span>
+                        <strong id="currentTileSizeDisplay" class="badge-size">16x16 px</strong>
+                    </div>
+                    <div class="palette-btn-row" id="tileSizeButtons">
+                        <button type="button" class="btn-chip active" data-size="16" title="Cuadrícula de 16x16 px (2 tiles = 64px grande en mapa)">16x16</button>
+                        <button type="button" class="btn-chip" data-size="32" title="Cuadrícula de 32x32 px (1 tile = 32px en mapa)">32x32</button>
+                        <button type="button" class="btn-chip" data-size="64" title="Cuadrícula de 64x64 px (Alta Resolución)">64x64</button>
+                    </div>
+                </div>
+
+                <!-- Controles de Zoom de la Paleta (32x32 / 64x64 y granular) -->
+                <div class="palette-setting-box">
+                    <div class="palette-control-label">
+                        <span>🔍 Zoom Paleta:</span>
+                        <span id="paletteZoomDisplay" class="badge-zoom">64px (400%)</span>
+                    </div>
+                    <div class="palette-zoom-row">
+                        <div class="palette-btn-row">
+                            <button type="button" class="btn-chip" id="btnZoomPalette32" title="Ver celdas a 32x32 px">32x32</button>
+                            <button type="button" class="btn-chip active" id="btnZoomPalette64" title="Ver celdas ampliadas a 64x64 px (fácil de seleccionar)">64x64</button>
+                        </div>
+                        <div class="palette-btn-row" style="margin-left: auto;">
+                            <button type="button" class="btn-chip-mini" id="btnPaletteZoomOut" title="Reducir Zoom (−)">−</button>
+                            <button type="button" class="btn-chip-mini" id="btnPaletteZoomIn" title="Aumentar Zoom (+)">+</button>
+                            <button type="button" class="btn-chip-mini" id="btnPaletteZoomReset" title="Restablecer (1x)">1x</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Canvas Interactivo del Tileset (Paleta) -->
+                <div class="tileset-palette-container" id="tilesetPaletteContainer">
+                    <canvas id="paletteCanvas" width="400" height="224"></canvas>
+                </div>
+                <div class="palette-hint">
+                    <span>💡 Clic para 1 tile o arrastra para seleccionar un <strong>bloque múltiple</strong> (sello). Usa Ctrl + Rueda para zoom fluido.</span>
+                </div>
+            </div>
+
+            <!-- Panel de Permisos de Paso (Movement Permissions estilo Advance Map) -->
+            <div class="sidebar-section" id="collisionPaletteSection" style="display: none;">
+                <div class="sidebar-header">
+                    <h3>🚫 PERMISOS DE PASO</h3>
+                </div>
+                <p class="perm-desc">Selecciona el tipo de permiso para pintar colisiones como en Advance Map:</p>
+                <div class="perm-types-grid">
+                    <div class="perm-card active" data-perm="solid">
+                        <div class="perm-box solid-box">1</div>
+                        <div>
+                            <strong>Bloqueado (Sólido)</strong>
+                            <span>Paredes, rocas, vallas</span>
+                        </div>
+                    </div>
+                    <div class="perm-card" data-perm="walkable">
+                        <div class="perm-box walkable-box">0</div>
+                        <div>
+                            <strong>Paso Libre</strong>
+                            <span>Caminos, hierba baja</span>
+                        </div>
+                    </div>
+                    <div class="perm-card" data-perm="tall_grass">
+                        <div class="perm-box grass-box">C</div>
+                        <div>
+                            <strong>Hierba Silvestre</strong>
+                            <span>Dinos salvajes & recolección</span>
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-top: 10px;">
+                    <button class="btn-secondary" id="btnAutoCollisions" style="width: 100%;">
+                        ⚡ Auto-Generar Colisiones
+                    </button>
+                </div>
+            </div>
+
+            <!-- Panel de Warps / Puertas y Conexiones entre Mapas -->
+            <div class="sidebar-section" id="warpPaletteSection" style="display: none;">
+                <div class="sidebar-header">
+                    <h3>🌀 PUERTAS & WARPS</h3>
+                </div>
+                <p class="perm-desc">Haz clic en una losa del mapa (ej. una puerta o camino) para colocar o editar un teletransporte:</p>
+                
+                <div class="warp-form-box">
+                    <div class="form-row">
+                        <label>Losa Seleccionada:</label>
+                        <span id="warpCurrentTileCoords" style="color: var(--cyan); font-weight: bold; font-family: var(--font-mono); font-size: 0.8rem;">(Ninguna - Haz clic en el mapa)</span>
+                    </div>
+                    <div class="form-row" style="margin-top: 8px;">
+                        <label for="warpTargetMapSelect">Mapa Destino:</label>
+                        <select id="warpTargetMapSelect" class="retro-select" style="margin-top: 2px;"></select>
+                    </div>
+                    <div style="display: flex; gap: 8px; margin-top: 8px;">
+                        <div style="flex: 1;">
+                            <label>Llegada X (Col):</label>
+                            <input type="number" id="warpTargetX" class="retro-input-mini" value="10" min="0">
+                        </div>
+                        <div style="flex: 1;">
+                            <label>Llegada Y (Fila):</label>
+                            <input type="number" id="warpTargetY" class="retro-input-mini" value="10" min="0">
+                        </div>
+                    </div>
+                    <div class="form-row" style="margin-top: 8px;">
+                        <label>Descripción / Etiqueta:</label>
+                        <input type="text" id="warpDesc" class="retro-input-mini" placeholder="Ej: Puerta Casa de Martín" style="width: 100%;">
+                    </div>
+                    <div style="display: flex; gap: 6px; margin-top: 10px;">
+                        <button class="action-btn btn-deploy" id="btnSaveWarp" style="flex: 1; justify-content: center;">
+                            💾 Guardar Warp
+                        </button>
+                        <button class="action-btn" id="btnDeleteWarp" style="display: none; background: #dc2626; border-color: #ef4444;" title="Eliminar este warp">
+                            🗑️
+                        </button>
+                    </div>
+                </div>
+
+                <div class="layers-divider" style="margin-top: 14px;">
+                    <span>WARPS REGISTRADOS EN ESTE MAPA</span>
+                </div>
+                <div class="warps-list" id="warpsListContainer">
+                    <small style="color: #64748b; display: block; padding: 6px 0;">No hay warps en este mapa aún.</small>
+                </div>
+            </div>
+
+            <!-- Panel de Personajes Fijos / Eventos de Combate -->
+            <div class="sidebar-section" id="npcPaletteSection" style="display: none;">
+                <div class="sidebar-header">
+                    <h3>🧑 PERSONAJES & EVENTOS</h3>
+                </div>
+                <p class="perm-desc">Haz clic en una losa para colocar un personaje fijo. Los <strong>entrenadores</strong> te desafían a combate al verte en su línea de visión (estilo Pokémon).</p>
+
+                <div class="warp-form-box npc-form-box">
+                    <div class="form-row">
+                        <label>Losa Seleccionada:</label>
+                        <span id="npcCurrentTileCoords" style="color: var(--cyan); font-weight: bold; font-family: var(--font-mono); font-size: 0.8rem;">(Ninguna - Haz clic en el mapa)</span>
+                    </div>
+
+                    <div class="npc-sprite-row" style="margin-top: 8px;">
+                        <canvas id="npcSpritePreview" width="64" height="64"></canvas>
+                        <div style="flex: 1; min-width: 0;">
+                            <label for="npcSpriteSelect">Sprite (assets/characters):</label>
+                            <select id="npcSpriteSelect" class="retro-select" style="margin-top: 2px;"></select>
+                        </div>
+                    </div>
+
+                    <div id="npcSpriteGallery" class="npc-sprite-gallery" title="Haz clic en un personaje para usarlo">
+                        <small style="color: #64748b;">Cargando personajes...</small>
+                    </div>
+
+                    <div class="form-row" style="margin-top: 8px;">
+                        <label for="npcName">Nombre:</label>
+                        <input type="text" id="npcName" class="retro-input-mini" placeholder="Ej: Cazador Rex" maxlength="24">
+                    </div>
+
+                    <div style="display: flex; gap: 8px; margin-top: 8px;">
+                        <div style="flex: 1;">
+                            <label for="npcType">Tipo de Evento:</label>
+                            <select id="npcType" class="retro-select" style="margin-top: 2px;">
+                                <option value="trainer">⚔️ Entrenador (Combate)</option>
+                                <option value="npc">💬 NPC (Solo diálogo)</option>
+                                <option value="tutor">📚 Maestro de ataques</option>
+                            </select>
+                        </div>
+                        <div style="width: 96px;">
+                            <label for="npcDirection">Mira hacia:</label>
+                            <select id="npcDirection" class="retro-select" style="margin-top: 2px;">
+                                <option value="down">⬇️ Abajo</option>
+                                <option value="up">⬆️ Arriba</option>
+                                <option value="left">⬅️ Izq.</option>
+                                <option value="right">➡️ Der.</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="npc-trainer-only" style="display: flex; gap: 8px; margin-top: 8px;">
+                        <div style="flex: 1;">
+                            <label for="npcSightRange">Visión (losas):</label>
+                            <input type="number" id="npcSightRange" class="retro-input-mini" value="4" min="0" max="12">
+                        </div>
+                        <div style="flex: 1;">
+                            <label for="npcRewardExp">Recompensa EXP:</label>
+                            <input type="number" id="npcRewardExp" class="retro-input-mini" value="100" min="0">
+                        </div>
+                    </div>
+
+                    <div class="form-row" style="margin-top: 8px;">
+                        <label for="npcDialog" id="npcDialogLabel">Diálogo antes del combate:</label>
+                        <textarea id="npcDialog" class="retro-input-mini" rows="3" placeholder="Cada línea es una página del diálogo"></textarea>
+                    </div>
+
+                    <div class="form-row npc-trainer-only" style="margin-top: 8px;">
+                        <label for="npcDefeatDialog">Diálogo al ser derrotado:</label>
+                        <textarea id="npcDefeatDialog" class="retro-input-mini" rows="2" placeholder="Ej: ¡Vaya, qué fuerza tienen tus dinos!"></textarea>
+                    </div>
+
+                    <div class="form-row npc-trainer-only" style="margin-top: 8px;">
+                        <label>🦖 Equipo de Dinos (hasta 3, con 3 ataques cada uno) + 1 carta de movimiento:</label>
+                        <div id="npcTeamSlots" class="dino-team-slots">
+                            <!-- Generado por editor.js a partir de assets/dinos/dinos.json -->
+                        </div>
+                    </div>
+
+                    <div class="form-row npc-trainer-only" style="margin-top: 8px;">
+                        <label for="npcMoveCard">🃏 Carta de movimiento (1, usable varias veces en el combate):</label>
+                        <select id="npcMoveCard" class="retro-select" style="margin-top: 2px;"></select>
+                    </div>
+
+                    <div style="display: flex; gap: 6px; margin-top: 10px;">
+                        <button class="action-btn btn-deploy" id="btnSaveNpc" style="flex: 1; justify-content: center;">
+                            💾 Guardar Personaje
+                        </button>
+                        <button class="action-btn" id="btnDeleteNpc" style="display: none; background: #dc2626; border-color: #ef4444;" title="Eliminar este personaje">
+                            🗑️
+                        </button>
+                    </div>
+                </div>
+
+                <div class="layers-divider" style="margin-top: 14px;">
+                    <span>PERSONAJES EN ESTE MAPA</span>
+                </div>
+                <div class="warps-list" id="npcsListContainer">
+                    <small style="color: #64748b; display: block; padding: 6px 0;">No hay personajes en este mapa aún.</small>
+                </div>
+            </div>
+
+            <!-- Previsualización del Sello / Pincel Seleccionado -->
+            <div class="sidebar-section brush-preview-section">
+                <div class="sidebar-header">
+                    <h3>🖌️ PINCEL ACTIVO</h3>
+                </div>
+                <div class="brush-preview-content">
+                    <canvas id="brushPreviewCanvas" width="64" height="64"></canvas>
+                    <div class="brush-info" id="brushInfoText">
+                        <strong>Tile:</strong> [GRASS+, r:0, c:0]<br>
+                        <strong>Tamaño:</strong> 1 x 1 losas
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mini-Radar del Mapa Completo -->
+            <div class="sidebar-section minimap-section">
+                <div class="sidebar-header">
+                    <h3>🗺️ NAVEGADOR RÁPIDO</h3>
+                </div>
+                <div class="minimap-wrapper">
+                    <canvas id="editorMinimap" width="240" height="180"></canvas>
+                </div>
+                <span class="minimap-hint">Haz clic en el minimapa para saltar a esa zona.</span>
+            </div>
+        </aside>
+
+        <!-- Área Central de Lienzo (Editor de Mapa) -->
+        <section class="editor-viewport" id="viewport">
+            <div class="canvas-zoom-wrapper" id="canvasWrapper">
+                <canvas id="mapCanvas" width="3840" height="2880"></canvas>
+            </div>
+
+            <!-- Controles Flotantes de Zoom y Posición -->
+            <div class="floating-view-controls">
+                <button class="floating-btn" id="btnZoomOut" title="Reducir Zoom (-)">−</button>
+                <span class="zoom-level-text" id="zoomLevelDisplay">100%</span>
+                <button class="floating-btn" id="btnZoomIn" title="Aumentar Zoom (+)">+</button>
+                <button class="floating-btn" id="btnResetView" title="Restablecer Vista al Centro">🎯</button>
+            </div>
+        </section>
+
+        <!-- Barra Lateral Derecha (GESTOR DE CAPAS MULTICAPA) -->
+        <aside class="editor-layers-panel">
+            <div class="layers-panel-header">
+                <div class="layers-title-box">
+                    <span style="font-size: 1.1rem;">📑</span>
+                    <h3>GESTOR DE CAPAS</h3>
+                </div>
+                <button class="btn-add-layer" id="btnAddLayer" title="Crear una nueva capa encima">
+                    ➕ Nueva Capa
+                </button>
+            </div>
+
+            <div class="layers-panel-hint">
+                <span>Orden: <strong>Arriba</strong> se dibuja sobre las capas de <strong>Abajo</strong>.</span>
+            </div>
+
+            <!-- Capa Especial de Eventos: Warps & Puertas -->
+            <div class="layer-item warp-layer-item" id="layerItemWarp" title="Capa de Puertas, Warps y Conexiones entre Mapas">
+                <button class="layer-btn-eye" id="btnEyeWarp" title="Mostrar/Ocultar Indicadores de Warps">👁️</button>
+                <div class="layer-item-info">
+                    <span class="layer-badge-warp">EVENTOS</span>
+                    <strong class="layer-name">Puertas & Warps</strong>
+                </div>
+                <span class="layer-active-indicator"></span>
+            </div>
+
+            <!-- Capa Especial de Eventos: Personajes / Entrenadores -->
+            <div class="layer-item npc-layer-item" id="layerItemNpc" title="Capa de Personajes Fijos y Eventos de Combate">
+                <button class="layer-btn-eye" id="btnEyeNpc" title="Mostrar/Ocultar Personajes">👁️</button>
+                <div class="layer-item-info">
+                    <span class="layer-badge-npc">EVENTOS</span>
+                    <strong class="layer-name">Personajes & Combates</strong>
+                </div>
+                <span class="layer-active-indicator"></span>
+            </div>
+
+            <!-- Capa Especial de Permisos / Colisiones -->
+            <div class="layer-item collision-layer-item" id="layerItemCollision" title="Capa de Colisiones y Permisos">
+                <button class="layer-btn-eye" id="btnEyeCollision" title="Mostrar/Ocultar Overlay de Permisos">👁️</button>
+                <div class="layer-item-info">
+                    <span class="layer-badge-perm">FÍSICAS</span>
+                    <strong class="layer-name">Colisiones & Permisos</strong>
+                </div>
+                <span class="layer-active-indicator"></span>
+            </div>
+
+            <div class="layers-divider">
+                <span>CAPAS VISUALES DE TILES</span>
+            </div>
+
+            <!-- Lista Dinámica de Capas (Generada por JS) -->
+            <div class="layers-list" id="layersListContainer">
+                <!-- Se llena dinámicamente con las capas creadas -->
+            </div>
+        </aside>
+    </main>
+
+    <!-- Modal para Crear Nuevo Mapa -->
+    <div class="editor-modal-backdrop" id="modalNewMap" style="display: none;">
+        <div class="editor-modal">
+            <div class="modal-header">
+                <h3>🗺️ Crear Nuevo Mapa</h3>
+                <button class="modal-close" id="btnCloseNewMapModal">✖</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group" style="margin-bottom: 12px;">
+                    <label>ID / Nombre de Archivo (.json):</label>
+                    <input type="text" id="inputNewMapId" class="retro-input-dialog" placeholder="ej: casa_martin, cueva_1, ruta_2">
+                    <small style="color: #64748b; font-size: 0.72rem;">Sin espacios (usa guiones bajos). Se guardará como archivo independiente.</small>
+                </div>
+                <div class="form-group" style="margin-bottom: 12px;">
+                    <label>Título Descriptivo:</label>
+                    <input type="text" id="inputNewMapName" class="retro-input-dialog" placeholder="ej: Casa de Martín (Planta Baja)">
+                </div>
+                <div style="display: flex; gap: 12px; margin-bottom: 14px;">
+                    <div style="flex: 1;">
+                        <label>Ancho (Losas):</label>
+                        <input type="number" id="inputNewMapCols" class="retro-input-dialog" value="20" min="8" max="250">
+                        <small style="color: #64748b; font-size: 0.7rem;">Casas: 16-24 | Rutas: 60-120</small>
+                    </div>
+                    <div style="flex: 1;">
+                        <label>Alto (Losas):</label>
+                        <input type="number" id="inputNewMapRows" class="retro-input-dialog" value="16" min="8" max="250">
+                        <small style="color: #64748b; font-size: 0.7rem;">Casas: 12-18 | Rutas: 60-120</small>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 12px; margin-bottom: 16px;">
+                    <div style="flex: 1;">
+                        <label>Tileset Base Inicial:</label>
+                        <select id="selectNewMapTileset" class="retro-select">
+                            <option value="GRASS+.png" selected>GRASS+.png</option>
+                            <option value="Water+.png">Water+.png</option>
+                            <option value="Bridges.png">Bridges.png</option>
+                            <option value="exterior.png">exterior.png</option>
+                            <option value="arboles.png">arboles.png</option>
+                            <option value="pasto.png">pasto.png</option>
+                            <option value="caver.png">caver.png</option>
+                            <option value="fairwood.png">fairwood.png</option>
+                        </select>
+                    </div>
+                    <div style="width: 140px;">
+                        <label>Tamaño Tile:</label>
+                        <select id="selectNewMapTileSize" class="retro-select">
+                            <option value="32" selected>32x32 px</option>
+                            <option value="16">16x16 px</option>
+                            <option value="64">64x64 px</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-actions" style="display: flex; justify-content: flex-end; gap: 8px;">
+                    <button class="action-btn" id="btnCancelNewMap">Cancelar</button>
+                    <button class="action-btn btn-deploy" id="btnConfirmNewMap">✨ Crear Mapa</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Barra Inferior de Estado -->
+    <footer class="editor-statusbar">
+        <div class="status-left">
+            <span class="status-item" id="statusCoords">📍 Losa: X: 0, Y: 0 | Píxel: X: 0, Y: 0</span>
+            <span class="status-item" id="statusZone">🏡 Zona: Pueblo Raíz</span>
+            <span class="status-item" id="statusDims">📐 Dimensiones: 120 x 90 losas</span>
+        </div>
+        <div class="status-right">
+            <span class="status-toast" id="editorToast"></span>
+            <span class="status-item" id="statusMode">Capa Activa: <strong id="statusCurrentLayerName">Suelo Base</strong> | Herramienta: <strong>Lápiz</strong></span>
+        </div>
+    </footer>
+
+    <!-- Scripts del Editor -->
+    <script src="js/editor.js"></script>
+</body>
+</html>

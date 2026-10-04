@@ -39,6 +39,13 @@ class LPCRenderer {
                 resolve(img);
             };
             img.onerror = () => {
+                // Sprite que todavía no existe: usar su provisional (LPCRenderer.fallbacks)
+                const file = decodeURIComponent(String(url).split('/').pop());
+                const alt = LPCRenderer.fallbacks[file];
+                if (alt && alt !== file) {
+                    this.loadFromUrl(String(url).replace(/[^/]*$/, encodeURIComponent(alt))).then(resolve);
+                    return;
+                }
                 this.loaded = false;
                 this.image = null;
                 resolve(null);
@@ -201,3 +208,6 @@ class LPCRenderer {
         ctx.restore();
     }
 }
+
+/** Sprite provisional para archivos que aún no existen: { 'Fer.png': 'Roderick.png' }. */
+LPCRenderer.fallbacks = {};
