@@ -99,6 +99,20 @@
   },
   "dinos": [
     {
+      "id": "acrocanthosaurus",
+      "name": "Acrocanthosaurus",
+      "image": "fuego/acrocanthosaurus_dinosaur_king.jpg",
+      "element": "fuego",
+      "card": "cards/fuego/acrocanthosaurus_dinosaur_king.jpg",
+      "stats": [
+        4,
+        5,
+        4,
+        5,
+        6
+      ]
+    },
+    {
       "id": "carcharodontosaurus",
       "name": "Carcharodontosaurus",
       "image": "fuego/carcharodontosaurus_dinosaur_king.jpg",

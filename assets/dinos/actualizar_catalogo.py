@@ -185,7 +185,7 @@ def main():
 
     folders = [e for e in elements if os.path.isdir(os.path.join(DIR, e))]
     folders += sorted(d for d in os.listdir(DIR)
-                      if os.path.isdir(os.path.join(DIR, d)) and d not in folders and d != 'cards')
+                      if os.path.isdir(os.path.join(DIR, d)) and d not in folders and d not in ('cards', 'chibis'))
 
     all_paths = [os.path.join(DIR, e, fn) for e in folders
                  for fn in sorted(os.listdir(os.path.join(DIR, e))) if fn.lower().endswith('.jpg')]
