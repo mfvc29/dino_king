@@ -6,6 +6,9 @@
  * ranuras (js/save.js) desde la pantalla de título (js/characterSelect.js).
  */
 
+// Servidor multijugador en Render (render.yaml, servicio "dino-king-multijugador")
+const MULTIPLAYER_URL = 'wss://dino-king-multijugador.onrender.com';
+
 class Game {
     constructor() {
         this.canvas = document.getElementById('gameCanvas');
@@ -241,13 +244,10 @@ class Game {
         statusEl.textContent = '🟡 Conectando...';
 
         try {
-            // Auto-detectar protocolo y host para funcionar en local y en la nube
-            const isSecure = window.location.protocol === 'https:';
-            const wsProtocol = isSecure ? 'wss' : 'ws';
-            const wsHost = window.location.hostname || 'localhost';
-            const httpPort = parseInt(window.location.port) || (isSecure ? 443 : 80);
-            const wsPort = (wsHost === 'localhost' || wsHost === '127.0.0.1') ? 8001 : httpPort + 1;
-            this.ws = new WebSocket(`${wsProtocol}://${wsHost}:${wsPort}`);
+            // En local: server.py (puerto 8001). En la nube: el servidor multijugador de Render
+            const host = window.location.hostname || 'localhost';
+            const local = host === 'localhost' || host === '127.0.0.1' || /^192\.168\.|^10\./.test(host);
+            this.ws = new WebSocket(local ? `ws://${host}:8001` : MULTIPLAYER_URL);
 
             this.ws.onopen = () => {
                 statusEl.textContent = '🟢 En línea';

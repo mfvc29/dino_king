@@ -390,9 +390,17 @@ async def ws_handler(websocket):
     finally:
         await handle_disconnect(websocket)
 
-async def run_ws_server():
-    async with websockets.serve(ws_handler, "0.0.0.0", WS_PORT):
-        print(f"  ⚡ Servidor WebSocket multijugador activo en: ws://localhost:{WS_PORT}")
+def health_check(connection, request):
+    """Render comprueba que el servicio está vivo con GET /healthz (no es WebSocket)."""
+    if request.path in ("/healthz", "/") and "upgrade" not in request.headers.get("Connection", "").lower():
+        return connection.respond(200, "Dino Rey: servidor multijugador activo\n")
+    return None
+
+
+async def run_ws_server(port=None):
+    port = port or WS_PORT
+    async with websockets.serve(ws_handler, "0.0.0.0", port, process_request=health_check):
+        print(f"  ⚡ Servidor WebSocket multijugador activo en el puerto {port}")
         await asyncio.Future()
 
 def start_ws_loop():
@@ -417,6 +425,13 @@ def start_map_editor():
 
 
 if __name__ == "__main__":
+    # En Render (la nube) solo hay un puerto ($PORT): ahí corre únicamente el multijugador,
+    # porque el juego lo sirve Firebase Hosting.
+    if os.environ.get("RENDER") and os.environ.get("PORT"):
+        print("  ☁️  Modo Render: solo servidor multijugador (WebSocket)")
+        asyncio.run(run_ws_server(int(os.environ["PORT"])))
+        sys.exit(0)
+
     print("==================================================")
     print("  🦖 DINO KING - Servidor Multijugador & Mundo Real")
     print("==================================================")

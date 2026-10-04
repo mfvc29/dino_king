@@ -57,9 +57,11 @@ class SaveManager {
             this.game.notifyStatus('⚠️ No se pudo guardar en el navegador.');
             return false;
         }
+        // Cada partida lleva el nombre del jugador (Fer-slot1, Ander-slot1...) para que dos
+        // hermanos no se sobrescriban en la hoja aunque usen la misma ranura
         const payload = {
             correo: "jugador@dinoking.com", // Usuario por defecto
-            nombre_partida: `slot${slot}`,
+            nombre_partida: SaveManager.cloudName(data, slot),
             estado: JSON.stringify(data)
         };
         fetch("https://script.google.com/macros/s/AKfycbx1erDei_wrc8qoyo91hIchiiS8M_xa3TF0XVflqwv_qDpGJtRTG3w06lqpc3TS47gpDg/exec", {
@@ -109,12 +111,14 @@ class SaveManager {
 
             let changed = false;
             for (const row of resData.data) {
-                const match = row.nombre_partida.match(/slot(\d+)/);
+                const match = String(row.nombre_partida).match(/slot(\d+)$/);
                 if (match) {
                     const slot = match[1];
                     const data = JSON.parse(row.estado);
                     const local = this.read(slot);
-                    if (data && (!local || (data.savedAt || 0) > (local.savedAt || 0))) {
+                    // Solo se recupera en una ranura vacía o sobre la partida del mismo jugador
+                    const samePlayer = local && data && local.player && data.player && local.player.name === data.player.name;
+                    if (data && (!local || (samePlayer && (data.savedAt || 0) > (local.savedAt || 0)))) {
                         localStorage.setItem(SAVE_PREFIX + slot, JSON.stringify(data));
                         changed = true;
                     }
@@ -242,6 +246,12 @@ class SaveManager {
     // ------------------------------------------------------------
     // Resumen para la pantalla de título
     // ------------------------------------------------------------
+    /** Nombre de la partida en Google Sheets: "<jugador>-slot<N>". */
+    static cloudName(data, slot) {
+        const name = String((data && data.player && data.player.name) || 'Jugador').replace(/[^\wÁÉÍÓÚÑáéíóúñ]+/g, '_');
+        return `${name}-slot${slot}`;
+    }
+
     static formatTime(seconds = 0) {
         const h = Math.floor(seconds / 3600);
         const m = Math.floor((seconds % 3600) / 60);

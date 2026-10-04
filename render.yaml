@@ -1,0 +1,15 @@
+# Blueprint de Render: servidor multijugador de Dino Rey (WebSocket).
+# El juego (HTML/JS) lo sirve Firebase Hosting; aquí solo corre server.py en modo Render.
+services:
+  - type: web
+    name: dino-king-multijugador
+    runtime: python
+    plan: free
+    branch: main
+    buildCommand: pip install -r requirements.txt
+    startCommand: python server.py
+    healthCheckPath: /healthz
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
