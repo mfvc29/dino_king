@@ -57,6 +57,19 @@ class SaveManager {
             this.game.notifyStatus('⚠️ No se pudo guardar en el navegador.');
             return false;
         }
+        const payload = {
+            correo: "jugador@dinoking.com", // Usuario por defecto
+            nombre_partida: `slot${slot}`,
+            estado: JSON.stringify(data)
+        };
+        fetch("https://script.google.com/macros/s/AKfycbx1erDei_wrc8qoyo91hIchiiS8M_xa3TF0XVflqwv_qDpGJtRTG3w06lqpc3TS47gpDg/exec", {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'text/plain' },
+            body: JSON.stringify(payload)
+        }).catch(() => {});
+
+        // Fallback local
         fetch(`/api/save?slot=${slot}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -86,20 +99,46 @@ class SaveManager {
     /** Recupera del servidor las ranuras que falten en este navegador. */
     async syncFromServer() {
         try {
-            const res = await fetch('/api/saves');
-            if (!res.ok) return false;
-            const remote = await res.json();
+            // Intentar sincronizar desde Google Sheets
+            const url = "https://script.google.com/macros/s/AKfycbx1erDei_wrc8qoyo91hIchiiS8M_xa3TF0XVflqwv_qDpGJtRTG3w06lqpc3TS47gpDg/exec?correo=jugador@dinoking.com";
+            const res = await fetch(url);
+            if (!res.ok) throw new Error("Fetch failed");
+            
+            const resData = await res.json();
+            if (resData.status !== "success" || !resData.data) throw new Error("No data");
+
             let changed = false;
-            for (const [slot, data] of Object.entries(remote || {})) {
-                const local = this.read(slot);
-                if (data && (!local || (data.savedAt || 0) > (local.savedAt || 0))) {
-                    localStorage.setItem(SAVE_PREFIX + slot, JSON.stringify(data));
-                    changed = true;
+            for (const row of resData.data) {
+                const match = row.nombre_partida.match(/slot(\d+)/);
+                if (match) {
+                    const slot = match[1];
+                    const data = JSON.parse(row.estado);
+                    const local = this.read(slot);
+                    if (data && (!local || (data.savedAt || 0) > (local.savedAt || 0))) {
+                        localStorage.setItem(SAVE_PREFIX + slot, JSON.stringify(data));
+                        changed = true;
+                    }
                 }
             }
             return changed;
         } catch (e) {
-            return false;
+            // Fallback al servidor local
+            try {
+                const resLocal = await fetch('/api/saves');
+                if (!resLocal.ok) return false;
+                const remote = await resLocal.json();
+                let changed = false;
+                for (const [slot, data] of Object.entries(remote || {})) {
+                    const local = this.read(slot);
+                    if (data && (!local || (data.savedAt || 0) > (local.savedAt || 0))) {
+                        localStorage.setItem(SAVE_PREFIX + slot, JSON.stringify(data));
+                        changed = true;
+                    }
+                }
+                return changed;
+            } catch (err) {
+                return false;
+            }
         }
     }
 
