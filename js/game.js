@@ -162,10 +162,13 @@ class Game {
         await this.enterWorld(start.map, start.x, start.y, start.direction);
         this.saves.save(slot, { silent: true });
 
+        // Prólogo y la noticia del temblor
         const prologue = this.story.format(this.story.data.prologue || '');
-        setTimeout(() => {
-            if (prologue) this.showDialog('Narrador', prologue, () => this.notifyStatus(`📜 ${this.story.objective}`));
-        }, 700);
+        const intro = [
+            ...(prologue ? [{ speaker: 'Narrador', text: prologue }] : []),
+            ...(this.story.data.intro || []).map(i => ({ speaker: this.story.format(i.speaker), text: this.story.format(i.text) }))
+        ];
+        setTimeout(() => this.showDialogSequence(intro, () => this.notifyStatus(`📜 ${this.story.objective}`)), 700);
     }
 
     /** Cargar una partida guardada. */
@@ -437,6 +440,14 @@ class Game {
 
         // Warps / puertas
         const { col, row } = this.getPlayerTile();
+
+        // Eventos de historia al pisarlos (la carta del dino inicial)
+        const ev = this.story.eventAt(this.tileMap.currentMapId || 'world_map', col, row);
+        if (ev && !this.isTransitioning) {
+            this.localPlayer.state = 'idle';
+            this.story.runEvent(ev);
+            return;
+        }
         const warp = this.tileMap.getWarpAt(col, row);
         if (warp) {
             if (!this.lastWarp || this.lastWarp.x !== col || this.lastWarp.y !== row) {
@@ -473,6 +484,7 @@ class Game {
         this.camera.apply(ctx);
         this.tileMap.draw(ctx, this.camera);
         this.cards.drawGroundItems(ctx);
+        this.story.drawEvents(ctx, this.tileMap.currentMapId || 'world_map', this.tileMap.tileSize);
 
         const currentMap = this.tileMap.currentMapId || 'world_map';
         const visibleRemotePlayers = Object.values(this.remotePlayers).filter(p => (p.map || 'world_map') === currentMap);
@@ -622,6 +634,11 @@ class Game {
         if (this.state !== 'overworld' || this.isMenuOpen || this.isMapOpen || this.activeEvent || this.cards.isEncounterActive) return;
         const { col, row } = this.getPlayerTile();
         const d = NPC_DIRS[this.localPlayer.direction] || NPC_DIRS.down;
+        const ev = this.story.eventAt(this.tileMap.currentMapId || 'world_map', col + d.dx, row + d.dy);
+        if (ev) {
+            this.story.runEvent(ev);
+            return;
+        }
         const npc = this.npcs.find(n => n.occupiesTile(col + d.dx, row + d.dy));
         if (!npc) return;
 
@@ -642,6 +659,15 @@ class Game {
         } else {
             this.showDialog(npc.name, npc.dialog || '...');
         }
+    }
+
+    /** Varios diálogos seguidos: [{ speaker, text }]. */
+    showDialogSequence(list, onDone = null, i = 0) {
+        if (i >= list.length) {
+            if (onDone) onDone();
+            return;
+        }
+        this.showDialog(list[i].speaker, list[i].text, () => this.showDialogSequence(list, onDone, i + 1));
     }
 
     showDialog(speaker, text, onClose = null) {
@@ -1021,7 +1047,7 @@ class Game {
                 <div>
                     <h3 class="panel-title">👤 ${escapeHtml(p.name)}${this.story.flags.dinoRey ? ' 👑' : ''}</h3>
                     <p class="panel-sub">Nivel de entrenador ${p.level} · ${p.exp}/${p.expNext} EXP (${expPct}%)</p>
-                    <p class="panel-sub">${escapeHtml(this.story.chapter ? this.story.chapter.title : '')} · Rival: ${escapeHtml(this.story.rival.name)}</p>
+                    <p class="panel-sub">${escapeHtml(this.story.chapter ? this.story.chapter.title : '')}</p>
                 </div>
             </div>
             <div class="info-grid">

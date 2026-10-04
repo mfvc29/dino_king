@@ -6,6 +6,8 @@
  *   usan `talk` (el primer bloque cuyo `if` se cumple); los 'trainer' combaten como los del editor
  *   y al ser derrotados ejecutan `onDefeat`.
  * - Guardianes: los entrenadores del mapa listados en `guardians` dan una Piedra Elemental.
+ * - Eventos (`events`): objetos en el suelo que se activan al pisarlos o con Espacio, como la
+ *   carta del dino inicial que aparece frente a la casa tras el temblor.
  * - Estado guardado: flags, piedras y datos del rival (ver serialize / deserialize).
  */
 
@@ -164,6 +166,72 @@ class StorySystem {
         };
     }
 
+    /** Eventos visibles en un mapa (según su `showIf`). */
+    getMapEvents(mapId) {
+        return (this.data.events || []).filter(e => e.map === mapId && this.check(e.showIf));
+    }
+
+    eventAt(mapId, col, row) {
+        return this.getMapEvents(mapId).find(e => e.x === col && e.y === row) || null;
+    }
+
+    /** Activa un evento: muestra su texto y ejecuta sus acciones. */
+    runEvent(ev) {
+        this.game.showDialog('✨ Carta brillante', this.format(ev.text), () => this.runActions(ev.actions || []));
+    }
+
+    /** Dibuja los eventos del mapa actual (la carta inicial brillando en el suelo). */
+    drawEvents(ctx, mapId, tileSize) {
+        const events = this.getMapEvents(mapId);
+        if (!events.length) return;
+        const t = Date.now();
+        for (const ev of events) {
+            const cx = ev.x * tileSize + tileSize / 2;
+            const cy = ev.y * tileSize + tileSize / 2;
+            const pulse = 0.5 + 0.5 * Math.sin(t / 300);
+            const bob = Math.sin(t / 400) * 3;
+            ctx.save();
+            const glow = ctx.createRadialGradient(cx, cy, 2, cx, cy, 26);
+            glow.addColorStop(0, `rgba(255, 230, 120, ${0.55 + pulse * 0.35})`);
+            glow.addColorStop(1, 'rgba(255, 200, 60, 0)');
+            ctx.fillStyle = glow;
+            ctx.beginPath();
+            ctx.arc(cx, cy, 26, 0, Math.PI * 2);
+            ctx.fill();
+            const img = this.cardImage(ev);
+            const w = 20;
+            const h = 28;
+            ctx.translate(cx, cy + bob);
+            ctx.rotate(Math.sin(t / 700) * 0.15);
+            if (img && img.complete && img.naturalWidth) {
+                ctx.drawImage(img, -w / 2, -h / 2, w, h);
+            } else {
+                ctx.fillStyle = '#ffd60a';
+                ctx.fillRect(-w / 2, -h / 2, w, h);
+            }
+            ctx.strokeStyle = `rgba(255, 255, 255, ${0.6 + pulse * 0.4})`;
+            ctx.lineWidth = 2;
+            ctx.strokeRect(-w / 2, -h / 2, w, h);
+            ctx.restore();
+        }
+    }
+
+    /** Imagen de la carta del dino inicial del protagonista. */
+    cardImage(ev) {
+        if (ev.kind !== 'starterCard') return null;
+        const id = this.game.starterOf(this.game.protagonist);
+        const dino = id && this.game.cards.getDino(id);
+        const src = dino && (dino.card || dino.image);
+        if (!src) return null;
+        this.cardImages = this.cardImages || {};
+        if (!this.cardImages[src]) {
+            const img = new Image();
+            img.src = `assets/dinos/${encodeURI(src)}`;
+            this.cardImages[src] = img;
+        }
+        return this.cardImages[src];
+    }
+
     getNpcDef(id) {
         return (this.data.npcs || []).find(n => n.id === id) || null;
     }
@@ -222,27 +290,17 @@ class StorySystem {
         } else if (a.notify) {
             setTimeout(() => this.game.notifyStatus(this.format(a.notify)), 400);
             next();
+        } else if (a.starter && cards.collection.length > 0) {
+            // Ya tiene dinos (partida antigua): solo marcar el dino inicial como recibido
+            this.flags.starter = true;
+            next();
         } else if (a.starter) {
-            // Cada hermano tiene su dino inicial (protagonistas.json); el rival recibe el del otro
-            const hero = this.game.protagonist;
-            const brother = this.game.heroes.find(h => h.id !== (hero && hero.id));
-            const mine = this.game.starterOf(hero);
-            cards.showStarterPicker((card) => {
+            // Cada hermano tiene su dino inicial (protagonistas.json)
+            const mine = this.game.starterOf(this.game.protagonist);
+            cards.showStarterPicker(() => {
                 this.flags.starter = true;
-                const others = STARTER_DINOS.filter(id => id !== card.id);
-                this.rival.starter = this.game.starterOf(brother) || others[Math.floor(Math.random() * others.length)] || card.id;
-                this.refreshNpcs();
-                const rival = this.game.npcs.find(n => n.id === 'rival_1');
-                const rivalDino = cards.getDino(this.rival.starter);
-                this.game.showDialog(this.rival.name,
-                    `¡Espera, ${this.game.localPlayer.name}! A mí me tocó ${rivalDino ? rivalDino.name : 'mi dino'}.\n¡Vamos a probarlos ahora mismo!`,
-                    () => {
-                        if (rival) {
-                            this.game.activeEvent = { npc: rival, phase: 'dialog', timer: 0 };
-                            this.game.openTrainerChallenge(rival);
-                        }
-                    });
                 this.afterProgress();
+                setTimeout(() => this.game.notifyStatus(`📜 ${this.objective}`), 1200);
             }, mine ? [mine] : undefined);
         } else if (a.shop) {
             cards.openShop(this.format(a.shop.name || 'Tienda'), a.shop.lines || {});

@@ -4,7 +4,7 @@
  * - Menú: Continuar (partida más reciente), Nueva partida, Cargar partida.
  * - Ranuras de guardado: cargar, borrar, exportar e importar partidas (js/save.js).
  * - Elección de protagonista: solo los dos de assets/characters/protagonistas.json.
- *   El que no elijas será tu rival en la historia.
+ *   El otro hermano lo juega otra persona con su propia partida.
  */
 
 class TitleScreen {
@@ -274,7 +274,7 @@ class TitleScreen {
         const input = document.getElementById('trainerNameInput');
         if (!this.nameEdited) input.value = this.heroes[this.heroIndex].defaultName;
         const other = this.heroes[1 - this.heroIndex];
-        document.getElementById('rivalHint').textContent = other ? `Tu hermano ${other.defaultName} será tu rival.` : '';
+        document.getElementById('rivalHint').textContent = other ? `${other.defaultName} puede jugar con su propia partida y encontrarte en el mundo.` : '';
     }
 
     selectHero(i) {

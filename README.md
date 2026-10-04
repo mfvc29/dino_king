@@ -77,18 +77,16 @@ dino_king/
   También puedes guardar con el botón 💾 de la barra superior o desde el menú.
 - Las partidas se guardan en el navegador y se copian en `saves/slotN.json` en el servidor; si borras
   los datos del navegador, la pantalla de título las recupera del servidor.
-- **Solo dos protagonistas** (`assets/characters/protagonistas.json`). El que no eliges es tu rival.
+- **Solo dos protagonistas** (`assets/characters/protagonistas.json`): Fer y Ander. Cada hermano juega con su propia partida.
 
 ### Historia (`assets/story/historia.json`)
-1. **El despertar:** habla con mamá en casa.
-2. **La carta brillante:** la Profesora Ámbar (afuera de la casa) te da tu primer dino.
-3. **Primer duelo:** combate contra tu rival.
+1. **El temblor:** una noticia habla de un extraño temblor; al salir de casa encuentras la carta de tu dino inicial.
 4. **Los Guardianes:** los 7 entrenadores del mapa son Guardianes; cada uno da una **Piedra Elemental**.
 5. **La Banda Meteoro:** con 3 piedras aparece el recluta Zarpa junto al Maestro Fósil.
-6. **Las siete piedras → Promesa de rivales → El Rey Usurpador:** vence a tu rival en la plaza y a
-   Draco frente al Templo del Meteorito para convertirte en **Dino Rey**.
+6. **Las siete piedras → El Rey Usurpador:** vence a Rolando frente al Templo del Meteorito para
+   convertirte en **Dino Rey**. Tu hermano no es un rival: juega con su propia partida.
 
-Todo se edita en el JSON: textos (`{player}`, `{rival}`, `{stones}`, `{left}`), capítulos y sus
+Todo se edita en el JSON: textos (`{player}`, `{rival}` = tu hermano, `{stones}`, `{left}`), capítulos y sus
 condiciones, personajes (posición, sprite, equipo, diálogos) y qué Guardián da cada piedra.
 
 ### Combate estilo Persona 5 (`js/battle.js`)
@@ -108,7 +106,7 @@ condiciones, personajes (posición, sprite, equipo, diálogos) y qué Guardián 
 - **Protagonistas:** los hermanos **Fer** (estratega, viento, empieza con Deltadromeus) y **Ander** (impulsivo, fuego,
   empieza con Acrocanthosaurus; mientras no exista su carta usa Carcharodontosaurus). Datos, frases de batalla y
   dino inicial en `assets/characters/protagonistas.json` (historia base: `assets/characters/historia_y_dialogos.md`).
-- **Historia:** Blanche (mamá), Dr. Cretácico (despierta tu dino y gestiona tu equipo), Vendedora Ámbar (tienda con
+- **Historia:** Dr. Cretácico (despierta tu dino y gestiona tu equipo), Vendedora Ámbar (tienda con
   Dino-Créditos), Maestro Eldon (enseña ataques), Recluta Darius,
   Comandante Helmep (Cueva Meteoro) y Rolando, el Rey Usurpador.
 - **Guardianes (Pueblo Meteoro):** Beatrice 🔥, Cross 💧, Nelly ⚡, Trevor ⛰️, Livia 🌿, Tiberius 🌪️ y Ulises ✨.

@@ -2,9 +2,9 @@
  * TournamentSystem - Gran Torneo Mesozoico (estadio del torneo, mapa "torneo").
  *
  * - Al entrar al estadio (o al hablar con el Árbitro) se abre el menú: combatir solo o con alguien más.
- * - 8 Tamers: Fer, Ander y 6 NPCs elegidos al azar (sin repetir los del torneo anterior si hay suficientes).
- *   · Solo: tú contra 7 rivales con IA experta (tu hermano incluido).
- *   · Con alguien más: Fer y Ander los manejan dos personas en la misma pantalla (por turnos).
+ * - 8 Tamers con NPCs elegidos al azar (sin repetir los del torneo anterior si hay suficientes).
+ *   · Solo: tú y 7 NPCs con IA experta.
+ *   · Con alguien más: Fer y Ander los manejan dos personas en la misma pantalla (por turnos) + 6 NPCs.
  * - Todos los dinos combaten a nivel 50 con sus mejores ataques para ese nivel.
  * - Cuadro de eliminación directa: cuartos de final, semifinal y gran final. Los combates entre NPCs se
  *   simulan; los tuyos se juegan. El ganador se consagra campeón (+1500 Dino-Créditos si eres tú).
@@ -118,11 +118,11 @@ class TournamentSystem {
     }
 
     /** 6 NPCs al azar, evitando repetir los del torneo anterior. */
-    pickNpcs(pool) {
+    pickNpcs(pool, count = TOURNAMENT_NPCS) {
         const last = new Set(this.game.story.flags.torneoUltimos || []);
         const fresh = this.shuffle(pool.filter(p => !last.has(p.name)));
         const used = this.shuffle(pool.filter(p => last.has(p.name)));
-        const chosen = [...fresh, ...used].slice(0, TOURNAMENT_NPCS);
+        const chosen = [...fresh, ...used].slice(0, count);
         this.game.story.flags.torneoUltimos = chosen.map(p => p.name);
         return chosen;
     }
@@ -179,10 +179,11 @@ class TournamentSystem {
             move: this.cards.getPlayerMoveCard(),
             local: true
         });
-        const bro = this.heroData(brother, mode === 'duo'
-            ? { human: true, team: partnerTeam.team, move: partnerTeam.move, name: partnerTeam.name || (brother && brother.defaultName) }
-            : { human: false, ai: 'experto', team: this.brotherTeam(brother), move: this.randomMove() });
-        const npcs = this.pickNpcs(pool).map(p => ({
+        // Tu hermano solo participa si lo juega otra persona (modo "con alguien más")
+        const bro = mode === 'duo'
+            ? this.heroData(brother, { human: true, team: partnerTeam.team, move: partnerTeam.move, name: partnerTeam.name || (brother && brother.defaultName) })
+            : null;
+        const npcs = this.pickNpcs(pool, bro ? TOURNAMENT_NPCS : TOURNAMENT_NPCS + 1).map(p => ({
             name: p.name,
             sprite: p.sprite,
             human: false,
@@ -191,7 +192,7 @@ class TournamentSystem {
             move: p.move || this.randomMove()
         }));
 
-        const players = this.shuffle([me, bro, ...npcs]);
+        const players = this.shuffle([me, ...(bro ? [bro] : []), ...npcs]);
         const first = [];
         for (let i = 0; i < players.length; i += 2) first.push({ a: players[i], b: players[i + 1], winner: null });
         this.t = { mode, players, rounds: [first], round: 0, alphaDone: false, message: this.lines.start, done: false, champion: null };
@@ -424,18 +425,18 @@ class TournamentSystem {
         const hero = g.heroes.find(h => g.protagonist && h.id === g.protagonist.id);
         const brother = g.heroes.find(h => h !== hero);
         this.body.innerHTML = `
-            ${this.header('8 Tamers · todos los dinos a nivel 50 · eliminación directa')}
+            ${this.header('¿Quién participa? · 8 Tamers · todos los dinos a nivel 50')}
             <p class="tour-referee">🎙️ “${escapeHtml(this.lines.welcome)}”</p>
             <div class="tour-modes">
                 <button class="tour-mode" data-mode="solo" ${hasTeam ? '' : 'disabled'}>
-                    <span class="tour-mode-icon">⚔️</span>
-                    <strong>COMBATIR SOLO</strong>
-                    <small>Tú, tu hermano ${escapeHtml(brother ? brother.defaultName : '')} y 6 Tamers al azar. Todos los rivales usan IA experta.</small>
+                    <span class="tour-mode-icon">👤</span>
+                    <strong>SOLO YO</strong>
+                    <small>Solo participas tú, contra 7 Tamers al azar con IA experta.</small>
                 </button>
                 <button class="tour-mode duo" data-mode="duo" ${hasTeam ? '' : 'disabled'}>
                     <span class="tour-mode-icon">👥</span>
-                    <strong>CON ALGUIEN MÁS</strong>
-                    <small>${escapeHtml(g.localPlayer.name)} y ${escapeHtml(brother ? brother.defaultName : 'tu hermano')} los manejan dos personas en esta pantalla, junto a 6 Tamers al azar.</small>
+                    <strong>MI HERMANO Y YO</strong>
+                    <small>Participan ${escapeHtml(g.localPlayer.name)} y ${escapeHtml(brother ? brother.defaultName : 'tu hermano')} junto a 6 Tamers al azar. Si les toca juntos, pelean entre ustedes (por turnos en esta pantalla).</small>
                 </button>
             </div>
             ${hasTeam ? '' : '<p class="tour-warning">⚠️ Necesitas al menos un dino en tu equipo para inscribirte.</p>'}
