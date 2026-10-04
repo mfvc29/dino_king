@@ -22,7 +22,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MAPS_DIR = os.path.join(ROOT, 'assets', 'maps')
 OUT = os.path.join(MAPS_DIR, 'minimapa.png')
 START = 'world_map'
-SKIP = {'proyecto_actual', 'world_map_antiguo_backup'}  # copias del mismo mapa
+SKIP = {'proyecto_actual', 'world_map_antiguo_backup', 'mapas'}  # copias del mismo mapa y la lista de mapas
 
 SCALE = int(sys.argv[sys.argv.index('--escala') + 1]) if '--escala' in sys.argv else 8
 GAP = 3 * SCALE          # separación entre mapas pegados
