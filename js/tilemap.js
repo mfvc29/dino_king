@@ -52,7 +52,7 @@ const TILES = {
     CLIFF_WALL: { r: 13, c: 12, solid: true },
 
     // ============================================================
-    // ELEMENTOS ACUÁTICOS (Water+.png y assets/water_tiles/)
+    // ELEMENTOS ACUÁTICOS (Water+.png, solo para el mapa procedimental de respaldo)
     // ============================================================
     WATER_DEEP_ANIM: { tileset: 'water', r: 3, c: 3, solid: true, isWater: true },
     WATER_RIPPLE: { tileset: 'water', r: 4, c: 3, solid: true, isWater: true },

@@ -1,8 +1,0 @@
-Aquí puedes colocar los spritesheets exportados desde:
-https://liberatedpixelcup.github.io/Universal-LPC-Spritesheet-Character-Generator
-
-Nombres reconocidos automáticamente:
-- player1.png  -> Sprite predeterminado para el Jugador 1 (Azul)
-- player2.png  -> Sprite predeterminado para el Jugador 2 (Rojo)
-
-También puedes cargarlos directamente desde el navegador en el juego mediante el botón de selección de archivos.

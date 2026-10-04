@@ -9,22 +9,23 @@ Enfocado en la experiencia de caminar por el mapa con sprites del generador Univ
 
 ```text
 dino_king/
-├── index.html            # Interfaz de exploración con HUD de coordenadas y terreno
-├── server.py             # Servidor HTTP local en Python (sin caché)
-├── css/
-│   └── style.css         # Estilos retro arcade y HUD
-├── js/
-│   ├── camera.js         # Cámara 2D con suavizado que sigue al jugador
-│   ├── tilemap.js        # Generador de ruta estilo Pokémon (hierba, caminos, agua, árboles)
-│   ├── minimap.js        # Radar en esquina con terreno, viewport y puntos de jugadores
-│   ├── lpcRenderer.js    # Motor de spritesheet Universal LPC (64x64)
-│   ├── input.js          # Control de movimiento en 4 direcciones y sprint
-│   ├── player.js         # Lógica del personaje (caminar, correr, efecto hierba alta)
-│   └── game.js           # Bucle principal, profundidad de capas y encuentros
+├── index.html              # Juego (título, mundo, combate, torneo, menú)
+├── server.py               # Servidor local + multijugador (en la nube: Render)
+├── firebase.json           # Publicación en Firebase Hosting
+├── deployment_guide.md     # Cómo está montado en la nube
+├── sheet/                  # Apps Script de Google Sheets (guardado en la nube)
+├── css/                    # style.css + dinorey.css
+├── js/                     # game, tilemap, battle, cards, story, save, tournament...
+├── tools/
+│   ├── map_editor/         # Editor de mapas (local en :8080, nube en /tools/map_editor/)
+│   ├── generar_rutas.py    # Genera Ruta 1, Cueva y Estadio
+│   ├── generar_minimapa.py # assets/maps/minimapa.png
+│   └── generar_manifiestos.py
 └── assets/
-    ├── sprites/          # Coloca aquí player1.png y player2.png
-    ├── maps/             # Recursos de mapas
-    └── audio/            # Efectos sonoros futuros
+    ├── maps/               # Mapas .json + tilesets (Outside, Caves, charcos)
+    ├── characters/         # Sprites LPC, protagonistas.json, historia_y_dialogos.md
+    ├── dinos/              # Cartas, dinos.json y herramientas del catálogo
+    └── story/              # historia.json
 ```
 
 ---
