@@ -113,6 +113,10 @@ condiciones, personajes (posición, sprite, equipo, diálogos) y qué Guardián 
   Cada uno lleva 3 dinos de su elemento (3 ataques cada uno) y una carta de movimiento.
 - **Ruta 1:** Ruth, Alvin, Amelia, Luter y Maxwell. **Cueva Meteoro:** Ritza, Vivian y Rose.
 
+### ✏️ Editar y publicar mapas
+Usa **`./generador_de_mapa/generador_de_mapa.sh`** (guía en `generador_de_mapa/README.md`): abre el editor,
+y al terminar valida, actualiza el minimapa, sube a GitHub y despliega en Firebase.
+
 ### Mapas y rutas (`tools/generar_rutas.py`)
 - Pueblo Meteoro (norte, x 59-61) → **Ruta 1** → **Cueva Meteoro** (puerta en la pared de roca).
 - Las rutas se dibujan como texto en `tools/generar_rutas.py` (una letra por losa) usando `Outside.png` y

@@ -10,6 +10,12 @@ services:
     startCommand: python server.py
     healthCheckPath: /healthz
     autoDeploy: true
+    # Solo redesplegar cuando cambia el servidor (no al publicar mapas o el juego)
+    buildFilter:
+      paths:
+        - server.py
+        - requirements.txt
+        - render.yaml
     envVars:
       - key: PYTHON_VERSION
         value: 3.12.7

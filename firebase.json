@@ -11,7 +11,8 @@
       "**/saves/**",
       "**/*.py",
       "tools/map_editor/projects/**",
-      "tools/map_editor/custom_assets/**"
+      "tools/map_editor/custom_assets/**",
+      "generador_de_mapa/**"
     ],
     "rewrites": [
       {
