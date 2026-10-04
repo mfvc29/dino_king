@@ -22,3 +22,6 @@ saves/
 # Despliegue
 descargas/
 /tmp/dino_king.tar.gz
+
+# Caché local de Firebase CLI
+.firebase/

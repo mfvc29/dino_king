@@ -1,0 +1,26 @@
+{
+  "hosting": {
+    "public": ".",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**",
+      "**/.venv/**",
+      "**/.git/**",
+      "**/__pycache__/**",
+      "**/saves/**",
+      "**/*.py",
+      "tools/map_editor/projects/**",
+      "tools/map_editor/custom_assets/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ],
+    "predeploy": [
+      "python3 tools/generar_manifiestos.py"
+    ]
+  }
+}

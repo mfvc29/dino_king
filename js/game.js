@@ -71,7 +71,7 @@ class Game {
 
         // Menú (Enter)
         this.isMenuOpen = false;
-        this.activeMenuTab = 'cards';
+        this.activeMenuTab = 'status';
         this.hudTeamKey = null;
 
         this.localPlayer.onExpGain = (data) => {
@@ -890,7 +890,9 @@ class Game {
 
     renderMenuPanel(tab) {
         const panel = document.getElementById('menuPanel');
-        if (tab === 'cards') {
+        if (tab === 'status') {
+            this.renderStatusPanel(panel);
+        } else if (tab === 'cards') {
             this.cards.renderCardsPanel(panel);
         } else if (tab === 'bag') {
             this.cards.renderBagPanel(panel);
@@ -965,7 +967,7 @@ class Game {
                 <div class="settings-row"><span>Autoguardado (tras combates, capturas e historia)</span>
                     <label class="switch"><input type="checkbox" id="menuAutoSave" ${this.saves.settings.autoSave ? 'checked' : ''}><span></span></label></div>
             </div>
-            <p class="panel-sub" style="margin-top:10px;">Las partidas se guardan en este navegador y se copian en la carpeta <code>saves/</code> del servidor.</p>`;
+            <p class="panel-sub" style="margin-top:10px;">Las partidas se guardan en este navegador y en la nube (Google Sheets), así puedes seguir jugando desde otro dispositivo.</p>`;
         document.getElementById('menuSaveBtn').addEventListener('click', () => {
             this.saves.save();
             this.renderSavePanel(panel);
@@ -1040,6 +1042,71 @@ class Game {
         ctx.imageSmoothingEnabled = false;
         const img = p.renderer.image;
         if (img) ctx.drawImage(img, 0, 10 * 64, 64, 64, 0, 0, 128, 128);
+    }
+
+    /** Pestaña Estado (Enter): lo que antes mostraba la barra superior y la ayuda de controles. */
+    renderStatusPanel(panel) {
+        const p = this.localPlayer;
+        const ch = this.story.chapter;
+        const expPct = Math.min(100, Math.round((p.exp / p.expNext) * 100));
+        const net = document.getElementById('netStatus');
+        const team = this.cards.getTeam();
+        const slot = this.saves.currentSlot;
+        const saved = slot ? this.saves.read(slot) : null;
+        const teamHtml = team.length ? team.map(c => {
+            const d = this.cards.getDino(c.id);
+            const el = d && this.dinoCatalog.elements[d.element];
+            const src = d && (d.card || d.image);
+            return `<div class="status-dino">
+                        <span class="status-dino-img" style="${src ? `background-image:url('assets/dinos/${encodeURI(src)}')` : ''}"></span>
+                        <div><strong>${escapeHtml(d ? d.name : c.id)}</strong>
+                        <small style="color:${el ? el.color : '#94a3b8'}">${el ? el.icon + ' ' + el.name : ''} · Nv. ${c.level}</small>
+                        <div class="status-xp"><span style="width:${c.xp}%"></span></div></div>
+                    </div>`;
+        }).join('') : '<p class="muted">Aún no tienes dinos en tu equipo.</p>';
+        const keys = [
+            ['Moverse', '<kbd>WASD</kbd> / <kbd>Flechas</kbd>'], ['Correr', '<kbd>Shift</kbd>'],
+            ['Hablar / avanzar', '<kbd>Espacio</kbd> / <kbd>E</kbd>'], ['Mapa', '<kbd>M</kbd>'],
+            ['Menú', '<kbd>Enter</kbd>'], ['Combate', '<kbd>1</kbd>-<kbd>4</kbd> ataques · <kbd>D</kbd> defender · <kbd>T</kbd> ataque total']
+        ];
+        panel.innerHTML = `
+            <div class="status-head">
+                <div>
+                    <h3 class="panel-title">👤 ${escapeHtml(p.name)} <span class="hud-level">Nv. ${p.level}</span></h3>
+                    <div class="hud-exp status-exp"><div class="hud-exp-fill" style="width:${expPct}%"></div></div>
+                </div>
+                <div class="status-chips">
+                    <span>📍 ${escapeHtml(this.mapTitle)}</span>
+                    <span>💰 ${this.cards.credits}</span>
+                    <span>⏱ ${SaveManager.formatTime(this.playTime)}</span>
+                    <span>${net ? escapeHtml(net.textContent) : ''}</span>
+                </div>
+            </div>
+            <div class="status-objective">
+                <small>${escapeHtml(ch ? ch.title : 'Objetivo')}</small>
+                <strong>📜 ${escapeHtml(this.story.objective)}</strong>
+            </div>
+            <h4 class="almanac-title">💎 Piedras Elementales (${this.story.stones.length}/7)</h4>
+            ${this.renderStonesHtml()}
+            <h4 class="almanac-title">⚔️ Tu equipo</h4>
+            <div class="status-team">${teamHtml}</div>
+            <div class="save-actions">
+                <button id="statusSaveBtn" class="battle-btn win">💾 Guardar partida</button>
+                <button id="statusMapBtn" class="battle-btn swap">🗺️ Ver mapa</button>
+                <button id="statusFsBtn" class="battle-btn flee">⛶ Pantalla completa</button>
+            </div>
+            <p class="panel-sub">${slot ? `Ranura ${slot}` : ''}${saved ? ` · Último guardado: ${SaveManager.formatDate(saved.savedAt)}` : ''}</p>
+            <h4 class="almanac-title">🎮 Controles</h4>
+            <div class="status-keys">${keys.map(([a, k]) => `<span><b>${a}</b> ${k}</span>`).join('')}</div>`;
+        document.getElementById('statusSaveBtn').addEventListener('click', () => {
+            this.saves.save();
+            this.renderStatusPanel(panel);
+        });
+        document.getElementById('statusMapBtn').addEventListener('click', () => {
+            this.toggleMenu();
+            this.toggleWorldMap();
+        });
+        document.getElementById('statusFsBtn').addEventListener('click', () => this.toggleFullscreen());
     }
 
     renderSettingsPanel(panel) {

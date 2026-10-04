@@ -31,6 +31,17 @@
                 </button>
                 <button class="title-btn" data-go="new"><span>✦ Nueva partida</span></button>
                 <button class="title-btn" data-go="load"><span>💾 Cargar partida</span></button>
+                <button class="title-btn" id="titleEditorBtn" style="display:none;"><span>🛠️ Editar mapa</span></button>
+                <script>
+                    // Editor de mapas: en local usa su servidor (puerto 8080); en la nube, la versión estática
+                    (function () {
+                        const host = location.hostname;
+                        const local = host === 'localhost' || host === '127.0.0.1' || /^192\.168\.|^10\./.test(host);
+                        const btn = document.getElementById('titleEditorBtn');
+                        btn.style.display = '';
+                        btn.addEventListener('click', () => window.open(local ? `http://${host}:8080/` : '/tools/map_editor/', '_blank'));
+                    })();
+                </script>
                 <button id="titleFullscreenBtn" class="title-btn ghost"><span>⛶ Pantalla completa</span></button>
             </nav>
             <p class="title-hint">Inspirado en Dinosaur King · Combates de cartas al estilo Persona 5</p>
@@ -95,9 +106,10 @@
                 <a id="editorLink" href="#" target="_blank" class="icon-btn" title="Abrir el editor de mapas" style="display:none;">🛠️</a>
                 <script>
                     // Solo mostrar el enlace al editor en desarrollo local
-                    if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+                    {
+                        const local = location.hostname === 'localhost' || location.hostname === '127.0.0.1' || /^192\.168\.|^10\./.test(location.hostname);
                         const el = document.getElementById('editorLink');
-                        el.href = 'http://localhost:8080';
+                        el.href = local ? `http://${location.hostname}:8080/` : '/tools/map_editor/';
                         el.style.display = '';
                     }
                 </script>
@@ -120,10 +132,20 @@
                             <span id="battleTurn" class="battle-turn"></span>
                         </div>
                     </div>
-                    <div class="battle-row rival" id="battleRivalSide"></div>
-                    <div id="battleLog" class="battle-log"></div>
-                    <div class="battle-row player" id="battlePlayerSide"></div>
-                    <div id="battleActions" class="battle-actions-grid"></div>
+                    <div class="battle-main">
+                        <div class="battle-field">
+                            <div class="battle-side-label rival">RIVAL</div>
+                            <div class="battle-row rival" id="battleRivalSide"></div>
+                            <div class="battle-vs" aria-hidden="true">VS</div>
+                            <div class="battle-row player" id="battlePlayerSide"></div>
+                            <div class="battle-side-label player">TU EQUIPO</div>
+                        </div>
+                        <div id="battleActions" class="battle-actions-grid"></div>
+                    </div>
+                    <aside class="battle-feed">
+                        <div class="battle-feed-title">📜 Registro del combate</div>
+                        <div id="battleLog" class="battle-log"></div>
+                    </aside>
                     <div id="battleSplash" class="battle-splash"></div>
                 </div>
             </div>
@@ -185,7 +207,8 @@
                     </div>
                     <div class="menu-body">
                         <nav class="menu-tabs">
-                            <button class="menu-tab-btn active" data-tab="cards">📖 <span>Almanaque</span></button>
+                            <button class="menu-tab-btn active" data-tab="status">📍 <span>Estado</span></button>
+                            <button class="menu-tab-btn" data-tab="cards">📖 <span>Almanaque</span></button>
                             <button class="menu-tab-btn" data-tab="bag">🎒 <span>Mochila</span></button>
                             <button class="menu-tab-btn" data-tab="trainer">👤 <span>Entrenador</span></button>
                             <button class="menu-tab-btn" data-tab="story">📜 <span>Historia</span></button>

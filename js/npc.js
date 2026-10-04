@@ -153,12 +153,6 @@ class NPC {
             ctx.textAlign = 'center';
             ctx.font = '18px sans-serif';
             ctx.fillText('📚', this.x, this.y - 70 + bob);
-            ctx.font = 'bold 10px sans-serif';
-            ctx.lineWidth = 3;
-            ctx.strokeStyle = '#000';
-            ctx.fillStyle = '#5eead4';
-            ctx.strokeText(this.name, this.x, this.y - 50);
-            ctx.fillText(this.name, this.x, this.y - 50);
             ctx.restore();
         }
 

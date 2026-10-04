@@ -28,6 +28,11 @@ GAME_MAPS_DIR = os.path.join(PROJECT_ROOT, 'assets', 'maps')
 GAME_CHARACTERS_DIR = os.path.join(PROJECT_ROOT, 'assets', 'characters')
 GAME_DINOS_DIR = os.path.join(PROJECT_ROOT, 'assets', 'dinos')
 
+# Tilesets que se ofrecen para pintar (los que usa el juego por ahora)
+PALETTE_TILESETS = ['Outside.png', 'Caves.png', 'charcos.png']
+# Copias del mapa principal que no se muestran en la lista
+HIDDEN_MAPS = {'proyecto_actual.json', 'world_map_antiguo_backup.json'}
+
 os.makedirs(PROJECTS_DIR, exist_ok=True)
 os.makedirs(CUSTOM_ASSETS_DIR, exist_ok=True)
 os.makedirs(GAME_MAPS_DIR, exist_ok=True)
@@ -43,10 +48,8 @@ class AdvanceMapRequestHandler(http.server.SimpleHTTPRequestHandler):
 
         # 1. API: Listar tilesets disponibles
         if path == '/api/tilesets':
-            # Buscar en assets del juego y en custom_assets del editor
-            game_pngs = [os.path.basename(f) for f in glob.glob(os.path.join(GAME_MAPS_DIR, '*.png'))]
-            custom_pngs = [os.path.basename(f) for f in glob.glob(os.path.join(CUSTOM_ASSETS_DIR, '*.png'))]
-            all_tilesets = sorted(list(set(game_pngs + custom_pngs)))
+            # Solo los tilesets del juego que se usan por ahora (PALETTE_TILESETS)
+            all_tilesets = [n for n in PALETTE_TILESETS if os.path.exists(os.path.join(GAME_MAPS_DIR, n))]
             
             data = json.dumps(all_tilesets).encode('utf-8')
             self.send_response(200)
@@ -133,9 +136,10 @@ class AdvanceMapRequestHandler(http.server.SimpleHTTPRequestHandler):
 
         # 2. API: Listar proyectos y borradores guardados
         elif path == '/api/projects':
-            proj_files = [os.path.basename(f) for f in glob.glob(os.path.join(PROJECTS_DIR, '*.json'))]
+            # Los mapas que tiene el juego (assets/maps), sin las copias del mapa principal
             game_files = [os.path.basename(f) for f in glob.glob(os.path.join(GAME_MAPS_DIR, '*.json'))]
-            all_maps = sorted(list(set(proj_files + game_files + ['world_map.json'])))
+            all_maps = sorted(f for f in set(game_files + ['world_map.json']) if f not in HIDDEN_MAPS)
+            all_maps.sort(key=lambda f: (f != 'world_map.json', f))
             data = json.dumps(all_maps).encode('utf-8')
             self.send_response(200)
             self.send_header('Content-Type', 'application/json')
@@ -153,7 +157,10 @@ class AdvanceMapRequestHandler(http.server.SimpleHTTPRequestHandler):
             proj_path = os.path.join(PROJECTS_DIR, proj_name)
             game_path = os.path.join(GAME_MAPS_DIR, proj_name)
 
-            target_path = proj_path if os.path.exists(proj_path) else (game_path if os.path.exists(game_path) else None)
+            # Siempre la versión del juego, salvo que haya un borrador guardado después
+            target_path = game_path if os.path.exists(game_path) else None
+            if os.path.exists(proj_path) and (not target_path or os.path.getmtime(proj_path) > os.path.getmtime(game_path)):
+                target_path = proj_path
 
             if target_path and os.path.exists(target_path):
                 with open(target_path, 'rb') as f:
@@ -173,12 +180,13 @@ class AdvanceMapRequestHandler(http.server.SimpleHTTPRequestHandler):
             custom_path = os.path.join(CUSTOM_ASSETS_DIR, filename)
             game_path = os.path.join(GAME_MAPS_DIR, filename)
 
-            target_path = custom_path if os.path.exists(custom_path) else (game_path if os.path.exists(game_path) else None)
+            # Solo los tilesets del juego, para que el editor se vea igual que el juego
+            target_path = game_path if os.path.exists(game_path) else None
             
             # Fallback insensible a mayúsculas/minúsculas
             if not target_path or not os.path.exists(target_path):
                 fn_lower = filename.lower()
-                for d in [CUSTOM_ASSETS_DIR, GAME_MAPS_DIR]:
+                for d in [GAME_MAPS_DIR]:
                     for f in os.listdir(d):
                         if f.lower() == fn_lower:
                             target_path = os.path.join(d, f)
@@ -272,23 +280,7 @@ class AdvanceMapRequestHandler(http.server.SimpleHTTPRequestHandler):
                 with open(proj_file, 'w', encoding='utf-8') as f:
                     json.dump(data, f, indent=2)
 
-                # Copiar cualquier tileset personalizado de custom_assets a assets/maps/
-                for f in glob.glob(os.path.join(CUSTOM_ASSETS_DIR, '*.png')):
-                    base_name = os.path.basename(f)
-                    dest = os.path.join(GAME_MAPS_DIR, base_name)
-                    if not os.path.exists(dest) or os.path.getmtime(f) > os.path.getmtime(dest):
-                        shutil.copy(f, dest)
-                        print(f"  📦 Copiando nuevo asset al juego: {base_name}")
-                    
-                    # Crear enlace / copia en minúsculas si el archivo tiene mayúsculas
-                    lower_name = base_name.lower()
-                    if lower_name != base_name:
-                        dest_lower = os.path.join(GAME_MAPS_DIR, lower_name)
-                        if not os.path.exists(dest_lower):
-                            try:
-                                os.symlink(base_name, dest_lower)
-                            except Exception:
-                                shutil.copy(f, dest_lower)
+                # (Ya no se copian tilesets de custom_assets: el juego usa solo PALETTE_TILESETS)
 
                 resp = json.dumps({"status": "ok", "message": f"¡Mapa '{map_name}' y assets publicados exitosamente al juego!"}).encode('utf-8')
                 self.send_response(200)

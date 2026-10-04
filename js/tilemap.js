@@ -65,6 +65,9 @@ const TILES = {
     WATER_ROCK: { tileset: 'water', r: 12, c: 4, solid: true }
 };
 
+// Nombre real de cada tileset (en minúsculas -> archivo en assets/maps)
+const TILESET_FILES = { outside: 'Outside.png', caves: 'Caves.png', charcos: 'charcos.png' };
+
 class TileMap {
     constructor(cols = 120, rows = 90, tileSize = 32) {
         this.cols = cols;
@@ -107,6 +110,21 @@ class TileMap {
         this.loadSavedMap();
     }
 
+    /**
+     * Lee un mapa como archivo estático (assets/maps/<id>.json): funciona igual en local y en
+     * Firebase. Si no existe, prueba la API del servidor local (/api/map).
+     */
+    static async fetchMap(mapId) {
+        for (const url of [`assets/maps/${encodeURIComponent(mapId)}.json`, `/api/map?id=${encodeURIComponent(mapId)}`]) {
+            try {
+                const res = await fetch(url);
+                const type = res.headers.get('content-type') || '';
+                if (res.ok && type.includes('json')) return await res.json();
+            } catch (e) { /* probar la siguiente */ }
+        }
+        return null;
+    }
+
     getTilesetImage(rawName) {
         if (!rawName) return this.tilesetImage;
         let name = rawName.toLowerCase();
@@ -116,8 +134,10 @@ class TileMap {
 
         if (this.tilesetsCache[name]) return this.tilesetsCache[name];
 
+        // Nombre real del archivo (Firebase distingue mayúsculas: "outside" -> "Outside.png")
+        const file = TILESET_FILES[name] || `${name}.png`;
         const img = new Image();
-        img.src = `assets/maps/${name}.png`;
+        img.src = `assets/maps/${file}`;
         this.tilesetsCache[name] = img;
         return img;
     }
@@ -131,9 +151,8 @@ class TileMap {
         try {
             const cleanId = (mapId || 'world_map').replace('.json', '');
             const token = this.loadToken = (this.loadToken || 0) + 1;
-            const res = await fetch(`/api/map?id=${encodeURIComponent(cleanId)}`);
-            if (res.ok) {
-                const data = await res.json();
+            const data = await TileMap.fetchMap(cleanId);
+            if (data) {
                 if (token !== this.loadToken) return false; // llegó una carga más reciente
                 this.currentMapId = cleanId;
                 this.applyMapData(data);

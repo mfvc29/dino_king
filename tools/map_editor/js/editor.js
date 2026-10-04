@@ -3,6 +3,36 @@
  * Editor de Mapas 2D & Permisos de Paso
  */
 
+// ============================================================
+// MODO NUBE (Firebase): sin servidor Python, el editor lee los archivos estáticos del juego
+// (assets/maps/*.json, manifiestos de mapas y personajes, dinos.json). Los cambios se guardan
+// como borrador en el navegador y "Publicar" descarga el .json para subirlo al juego.
+// ============================================================
+const EDITOR_TILESETS = ['Outside.png', 'Caves.png', 'charcos.png'];
+const TILESET_FILES = { 'outside.png': 'Outside.png', 'caves.png': 'Caves.png', 'charcos.png': 'charcos.png' };
+const DEFAULT_MAPS = ['world_map.json', 'casa_martin.json', 'ruta_1.json', 'cueva_meteoro.json', 'torneo.json'];
+const DRAFT_PREFIX = 'dinoRey_editorDraft_';
+
+/** URL del tileset con el nombre real del archivo (Firebase distingue mayúsculas). */
+const tilesetUrl = (name) => `/assets/maps/${encodeURIComponent(TILESET_FILES[String(name).toLowerCase()] || name)}`;
+
+/** Huella sencilla de un texto (para saber si el mapa publicado cambió desde el borrador). */
+const textHash = (text) => {
+    let h = 5381;
+    for (let i = 0; i < text.length; i++) h = ((h << 5) + h + text.charCodeAt(i)) | 0;
+    return `${text.length}:${h}`;
+};
+
+async function fetchJson(url) {
+    try {
+        const res = await fetch(url);
+        const type = res.headers.get('content-type') || '';
+        return res.ok && type.includes('json') ? await res.json() : null;
+    } catch (e) {
+        return null;
+    }
+}
+
 class AdvanceMapEditor {
     constructor() {
         this.cols = 120;
@@ -11,6 +41,9 @@ class AdvanceMapEditor {
         this.sourceTileSize = 16;
         this.paletteScale = 4; // Cada tile de 16x16 se visualiza ampliado a 64x64 px en la paleta
         this.tilesetTileSizes = {
+            'Outside.png': 32,
+            'Caves.png': 32,
+            'charcos.png': 64,
             'GRASS+.png': 16,
             'Water+.png': 16,
             'Bridges.png': 16,
@@ -45,17 +78,17 @@ class AdvanceMapEditor {
         this.dinoCatalog = { elements: {}, dinos: [], attacks: [] }; // assets/dinos/dinos.json
 
         // Proyectos
-        this.currentProjectName = 'proyecto_actual.json';
+        this.currentProjectName = 'world_map.json'; // Pueblo Meteoro (proyecto_actual.json es su copia)
         this.projectList = [];
 
         // Tilesets disponibles
         this.tilesets = {}; // filename -> Image
-        this.currentTilesetKey = 'GRASS+.png';
-        this.tilesetNames = ['GRASS+.png', 'Water+.png'];
+        this.currentTilesetKey = 'Outside.png';
+        this.tilesetNames = ['Outside.png', 'Caves.png', 'charcos.png'];
 
         // Sello / Pincel seleccionado (soporta bloques multi-tile)
         this.selectedStamp = {
-            tileset: 'GRASS+.png',
+            tileset: 'Outside.png',
             startR: 0,
             startC: 0,
             w: 1,
@@ -106,6 +139,9 @@ class AdvanceMapEditor {
 
     async init() {
         this.showToast('Inicializando Advance Map Studio...');
+        // ¿Hay servidor del editor (local) o estamos en la nube (Firebase)?
+        this.cloud = !(await fetchJson('/api/tilesets'));
+        document.body.classList.toggle('editor-cloud', this.cloud);
 
         this.initEmptyGrids();
         await this.loadTilesetList();
@@ -137,9 +173,9 @@ class AdvanceMapEditor {
     // ============================================================
     async loadTilesetList() {
         try {
-            const res = await fetch('/api/tilesets');
-            if (res.ok) {
-                this.tilesetNames = await res.json();
+            const list = this.cloud ? EDITOR_TILESETS : await fetchJson('/api/tilesets');
+            if (list) {
+                this.tilesetNames = list;
                 if (!this.tilesetNames.includes(this.currentTilesetKey) && this.tilesetNames.length > 0) {
                     this.currentTilesetKey = this.tilesetNames[0];
                 }
@@ -177,7 +213,7 @@ class AdvanceMapEditor {
                     console.warn('Error cargando imagen tileset:', name);
                     resolve(null);
                 };
-                img.src = `/assets/maps/${name}`;
+                img.src = tilesetUrl(name);
             });
         });
         return Promise.all(promises);
@@ -185,9 +221,11 @@ class AdvanceMapEditor {
 
     async loadProjectList() {
         try {
-            const res = await fetch('/api/projects');
-            if (res.ok) {
-                this.projectList = await res.json();
+            const list = this.cloud
+                ? ((await fetchJson('/assets/maps/mapas.json')) || DEFAULT_MAPS)
+                : await fetchJson('/api/projects');
+            if (list) {
+                this.projectList = list;
                 const sel = document.getElementById('projectSelect');
                 if (sel) {
                     sel.innerHTML = '';
@@ -226,11 +264,11 @@ class AdvanceMapEditor {
 
     async loadProject(name) {
         try {
-            const res = await fetch(`/api/project?name=${encodeURIComponent(name)}`);
-            if (res.ok) {
-                const data = await res.json();
+            const data = this.cloud ? await this.loadCloudMap(name) : await fetchJson(`/api/project?name=${encodeURIComponent(name)}`);
+            if (data) {
                 this.currentProjectName = name;
                 this.applyMapData(data);
+                await this.ensureTilesetImages();
                 this.history = [];
                 this.historyIndex = -1;
                 this.pushHistory('Cargar proyecto: ' + name);
@@ -269,7 +307,7 @@ class AdvanceMapEditor {
             this.solidGrid[r] = [];
             this.tallGrassGrid[r] = [];
             for (let c = 0; c < this.cols; c++) {
-                this.layers[0].grid[r][c] = { tileset: 'GRASS+.png', r: 0, c: 0 };
+                this.layers[0].grid[r][c] = { tileset: 'Outside.png', r: 0, c: 1, srcSize: 32 };
                 this.layers[1].grid[r][c] = null;
                 this.solidGrid[r][c] = 0;
                 this.tallGrassGrid[r][c] = 0;
@@ -279,8 +317,24 @@ class AdvanceMapEditor {
         this.activeLayerIndex = 0;
     }
 
+    /** Carga las imágenes de todos los tilesets que usa el mapa (aunque no estén en la paleta). */
+    async ensureTilesetImages() {
+        const used = new Set();
+        (this.layers || []).forEach(l => l.grid.forEach(row => row.forEach(c => { if (c && c.tileset) used.add(c.tileset); })));
+        const missing = [...used].filter(name => !this.tilesets[name]);
+        await Promise.all(missing.map(name => new Promise(resolve => {
+            const img = new Image();
+            img.onload = () => { this.tilesets[name] = img; resolve(); };
+            img.onerror = () => resolve(); // el servidor busca sin distinguir mayúsculas; si no existe, se omite
+            img.src = tilesetUrl(name);
+        })));
+    }
+
     applyMapData(data) {
         if (!data) return;
+        // Datos del mapa que el editor no modifica (nombre, punto de aparición...) para conservarlos al publicar
+        const { layers, ground, decor, solid, tallGrass, warps, npcs, ...meta } = data;
+        this.mapMeta = meta;
         this.cols = data.cols || 120;
         this.rows = data.rows || 90;
         if (data.sourceTileSize) {
@@ -397,20 +451,17 @@ class AdvanceMapEditor {
 
     getExportableMapData() {
         const mapNameClean = (this.currentProjectName || 'world_map').replace('.json', '');
+        const meta = this.mapMeta || {};
         const data = {
+            ...meta,
             version: 2,
-            name: mapNameClean,
+            name: meta.name || mapNameClean,
             cols: this.cols,
             rows: this.rows,
             tileSize: this.tileSize,
             sourceTileSize: this.sourceTileSize,
             tilesetTileSizes: this.tilesetTileSizes,
-            tilesets: {
-                "grass": "GRASS+.png",
-                "water": "Water+.png",
-                "bridges": "Bridges.png",
-                "exterior": "exterior.png"
-            },
+            tilesets: { outside: 'Outside.png', caves: 'Caves.png', charcos: 'charcos.png' },
             layers: this.layers.map(l => ({
                 id: l.id,
                 name: l.name,
@@ -435,13 +486,14 @@ class AdvanceMapEditor {
             })),
             // Personajes fijos / Eventos de combate
             npcs: (this.npcs || []).map(n => ({
+                ...n, // conserva campos del juego (ai, tournament, lines...)
                 id: n.id,
                 x: Number(n.x),
                 y: Number(n.y),
                 name: n.name || '',
                 sprite: n.sprite || '',
                 direction: n.direction || 'down',
-                type: ['npc', 'tutor'].includes(n.type) ? n.type : 'trainer',
+                type: ['npc', 'tutor', 'trainer'].includes(n.type) ? n.type : 'trainer',
                 sightRange: Number(n.sightRange) || 0,
                 dialog: n.dialog || '',
                 defeatDialog: n.defeatDialog || '',
@@ -972,6 +1024,11 @@ class AdvanceMapEditor {
         const inputNew = document.getElementById('inputNewTileset');
         if (inputNew) {
             inputNew.addEventListener('change', async (e) => {
+                if (e.target.files && e.target.files[0] && this.cloud) {
+                    this.showToast('☁️ En la nube no se pueden añadir tilesets: agrégalos en assets/maps/ y vuelve a subir el juego.');
+                    e.target.value = '';
+                    return;
+                }
                 if (e.target.files && e.target.files[0]) {
                     const file = e.target.files[0];
                     const formData = await file.arrayBuffer();
@@ -1235,7 +1292,7 @@ class AdvanceMapEditor {
 
         if (this.activeLayerIndex === 0) {
             // Capa 0 es el suelo base -> se resetea al pasto por defecto
-            activeLayer.grid[row][col] = { tileset: 'GRASS+.png', r: 0, c: 0, srcSize: 16 };
+            activeLayer.grid[row][col] = { tileset: 'Outside.png', r: 0, c: 1, srcSize: 32 }; // pasto de Outside.png
         } else {
             // Capas superiores -> se vuelven transparentes (null)
             activeLayer.grid[row][col] = null;
@@ -2033,9 +2090,9 @@ class AdvanceMapEditor {
     // ============================================================
     async loadCharacterList() {
         try {
-            const res = await fetch('/api/characters');
-            if (res.ok) {
-                this.characterSprites = await res.json();
+            const list = await fetchJson(this.cloud ? '/assets/characters/personajes.json' : '/api/characters');
+            if (list) {
+                this.characterSprites = list;
             } else {
                 console.warn(`/api/characters respondió ${res.status}. ¿Reiniciaste app.py tras actualizarlo?`);
                 this.showToast('⚠️ No se pudo cargar la lista de personajes. Reinicia el editor (run_editor.sh).');
@@ -2228,8 +2285,8 @@ class AdvanceMapEditor {
     // ------------------------------------------------------------
     async loadDinoCatalog() {
         try {
-            const res = await fetch('/api/dinos');
-            if (res.ok) this.dinoCatalog = await res.json();
+            const catalog = await fetchJson(this.cloud ? '/assets/dinos/dinos.json' : '/api/dinos');
+            if (catalog) this.dinoCatalog = catalog;
         } catch (e) {
             console.warn('Error cargando catálogo de dinos:', e);
         }
@@ -2621,12 +2678,7 @@ class AdvanceMapEditor {
             tileSize: this.tileSize,
             sourceTileSize: chosenTileSize,
             tilesetTileSizes: { ...this.tilesetTileSizes, [chosenTileset]: chosenTileSize },
-            tilesets: {
-                "exterior": "exterior.png",
-                "grass": "GRASS+.png",
-                "water": "Water+.png",
-                "bridges": "Bridges.png"
-            },
+            tilesets: { outside: 'Outside.png', caves: 'Caves.png', charcos: 'charcos.png' },
             layers: [
                 { id: 'layer_0', name: 'Suelo Base', type: 'ground', visible: true, grid: groundGrid },
                 { id: 'layer_1', name: 'Muebles & Paredes', type: 'decor', visible: true, grid: decorGrid }
@@ -2879,6 +2931,11 @@ class AdvanceMapEditor {
         const btn = document.getElementById('btnSaveDraft');
         if (btn) btn.textContent = '⏳ Guardando...';
 
+        if (this.cloud) {
+            this.saveCloudDraft();
+            if (btn) btn.textContent = '💾 Guardar Borrador';
+            return;
+        }
         try {
             const data = this.getExportableMapData();
             const res = await fetch(`/api/project?name=${encodeURIComponent(this.currentProjectName)}`, {
@@ -2904,6 +2961,11 @@ class AdvanceMapEditor {
         const btn = document.getElementById('btnDeployGame');
         if (btn) btn.textContent = '🚀 Publicando...';
 
+        if (this.cloud) {
+            this.publishCloud();
+            if (btn) btn.textContent = '🚀 Publicar al Juego';
+            return;
+        }
         try {
             const data = this.getExportableMapData();
             const mapName = (this.currentProjectName || 'world_map.json').endsWith('.json')
@@ -2927,6 +2989,53 @@ class AdvanceMapEditor {
         } finally {
             if (btn) btn.textContent = '🚀 Publicar al Juego';
         }
+    }
+
+    // ------------------------------------------------------------
+    // Modo nube: borradores en el navegador y publicación por descarga
+    // ------------------------------------------------------------
+    /** Mapa publicado (estático) o el borrador local si se hizo sobre esa misma versión. */
+    async loadCloudMap(name) {
+        let text = null;
+        try {
+            const res = await fetch(`/assets/maps/${encodeURIComponent(name)}`);
+            if (res.ok && (res.headers.get('content-type') || '').includes('json')) text = await res.text();
+        } catch (e) { /* sin conexión */ }
+        this.cloudBase = text ? textHash(text) : null;
+        let draft = null;
+        try { draft = JSON.parse(localStorage.getItem(DRAFT_PREFIX + name) || 'null'); } catch (e) { draft = null; }
+        if (draft && (!text || draft.base === this.cloudBase)) {
+            setTimeout(() => this.showToast(`📝 Cargado tu borrador de "${name}" (${new Date(draft.savedAt).toLocaleString('es')}).`), 300);
+            return draft.data;
+        }
+        if (draft) setTimeout(() => this.showToast('ℹ️ El mapa publicado cambió desde tu borrador: se cargó la versión publicada.'), 300);
+        return text ? JSON.parse(text) : null;
+    }
+
+    saveCloudDraft() {
+        try {
+            localStorage.setItem(DRAFT_PREFIX + this.currentProjectName, JSON.stringify({
+                base: this.cloudBase, savedAt: Date.now(), data: this.getExportableMapData()
+            }));
+            this.showToast(`💾 Borrador de "${this.currentProjectName}" guardado en este navegador.`);
+        } catch (e) {
+            this.showToast('❌ No se pudo guardar el borrador (¿mapa demasiado grande para el navegador?).');
+        }
+    }
+
+    /** En la nube no se puede escribir en el juego: descarga el .json listo para assets/maps/. */
+    publishCloud() {
+        this.saveCloudDraft();
+        const name = (this.currentProjectName || 'world_map.json').replace(/\.json$/, '') + '.json';
+        const blob = new Blob([JSON.stringify(this.getExportableMapData())], { type: 'application/json' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = name;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+        this.showToast(`☁️ Descargado ${name}: cópialo en assets/maps/ (si es world_map, también como proyecto_actual.json) y sube el juego con "firebase deploy --only hosting".`);
     }
 
     showToast(msg) {

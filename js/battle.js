@@ -183,7 +183,13 @@ class BattleSystem {
         };
 
         document.getElementById('battleTrainerName').textContent = title;
+        const labels = this.overlay.querySelectorAll('.battle-side-label');
+        labels.forEach(el => {
+            const side = el.classList.contains('rival') ? 'rival' : 'player';
+            el.textContent = isTournament ? this.battle.names[side].toUpperCase() : (side === 'rival' ? (isWild ? 'SALVAJE' : 'RIVAL') : 'TU EQUIPO');
+        });
         this.overlay.classList.toggle('wild', isWild);
+        this.overlay.querySelector('.battle-window').classList.remove('defeat', 'victory');
         this.overlay.classList.toggle('pvp', this.battle.humans.rival);
         this.logEl.innerHTML = '';
         this.turnEl.textContent = '';
@@ -534,7 +540,10 @@ class BattleSystem {
             const damage = Math.max(1, Math.round(total * (0.9 + Math.random() * 0.1)));
             foe.hp = Math.max(0, foe.hp - damage);
             foe.down = false;
+            if (foe.hp <= 0) foe.justKO = true;
+            this.render();
             this.animate(foe, 'hit');
+            this.impact(foe, damage, { color: '#ffd60a', crit: true, weak: false });
             this.log(`💥 ${foe.name} recibe ${damage} de daño.`);
             if (foe.hp <= 0) this.log(`☠️ ${foe.name} se debilitó.`);
         }
@@ -607,7 +616,7 @@ class BattleSystem {
         const mine = this.battle.humans[attacker.side] && !this.battle.humans.rival ? 'player' : (attacker.side === 'player' ? 'player' : 'rival');
         attacker.lastMove = attackId;
         this.log(`${el ? el.icon : '•'}${cat.icon} ${this.ownerLabel(attacker)} ${attacker.name} usó ${attack.moveCard ? '🃏 ' : ''}<strong>${escapeHtml(attack.name)}</strong> contra ${defender.name}.`);
-        this.animate(attacker, 'attacking');
+        this.animateCard(attacker, attacker.side === 'player' ? 'lunge-up' : 'lunge-down');
         await sleep(BATTLE_DELAY / 2);
 
         if (attack.power <= 0) {
@@ -625,8 +634,10 @@ class BattleSystem {
         defender.hp = Math.max(0, defender.hp - damage);
         const knocked = (weak || crit) && !defender.down && !defender.guarding && defender.hp > 0;
         if (knocked) defender.down = true;
+        if (defender.hp <= 0) defender.justKO = true;
         this.render();
         this.animate(defender, 'hit');
+        this.impact(defender, damage, { color: el ? el.color : '#ffffff', crit, weak: weak && !defender.guarding });
         if (weak && !defender.guarding) this.splash('¡DÉBIL!', mine === 'player' ? 'weak' : 'rival');
         else if (crit) this.splash('¡CRÍTICO!', mine === 'player' ? 'weak' : 'rival');
         this.log(`💥 ${defender.name} recibe ${damage} de daño.${weak ? ' <span class="log-effective">¡Es muy eficaz!</span>' : ''}${crit ? ' <span class="log-effective">¡Crítico!</span>' : ''}${defender.guarding ? ' 🛡️' : ''}`);
@@ -680,6 +691,11 @@ class BattleSystem {
         b.turn = null;
         b.oneMore = false;
         const winner = result === 'won' ? b.names.player : b.names.rival;
+        const win = this.overlay.querySelector('.battle-window');
+        const lostLocal = result === 'lost' && !b.humans.rival;
+        win.classList.remove('defeat', 'victory');
+        void win.offsetWidth;
+        win.classList.add(lostLocal ? 'defeat' : 'victory');
         if (b.kind === 'tournament') {
             this.turnEl.textContent = `🏆 Gana ${winner}`;
             this.splash(`¡GANA ${winner.toUpperCase()}!`, result === 'won' || b.humans.rival ? 'win' : 'lose');
@@ -702,6 +718,7 @@ class BattleSystem {
 
     close() {
         this.battle = null;
+        this.overlay.querySelector('.battle-window').classList.remove('defeat', 'victory');
         this.overlay.style.display = 'none';
         this.overlay.classList.remove('pvp');
         if (document.activeElement) document.activeElement.blur();
@@ -764,6 +781,34 @@ class BattleSystem {
         el.classList.add(cls);
     }
 
+    fighterEl(f) {
+        return document.querySelector(`.battle-fighter[data-side="${f.side}"][data-idx="${f.idx}"]`);
+    }
+
+    /** Animación de toda la carta (embestida hacia el rival). */
+    animateCard(f, cls) {
+        const el = this.fighterEl(f);
+        if (!el) return;
+        el.classList.remove(cls);
+        void el.offsetWidth;
+        el.classList.add(cls);
+    }
+
+    /** Golpe: destello del color del elemento y número de daño flotante. */
+    impact(f, damage, { color = '#fff', crit = false, weak = false } = {}) {
+        const el = this.fighterEl(f);
+        if (!el) return;
+        const slash = document.createElement('span');
+        slash.className = 'fx-slash';
+        slash.style.setProperty('--fx', color);
+        const pop = document.createElement('span');
+        pop.className = `dmg-pop ${crit ? 'crit' : ''} ${weak ? 'weak' : ''}`;
+        pop.textContent = `-${damage}`;
+        el.append(slash, pop);
+        setTimeout(() => { slash.remove(); pop.remove(); }, 1100);
+        if (f.justKO) setTimeout(() => { f.justKO = false; }, 1200);
+    }
+
     renderFighter(f, targetNumber = 0) {
         const b = this.battle;
         const el = this.cards.catalog.elements[f.element];
@@ -782,11 +827,12 @@ class BattleSystem {
         const done = b.phase === 'human' && f.side === b.turn && b.acted.has(f.idx) && !isActor;
         const status = `${f.guarding ? '🛡️' : ''}${f.intimidated ? '😨' : ''}${done ? '✔' : ''}`;
         return `
-            <div class="battle-fighter ${isActor ? 'actor' : ''} ${targetable ? 'targetable' : ''} ${f.hp <= 0 ? 'fainted' : ''} ${f.down ? 'down' : ''}"
+            <div class="battle-fighter ${isActor ? 'actor' : ''} ${targetable ? 'targetable' : ''} ${f.hp <= 0 ? 'fainted' : ''} ${f.justKO ? 'ko-anim' : ''} ${f.down ? 'down' : ''}"
                  data-side="${f.side}" data-idx="${f.idx}">
                 ${effTag}
                 ${targetable && targetNumber ? `<kbd class="fighter-key">${targetNumber}</kbd>` : ''}
                 ${f.down ? '<span class="fighter-down">DERRIBADO</span>' : ''}
+                ${f.hp <= 0 ? '<span class="fighter-ko">K.O.</span>' : ''}
                 <div class="battle-fighter-img battle-dino-img ${f.fullCard ? 'full-card' : ''}" style="${imgStyle}"></div>
                 <div class="battle-fighter-info">
                     <strong>${escapeHtml(f.name)} <span class="fighter-status">${status}</span></strong>

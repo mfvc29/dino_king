@@ -401,6 +401,21 @@ def start_ws_loop():
 # ============================================================
 # 3. EJECUCIÓN PRINCIPAL
 # ============================================================
+def start_map_editor():
+    """Editor de mapas en su puerto (8080); si ya está abierto en otra terminal, no hace nada."""
+    try:
+        sys.path.insert(0, os.path.join(DIRECTORY, 'tools', 'map_editor'))
+        import app as map_editor
+        socketserver.TCPServer.allow_reuse_address = True
+        with socketserver.TCPServer(("", map_editor.PORT), map_editor.AdvanceMapRequestHandler) as httpd:
+            print(f"  🗺️  Editor de mapas en: http://localhost:{map_editor.PORT}")
+            httpd.serve_forever()
+    except OSError:
+        print("  🗺️  El editor de mapas ya está abierto (puerto 8080).")
+    except Exception as e:
+        print(f"  ⚠️  No se pudo iniciar el editor de mapas: {e}")
+
+
 if __name__ == "__main__":
     print("==================================================")
     print("  🦖 DINO KING - Servidor Multijugador & Mundo Real")
@@ -409,6 +424,10 @@ if __name__ == "__main__":
     # Iniciar servidor WebSocket en un hilo separado
     ws_thread = threading.Thread(target=start_ws_loop, daemon=True)
     ws_thread.start()
+
+    # Iniciar también el editor de mapas (tools/map_editor) en http://localhost:8080
+    if "--sin-editor" not in sys.argv and not os.environ.get("RENDER"):
+        threading.Thread(target=start_map_editor, daemon=True).start()
 
     # Abrir navegador si no se pasa --no-browser
     if "--no-browser" not in sys.argv:

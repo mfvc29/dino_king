@@ -100,10 +100,8 @@ class TournamentSystem {
             byName.set(name, { name, sprite: n.sprite, species: team.slice(0, 3), move: n.moveCard || null });
         };
         for (const id of TOURNAMENT_MAPS) {
-            try {
-                const res = await fetch(`/api/map?id=${id}`);
-                if (res.ok) ((await res.json()).npcs || []).forEach(add);
-            } catch (e) { /* mapa no disponible */ }
+            const data = await TileMap.fetchMap(id);
+            if (data) (data.npcs || []).forEach(add);
         }
         (this.game.story.data.npcs || []).forEach(add);
         this.pool = [...byName.values()];

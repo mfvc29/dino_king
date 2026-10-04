@@ -187,15 +187,6 @@ class Player {
             ctx.restore();
         }
 
-        // Nombre
-        ctx.save();
-        ctx.textAlign = 'center';
-        ctx.font = 'bold 11px sans-serif';
-        ctx.fillStyle = '#ffffff';
-        ctx.strokeStyle = '#000000';
-        ctx.lineWidth = 3;
-        ctx.strokeText(this.name, this.x, this.y - 42);
-        ctx.fillText(this.name, this.x, this.y - 42);
-        ctx.restore();
+
     }
 }

@@ -3,186 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dino King - Creador de Mapas (Advance Map Studio)</title>
-    <link rel="stylesheet" href="css/editor.css">
+    <title>Dino Rey · Editor de mapas</title>
+    <style>
+        body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;
+               background: #0a0a0c; color: #f5f5f0; font-family: 'Segoe UI', system-ui, sans-serif; text-align: center; padding: 16px; }
+        a { color: #ffd60a; }
+    </style>
 </head>
 <body>
-    <!-- Barra Superior / Header de Herramientas -->
-    <header class="editor-header">
-        <div class="editor-branding">
-            <span class="editor-icon">🗺️</span>
-            <div>
-                <h1>Dino King <span class="badge">ADVANCE MAP STUDIO</span></h1>
-                <p class="subtitle">Editor Visual de Mapas 2D & Permisos de Paso</p>
-            </div>
-        </div>
-
-        <!-- Selector de Capas Estilo Advance Map -->
-        <div class="layer-control-group">
-            <span class="group-label">CAPA ACTIVA:</span>
-            <div class="layer-tabs">
-                <button class="layer-tab-btn active" data-layer="ground" title="Capa 1: Suelo y Terreno base">
-                    <span class="dot ground-dot"></span> Suelo
-                </button>
-                <button class="layer-tab-btn" data-layer="decor" title="Capa 2: Decoraciones, Rocas, Flores y Objetos">
-                    <span class="dot decor-dot"></span> Decoración
-                </button>
-                <button class="layer-tab-btn" data-layer="collision" title="Capa 3: Permisos de Paso y Colisiones (Movement Permissions)">
-                    <span class="dot collision-dot"></span> Permisos (Colisiones)
-                </button>
-            </div>
-        </div>
-
-        <!-- Herramientas de Dibujo -->
-        <div class="tools-group">
-            <button class="tool-btn active" id="toolPencil" title="Lápiz (P): Pintar tiles o sellos seleccionados">✏️</button>
-            <button class="tool-btn" id="toolFill" title="Bote de Pintura (F): Relleno de áreas">🪣</button>
-            <button class="tool-btn" id="toolEraser" title="Borrador (E): Limpiar tile de la capa activa">🧹</button>
-            <button class="tool-btn" id="toolPicker" title="Pipeta (I): Clonar tile del mapa">🔍</button>
-            <div class="tool-divider"></div>
-            <button class="tool-btn" id="btnUndo" title="Deshacer (Ctrl+Z)">↩️</button>
-            <button class="tool-btn" id="btnRedo" title="Rehacer (Ctrl+Y)">↪️</button>
-            <div class="tool-divider"></div>
-            <button class="tool-btn active" id="btnToggleGrid" title="Mostrar/Ocultar Cuadrícula">📐</button>
-            <button class="tool-btn active" id="btnToggleCollisionsOverlay" title="Mostrar/Ocultar Permisos">🚫</button>
-        </div>
-
-        <!-- Controles de Archivo y Guardado -->
-        <div class="file-actions-group">
-            <button class="action-btn btn-save" id="btnSaveServer" title="Guardar cambios directamente en el juego">
-                💾 Guardar en Juego
-            </button>
-            <button class="action-btn" id="btnExportJson" title="Descargar copia de seguridad en JSON">
-                📥 Exportar JSON
-            </button>
-            <label class="action-btn btn-import-label" title="Importar mapa desde archivo JSON">
-                📂 Importar
-                <input type="file" id="fileImportJson" accept=".json" style="display:none;">
-            </label>
-            <a href="/" class="action-btn btn-play" target="_blank" title="Abrir y probar el juego en tiempo real">
-                🎮 Jugar
-            </a>
-        </div>
-    </header>
-
-    <!-- Cuerpo Principal del Editor -->
-    <main class="editor-main">
-        <!-- Barra Lateral Izquierda (Paleta de Tilesets y Permisos) -->
-        <aside class="editor-sidebar">
-            <!-- Pestaña / Selector de Tileset -->
-            <div class="sidebar-section">
-                <div class="sidebar-header">
-                    <h3>🎨 PALETA DE TILESETS</h3>
-                </div>
-                <div class="tileset-select-wrapper">
-                    <label for="tilesetSelector">Tileset Activo:</label>
-                    <select id="tilesetSelector" class="retro-select">
-                        <option value="GRASS+.png">GRASS+.png (Pasto, Tierra, Cercas)</option>
-                        <option value="Water+.png">Water+.png (Agua, Lotos, Nenúfares)</option>
-                    </select>
-                </div>
-
-                <!-- Canvas Interactivo del Tileset (Paleta) -->
-                <div class="tileset-palette-container" id="tilesetPaletteContainer">
-                    <canvas id="paletteCanvas" width="400" height="224"></canvas>
-                </div>
-                <div class="palette-hint">
-                    <span>💡 Clic para 1 tile o arrastra para seleccionar un <strong>bloque múltiple</strong> (sello).</span>
-                </div>
-            </div>
-
-            <!-- Panel de Permisos de Paso (Movement Permissions estilo Advance Map) -->
-            <div class="sidebar-section" id="collisionPaletteSection" style="display: none;">
-                <div class="sidebar-header">
-                    <h3>🚫 PERMISOS DE PASO</h3>
-                </div>
-                <p class="perm-desc">Selecciona el tipo de permiso para pintar colisiones como en Advance Map:</p>
-                <div class="perm-types-grid">
-                    <div class="perm-card active" data-perm="solid">
-                        <div class="perm-box solid-box">1</div>
-                        <div>
-                            <strong>Bloqueado (Sólido)</strong>
-                            <span>Paredes, rocas, vallas</span>
-                        </div>
-                    </div>
-                    <div class="perm-card" data-perm="walkable">
-                        <div class="perm-box walkable-box">0</div>
-                        <div>
-                            <strong>Paso Libre</strong>
-                            <span>Caminos, hierba baja</span>
-                        </div>
-                    </div>
-                    <div class="perm-card" data-perm="tall_grass">
-                        <div class="perm-box grass-box">C</div>
-                        <div>
-                            <strong>Hierba Silvestre</strong>
-                            <span>Dinos salvajes & recolección</span>
-                        </div>
-                    </div>
-                </div>
-                <div style="margin-top: 10px;">
-                    <button class="btn-secondary" id="btnAutoCollisions" style="width: 100%;">
-                        ⚡ Auto-Generar Colisiones
-                    </button>
-                </div>
-            </div>
-
-            <!-- Previsualización del Sello / Pincel Seleccionado -->
-            <div class="sidebar-section brush-preview-section">
-                <div class="sidebar-header">
-                    <h3>🖌️ PINCEL ACTIVO</h3>
-                </div>
-                <div class="brush-preview-content">
-                    <canvas id="brushPreviewCanvas" width="64" height="64"></canvas>
-                    <div class="brush-info" id="brushInfoText">
-                        <strong>Tile:</strong> [GRASS+, r:0, c:0]<br>
-                        <strong>Tamaño:</strong> 1 x 1 losas
-                    </div>
-                </div>
-            </div>
-
-            <!-- Mini-Radar del Mapa Completo -->
-            <div class="sidebar-section minimap-section">
-                <div class="sidebar-header">
-                    <h3>🗺️ NAVEGADOR RÁPIDO</h3>
-                </div>
-                <div class="minimap-wrapper">
-                    <canvas id="editorMinimap" width="240" height="180"></canvas>
-                </div>
-                <span class="minimap-hint">Haz clic en el minimapa para saltar a esa zona.</span>
-            </div>
-        </aside>
-
-        <!-- Área Central de Lienzo (Editor de Mapa) -->
-        <section class="editor-viewport" id="viewport">
-            <div class="canvas-zoom-wrapper" id="canvasWrapper">
-                <canvas id="mapCanvas" width="3840" height="2880"></canvas>
-            </div>
-
-            <!-- Controles Flotantes de Zoom y Posición -->
-            <div class="floating-view-controls">
-                <button class="floating-btn" id="btnZoomOut" title="Reducir Zoom (-)">−</button>
-                <span class="zoom-level-text" id="zoomLevelDisplay">100%</span>
-                <button class="floating-btn" id="btnZoomIn" title="Aumentar Zoom (+)">+</button>
-                <button class="floating-btn" id="btnResetView" title="Restablecer Vista al Centro">🎯</button>
-            </div>
-        </section>
-    </main>
-
-    <!-- Barra Inferior de Estado -->
-    <footer class="editor-statusbar">
-        <div class="status-left">
-            <span class="status-item" id="statusCoords">📍 Losa: X: 0, Y: 0 | Píxel: X: 0, Y: 0</span>
-            <span class="status-item" id="statusZone">🏡 Zona: Pueblo Raíz</span>
-            <span class="status-item" id="statusDims">📐 Dimensiones: 120 x 90 losas (3840 x 2880 px)</span>
-        </div>
-        <div class="status-right">
-            <span class="status-toast" id="editorToast"></span>
-            <span class="status-item" id="statusMode">Capa: <strong>Suelo</strong> | Herramienta: <strong>Lápiz</strong></span>
-        </div>
-    </footer>
-
-    <!-- Scripts del Editor -->
-    <script src="js/editor.js"></script>
+    <!--
+        El editor antiguo (formato de mapa v1) se reemplazó por el editor de tools/map_editor,
+        que entiende las capas, personajes y puertas de los mapas actuales. Esta página solo redirige.
+        El editor antiguo sigue en el historial de git (commit 47dfb2b) si lo necesitas.
+    -->
+    <div>
+        <h1>🛠️ Editor de mapas</h1>
+        <p id="msg">Abriendo el editor de mapas...</p>
+    </div>
+    <script>
+        const host = location.hostname;
+        const local = host === 'localhost' || host === '127.0.0.1' || /^192\.168\.|^10\./.test(host);
+        const msg = document.getElementById('msg');
+        const url = local ? `http://${host}:8080/` : '/tools/map_editor/';
+        msg.innerHTML = `Si no se abre solo, entra a <a href="${url}">${url}</a>.`;
+        location.replace(url);
+    </script>
 </body>
 </html>

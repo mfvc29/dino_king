@@ -304,7 +304,7 @@ kbd {
 
 .topbar {
     width: var(--game-w);
-    display: flex;
+    display: none !important;
     align-items: center;
     gap: 10px;
     padding: 6px 8px 6px 14px;
@@ -484,7 +484,7 @@ kbd {
 
 .controls-hint {
     width: var(--game-w);
-    display: flex;
+    display: none !important;
     justify-content: center;
     flex-wrap: wrap;
     gap: 6px 18px;
