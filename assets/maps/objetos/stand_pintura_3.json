@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "cols": 1,
+  "rows": 2,
+  "tileSize": 32,
+  "tilesets": {
+    "objetos_para_casa.png": "/custom_assets/objetos_para_casa.png"
+  },
+  "cells": [
+    [
+      [
+        "objetos_para_casa.png",
+        7,
+        2,
+        32
+      ]
+    ],
+    [
+      [
+        "objetos_para_casa.png",
+        8,
+        2,
+        32
+      ]
+    ]
+  ],
+  "solid": [
+    [
+      0
+    ],
+    [
+      0
+    ]
+  ],
+  "name": "stand_pintura_3",
+  "png": "objetos/stand_pintura_3.png",
+  "tilesetKey": "objetos/stand_pintura_3"
+}

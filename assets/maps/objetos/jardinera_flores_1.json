@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "cols": 3,
+  "rows": 2,
+  "tileSize": 32,
+  "tilesets": {
+    "Outside.png": "/assets/maps/Outside.png"
+  },
+  "cells": [
+    [
+      [
+        "Outside.png",
+        252,
+        0,
+        32
+      ],
+      [
+        "Outside.png",
+        252,
+        1,
+        32
+      ],
+      [
+        "Outside.png",
+        252,
+        2,
+        32
+      ]
+    ],
+    [
+      [
+        "Outside.png",
+        253,
+        0,
+        32
+      ],
+      [
+        "Outside.png",
+        253,
+        1,
+        32
+      ],
+      [
+        "Outside.png",
+        253,
+        2,
+        32
+      ]
+    ]
+  ],
+  "solid": [
+    [
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0
+    ]
+  ],
+  "name": "jardinera_flores_1",
+  "png": "objetos/jardinera_flores_1.png",
+  "tilesetKey": "objetos/jardinera_flores_1"
+}

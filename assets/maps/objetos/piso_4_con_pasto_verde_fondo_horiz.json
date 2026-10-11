@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "cols": 3,
+  "rows": 1,
+  "tileSize": 32,
+  "tilesets": {
+    "Outside.png": "/assets/maps/Outside.png"
+  },
+  "cells": [
+    [
+      [
+        "Outside.png",
+        36,
+        1,
+        32
+      ],
+      [
+        "Outside.png",
+        36,
+        2,
+        32
+      ],
+      [
+        "Outside.png",
+        36,
+        3,
+        32
+      ]
+    ]
+  ],
+  "solid": [
+    [
+      0,
+      0,
+      0
+    ]
+  ],
+  "name": "piso_4_con_pasto_verde_fondo_horiz",
+  "png": "objetos/piso_4_con_pasto_verde_fondo_horiz.png",
+  "tilesetKey": "objetos/piso_4_con_pasto_verde_fondo_horiz"
+}

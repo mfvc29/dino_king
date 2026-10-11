@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "cols": 1,
+  "rows": 1,
+  "tileSize": 32,
+  "tilesets": {
+    "Caves.png": "/assets/maps/Caves.png"
+  },
+  "cells": [
+    [
+      [
+        "Caves.png",
+        8,
+        4,
+        32
+      ]
+    ]
+  ],
+  "solid": [
+    [
+      0
+    ]
+  ],
+  "name": "gema_celeste",
+  "png": "objetos/gema_celeste.png",
+  "tilesetKey": "objetos/gema_celeste"
+}

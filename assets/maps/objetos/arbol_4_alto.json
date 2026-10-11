@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "cols": 2,
+  "rows": 5,
+  "tileSize": 32,
+  "tilesets": {
+    "Outside.png": "/assets/maps/Outside.png"
+  },
+  "cells": [
+    [
+      [
+        "Outside.png",
+        116,
+        12,
+        16
+      ],
+      [
+        "Outside.png",
+        116,
+        13,
+        16
+      ]
+    ],
+    [
+      [
+        "Outside.png",
+        117,
+        12,
+        16
+      ],
+      [
+        "Outside.png",
+        117,
+        13,
+        16
+      ]
+    ],
+    [
+      [
+        "Outside.png",
+        118,
+        12,
+        16
+      ],
+      [
+        "Outside.png",
+        118,
+        13,
+        16
+      ]
+    ],
+    [
+      [
+        "Outside.png",
+        119,
+        12,
+        16
+      ],
+      [
+        "Outside.png",
+        119,
+        13,
+        16
+      ]
+    ],
+    [
+      [
+        "Outside.png",
+        120,
+        12,
+        16
+      ],
+      [
+        "Outside.png",
+        120,
+        13,
+        16
+      ]
+    ]
+  ],
+  "solid": [
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      0
+    ]
+  ],
+  "name": "arbol_4_alto",
+  "png": "objetos/arbol_4_alto.png",
+  "tilesetKey": "objetos/arbol_4_alto"
+}

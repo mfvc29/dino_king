@@ -1,0 +1,91 @@
+{
+  "version": 1,
+  "cols": 3,
+  "rows": 3,
+  "tileSize": 32,
+  "tilesets": {
+    "Outside.png": "/assets/maps/Outside.png"
+  },
+  "cells": [
+    [
+      [
+        "Outside.png",
+        98,
+        0,
+        32
+      ],
+      [
+        "Outside.png",
+        98,
+        1,
+        32
+      ],
+      [
+        "Outside.png",
+        98,
+        2,
+        32
+      ]
+    ],
+    [
+      [
+        "Outside.png",
+        99,
+        0,
+        32
+      ],
+      [
+        "Outside.png",
+        99,
+        1,
+        32
+      ],
+      [
+        "Outside.png",
+        99,
+        2,
+        32
+      ]
+    ],
+    [
+      [
+        "Outside.png",
+        100,
+        0,
+        32
+      ],
+      [
+        "Outside.png",
+        100,
+        1,
+        32
+      ],
+      [
+        "Outside.png",
+        100,
+        2,
+        32
+      ]
+    ]
+  ],
+  "solid": [
+    [
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0
+    ]
+  ],
+  "name": "tierra_sobre_monta_a_sin_fondo",
+  "png": "objetos/tierra_sobre_monta_a_sin_fondo.png",
+  "tilesetKey": "objetos/tierra_sobre_monta_a_sin_fondo"
+}

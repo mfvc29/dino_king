@@ -280,9 +280,7 @@ class StorySystem {
             if (item) this.game.notifyStatus(`${item.icon} Recibiste ${item.name}. Equípalo en la Mochila (ENTER).`);
             next();
         } else if (a.giveMove) {
-            cards.moveCards[a.giveMove] = (cards.moveCards[a.giveMove] || 0) + 1;
-            if (!cards.getPlayerMoveCard()) cards.selectedMove = a.giveMove;
-            next();
+            next();   // ya no hay cartas de movimiento (acción antigua: se ignora)
         } else if (a.giveXp) {
             const leveled = cards.gainTeamXp(a.giveXp);
             this.game.notifyStatus(cards.describeXpGain(a.giveXp, leveled));

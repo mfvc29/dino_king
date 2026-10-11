@@ -2029,3 +2029,124 @@
     color: var(--text);
     margin-right: 4px;
 }
+
+/* ============================================================
+   Arte del dino sobre la carta (estilo Yu-Gi-Oh)
+   ============================================================ */
+/* Almanaque / capturas: la carta abajo a la izquierda y el dino saliendo de ella */
+.dino-card-stage {
+    position: relative;
+    width: 100%;
+    height: 150px;
+    margin-bottom: 4px;
+}
+
+.dino-card-stage .battle-dino-img {
+    position: absolute;
+    left: 4px;
+    bottom: 0;
+    width: 70px;
+    height: 98px;
+    margin: 0;
+}
+
+.dino-card-art {
+    position: absolute;
+    right: -6px;
+    top: 0;
+    max-width: 118%;
+    max-height: 118px;
+    object-fit: contain;
+    filter: drop-shadow(0 6px 6px rgba(0, 0, 0, 0.55));
+    animation: dino-breathe 3.2s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes dino-breathe {
+    50% { transform: translateY(-3px) scale(1.015); }
+}
+
+/* Combate: cada dino invocado sobre su carta */
+.battle-row .fighter-slot {
+    position: relative;
+    flex: 0 1 calc((100% - 20px) / 3);
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-top: 96px;
+}
+
+.battle-row .fighter-slot .battle-fighter {
+    flex: none;
+    width: 100%;
+}
+
+.fighter-art {
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% - 104px);
+    height: 104px;
+    max-width: 120%;
+    object-fit: contain;
+    transform: translateX(-50%);
+    transform-origin: 50% 100%;
+    filter: drop-shadow(0 0 6px var(--glow, #fff)) drop-shadow(0 8px 6px rgba(0, 0, 0, 0.6));
+    animation: fighter-idle 2.8s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 2;
+}
+
+@keyframes fighter-idle {
+    50% { transform: translateX(-50%) translateY(-4px); }
+}
+
+/* Invocación: sale de la carta con un destello */
+.fighter-art.summon {
+    animation: fighter-summon 1.1s cubic-bezier(.2, .9, .3, 1.2) both;
+}
+
+@keyframes fighter-summon {
+    0% { opacity: 0; transform: translateX(-50%) translateY(60px) scale(0.15); filter: brightness(4) drop-shadow(0 0 22px var(--glow, #fff)); }
+    55% { opacity: 1; filter: brightness(2) drop-shadow(0 0 18px var(--glow, #fff)); }
+    100% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+}
+
+/* Embestida hacia el rival y golpe recibido */
+.fighter-art.art-lunge {
+    animation: art-lunge-up 0.5s ease-out;
+}
+
+.fighter-art.art-lunge-down {
+    animation: art-lunge-down 0.5s ease-out;
+}
+
+@keyframes art-lunge-up {
+    45% { transform: translateX(-30%) translateY(-26px) scale(1.12); }
+}
+
+@keyframes art-lunge-down {
+    45% { transform: translateX(-70%) translateY(26px) scale(1.12); }
+}
+
+.fighter-art.art-hit {
+    animation: art-hit 0.45s ease-out;
+}
+
+@keyframes art-hit {
+    20%, 60% { transform: translateX(-56%); filter: brightness(2.5) drop-shadow(0 0 10px #ff3b3b); }
+    40%, 80% { transform: translateX(-44%); }
+}
+
+/* Derribado / debilitado */
+.fighter-slot.down .fighter-art {
+    transform: translateX(-50%) rotate(-12deg) translateY(10px);
+    filter: brightness(0.6);
+    animation: none;
+}
+
+.fighter-slot.fainted .fighter-art {
+    opacity: 0.25;
+    filter: grayscale(1);
+    animation: none;
+}

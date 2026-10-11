@@ -1,0 +1,52 @@
+{
+  "version": 1,
+  "cols": 2,
+  "rows": 2,
+  "tileSize": 32,
+  "tilesets": {
+    "objetos_para_casa_3.png": "/custom_assets/objetos_para_casa_3.png"
+  },
+  "cells": [
+    [
+      [
+        "objetos_para_casa_3.png",
+        11,
+        2,
+        32
+      ],
+      [
+        "objetos_para_casa_3.png",
+        11,
+        3,
+        32
+      ]
+    ],
+    [
+      [
+        "objetos_para_casa_3.png",
+        12,
+        2,
+        32
+      ],
+      [
+        "objetos_para_casa_3.png",
+        12,
+        3,
+        32
+      ]
+    ]
+  ],
+  "solid": [
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      0
+    ]
+  ],
+  "name": "ventana",
+  "png": "objetos/ventana.png",
+  "tilesetKey": "objetos/ventana"
+}

@@ -66,7 +66,12 @@ class BattleSystem {
         const dinoId = src.id || src.species;
         const dino = this.cards.getDino(dinoId);
         const level = Math.max(1, Number(src.level) || 1);
-        const stats = this.cards.getStats(dinoId, level);
+        const stats = { ...this.cards.getStats(dinoId, level) };
+        // Cansancio: tus dinos cansados pelean con menos fuerza (no aplica en el torneo)
+        const tired = side === 'player' && src.fatigue ? this.cards.fatigueLevel(src) : null;
+        if (tired && tired.factor < 1) {
+            for (const k of ['atk', 'def', 'spa', 'spd']) stats[k] = Math.max(1, Math.round(stats[k] * tired.factor));
+        }
         const attacks = (src.attacks && src.attacks.length) ? src.attacks.slice(0, 3)
             : (dino ? this.cards.getDefaultAttacks(dino, level) : ['embestida']);
         const f = {
@@ -89,7 +94,8 @@ class BattleSystem {
             guarding: false,
             down: false,
             boost: 1,
-            lastMove: null
+            lastMove: null,
+            tired: tired && tired.factor < 1 ? tired : null
         };
         f.strongest = this.strongestMove(f, moveId);
         return f;
@@ -147,7 +153,8 @@ class BattleSystem {
             rivalTeam = [{ species: dino.id, level: avg }];
         }
 
-        const playerMove = isTournament ? (opponent.player.move || null) : this.cards.getPlayerMoveCard();
+        const wantedMove = isTournament ? (opponent.player.move || null) : this.cards.getPlayerMoveCard();
+        const playerMove = wantedMove && this.cards.getAttack(wantedMove) ? wantedMove : null;
         const rivalMoveId = isTournament ? opponent.rival.move : (!isWild && npc.moveCard);
         const rivalMove = rivalMoveId && this.cards.getAttack(rivalMoveId) ? rivalMoveId : null;
         const title = isTournament ? opponent.title : (isWild ? opponent.title : npc.name);
@@ -202,6 +209,8 @@ class BattleSystem {
             this.log(isWild ? `🌿 ¡Un ${title} aparece entre la hierba alta!` : `⚔️ ¡${npc.name} te desafía a un combate!`);
         }
         if (rivalMove) this.log(`🃏 ${escapeHtml(this.battle.names.rival)} lleva la carta de movimiento <strong>${this.cards.getAttack(rivalMove).name}</strong>.`);
+        this.battle.player.filter(f => f.tired).forEach(f =>
+            this.log(`${f.tired.icon} ${f.name} está ${f.tired.label.toLowerCase()}: pelea con −${Math.round((1 - f.tired.factor) * 100)}% de fuerza.`));
         this.flipCoin();
     }
 
@@ -630,6 +639,7 @@ class BattleSystem {
         const crit = attack.category !== 'especial' && Math.random() < CRIT_CHANCE;
         const { damage, mult } = this.calcDamage(attacker, defender, attack, true, crit);
         const weak = mult > 1;
+        const resisted = mult < 1;
         attacker.intimidated = false;
         defender.hp = Math.max(0, defender.hp - damage);
         const knocked = (weak || crit) && !defender.down && !defender.guarding && defender.hp > 0;
@@ -640,7 +650,7 @@ class BattleSystem {
         this.impact(defender, damage, { color: el ? el.color : '#ffffff', crit, weak: weak && !defender.guarding });
         if (weak && !defender.guarding) this.splash('¡DÉBIL!', mine === 'player' ? 'weak' : 'rival');
         else if (crit) this.splash('¡CRÍTICO!', mine === 'player' ? 'weak' : 'rival');
-        this.log(`💥 ${defender.name} recibe ${damage} de daño.${weak ? ' <span class="log-effective">¡Es muy eficaz!</span>' : ''}${crit ? ' <span class="log-effective">¡Crítico!</span>' : ''}${defender.guarding ? ' 🛡️' : ''}`);
+        this.log(`💥 ${defender.name} recibe ${damage} de daño.${weak ? ' <span class="log-effective">¡Es muy eficaz!</span>' : ''}${resisted ? ' <span style="color:#94a3b8;">No es muy eficaz...</span>' : ''}${crit ? ' <span class="log-effective">¡Crítico!</span>' : ''}${defender.guarding ? ' 🛡️' : ''}`);
         if (knocked) this.log(`💫 <strong>¡${defender.name} fue derribado!</strong>`);
         if (defender.hp <= 0) {
             this.log(`☠️ ${defender.name} se debilitó.`);
@@ -674,6 +684,7 @@ class BattleSystem {
 
     /** Avisa del resultado al juego (entrenador), al sistema de cartas (salvaje) o al torneo. */
     report(b, result) {
+        if (b.kind !== 'tournament') this.cards.onBattleFatigue(b.kind === 'wild' ? 'wild' : 'trainer');
         if (b.kind === 'tournament') {
             if (b.opponent.onEnd) b.opponent.onEnd(result);
         } else if (b.kind === 'wild') {
@@ -792,12 +803,25 @@ class BattleSystem {
         el.classList.remove(cls);
         void el.offsetWidth;
         el.classList.add(cls);
+        // El dino también embiste
+        const art = el.parentElement && el.parentElement.querySelector('.fighter-art');
+        if (art) {
+            art.classList.remove('summon', 'art-lunge', 'art-lunge-down');
+            void art.offsetWidth;
+            art.classList.add(f.side === 'player' ? 'art-lunge' : 'art-lunge-down');
+        }
     }
 
     /** Golpe: destello del color del elemento y número de daño flotante. */
     impact(f, damage, { color = '#fff', crit = false, weak = false } = {}) {
         const el = this.fighterEl(f);
         if (!el) return;
+        const art = el.parentElement && el.parentElement.querySelector('.fighter-art');
+        if (art) {
+            art.classList.remove('summon', 'art-hit');
+            void art.offsetWidth;
+            art.classList.add('art-hit');
+        }
         const slash = document.createElement('span');
         slash.className = 'fx-slash';
         slash.style.setProperty('--fx', color);
@@ -826,7 +850,15 @@ class BattleSystem {
         }
         const done = b.phase === 'human' && f.side === b.turn && b.acted.has(f.idx) && !isActor;
         const status = `${f.guarding ? '🛡️' : ''}${f.intimidated ? '😨' : ''}${done ? '✔' : ''}`;
+        // El dino aparece sobre su carta (estilo Yu-Gi-Oh): tus dinos miran a la derecha, los rivales a la izquierda
+        const art = this.cards.artUrl(f.dinoId, f.side === 'player' ? 'right' : 'left');
+        if (!f.summonedAt) f.summonedAt = Date.now();
+        const since = Date.now() - f.summonedAt;
+        const artHtml = art ? `<img class="fighter-art ${since < 1200 ? 'summon' : ''} ${f.side}" src="${art}" alt=""
+                                   style="${since < 1200 ? `animation-delay:-${since}ms;` : ''}--glow:${el ? el.color : '#fff'}">` : '';
         return `
+          <div class="fighter-slot ${f.hp <= 0 ? 'fainted' : ''} ${f.down ? 'down' : ''}">
+            ${artHtml}
             <div class="battle-fighter ${isActor ? 'actor' : ''} ${targetable ? 'targetable' : ''} ${f.hp <= 0 ? 'fainted' : ''} ${f.justKO ? 'ko-anim' : ''} ${f.down ? 'down' : ''}"
                  data-side="${f.side}" data-idx="${f.idx}">
                 ${effTag}
@@ -840,7 +872,8 @@ class BattleSystem {
                     <div class="battle-hp-bar"><div class="battle-hp-fill ${hpClass}" style="width:${hpPct}%"></div></div>
                     <small class="battle-hp-text">❤️ ${f.hp}/${f.maxHp}</small>
                 </div>
-            </div>`;
+            </div>
+          </div>`;
     }
 
     /** Crea un botón de acción con atajo de teclado. */

@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "cols": 1,
+  "rows": 1,
+  "tileSize": 32,
+  "tilesets": {
+    "Outside.png": "/assets/maps/Outside.png"
+  },
+  "cells": [
+    [
+      [
+        "Outside.png",
+        120,
+        4,
+        32
+      ]
+    ]
+  ],
+  "solid": [
+    [
+      0
+    ]
+  ],
+  "name": "maceta_1",
+  "png": "objetos/maceta_1.png",
+  "tilesetKey": "objetos/maceta_1"
+}

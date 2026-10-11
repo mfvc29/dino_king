@@ -1,0 +1,88 @@
+{
+  "version": 1,
+  "cols": 2,
+  "rows": 4,
+  "tileSize": 32,
+  "tilesets": {
+    "Outside.png": "/assets/maps/Outside.png"
+  },
+  "cells": [
+    [
+      [
+        "Outside.png",
+        240,
+        12,
+        16
+      ],
+      [
+        "Outside.png",
+        240,
+        13,
+        16
+      ]
+    ],
+    [
+      [
+        "Outside.png",
+        241,
+        12,
+        16
+      ],
+      [
+        "Outside.png",
+        241,
+        13,
+        16
+      ]
+    ],
+    [
+      [
+        "Outside.png",
+        242,
+        12,
+        16
+      ],
+      [
+        "Outside.png",
+        242,
+        13,
+        16
+      ]
+    ],
+    [
+      [
+        "Outside.png",
+        243,
+        12,
+        16
+      ],
+      [
+        "Outside.png",
+        243,
+        13,
+        16
+      ]
+    ]
+  ],
+  "solid": [
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      0
+    ]
+  ],
+  "name": "estatua_1",
+  "png": "objetos/estatua_1.png",
+  "tilesetKey": "objetos/estatua_1"
+}

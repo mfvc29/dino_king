@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "cols": 1,
+  "rows": 1,
+  "tileSize": 32,
+  "tilesets": {
+    "charcos.png": "/assets/maps/charcos.png"
+  },
+  "cells": [
+    [
+      [
+        "charcos.png",
+        17,
+        4,
+        32
+      ]
+    ]
+  ],
+  "solid": [
+    [
+      0
+    ]
+  ],
+  "name": "abajo_charco_medio",
+  "png": "objetos/abajo_charco_medio.png",
+  "tilesetKey": "objetos/abajo_charco_medio"
+}

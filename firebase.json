@@ -12,7 +12,9 @@
       "**/*.py",
       "tools/map_editor/projects/**",
       "tools/map_editor/custom_assets/**",
-      "generador_de_mapa/**"
+      "generador_de_mapa/**",
+      "assets/dinos/grande/**",
+      "assets/dinos/cartas/**"
     ],
     "rewrites": [
       {

@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "cols": 3,
+  "rows": 2,
+  "tileSize": 32,
+  "tilesets": {
+    "objetos_para_casa_3.png": "/custom_assets/objetos_para_casa_3.png"
+  },
+  "cells": [
+    [
+      [
+        "objetos_para_casa_3.png",
+        13,
+        2,
+        32
+      ],
+      [
+        "objetos_para_casa_3.png",
+        13,
+        3,
+        32
+      ],
+      [
+        "objetos_para_casa_3.png",
+        13,
+        4,
+        32
+      ]
+    ],
+    [
+      [
+        "objetos_para_casa_3.png",
+        14,
+        2,
+        32
+      ],
+      [
+        "objetos_para_casa_3.png",
+        14,
+        3,
+        32
+      ],
+      [
+        "objetos_para_casa_3.png",
+        14,
+        4,
+        32
+      ]
+    ]
+  ],
+  "solid": [
+    [
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0
+    ]
+  ],
+  "name": "cama_2",
+  "png": "objetos/cama_2.png",
+  "tilesetKey": "objetos/cama_2"
+}

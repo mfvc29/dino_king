@@ -48,6 +48,7 @@ class NPC {
             src: data.sprite ? `assets/characters/${data.sprite}` : null,
             fallbackColor: this.type === 'trainer' ? '#b5179e' : (this.type === 'tutor' ? '#2a9d8f' : '#6c757d'),
             accentColor: '#ffbe0b',
+            filter: data.tint ? `hue-rotate(${Number(data.tint)}deg)` : null,  // otro color de ropa
             name: this.name,
             scale: 1.8
         });
@@ -62,7 +63,8 @@ class NPC {
     }
 
     get eventKey() {
-        return `${this.mapId}:${this.id}`;
+        // eventKey fijo: los líderes que se mudaron a su gimnasio siguen contando como vencidos en partidas viejas
+        return this.data.eventKey || `${this.mapId}:${this.id}`;
     }
 
     occupiesTile(col, row) {

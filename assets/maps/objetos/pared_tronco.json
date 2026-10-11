@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "cols": 1,
+  "rows": 1,
+  "tileSize": 32,
+  "tilesets": {
+    "objetos_para_casa_3.png": "/custom_assets/objetos_para_casa_3.png"
+  },
+  "cells": [
+    [
+      [
+        "objetos_para_casa_3.png",
+        0,
+        5,
+        32
+      ]
+    ]
+  ],
+  "solid": [
+    [
+      0
+    ]
+  ],
+  "name": "pared_tronco",
+  "png": "objetos/pared_tronco.png",
+  "tilesetKey": "objetos/pared_tronco"
+}

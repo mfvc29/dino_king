@@ -196,6 +196,12 @@ class TileMap {
             this.spawn = { x: data.spawn.x, y: data.spawn.y };
         }
         this.mapName = data.name || this.currentMapId;
+        // Pisos de la Cueva Meteoro: rocas, escalera escondida y gemas ocultas (js/mine.js)
+        this.mine = data.mine || null;
+        // Arbustos que se cortan, tesoros y reglas de gimnasio (js/field.js)
+        this.fieldObjects = Array.isArray(data.fieldObjects) ? data.fieldObjects : [];
+        this.treasures = Array.isArray(data.treasures) ? data.treasures : [];
+        this.gymRules = data.gymRules || null;
 
         // Cargar capas dinámicas si existen (formato multicapa v2)
         if (data.layers && Array.isArray(data.layers) && data.layers.length > 0) {
@@ -265,6 +271,21 @@ class TileMap {
 
                 this.solidGrid[r][c] = (data.solid && data.solid[r]) ? (data.solid[r][c] === 1) : false;
                 this.tallGrassGrid[r][c] = (data.tallGrass && data.tallGrass[r]) ? (data.tallGrass[r][c] === 1) : false;
+            }
+        }
+
+        // Agua (se puede cruzar nadando con un dino de Agua en el equipo)
+        this.waterGrid = [];
+        for (let r = 0; r < this.rows; r++) {
+            this.waterGrid[r] = [];
+            for (let c = 0; c < this.cols; c++) this.waterGrid[r][c] = false;
+        }
+        for (const layer of (this.layers || [])) {
+            for (let r = 0; r < this.rows; r++) {
+                for (let c = 0; c < this.cols; c++) {
+                    const cell = layer.grid[r][c];
+                    if (cell && TileMap.isWaterTile(cell)) this.waterGrid[r][c] = true;
+                }
             }
         }
 
@@ -595,6 +616,14 @@ class TileMap {
         }
     }
 
+    /** Losas de agua: estanques de Outside.png (filas 86-88, col. 5-7) y de charcos.png (filas 15-17, col. 3-5). */
+    static isWaterTile(cell) {
+        const ts = String(cell.tileset || '').toLowerCase().replace('.png', '');
+        if (ts === 'outside') return cell.r >= 86 && cell.r <= 88 && cell.c >= 5 && cell.c <= 7;
+        if (ts === 'charcos') return cell.r >= 15 && cell.r <= 17 && cell.c >= 3 && cell.c <= 5;
+        return false;
+    }
+
     isSolid(x, y, w = 14, h = 10) {
         const checkPoints = [
             { x: x - w / 2, y: y - h / 2 },
@@ -610,7 +639,7 @@ class TileMap {
             if (col < 0 || col >= this.cols || row < 0 || row >= this.rows) {
                 return true;
             }
-            if (this.solidGrid[row][col]) {
+            if (this.solidGrid[row][col] && !(this.canSurf && this.waterGrid && this.waterGrid[row] && this.waterGrid[row][col])) {
                 return true;
             }
             if (this.npcBlockers.has(`${col},${row}`)) {

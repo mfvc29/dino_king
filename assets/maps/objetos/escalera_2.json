@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "cols": 2,
+  "rows": 1,
+  "tileSize": 32,
+  "tilesets": {
+    "Outside.png": "/assets/maps/Outside.png"
+  },
+  "cells": [
+    [
+      [
+        "Outside.png",
+        96,
+        1,
+        32
+      ],
+      [
+        "Outside.png",
+        96,
+        2,
+        32
+      ]
+    ]
+  ],
+  "solid": [
+    [
+      0,
+      0
+    ]
+  ],
+  "name": "escalera_2",
+  "png": "objetos/escalera_2.png",
+  "tilesetKey": "objetos/escalera_2"
+}

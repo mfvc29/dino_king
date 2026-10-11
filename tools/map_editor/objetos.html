@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Constructor de Objetos</title>
+<style>
+:root {
+    --bg-dark: #0b0f19;
+    --bg-panel: #131826;
+    --bg-panel-hover: #1c2336;
+    --border-color: #2b354f;
+    --cyan: #00e5ff;
+    --gold: #ffbe0b;
+    --green: #2ec4b6;
+    --red: #e63946;
+    --text: #e2e8f0;
+    --text-muted: #8892b0;
+    --font-mono: 'Courier New', Courier, monospace;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: var(--bg-dark); color: var(--text); height: 100vh; overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    display: flex; flex-direction: column; user-select: none;
+}
+header {
+    display: flex; align-items: center; gap: 16px; padding: 10px 16px;
+    background: var(--bg-panel); border-bottom: 1px solid var(--border-color);
+}
+header h1 { font-size: 18px; }
+header h1 .badge { font-size: 11px; color: var(--bg-dark); background: var(--gold); padding: 2px 6px; border-radius: 4px; margin-left: 6px; }
+header a { color: var(--cyan); font-size: 13px; margin-left: auto; text-decoration: none; }
+main { flex: 1; display: flex; min-height: 0; }
+aside { width: 320px; background: var(--bg-panel); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; min-height: 0; }
+aside.right { border-right: none; border-left: 1px solid var(--border-color); width: 280px; overflow-y: auto; }
+.section { padding: 10px 12px; border-bottom: 1px solid var(--border-color); }
+.section h3 { font-size: 13px; color: var(--gold); font-family: var(--font-mono); letter-spacing: 1px; margin-bottom: 8px; }
+.row { display: flex; gap: 6px; align-items: center; margin-bottom: 6px; flex-wrap: wrap; }
+.row label { font-size: 12px; color: var(--text-muted); }
+select, input[type=text], input[type=number] {
+    background: var(--bg-dark); color: var(--text); border: 1px solid var(--border-color);
+    border-radius: 4px; padding: 5px 6px; font-size: 13px;
+}
+select { width: 100%; }
+input[type=number] { width: 60px; }
+input[type=text] { width: 100%; }
+button, .btn {
+    background: var(--bg-dark); color: var(--text); border: 1px solid var(--border-color);
+    border-radius: 4px; padding: 5px 9px; font-size: 12px; cursor: pointer; font-family: var(--font-mono);
+}
+button:hover, .btn:hover { background: var(--bg-panel-hover); }
+button.active { background: #0277bd; border-color: var(--cyan); color: #fff; }
+.btn-gold { background: var(--gold); color: var(--bg-dark); font-weight: bold; border-color: var(--gold); }
+.btn-gold:hover { background: #ffd34d; }
+#paletteWrap { flex: 1; overflow: auto; position: relative; background: #000; margin: 8px 12px 12px; border: 1px solid var(--border-color); }
+#paletteInner { position: relative; display: inline-block; cursor: crosshair; }
+#paletteImg { display: block; image-rendering: pixelated; }
+#paletteGrid, #paletteSel { position: absolute; left: 0; top: 0; pointer-events: none; }
+#paletteSel { border: 2px solid var(--gold); box-shadow: 0 0 0 1px #000; }
+.center { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.toolbar { display: flex; gap: 6px; align-items: center; padding: 8px 12px; background: var(--bg-panel); border-bottom: 1px solid var(--border-color); flex-wrap: wrap; }
+.toolbar .sep { width: 1px; height: 22px; background: var(--border-color); margin: 0 4px; }
+.toolbar label { font-size: 12px; color: var(--text-muted); }
+#stageWrap { flex: 1; overflow: auto; display: flex; align-items: center; justify-content: center; padding: 24px; }
+#stage { image-rendering: pixelated; cursor: crosshair; box-shadow: 0 0 0 1px var(--border-color); }
+.hint { font-size: 11px; color: var(--text-muted); line-height: 1.5; }
+.hint b { color: var(--text); }
+#objList { list-style: none; max-height: 260px; overflow-y: auto; }
+#objList li { display: flex; align-items: center; gap: 8px; padding: 5px 6px; border-radius: 4px; cursor: pointer; font-size: 13px; }
+#objList li:hover { background: var(--bg-panel-hover); }
+#objList li.current { background: #0277bd55; }
+#objList img { width: 32px; height: 32px; object-fit: contain; image-rendering: pixelated; background: #222; }
+#preview { image-rendering: pixelated; background: repeating-conic-gradient(#333 0 25%, #222 0 50%) 0 0 / 16px 16px; max-width: 100%; }
+#status { font-size: 12px; font-family: var(--font-mono); color: var(--green); min-height: 16px; }
+code { font-family: var(--font-mono); color: var(--cyan); font-size: 11px; word-break: break-all; }
+</style>
+</head>
+<body>
+<header>
+    <h1>🏠 Dino King <span class="badge">CONSTRUCTOR DE OBJETOS</span></h1>
+    <span class="hint">Arma casas, árboles o lo que sea tile por tile y guárdalo como un PNG listo para los mapas.</span>
+    <a href="/">← Volver al editor de mapas</a>
+</header>
+<main>
+    <!-- Paleta de tilesets -->
+    <aside>
+        <div class="section">
+            <div class="row" style="justify-content: space-between;">
+                <h3 style="margin:0">🎨 PALETA DE TILESETS</h3>
+                <label class="btn" title="Añadir un PNG propio (queda guardado en custom_assets/)">➕ Añadir PNG
+                    <input type="file" id="inputPng" accept="image/png" style="display:none">
+                </label>
+            </div>
+            <div class="row"><select id="tilesetSel"></select></div>
+            <div class="row">
+                <label>Tile:</label>
+                <button data-ts="16">16</button><button data-ts="32">32</button><button data-ts="64">64</button>
+                <label style="margin-left:8px">Zoom:</label>
+                <button data-pz="1">1x</button><button data-pz="2">2x</button><button data-pz="3">3x</button>
+            </div>
+            <p class="hint">Clic en un tile o <b>arrastra</b> para tomar un bloque completo (si llegas al borde, la paleta se desplaza sola). <b>Shift + clic</b> extiende la selección.</p>
+        </div>
+        <div id="paletteWrap">
+            <div id="paletteInner">
+                <img id="paletteImg" alt="" draggable="false">
+                <div id="paletteGrid"></div>
+                <div id="paletteSel"></div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Lienzo del objeto -->
+    <section class="center">
+        <div class="toolbar">
+            <button id="toolPencil" class="active" title="Lápiz (P)">✏️ Lápiz</button>
+            <button id="toolEraser" title="Borrador (E) — también clic derecho">🧹 Borrar</button>
+            <button id="toolSolid" title="Colisión (C): marca qué celdas no se pueden atravesar">🚫 Colisión</button>
+            <div class="sep"></div>
+            <button id="btnUndo" title="Deshacer (Ctrl+Z)">↩️</button>
+            <button id="btnRedo" title="Rehacer (Ctrl+Y)">↪️</button>
+            <button id="btnGrid" class="active" title="Cuadrícula (G)">📐</button>
+            <button id="btnClear" title="Vaciar todo">🗑️ Vaciar</button>
+            <div class="sep"></div>
+            <label>Ancho</label><input type="number" id="inCols" min="1" max="64" value="4">
+            <label>Alto</label><input type="number" id="inRows" min="1" max="64" value="4">
+            <label>Tile salida</label>
+            <select id="outSize" style="width:auto"><option>16</option><option selected>32</option><option>64</option></select>
+            <label>Vista</label>
+            <button data-vz="2">2x</button><button data-vz="3">3x</button><button data-vz="4">4x</button>
+        </div>
+        <div id="stageWrap"><canvas id="stage"></canvas></div>
+    </section>
+
+    <!-- Guardar / objetos -->
+    <aside class="right">
+        <div class="section">
+            <h3>💾 GUARDAR OBJETO</h3>
+            <div class="row"><input type="text" id="objName" placeholder="casa_1"></div>
+            <div class="row">
+                <button class="btn-gold" id="btnSave">💾 Guardar PNG</button>
+                <button id="btnNew">➕ Nuevo</button>
+                <button id="btnDownload" title="Descargar el PNG a tu computador">📥</button>
+            </div>
+            <div id="status"></div>
+        </div>
+        <div class="section">
+            <h3>👁️ VISTA PREVIA</h3>
+            <canvas id="preview"></canvas>
+            <p class="hint" id="previewInfo"></p>
+        </div>
+        <div class="section">
+            <h3>📦 OBJETOS GUARDADOS</h3>
+            <ul id="objList"></ul>
+        </div>
+        <div class="section">
+            <p class="hint">Se guardan en <code>assets/maps/objetos/</code>: el <b>.png</b> (el objeto ya armado) y un <b>.json</b> con los tiles usados y las colisiones, para volver a editarlo o ponerlo en un mapa.</p>
+        </div>
+    </aside>
+</main>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const DEFAULT_TILE = { 'Outside.png': 16, 'Caves.png': 32, 'charcos.png': 64 };
+
+const state = {
+    tilesets: [],              // [{name, url}]
+    images: {},                // name -> HTMLImageElement
+    tsName: null,
+    tileSizes: {},             // tamaño de tile elegido por tileset
+    paletteZoom: 2,
+    sel: { c0: 0, r0: 0, c1: 0, r1: 0 },
+    cols: 4, rows: 4, outSize: 32, viewZoom: 3,
+    cells: [],                 // cells[r][c] = {ts, r, c, s} | null
+    solid: [],                 // solid[r][c] = 0/1
+    tool: 'pencil', showGrid: true,
+    hover: null, painting: false, paintMode: null,
+    undo: [], redo: [],
+    currentObject: null,
+};
+
+// ---------- Utilidades ----------
+const emptyGrid = (rows, cols, v) => Array.from({ length: rows }, () => Array(cols).fill(v));
+const setStatus = (msg, err) => { const s = $('status'); s.textContent = msg; s.style.color = err ? 'var(--red)' : 'var(--green)'; };
+const tileSize = (name) => state.tileSizes[name] || DEFAULT_TILE[name] || 16;
+
+function loadImage(name, url) {
+    if (state.images[name]) return Promise.resolve(state.images[name]);
+    return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => { state.images[name] = img; resolve(img); };
+        img.onerror = () => resolve(null);
+        img.src = url;
+    });
+}
+
+function snapshot() {
+    state.undo.push(JSON.stringify({ cells: state.cells, solid: state.solid, cols: state.cols, rows: state.rows }));
+    if (state.undo.length > 100) state.undo.shift();
+    state.redo = [];
+}
+function restore(json) {
+    const d = JSON.parse(json);
+    state.cells = d.cells; state.solid = d.solid; state.cols = d.cols; state.rows = d.rows;
+    $('inCols').value = d.cols; $('inRows').value = d.rows;
+    render();
+}
+function undo() { if (!state.undo.length) return; state.redo.push(JSON.stringify({ cells: state.cells, solid: state.solid, cols: state.cols, rows: state.rows })); restore(state.undo.pop()); }
+function redo() { if (!state.redo.length) return; state.undo.push(JSON.stringify({ cells: state.cells, solid: state.solid, cols: state.cols, rows: state.rows })); restore(state.redo.pop()); }
+
+// ---------- Paleta ----------
+async function loadTilesetList(selectName) {
+    const data = await (await fetch('/api/builder_tilesets')).json();
+    state.tilesets = [...data.game, ...data.custom];
+    const sel = $('tilesetSel');
+    sel.innerHTML = '';
+    const addGroup = (label, list) => {
+        if (!list.length) return;
+        const g = document.createElement('optgroup');
+        g.label = label;
+        list.forEach(t => { const o = document.createElement('option'); o.value = t.name; o.textContent = t.name; g.appendChild(o); });
+        sel.appendChild(g);
+    };
+    addGroup('Tilesets del juego', data.game);
+    addGroup('PNG añadidos', data.custom);
+    await selectTileset(selectName || state.tsName || (state.tilesets[0] && state.tilesets[0].name));
+}
+
+async function selectTileset(name) {
+    const ts = state.tilesets.find(t => t.name === name);
+    if (!ts) return;
+    state.tsName = name;
+    $('tilesetSel').value = name;
+    await loadImage(name, ts.url);
+    state.sel = { c0: 0, r0: 0, c1: 0, r1: 0 };
+    renderPalette();
+}
+
+function renderPalette() {
+    const img = state.images[state.tsName];
+    if (!img) return;
+    const z = state.paletteZoom, s = tileSize(state.tsName);
+    const w = img.naturalWidth * z, h = img.naturalHeight * z;
+    const pi = $('paletteImg');
+    pi.src = img.src; pi.style.width = w + 'px'; pi.style.height = h + 'px';
+
+    // Cuadrícula con CSS (Outside.png mide 16000 px de alto, demasiado para un canvas)
+    const grid = $('paletteGrid'), step = s * z;
+    grid.style.width = w + 'px'; grid.style.height = h + 'px';
+    grid.style.backgroundImage = 'linear-gradient(to right, rgba(255,255,255,0.18) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.18) 1px, transparent 1px)';
+    grid.style.backgroundSize = `${step}px ${step}px`;
+
+    document.querySelectorAll('[data-ts]').forEach(b => b.classList.toggle('active', +b.dataset.ts === s));
+    document.querySelectorAll('[data-pz]').forEach(b => b.classList.toggle('active', +b.dataset.pz === z));
+    renderSelection();
+}
+
+function renderSelection() {
+    const z = state.paletteZoom, s = tileSize(state.tsName) * z;
+    const { c0, r0, c1, r1 } = normSel();
+    const el = $('paletteSel');
+    el.style.left = (c0 * s) + 'px'; el.style.top = (r0 * s) + 'px';
+    el.style.width = ((c1 - c0 + 1) * s) + 'px'; el.style.height = ((r1 - r0 + 1) * s) + 'px';
+}
+function normSel() {
+    const s = state.sel;
+    return { c0: Math.min(s.c0, s.c1), r0: Math.min(s.r0, s.r1), c1: Math.max(s.c0, s.c1), r1: Math.max(s.r0, s.r1) };
+}
+
+function paletteCell(e) {
+    const img = state.images[state.tsName];
+    const rect = $('paletteImg').getBoundingClientRect();
+    const s = tileSize(state.tsName) * state.paletteZoom;
+    const maxC = Math.floor(img.naturalWidth / tileSize(state.tsName)) - 1;
+    const maxR = Math.floor(img.naturalHeight / tileSize(state.tsName)) - 1;
+    return {
+        c: Math.max(0, Math.min(maxC, Math.floor((e.clientX - rect.left) / s))),
+        r: Math.max(0, Math.min(maxR, Math.floor((e.clientY - rect.top) / s))),
+    };
+}
+
+let selecting = false, lastPaletteEvent = null;
+// Sin esto el navegador "arrastra" la imagen del tileset y deja de avisar el movimiento del mouse
+$('paletteInner').addEventListener('dragstart', (e) => e.preventDefault());
+$('paletteInner').addEventListener('mousedown', (e) => {
+    if (e.button !== 0 || !state.images[state.tsName]) return;
+    e.preventDefault();
+    const p = paletteCell(e);
+    // Shift + clic: extiende la selección desde el primer tile elegido
+    if (e.shiftKey) { state.sel.c1 = p.c; state.sel.r1 = p.r; }
+    else state.sel = { c0: p.c, r0: p.r, c1: p.c, r1: p.r };
+    selecting = true; lastPaletteEvent = e;
+    renderSelection();
+    if (state.tool !== 'pencil') setTool('pencil');
+    requestAnimationFrame(autoScrollPalette);
+});
+window.addEventListener('mousemove', (e) => {
+    if (!selecting) return;
+    lastPaletteEvent = e;
+    const p = paletteCell(e);
+    state.sel.c1 = p.c; state.sel.r1 = p.r;
+    renderSelection();
+});
+// Al arrastrar cerca del borde de la paleta, se desplaza sola para seguir seleccionando
+function autoScrollPalette() {
+    if (!selecting || !lastPaletteEvent) return;
+    const wrap = $('paletteWrap'), rect = wrap.getBoundingClientRect(), e = lastPaletteEvent, edge = 40;
+    let dy = 0, dx = 0;
+    if (e.clientY < rect.top + edge) dy = -Math.ceil((rect.top + edge - e.clientY) / 4);
+    else if (e.clientY > rect.bottom - edge) dy = Math.ceil((e.clientY - rect.bottom + edge) / 4);
+    if (e.clientX < rect.left + edge) dx = -Math.ceil((rect.left + edge - e.clientX) / 4);
+    else if (e.clientX > rect.right - edge) dx = Math.ceil((e.clientX - rect.right + edge) / 4);
+    if (dx || dy) {
+        wrap.scrollTop += dy; wrap.scrollLeft += dx;
+        const p = paletteCell(e);
+        state.sel.c1 = p.c; state.sel.r1 = p.r;
+        renderSelection();
+    }
+    requestAnimationFrame(autoScrollPalette);
+}
+window.addEventListener('mouseup', () => { selecting = false; state.painting = false; });
+
+$('tilesetSel').addEventListener('change', (e) => selectTileset(e.target.value));
+document.querySelectorAll('[data-ts]').forEach(b => b.addEventListener('click', () => {
+    state.tileSizes[state.tsName] = +b.dataset.ts;
+    state.sel = { c0: 0, r0: 0, c1: 0, r1: 0 };
+    renderPalette();
+}));
+document.querySelectorAll('[data-pz]').forEach(b => b.addEventListener('click', () => { state.paletteZoom = +b.dataset.pz; renderPalette(); }));
+
+$('inputPng').addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const res = await fetch('/api/upload_tileset?filename=' + encodeURIComponent(file.name), { method: 'POST', body: await file.arrayBuffer() });
+    const data = await res.json();
+    setStatus(data.message || 'PNG añadido');
+    e.target.value = '';
+    await loadTilesetList(data.filename);
+});
+
+// ---------- Lienzo del objeto ----------
+const stage = $('stage');
+const ctx = stage.getContext('2d');
+
+function resizeGrid(cols, rows) {
+    const cells = emptyGrid(rows, cols, null), solid = emptyGrid(rows, cols, 0);
+    for (let r = 0; r < Math.min(rows, state.rows); r++)
+        for (let c = 0; c < Math.min(cols, state.cols); c++) {
+            cells[r][c] = state.cells[r] ? state.cells[r][c] : null;
+            solid[r][c] = state.solid[r] ? state.solid[r][c] : 0;
+        }
+    state.cols = cols; state.rows = rows; state.cells = cells; state.solid = solid;
+}
+
+function drawCells(g, size) {
+    g.imageSmoothingEnabled = false;
+    for (let r = 0; r < state.rows; r++)
+        for (let c = 0; c < state.cols; c++) {
+            const cell = state.cells[r][c];
+            const img = cell && state.images[cell.ts];
+            if (img) g.drawImage(img, cell.c * cell.s, cell.r * cell.s, cell.s, cell.s, c * size, r * size, size, size);
+        }
+}
+
+function render() {
+    const cs = state.outSize * state.viewZoom;
+    stage.width = state.cols * cs; stage.height = state.rows * cs;
+    // Fondo a cuadros (transparencia)
+    const half = cs / 2;
+    for (let r = 0; r < state.rows * 2; r++)
+        for (let c = 0; c < state.cols * 2; c++) {
+            ctx.fillStyle = (r + c) % 2 ? '#2a2f3d' : '#1e2230';
+            ctx.fillRect(c * half, r * half, half, half);
+        }
+    drawCells(ctx, cs);
+
+    // Colisiones
+    for (let r = 0; r < state.rows; r++)
+        for (let c = 0; c < state.cols; c++)
+            if (state.solid[r][c]) {
+                ctx.fillStyle = 'rgba(230,57,70,0.35)';
+                ctx.fillRect(c * cs, r * cs, cs, cs);
+                if (state.tool === 'solid') {
+                    ctx.strokeStyle = 'rgba(230,57,70,0.9)'; ctx.lineWidth = 2;
+                    ctx.beginPath(); ctx.moveTo(c * cs + 6, r * cs + 6); ctx.lineTo((c + 1) * cs - 6, (r + 1) * cs - 6);
+                    ctx.moveTo((c + 1) * cs - 6, r * cs + 6); ctx.lineTo(c * cs + 6, (r + 1) * cs - 6); ctx.stroke();
+                }
+            }
+
+    if (state.showGrid) {
+        ctx.strokeStyle = 'rgba(255,255,255,0.15)'; ctx.lineWidth = 1; ctx.beginPath();
+        for (let c = 0; c <= state.cols; c++) { ctx.moveTo(c * cs + 0.5, 0); ctx.lineTo(c * cs + 0.5, stage.height); }
+        for (let r = 0; r <= state.rows; r++) { ctx.moveTo(0, r * cs + 0.5); ctx.lineTo(stage.width, r * cs + 0.5); }
+        ctx.stroke();
+    }
+
+    // Vista previa del bloque bajo el cursor
+    if (state.hover) {
+        const { c: hc, r: hr } = state.hover;
+        if (state.tool === 'pencil' && state.images[state.tsName]) {
+            const { c0, r0, c1, r1 } = normSel(), s = tileSize(state.tsName);
+            ctx.globalAlpha = 0.6;
+            ctx.drawImage(state.images[state.tsName], c0 * s, r0 * s, (c1 - c0 + 1) * s, (r1 - r0 + 1) * s,
+                hc * cs, hr * cs, (c1 - c0 + 1) * cs, (r1 - r0 + 1) * cs);
+            ctx.globalAlpha = 1;
+            ctx.strokeStyle = '#ffbe0b'; ctx.lineWidth = 2;
+            ctx.strokeRect(hc * cs + 1, hr * cs + 1, (c1 - c0 + 1) * cs - 2, (r1 - r0 + 1) * cs - 2);
+        } else {
+            ctx.strokeStyle = state.tool === 'solid' ? '#e63946' : '#00e5ff'; ctx.lineWidth = 2;
+            ctx.strokeRect(hc * cs + 1, hr * cs + 1, cs - 2, cs - 2);
+        }
+    }
+    renderPreview();
+}
+
+function renderPreview() {
+    const p = $('preview');
+    p.width = state.cols * state.outSize; p.height = state.rows * state.outSize;
+    const g = p.getContext('2d');
+    g.clearRect(0, 0, p.width, p.height);
+    drawCells(g, state.outSize);
+    p.style.width = Math.min(256, p.width * 2) + 'px';
+    $('previewInfo').textContent = `${p.width}×${p.height} px · ${state.cols}×${state.rows} tiles de ${state.outSize}px`;
+}
+
+function stageCell(e) {
+    const rect = stage.getBoundingClientRect();
+    const cs = state.outSize * state.viewZoom;
+    const c = Math.floor((e.clientX - rect.left) / cs), r = Math.floor((e.clientY - rect.top) / cs);
+    return (c >= 0 && r >= 0 && c < state.cols && r < state.rows) ? { c, r } : null;
+}
+
+// Al arrastrar con un bloque de varios tiles, se estampa en pasos del tamaño del bloque
+// (contando desde donde empezaste) para que no queden copias encimadas
+function snapToBlock(p) {
+    const o = state.paintOrigin;
+    if (!o || state.paintMode !== 'pencil') return p;
+    const { c0, r0, c1, r1 } = normSel(), bw = c1 - c0 + 1, bh = r1 - r0 + 1;
+    return { c: o.c + Math.floor((p.c - o.c) / bw) * bw, r: o.r + Math.floor((p.r - o.r) / bh) * bh };
+}
+
+function applyAt(p, mode) {
+    if (!p) return;
+    if (mode === 'pencil') {
+        const { c0, r0, c1, r1 } = normSel(), s = tileSize(state.tsName);
+        for (let dr = 0; dr <= r1 - r0; dr++)
+            for (let dc = 0; dc <= c1 - c0; dc++) {
+                const r = p.r + dr, c = p.c + dc;
+                if (r < state.rows && c < state.cols) state.cells[r][c] = { ts: state.tsName, r: r0 + dr, c: c0 + dc, s };
+            }
+    } else if (mode === 'eraser') {
+        state.cells[p.r][p.c] = null;
+        state.solid[p.r][p.c] = 0;
+    } else if (mode === 'solidOn') {
+        state.solid[p.r][p.c] = 1;
+    } else if (mode === 'solidOff') {
+        state.solid[p.r][p.c] = 0;
+    }
+}
+
+stage.addEventListener('contextmenu', (e) => e.preventDefault());
+stage.addEventListener('mousedown', (e) => {
+    const p = stageCell(e);
+    if (!p) return;
+    snapshot();
+    let mode = state.tool;
+    if (e.button === 2) mode = state.tool === 'solid' ? 'solidOff' : 'eraser';
+    else if (mode === 'solid') mode = state.solid[p.r][p.c] ? 'solidOff' : 'solidOn';
+    state.painting = true; state.paintMode = mode; state.paintOrigin = p;
+    applyAt(p, mode);
+    render();
+});
+stage.addEventListener('mousemove', (e) => {
+    let p = stageCell(e);
+    if (p && state.painting) p = snapToBlock(p);
+    const changed = JSON.stringify(p) !== JSON.stringify(state.hover);
+    state.hover = p;
+    if (state.painting && p && changed) applyAt(p, state.paintMode);
+    if (changed) render();
+});
+stage.addEventListener('mouseleave', () => { state.hover = null; render(); });
+
+function setTool(t) {
+    state.tool = t;
+    $('toolPencil').classList.toggle('active', t === 'pencil');
+    $('toolEraser').classList.toggle('active', t === 'eraser');
+    $('toolSolid').classList.toggle('active', t === 'solid');
+    render();
+}
+$('toolPencil').onclick = () => setTool('pencil');
+$('toolEraser').onclick = () => setTool('eraser');
+$('toolSolid').onclick = () => setTool('solid');
+$('btnUndo').onclick = undo;
+$('btnRedo').onclick = redo;
+$('btnGrid').onclick = () => { state.showGrid = !state.showGrid; $('btnGrid').classList.toggle('active', state.showGrid); render(); };
+$('btnClear').onclick = () => { snapshot(); state.cells = emptyGrid(state.rows, state.cols, null); state.solid = emptyGrid(state.rows, state.cols, 0); render(); };
+
+const onSizeChange = () => {
+    const cols = Math.max(1, Math.min(64, +$('inCols').value || 1));
+    const rows = Math.max(1, Math.min(64, +$('inRows').value || 1));
+    if (cols === state.cols && rows === state.rows) return;
+    snapshot(); resizeGrid(cols, rows); render();
+};
+$('inCols').addEventListener('change', onSizeChange);
+$('inRows').addEventListener('change', onSizeChange);
+$('outSize').addEventListener('change', (e) => { state.outSize = +e.target.value; render(); });
+document.querySelectorAll('[data-vz]').forEach(b => b.addEventListener('click', () => {
+    state.viewZoom = +b.dataset.vz;
+    document.querySelectorAll('[data-vz]').forEach(x => x.classList.toggle('active', x === b));
+    render();
+}));
+
+window.addEventListener('keydown', (e) => {
+    if (e.target.tagName === 'INPUT') return;
+    if (e.ctrlKey && e.key.toLowerCase() === 'z') { e.preventDefault(); undo(); }
+    else if (e.ctrlKey && e.key.toLowerCase() === 'y') { e.preventDefault(); redo(); }
+    else if (e.ctrlKey && e.key.toLowerCase() === 's') { e.preventDefault(); save(); }
+    else if (e.key === 'p') setTool('pencil');
+    else if (e.key === 'e') setTool('eraser');
+    else if (e.key === 'c') setTool('solid');
+    else if (e.key === 'g') $('btnGrid').click();
+});
+
+// ---------- Guardar / cargar ----------
+function exportCanvas() {
+    const out = document.createElement('canvas');
+    out.width = state.cols * state.outSize; out.height = state.rows * state.outSize;
+    drawCells(out.getContext('2d'), state.outSize);
+    return out;
+}
+
+async function save() {
+    const name = $('objName').value.trim();
+    if (!name) { setStatus('Escribe un nombre (ej: casa_1)', true); $('objName').focus(); return; }
+    const used = [...new Set(state.cells.flat().filter(Boolean).map(c => c.ts))];
+    if (!used.length) { setStatus('El objeto está vacío', true); return; }
+    const tilesets = {};
+    used.forEach(n => { const t = state.tilesets.find(x => x.name === n); tilesets[n] = t ? t.url : `/assets/maps/${n}`; });
+    const body = {
+        version: 1,
+        cols: state.cols, rows: state.rows, tileSize: state.outSize,
+        tilesets,
+        cells: state.cells.map(row => row.map(c => c ? [c.ts, c.r, c.c, c.s] : null)),
+        solid: state.solid,
+        pngData: exportCanvas().toDataURL('image/png'),
+    };
+    const res = await fetch('/api/object?name=' + encodeURIComponent(name), { method: 'POST', body: JSON.stringify(body) });
+    if (!res.ok) { setStatus('Error al guardar: ' + res.status, true); return; }
+    const data = await res.json();
+    state.currentObject = data.name;
+    $('objName').value = data.name;
+    setStatus('✅ ' + data.message);
+    loadObjectList();
+}
+
+async function loadObject(name) {
+    const res = await fetch('/api/object?name=' + encodeURIComponent(name));
+    if (!res.ok) { setStatus('No se pudo cargar ' + name, true); return; }
+    const d = await res.json();
+    await Promise.all(Object.entries(d.tilesets || {}).map(([n, url]) => loadImage(n, url)));
+    snapshot();
+    state.cols = d.cols; state.rows = d.rows; state.outSize = d.tileSize || 32;
+    state.cells = d.cells.map(row => row.map(c => c ? { ts: c[0], r: c[1], c: c[2], s: c[3] } : null));
+    state.solid = d.solid || emptyGrid(d.rows, d.cols, 0);
+    $('inCols').value = d.cols; $('inRows').value = d.rows; $('outSize').value = state.outSize;
+    $('objName').value = d.name; state.currentObject = d.name;
+    setStatus('Editando ' + d.name);
+    render(); loadObjectList();
+}
+
+async function loadObjectList() {
+    const names = await (await fetch('/api/objects')).json();
+    const ul = $('objList');
+    ul.innerHTML = names.length ? '' : '<li class="hint">Todavía no hay objetos</li>';
+    names.forEach(n => {
+        const li = document.createElement('li');
+        if (n === state.currentObject) li.className = 'current';
+        li.innerHTML = `<img src="/assets/maps/objetos/${encodeURIComponent(n)}.png?t=${Date.now()}" alt=""><span></span>`;
+        li.querySelector('span').textContent = n;
+        li.onclick = () => loadObject(n);
+        ul.appendChild(li);
+    });
+}
+
+$('btnSave').onclick = save;
+$('btnNew').onclick = () => {
+    snapshot();
+    state.cells = emptyGrid(state.rows, state.cols, null); state.solid = emptyGrid(state.rows, state.cols, 0);
+    state.currentObject = null; $('objName').value = ''; setStatus('');
+    render(); loadObjectList();
+};
+$('btnDownload').onclick = () => {
+    const a = document.createElement('a');
+    a.download = ($('objName').value.trim() || 'objeto') + '.png';
+    a.href = exportCanvas().toDataURL('image/png');
+    a.click();
+};
+
+// ---------- Inicio ----------
+(async () => {
+    resizeGrid(4, 4);
+    document.querySelector('[data-vz="3"]').classList.add('active');
+    await loadTilesetList();
+    render();
+    loadObjectList();
+})();
+</script>
+</body>
+</html>

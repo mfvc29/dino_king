@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "cols": 1,
+  "rows": 2,
+  "tileSize": 32,
+  "tilesets": {
+    "objetos_para_casa_2.png": "/custom_assets/objetos_para_casa_2.png"
+  },
+  "cells": [
+    [
+      [
+        "objetos_para_casa_2.png",
+        17,
+        1,
+        32
+      ]
+    ],
+    [
+      [
+        "objetos_para_casa_2.png",
+        18,
+        1,
+        32
+      ]
+    ]
+  ],
+  "solid": [
+    [
+      0
+    ],
+    [
+      0
+    ]
+  ],
+  "name": "pared_2",
+  "png": "objetos/pared_2.png",
+  "tilesetKey": "objetos/pared_2"
+}

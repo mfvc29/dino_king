@@ -99,23 +99,117 @@
   },
   "dinos": [
     {
+      "id": "alioramus",
+      "name": "Alioramus",
+      "image": "cartas/fuego/Alioramus (games).jpeg",
+      "element": "fuego",
+      "card": "cards/fuego/Alioramus (games).jpeg",
+      "stats": [
+        7,
+        7,
+        4,
+        8,
+        5
+      ],
+      "art": {
+        "left": "arte/fuego/alioramus_izq.webp",
+        "right": "arte/fuego/alioramus_der.webp"
+      }
+    },
+    {
+      "id": "alpha_acrocanthosaurus",
+      "name": "Alpha Acrocanthosaurus",
+      "image": "cartas/fuego/Alpha Acrocanthosaurus - Dinosaur King.jpeg",
+      "element": "fuego",
+      "card": "cards/fuego/Alpha Acrocanthosaurus - Dinosaur King.jpeg",
+      "stats": [
+        4,
+        7,
+        6,
+        6,
+        6
+      ],
+      "art": {
+        "left": "arte/fuego/alpha_acrocanthosaurus_izq.webp",
+        "right": "arte/fuego/alpha_acrocanthosaurus_der.webp"
+      }
+    },
+    {
+      "id": "black_tyrannosaurus_rex",
+      "name": "Black Tyrannosaurus Rex",
+      "image": "cartas/fuego/Black Tyrannosaurus Rex - Dinosaur King.jpeg",
+      "element": "fuego",
+      "card": "cards/fuego/Black Tyrannosaurus Rex - Dinosaur King.jpeg",
+      "stats": [
+        7,
+        5,
+        6,
+        6,
+        4
+      ],
+      "art": {
+        "left": "arte/fuego/black_tyrannosaurus_rex_izq.webp",
+        "right": "arte/fuego/black_tyrannosaurus_rex_der.webp"
+      }
+    },
+    {
+      "id": "eocarcharia",
+      "name": "Eocarcharia",
+      "image": "cartas/fuego/Eocarcharia.jpeg",
+      "element": "fuego",
+      "card": "cards/fuego/Eocarcharia.jpeg",
+      "stats": [
+        7,
+        7,
+        4,
+        5,
+        4
+      ],
+      "art": {
+        "left": "arte/fuego/eocarcharia_izq.webp",
+        "right": "arte/fuego/eocarcharia_der.webp"
+      }
+    },
+    {
+      "id": "giganotosaurus",
+      "name": "Giganotosaurus",
+      "image": "cartas/fuego/Giganotosaurus (games).jpeg",
+      "element": "fuego",
+      "card": "cards/fuego/Giganotosaurus (games).jpeg",
+      "stats": [
+        4,
+        4,
+        6,
+        7,
+        4
+      ],
+      "art": {
+        "left": "arte/fuego/giganotosaurus_izq.webp",
+        "right": "arte/fuego/giganotosaurus_der.webp"
+      }
+    },
+    {
       "id": "acrocanthosaurus",
       "name": "Acrocanthosaurus",
-      "image": "fuego/acrocanthosaurus_dinosaur_king.jpg",
+      "image": "cartas/fuego/acrocanthosaurus_dinosaur_king.jpg",
       "element": "fuego",
       "card": "cards/fuego/acrocanthosaurus_dinosaur_king.jpg",
       "stats": [
         4,
         5,
         4,
-        5,
-        6
-      ]
+        6,
+        4
+      ],
+      "art": {
+        "left": "arte/fuego/acrocanthosaurus_izq.webp",
+        "right": "arte/fuego/acrocanthosaurus_der.webp"
+      }
     },
     {
       "id": "carcharodontosaurus",
       "name": "Carcharodontosaurus",
-      "image": "fuego/carcharodontosaurus_dinosaur_king.jpg",
+      "image": "cartas/fuego/carcharodontosaurus_dinosaur_king.jpg",
       "element": "fuego",
       "card": "cards/fuego/carcharodontosaurus_dinosaur_king.jpg",
       "stats": [
@@ -124,12 +218,16 @@
         5,
         7,
         6
-      ]
+      ],
+      "art": {
+        "left": "arte/fuego/carcharodontosaurus_izq.webp",
+        "right": "arte/fuego/carcharodontosaurus_der.webp"
+      }
     },
     {
       "id": "daspletosaurus",
       "name": "Daspletosaurus",
-      "image": "fuego/daspletosaurus_dinosaur_king.jpg",
+      "image": "cartas/fuego/daspletosaurus_dinosaur_king.jpg",
       "element": "fuego",
       "card": "cards/fuego/daspletosaurus_dinosaur_king.jpg",
       "stats": [
@@ -138,12 +236,16 @@
         5,
         5,
         6
-      ]
+      ],
+      "art": {
+        "left": "arte/fuego/daspletosaurus_izq.webp",
+        "right": "arte/fuego/daspletosaurus_der.webp"
+      }
     },
     {
       "id": "gigas",
       "name": "Gigas",
-      "image": "fuego/gigas_dinosaur_king.jpg",
+      "image": "cartas/fuego/gigas_dinosaur_king.jpg",
       "element": "fuego",
       "card": "cards/fuego/gigas_dinosaur_king.jpg",
       "stats": [
@@ -152,12 +254,16 @@
         5,
         8,
         6
-      ]
+      ],
+      "art": {
+        "left": "arte/fuego/gigas_izq.webp",
+        "right": "arte/fuego/gigas_der.webp"
+      }
     },
     {
       "id": "mapusaurus",
       "name": "Mapusaurus",
-      "image": "fuego/mapusaurus_dinosaur_king.jpg",
+      "image": "cartas/fuego/mapusaurus_dinosaur_king.jpg",
       "element": "fuego",
       "card": "cards/fuego/mapusaurus_dinosaur_king.jpg",
       "stats": [
@@ -166,12 +272,16 @@
         6,
         8,
         5
-      ]
+      ],
+      "art": {
+        "left": "arte/fuego/mapusaurus_izq.webp",
+        "right": "arte/fuego/mapusaurus_der.webp"
+      }
     },
     {
       "id": "rajasaurus",
       "name": "Rajasaurus",
-      "image": "fuego/rajasaurus_dinosaur_king.jpg",
+      "image": "cartas/fuego/rajasaurus_dinosaur_king.jpg",
       "element": "fuego",
       "card": "cards/fuego/rajasaurus_dinosaur_king.jpg",
       "stats": [
@@ -180,12 +290,16 @@
         4,
         6,
         5
-      ]
+      ],
+      "art": {
+        "left": "arte/fuego/rajasaurus_izq.webp",
+        "right": "arte/fuego/rajasaurus_der.webp"
+      }
     },
     {
       "id": "saurophaganax",
       "name": "Saurophaganax",
-      "image": "fuego/saurophaganax_dinosaur_king.jpg",
+      "image": "cartas/fuego/saurophaganax_dinosaur_king.jpg",
       "element": "fuego",
       "card": "cards/fuego/saurophaganax_dinosaur_king.jpg",
       "stats": [
@@ -194,12 +308,16 @@
         6,
         8,
         6
-      ]
+      ],
+      "art": {
+        "left": "arte/fuego/saurophaganax_izq.webp",
+        "right": "arte/fuego/saurophaganax_der.webp"
+      }
     },
     {
       "id": "torvosaurus",
       "name": "Torvosaurus",
-      "image": "fuego/torvosaurus_dinosaur_king.jpg",
+      "image": "cartas/fuego/torvosaurus_dinosaur_king.jpg",
       "element": "fuego",
       "card": "cards/fuego/torvosaurus_dinosaur_king.jpg",
       "stats": [
@@ -208,12 +326,16 @@
         6,
         4,
         4
-      ]
+      ],
+      "art": {
+        "left": "arte/fuego/torvosaurus_izq.webp",
+        "right": "arte/fuego/torvosaurus_der.webp"
+      }
     },
     {
       "id": "tyrannosaurus_rex",
       "name": "Tyrannosaurus Rex",
-      "image": "fuego/tyrannosurus_rex_dinosaur_king.jpg",
+      "image": "cartas/fuego/tyrannosurus_rex_dinosaur_king.jpg",
       "element": "fuego",
       "card": "cards/fuego/tyrannosurus_rex_dinosaur_king.jpg",
       "stats": [
@@ -222,12 +344,16 @@
         6,
         8,
         6
-      ]
+      ],
+      "art": {
+        "left": "arte/fuego/tyrannosaurus_rex_izq.webp",
+        "right": "arte/fuego/tyrannosaurus_rex_der.webp"
+      }
     },
     {
       "id": "yangchuanosaurus",
       "name": "Yangchuanosaurus",
-      "image": "fuego/yangchuanosaurus_dinosaur_king.jpg",
+      "image": "cartas/fuego/yangchuanosaurus_dinosaur_king.jpg",
       "element": "fuego",
       "card": "cards/fuego/yangchuanosaurus_dinosaur_king.jpg",
       "stats": [
@@ -236,12 +362,106 @@
         4,
         7,
         4
-      ]
+      ],
+      "art": {
+        "left": "arte/fuego/yangchuanosaurus_izq.webp",
+        "right": "arte/fuego/yangchuanosaurus_der.webp"
+      }
+    },
+    {
+      "id": "bajadasaurus",
+      "name": "Bajadasaurus",
+      "image": "cartas/agua/Bajadasaurus.jpeg",
+      "element": "agua",
+      "card": "cards/agua/Bajadasaurus.jpeg",
+      "stats": [
+        7,
+        5,
+        7,
+        4,
+        5
+      ],
+      "art": {
+        "left": "arte/agua/bajadasaurus_izq.webp",
+        "right": "arte/agua/bajadasaurus_der.webp"
+      }
+    },
+    {
+      "id": "camarasaurus",
+      "name": "Camarasaurus",
+      "image": "cartas/agua/Camarasaurus .jpeg",
+      "element": "agua",
+      "card": "cards/agua/Camarasaurus .jpeg",
+      "stats": [
+        4,
+        5,
+        4,
+        4,
+        5
+      ],
+      "art": {
+        "left": "arte/agua/camarasaurus_izq.webp",
+        "right": "arte/agua/camarasaurus_der.webp"
+      }
+    },
+    {
+      "id": "elasmosaurus",
+      "name": "Elasmosaurus",
+      "image": "cartas/agua/Elasmosaurus Aquatic Shot.jpeg",
+      "element": "agua",
+      "card": "cards/agua/Elasmosaurus Aquatic Shot.jpeg",
+      "stats": [
+        6,
+        6,
+        6,
+        4,
+        5
+      ],
+      "art": {
+        "left": "arte/agua/elasmosaurus_izq.webp",
+        "right": "arte/agua/elasmosaurus_der.webp"
+      }
+    },
+    {
+      "id": "irritator",
+      "name": "Irritator",
+      "image": "cartas/agua/Irritator .jpeg",
+      "element": "agua",
+      "card": "cards/agua/Irritator .jpeg",
+      "stats": [
+        7,
+        6,
+        4,
+        5,
+        7
+      ],
+      "art": {
+        "left": "arte/agua/irritator_izq.webp",
+        "right": "arte/agua/irritator_der.webp"
+      }
+    },
+    {
+      "id": "ophthalmosaurus",
+      "name": "Ophthalmosaurus",
+      "image": "cartas/agua/Ophthalmosaurus.jpg",
+      "element": "agua",
+      "card": "cards/agua/Ophthalmosaurus.jpg",
+      "stats": [
+        6,
+        4,
+        7,
+        6,
+        4
+      ],
+      "art": {
+        "left": "arte/agua/ophthalmosaurus_izq.webp",
+        "right": "arte/agua/ophthalmosaurus_der.webp"
+      }
     },
     {
       "id": "amargasaurus",
       "name": "Amargasaurus",
-      "image": "agua/amargasaurus_dinosaur_king.jpg",
+      "image": "cartas/agua/amargasaurus_dinosaur_king.jpg",
       "element": "agua",
       "card": "cards/agua/amargasaurus_dinosaur_king.jpg",
       "stats": [
@@ -250,12 +470,16 @@
         7,
         4,
         5
-      ]
+      ],
+      "art": {
+        "left": "arte/agua/amargasaurus_izq.webp",
+        "right": "arte/agua/amargasaurus_der.webp"
+      }
     },
     {
       "id": "ampelosaurus",
       "name": "Ampelosaurus",
-      "image": "agua/ampelosaurus_dinosaur_king.jpg",
+      "image": "cartas/agua/ampelosaurus_dinosaur_king.jpg",
       "element": "agua",
       "card": "cards/agua/ampelosaurus_dinosaur_king.jpg",
       "stats": [
@@ -264,12 +488,16 @@
         6,
         4,
         7
-      ]
+      ],
+      "art": {
+        "left": "arte/agua/ampelosaurus_izq.webp",
+        "right": "arte/agua/ampelosaurus_der.webp"
+      }
     },
     {
       "id": "baryonyx",
       "name": "Baryonyx",
-      "image": "agua/baryonyx_dinosaur_king.jpg",
+      "image": "cartas/agua/baryonyx_dinosaur_king.jpg",
       "element": "agua",
       "card": "cards/agua/baryonyx_dinosaur_king.jpg",
       "stats": [
@@ -278,12 +506,34 @@
         4,
         5,
         5
-      ]
+      ],
+      "art": {
+        "left": "arte/agua/baryonyx_izq.webp",
+        "right": "arte/agua/baryonyx_der.webp"
+      }
+    },
+    {
+      "id": "futabasaurus",
+      "name": "Futabasaurus",
+      "image": "cartas/agua/futabasaurus_super_cannon_dinosaur_king.jpg",
+      "element": "agua",
+      "card": "cards/agua/futabasaurus_super_cannon_dinosaur_king.jpg",
+      "stats": [
+        6,
+        4,
+        7,
+        6,
+        6
+      ],
+      "art": {
+        "left": "arte/agua/futabasaurus_izq.webp",
+        "right": "arte/agua/futabasaurus_der.webp"
+      }
     },
     {
       "id": "isisaurus",
       "name": "Isisaurus",
-      "image": "agua/isisaurus_dinosaur_king.jpg",
+      "image": "cartas/agua/isisaurus_dinosaur_king.jpg",
       "element": "agua",
       "card": "cards/agua/isisaurus_dinosaur_king.jpg",
       "stats": [
@@ -292,12 +542,16 @@
         7,
         5,
         4
-      ]
+      ],
+      "art": {
+        "left": "arte/agua/isisaurus_izq.webp",
+        "right": "arte/agua/isisaurus_der.webp"
+      }
     },
     {
       "id": "jobaria",
       "name": "Jobaria",
-      "image": "agua/jobaria_dinosaur_king.jpg",
+      "image": "cartas/agua/jobaria_dinosaur_king.jpg",
       "element": "agua",
       "card": "cards/agua/jobaria_dinosaur_king.jpg",
       "stats": [
@@ -306,12 +560,16 @@
         5,
         5,
         6
-      ]
+      ],
+      "art": {
+        "left": "arte/agua/jobaria_izq.webp",
+        "right": "arte/agua/jobaria_der.webp"
+      }
     },
     {
       "id": "saltasaurus",
       "name": "Saltasaurus",
-      "image": "agua/saltasaurus_dinosaur_king.jpg",
+      "image": "cartas/agua/saltasaurus_dinosaur_king.jpg",
       "element": "agua",
       "card": "cards/agua/saltasaurus_dinosaur_king.jpg",
       "stats": [
@@ -320,12 +578,16 @@
         6,
         6,
         7
-      ]
+      ],
+      "art": {
+        "left": "arte/agua/saltasaurus_izq.webp",
+        "right": "arte/agua/saltasaurus_der.webp"
+      }
     },
     {
       "id": "shunosaurus",
       "name": "Shunosaurus",
-      "image": "agua/shunosaurus_dinosaur_king.jpg",
+      "image": "cartas/agua/shunosaurus_dinosaur_king.jpg",
       "element": "agua",
       "card": "cards/agua/shunosaurus_dinosaur_king.jpg",
       "stats": [
@@ -334,12 +596,34 @@
         7,
         4,
         4
-      ]
+      ],
+      "art": {
+        "left": "arte/agua/shunosaurus_izq.webp",
+        "right": "arte/agua/shunosaurus_der.webp"
+      }
+    },
+    {
+      "id": "spinosaurus_atacando",
+      "name": "Spinosaurus Atacando",
+      "image": "cartas/agua/spinosaurus atacando.jpg",
+      "element": "agua",
+      "card": "cards/agua/spinosaurus atacando.jpg",
+      "stats": [
+        5,
+        5,
+        5,
+        5,
+        7
+      ],
+      "art": {
+        "left": "arte/agua/spinosaurus_atacando_izq.webp",
+        "right": "arte/agua/spinosaurus_atacando_der.webp"
+      }
     },
     {
       "id": "spinosaurus",
       "name": "Spinosaurus",
-      "image": "agua/spinosaurus_dinosaur_king.jpg",
+      "image": "cartas/agua/spinosaurus_dinosaur_king.jpg",
       "element": "agua",
       "card": "cards/agua/spinosaurus_dinosaur_king.jpg",
       "stats": [
@@ -348,12 +632,16 @@
         7,
         6,
         7
-      ]
+      ],
+      "art": {
+        "left": "arte/agua/spinosaurus_izq.webp",
+        "right": "arte/agua/spinosaurus_der.webp"
+      }
     },
     {
       "id": "suchomimus",
       "name": "Suchomimus",
-      "image": "agua/suchomimus_dinosaur_king.jpg",
+      "image": "cartas/agua/suchomimus_dinosaur_king.jpg",
       "element": "agua",
       "card": "cards/agua/suchomimus_dinosaur_king.jpg",
       "stats": [
@@ -362,12 +650,124 @@
         5,
         6,
         6
-      ]
+      ],
+      "art": {
+        "left": "arte/agua/suchomimus_izq.webp",
+        "right": "arte/agua/suchomimus_der.webp"
+      }
+    },
+    {
+      "id": "centrosaurus",
+      "name": "Centrosaurus",
+      "image": "cartas/rayo/Centrosaurus (games).jpeg",
+      "element": "rayo",
+      "card": "cards/rayo/Centrosaurus (games).jpeg",
+      "stats": [
+        5,
+        4,
+        4,
+        6,
+        9
+      ],
+      "art": {
+        "left": "arte/rayo/centrosaurus_izq.webp",
+        "right": "arte/rayo/centrosaurus_der.webp"
+      }
+    },
+    {
+      "id": "chasmosaurus",
+      "name": "Chasmosaurus",
+      "image": "cartas/rayo/Chasmosaurus.jpeg",
+      "element": "rayo",
+      "card": "cards/rayo/Chasmosaurus.jpeg",
+      "stats": [
+        5,
+        6,
+        8,
+        4,
+        4
+      ],
+      "art": {
+        "left": "arte/rayo/chasmosaurus_izq.webp",
+        "right": "arte/rayo/chasmosaurus_der.webp"
+      }
+    },
+    {
+      "id": "einiosaurus",
+      "name": "Einiosaurus",
+      "image": "cartas/rayo/Einiosaurus.jpeg",
+      "element": "rayo",
+      "card": "cards/rayo/Einiosaurus.jpeg",
+      "stats": [
+        5,
+        5,
+        8,
+        6,
+        6
+      ],
+      "art": {
+        "left": "arte/rayo/einiosaurus_izq.webp",
+        "right": "arte/rayo/einiosaurus_der.webp"
+      }
+    },
+    {
+      "id": "machairoceratops",
+      "name": "Machairoceratops",
+      "image": "cartas/rayo/Machairoceratops.jpeg",
+      "element": "rayo",
+      "card": "cards/rayo/Machairoceratops.jpeg",
+      "stats": [
+        8,
+        5,
+        7,
+        5,
+        8
+      ],
+      "art": {
+        "left": "arte/rayo/machairoceratops_izq.webp",
+        "right": "arte/rayo/machairoceratops_der.webp"
+      }
+    },
+    {
+      "id": "monoclonius",
+      "name": "Monoclonius",
+      "image": "cartas/rayo/Monoclonius (games).jpeg",
+      "element": "rayo",
+      "card": "cards/rayo/Monoclonius (games).jpeg",
+      "stats": [
+        6,
+        6,
+        7,
+        6,
+        5
+      ],
+      "art": {
+        "left": "arte/rayo/monoclonius_izq.webp",
+        "right": "arte/rayo/monoclonius_der.webp"
+      }
+    },
+    {
+      "id": "zuniceratops",
+      "name": "Zuniceratops",
+      "image": "cartas/rayo/Zuniceratops (game).jpeg",
+      "element": "rayo",
+      "card": "cards/rayo/Zuniceratops (game).jpeg",
+      "stats": [
+        7,
+        4,
+        6,
+        5,
+        6
+      ],
+      "art": {
+        "left": "arte/rayo/zuniceratops_izq.webp",
+        "right": "arte/rayo/zuniceratops_der.webp"
+      }
     },
     {
       "id": "achelousaurus",
       "name": "Achelousaurus",
-      "image": "rayo/achelousaurus_dinosaur_king.jpg",
+      "image": "cartas/rayo/achelousaurus_dinosaur_king.jpg",
       "element": "rayo",
       "card": "cards/rayo/achelousaurus_dinosaur_king.jpg",
       "stats": [
@@ -376,12 +776,16 @@
         4,
         4,
         7
-      ]
+      ],
+      "art": {
+        "left": "arte/rayo/achelousaurus_izq.webp",
+        "right": "arte/rayo/achelousaurus_der.webp"
+      }
     },
     {
       "id": "anchiceratops",
       "name": "Anchiceratops",
-      "image": "rayo/anchiceratops_dinosaur_king.jpg",
+      "image": "cartas/rayo/anchiceratops_dinosaur_king.jpg",
       "element": "rayo",
       "card": "cards/rayo/anchiceratops_dinosaur_king.jpg",
       "stats": [
@@ -390,12 +794,16 @@
         6,
         4,
         5
-      ]
+      ],
+      "art": {
+        "left": "arte/rayo/anchiceratops_izq.webp",
+        "right": "arte/rayo/anchiceratops_der.webp"
+      }
     },
     {
       "id": "maximus",
       "name": "Maximus",
-      "image": "rayo/maximus_dinosaur_king.jpg",
+      "image": "cartas/rayo/maximus_dinosaur_king.jpg",
       "element": "rayo",
       "card": "cards/rayo/maximus_dinosaur_king.jpg",
       "stats": [
@@ -404,12 +812,16 @@
         9,
         6,
         9
-      ]
+      ],
+      "art": {
+        "left": "arte/rayo/maximus_izq.webp",
+        "right": "arte/rayo/maximus_der.webp"
+      }
     },
     {
       "id": "nedoceratops",
       "name": "Nedoceratops",
-      "image": "rayo/nedoceratops_dinosaur_king.jpg",
+      "image": "cartas/rayo/nedoceratops_dinosaur_king.jpg",
       "element": "rayo",
       "card": "cards/rayo/nedoceratops_dinosaur_king.jpg",
       "stats": [
@@ -418,12 +830,16 @@
         5,
         5,
         6
-      ]
+      ],
+      "art": {
+        "left": "arte/rayo/nedoceratops_izq.webp",
+        "right": "arte/rayo/nedoceratops_der.webp"
+      }
     },
     {
       "id": "pachyrhinosaurus",
       "name": "Pachyrhinosaurus",
-      "image": "rayo/pachyrhinosaurus_dinosaur_king.jpg",
+      "image": "cartas/rayo/pachyrhinosaurus_dinosaur_king.jpg",
       "element": "rayo",
       "card": "cards/rayo/pachyrhinosaurus_dinosaur_king.jpg",
       "stats": [
@@ -432,12 +848,16 @@
         7,
         6,
         6
-      ]
+      ],
+      "art": {
+        "left": "arte/rayo/pachyrhinosaurus_izq.webp",
+        "right": "arte/rayo/pachyrhinosaurus_der.webp"
+      }
     },
     {
       "id": "pentaceratops",
       "name": "Pentaceratops",
-      "image": "rayo/pentaceratops_dinosaur_king.jpg",
+      "image": "cartas/rayo/pentaceratops_dinosaur_king.jpg",
       "element": "rayo",
       "card": "cards/rayo/pentaceratops_dinosaur_king.jpg",
       "stats": [
@@ -446,12 +866,16 @@
         5,
         4,
         8
-      ]
+      ],
+      "art": {
+        "left": "arte/rayo/pentaceratops_izq.webp",
+        "right": "arte/rayo/pentaceratops_der.webp"
+      }
     },
     {
       "id": "styracosaurus",
       "name": "Styracosaurus",
-      "image": "rayo/styracosaurus_dinosaur_king.jpg",
+      "image": "cartas/rayo/styracosaurus_dinosaur_king.jpg",
       "element": "rayo",
       "card": "cards/rayo/styracosaurus_dinosaur_king.jpg",
       "stats": [
@@ -460,12 +884,16 @@
         9,
         6,
         9
-      ]
+      ],
+      "art": {
+        "left": "arte/rayo/styracosaurus_izq.webp",
+        "right": "arte/rayo/styracosaurus_der.webp"
+      }
     },
     {
       "id": "torosaurus",
       "name": "Torosaurus",
-      "image": "rayo/torosaurus_dinosaur_king_by.jpg",
+      "image": "cartas/rayo/torosaurus_dinosaur_king_by.jpg",
       "element": "rayo",
       "card": "cards/rayo/torosaurus_dinosaur_king_by.jpg",
       "stats": [
@@ -474,12 +902,16 @@
         9,
         4,
         5
-      ]
+      ],
+      "art": {
+        "left": "arte/rayo/torosaurus_izq.webp",
+        "right": "arte/rayo/torosaurus_der.webp"
+      }
     },
     {
       "id": "triceratops",
       "name": "Triceratops",
-      "image": "rayo/triceratops_dinosaur_king.jpg",
+      "image": "cartas/rayo/triceratops_dinosaur_king.jpg",
       "element": "rayo",
       "card": "cards/rayo/triceratops_dinosaur_king.jpg",
       "stats": [
@@ -488,12 +920,124 @@
         9,
         6,
         9
-      ]
+      ],
+      "art": {
+        "left": "arte/rayo/triceratops_izq.webp",
+        "right": "arte/rayo/triceratops_der.webp"
+      }
+    },
+    {
+      "id": "dacentrurus",
+      "name": "Dacentrurus",
+      "image": "cartas/tierra/Dacentrurus.jpeg",
+      "element": "tierra",
+      "card": "cards/tierra/Dacentrurus.jpeg",
+      "stats": [
+        5,
+        5,
+        5,
+        6,
+        5
+      ],
+      "art": {
+        "left": "arte/tierra/dacentrurus_izq.webp",
+        "right": "arte/tierra/dacentrurus_der.webp"
+      }
+    },
+    {
+      "id": "gigantspinosaurus",
+      "name": "Gigantspinosaurus",
+      "image": "cartas/tierra/Gigantspinosaurus (games).jpeg",
+      "element": "tierra",
+      "card": "cards/tierra/Gigantspinosaurus (games).jpeg",
+      "stats": [
+        6,
+        6,
+        5,
+        4,
+        6
+      ],
+      "art": {
+        "left": "arte/tierra/gigantspinosaurus_izq.webp",
+        "right": "arte/tierra/gigantspinosaurus_der.webp"
+      }
+    },
+    {
+      "id": "kentrosaurus",
+      "name": "Kentrosaurus",
+      "image": "cartas/tierra/Kentrosaurus.jpeg",
+      "element": "tierra",
+      "card": "cards/tierra/Kentrosaurus.jpeg",
+      "stats": [
+        4,
+        6,
+        4,
+        6,
+        6
+      ],
+      "art": {
+        "left": "arte/tierra/kentrosaurus_izq.webp",
+        "right": "arte/tierra/kentrosaurus_der.webp"
+      }
+    },
+    {
+      "id": "pinacosaurus",
+      "name": "Pinacosaurus",
+      "image": "cartas/tierra/Pinacosaurus (games).jpeg",
+      "element": "tierra",
+      "card": "cards/tierra/Pinacosaurus (games).jpeg",
+      "stats": [
+        4,
+        8,
+        6,
+        8,
+        4
+      ],
+      "art": {
+        "left": "arte/tierra/pinacosaurus_izq.webp",
+        "right": "arte/tierra/pinacosaurus_der.webp"
+      }
+    },
+    {
+      "id": "polacanthus",
+      "name": "Polacanthus",
+      "image": "cartas/tierra/Polacanthus.jpeg",
+      "element": "tierra",
+      "card": "cards/tierra/Polacanthus.jpeg",
+      "stats": [
+        7,
+        7,
+        4,
+        6,
+        4
+      ],
+      "art": {
+        "left": "arte/tierra/polacanthus_izq.webp",
+        "right": "arte/tierra/polacanthus_der.webp"
+      }
+    },
+    {
+      "id": "sauropelta",
+      "name": "Sauropelta",
+      "image": "cartas/tierra/Sauropelta.jpeg",
+      "element": "tierra",
+      "card": "cards/tierra/Sauropelta.jpeg",
+      "stats": [
+        5,
+        7,
+        5,
+        7,
+        6
+      ],
+      "art": {
+        "left": "arte/tierra/sauropelta_izq.webp",
+        "right": "arte/tierra/sauropelta_der.webp"
+      }
     },
     {
       "id": "ankylosaurus",
       "name": "Ankylosaurus",
-      "image": "tierra/ankylosaurus_dinosaur_king.jpg",
+      "image": "cartas/tierra/ankylosaurus_dinosaur_king.jpg",
       "element": "tierra",
       "card": "cards/tierra/ankylosaurus_dinosaur_king.jpg",
       "stats": [
@@ -502,12 +1046,16 @@
         5,
         7,
         6
-      ]
+      ],
+      "art": {
+        "left": "arte/tierra/ankylosaurus_izq.webp",
+        "right": "arte/tierra/ankylosaurus_der.webp"
+      }
     },
     {
       "id": "armatus",
       "name": "Armatus",
-      "image": "tierra/armatus_dinosaur_king.jpg",
+      "image": "cartas/tierra/armatus_dinosaur_king.jpg",
       "element": "tierra",
       "card": "cards/tierra/armatus_dinosaur_king.jpg",
       "stats": [
@@ -516,12 +1064,16 @@
         6,
         8,
         6
-      ]
+      ],
+      "art": {
+        "left": "arte/tierra/armatus_izq.webp",
+        "right": "arte/tierra/armatus_der.webp"
+      }
     },
     {
       "id": "edmontonia",
       "name": "Edmontonia",
-      "image": "tierra/edmontonia_dinosaur_king.jpg",
+      "image": "cartas/tierra/edmontonia_dinosaur_king.jpg",
       "element": "tierra",
       "card": "cards/tierra/edmontonia_dinosaur_king.jpg",
       "stats": [
@@ -530,12 +1082,34 @@
         5,
         4,
         6
-      ]
+      ],
+      "art": {
+        "left": "arte/tierra/edmontonia_izq.webp",
+        "right": "arte/tierra/edmontonia_der.webp"
+      }
+    },
+    {
+      "id": "scolosaurus",
+      "name": "Scolosaurus",
+      "image": "cartas/tierra/escolossauro.jpeg",
+      "element": "tierra",
+      "card": "cards/tierra/escolossauro.jpeg",
+      "stats": [
+        4,
+        8,
+        4,
+        8,
+        4
+      ],
+      "art": {
+        "left": "arte/tierra/scolosaurus_izq.webp",
+        "right": "arte/tierra/scolosaurus_der.webp"
+      }
     },
     {
       "id": "euoplocephalus",
       "name": "Euoplocephalus",
-      "image": "tierra/euoplocephalus_dinosaur_king.jpg",
+      "image": "cartas/tierra/euoplocephalus_dinosaur_king.jpg",
       "element": "tierra",
       "card": "cards/tierra/euoplocephalus_dinosaur_king.jpg",
       "stats": [
@@ -544,12 +1118,16 @@
         4,
         8,
         4
-      ]
+      ],
+      "art": {
+        "left": "arte/tierra/euoplocephalus_izq.webp",
+        "right": "arte/tierra/euoplocephalus_der.webp"
+      }
     },
     {
       "id": "lexovisaurus",
       "name": "Lexovisaurus",
-      "image": "tierra/lexovisaurus_dinosaur_king.jpg",
+      "image": "cartas/tierra/lexovisaurus_dinosaur_king.jpg",
       "element": "tierra",
       "card": "cards/tierra/lexovisaurus_dinosaur_king.jpg",
       "stats": [
@@ -558,12 +1136,16 @@
         6,
         8,
         5
-      ]
+      ],
+      "art": {
+        "left": "arte/tierra/lexovisaurus_izq.webp",
+        "right": "arte/tierra/lexovisaurus_der.webp"
+      }
     },
     {
       "id": "saichania",
       "name": "Saichania",
-      "image": "tierra/saichania_dinosaur_king.jpg",
+      "image": "cartas/tierra/saichania_dinosaur_king.jpg",
       "element": "tierra",
       "card": "cards/tierra/saichania_dinosaur_king.jpg",
       "stats": [
@@ -572,12 +1154,16 @@
         6,
         8,
         6
-      ]
+      ],
+      "art": {
+        "left": "arte/tierra/saichania_izq.webp",
+        "right": "arte/tierra/saichania_der.webp"
+      }
     },
     {
       "id": "stegosaurus",
       "name": "Stegosaurus",
-      "image": "tierra/stegosaurus_dinosaur_king.jpg",
+      "image": "cartas/tierra/stegosaurus_dinosaur_king.jpg",
       "element": "tierra",
       "card": "cards/tierra/stegosaurus_dinosaur_king.jpg",
       "stats": [
@@ -586,12 +1172,16 @@
         6,
         6,
         5
-      ]
+      ],
+      "art": {
+        "left": "arte/tierra/stegosaurus_izq.webp",
+        "right": "arte/tierra/stegosaurus_der.webp"
+      }
     },
     {
       "id": "tuojiangosaurus",
       "name": "Tuojiangosaurus",
-      "image": "tierra/tuojiangosaurus_dinosaur_king.jpg",
+      "image": "cartas/tierra/tuojiangosaurus_dinosaur_king.jpg",
       "element": "tierra",
       "card": "cards/tierra/tuojiangosaurus_dinosaur_king.jpg",
       "stats": [
@@ -600,12 +1190,161 @@
         5,
         7,
         5
-      ]
+      ],
+      "art": {
+        "left": "arte/tierra/tuojiangosaurus_izq.webp",
+        "right": "arte/tierra/tuojiangosaurus_der.webp"
+      }
+    },
+    {
+      "id": "charonosaurus",
+      "name": "Charonosaurus",
+      "image": "cartas/planta/Charonosaurus (games).jpeg",
+      "element": "planta",
+      "card": "cards/planta/Charonosaurus (games).jpeg",
+      "stats": [
+        6,
+        6,
+        4,
+        6,
+        4
+      ],
+      "art": {
+        "left": "arte/planta/charonosaurus_izq.webp",
+        "right": "arte/planta/charonosaurus_der.webp"
+      }
+    },
+    {
+      "id": "corythosaurus",
+      "name": "Corythosaurus",
+      "image": "cartas/planta/Corythosaurus (games).jpeg",
+      "element": "planta",
+      "card": "cards/planta/Corythosaurus (games).jpeg",
+      "stats": [
+        4,
+        4,
+        4,
+        6,
+        5
+      ],
+      "art": {
+        "left": "arte/planta/corythosaurus_izq.webp",
+        "right": "arte/planta/corythosaurus_der.webp"
+      }
+    },
+    {
+      "id": "olorotitan",
+      "name": "Olorotitan",
+      "image": "cartas/planta/Olorotitan (games).jpeg",
+      "element": "planta",
+      "card": "cards/planta/Olorotitan (games).jpeg",
+      "stats": [
+        4,
+        6,
+        4,
+        6,
+        5
+      ],
+      "art": {
+        "left": "arte/planta/olorotitan_izq.webp",
+        "right": "arte/planta/olorotitan_der.webp"
+      }
+    },
+    {
+      "id": "pteranodon",
+      "name": "Pteranodon",
+      "image": "cartas/planta/Pteranodon.jpg",
+      "element": "planta",
+      "card": "cards/planta/Pteranodon.jpg",
+      "stats": [
+        8,
+        5,
+        4,
+        5,
+        5
+      ],
+      "art": {
+        "left": "arte/planta/pteranodon_izq.webp",
+        "right": "arte/planta/pteranodon_der.webp"
+      }
+    },
+    {
+      "id": "seismosaurus",
+      "name": "Seismosaurus",
+      "image": "cartas/planta/Seismosaurus.jpg",
+      "element": "planta",
+      "card": "cards/planta/Seismosaurus.jpg",
+      "stats": [
+        5,
+        5,
+        6,
+        4,
+        6
+      ],
+      "art": {
+        "left": "arte/planta/seismosaurus_izq.webp",
+        "right": "arte/planta/seismosaurus_der.webp"
+      }
+    },
+    {
+      "id": "supersaurus",
+      "name": "Supersaurus",
+      "image": "cartas/planta/Supersaurus.jpg",
+      "element": "planta",
+      "card": "cards/planta/Supersaurus.jpg",
+      "stats": [
+        7,
+        5,
+        6,
+        7,
+        5
+      ],
+      "art": {
+        "left": "arte/planta/supersaurus_izq.webp",
+        "right": "arte/planta/supersaurus_der.webp"
+      }
+    },
+    {
+      "id": "tupandactylus",
+      "name": "Tupandactylus",
+      "image": "cartas/planta/Tupandactylus Move Card.jpeg",
+      "element": "planta",
+      "card": "cards/planta/Tupandactylus Move Card.jpeg",
+      "frontSide": "right",
+      "stats": [
+        4,
+        4,
+        5,
+        7,
+        4
+      ],
+      "art": {
+        "left": "arte/planta/tupandactylus_izq.webp",
+        "right": "arte/planta/tupandactylus_der.webp"
+      }
+    },
+    {
+      "id": "tupuxuara",
+      "name": "Tupuxuara",
+      "image": "cartas/planta/Tupuxuara.jpg",
+      "element": "planta",
+      "card": "cards/planta/Tupuxuara.jpg",
+      "stats": [
+        6,
+        4,
+        4,
+        4,
+        4
+      ],
+      "art": {
+        "left": "arte/planta/tupuxuara_izq.webp",
+        "right": "arte/planta/tupuxuara_der.webp"
+      }
     },
     {
       "id": "altirhinus",
       "name": "Altirhinus",
-      "image": "planta/altirhinus_dinosaur_king.jpg",
+      "image": "cartas/planta/altirhinus_dinosaur_king.jpg",
       "element": "planta",
       "card": "cards/planta/altirhinus_dinosaur_king.jpg",
       "stats": [
@@ -614,12 +1353,16 @@
         5,
         4,
         4
-      ]
+      ],
+      "art": {
+        "left": "arte/planta/altirhinus_izq.webp",
+        "right": "arte/planta/altirhinus_der.webp"
+      }
     },
     {
       "id": "fukuisaurus",
       "name": "Fukuisaurus",
-      "image": "planta/fukuisaurus_dinosaur_king.jpg",
+      "image": "cartas/planta/fukuisaurus_dinosaur_king.jpg",
       "element": "planta",
       "card": "cards/planta/fukuisaurus_dinosaur_king.jpg",
       "stats": [
@@ -628,12 +1371,16 @@
         5,
         7,
         4
-      ]
+      ],
+      "art": {
+        "left": "arte/planta/fukuisaurus_izq.webp",
+        "right": "arte/planta/fukuisaurus_der.webp"
+      }
     },
     {
       "id": "iguanodon",
       "name": "Iguanodon",
-      "image": "planta/iguanodon_dinosaur_king.jpg",
+      "image": "cartas/planta/iguanodon_dinosaur_king.jpg",
       "element": "planta",
       "card": "cards/planta/iguanodon_dinosaur_king.jpg",
       "stats": [
@@ -642,12 +1389,16 @@
         4,
         7,
         5
-      ]
+      ],
+      "art": {
+        "left": "arte/planta/iguanodon_izq.webp",
+        "right": "arte/planta/iguanodon_der.webp"
+      }
     },
     {
       "id": "lanzhousaurus",
       "name": "Lanzhousaurus",
-      "image": "planta/lanzhousaurus_dinosaur_king.jpg",
+      "image": "cartas/planta/lanzhousaurus_dinosaur_king.jpg",
       "element": "planta",
       "card": "cards/planta/lanzhousaurus_dinosaur_king.jpg",
       "stats": [
@@ -656,12 +1407,16 @@
         5,
         5,
         6
-      ]
+      ],
+      "art": {
+        "left": "arte/planta/lanzhousaurus_izq.webp",
+        "right": "arte/planta/lanzhousaurus_der.webp"
+      }
     },
     {
       "id": "maiasaura",
       "name": "Maiasaura",
-      "image": "planta/maiasaura_with_baby_dinosaur_king.jpg",
+      "image": "cartas/planta/maiasaura_with_baby_dinosaur_king.jpg",
       "element": "planta",
       "card": "cards/planta/maiasaura_with_baby_dinosaur_king.jpg",
       "stats": [
@@ -670,12 +1425,16 @@
         4,
         6,
         4
-      ]
+      ],
+      "art": {
+        "left": "arte/planta/maiasaura_izq.webp",
+        "right": "arte/planta/maiasaura_der.webp"
+      }
     },
     {
       "id": "parasaurolophus",
       "name": "Parasaurolophus",
-      "image": "planta/parasaurolophus_dinosaur_king.jpg",
+      "image": "cartas/planta/parasaurolophus_dinosaur_king.jpg",
       "element": "planta",
       "card": "cards/planta/parasaurolophus_dinosaur_king.jpg",
       "stats": [
@@ -684,12 +1443,16 @@
         6,
         7,
         6
-      ]
+      ],
+      "art": {
+        "left": "arte/planta/parasaurolophus_izq.webp",
+        "right": "arte/planta/parasaurolophus_der.webp"
+      }
     },
     {
       "id": "saurolophus_naranja",
       "name": "Saurolophus Naranja",
-      "image": "planta/sauralophus_orange_dinosaur_king.jpg",
+      "image": "cartas/planta/sauralophus_orange_dinosaur_king.jpg",
       "element": "planta",
       "card": "cards/planta/sauralophus_orange_dinosaur_king.jpg",
       "stats": [
@@ -698,12 +1461,16 @@
         5,
         7,
         5
-      ]
+      ],
+      "art": {
+        "left": "arte/planta/saurolophus_naranja_izq.webp",
+        "right": "arte/planta/saurolophus_naranja_der.webp"
+      }
     },
     {
       "id": "saurolophus_verde",
       "name": "Saurolophus Verde",
-      "image": "planta/saurolophus_green_dinosaur_king.jpg",
+      "image": "cartas/planta/saurolophus_green_dinosaur_king.jpg",
       "element": "planta",
       "card": "cards/planta/saurolophus_green_dinosaur_king.jpg",
       "stats": [
@@ -712,12 +1479,16 @@
         4,
         6,
         6
-      ]
+      ],
+      "art": {
+        "left": "arte/planta/saurolophus_verde_izq.webp",
+        "right": "arte/planta/saurolophus_verde_der.webp"
+      }
     },
     {
       "id": "shantungosaurus",
       "name": "Shantungosaurus",
-      "image": "planta/shantungosaurus_dinosaur_king.jpg",
+      "image": "cartas/planta/shantungosaurus_dinosaur_king.jpg",
       "element": "planta",
       "card": "cards/planta/shantungosaurus_dinosaur_king.jpg",
       "stats": [
@@ -726,12 +1497,106 @@
         5,
         4,
         4
-      ]
+      ],
+      "art": {
+        "left": "arte/planta/shantungosaurus_izq.webp",
+        "right": "arte/planta/shantungosaurus_der.webp"
+      }
+    },
+    {
+      "id": "dilophosaurus",
+      "name": "Dilophosaurus",
+      "image": "cartas/viento/Dilophosaurus (games).jpeg",
+      "element": "viento",
+      "card": "cards/viento/Dilophosaurus (games).jpeg",
+      "stats": [
+        4,
+        6,
+        6,
+        6,
+        7
+      ],
+      "art": {
+        "left": "arte/viento/dilophosaurus_izq.webp",
+        "right": "arte/viento/dilophosaurus_der.webp"
+      }
+    },
+    {
+      "id": "liliensternus",
+      "name": "Liliensternus",
+      "image": "cartas/viento/Liliensternus (games).jpeg",
+      "element": "viento",
+      "card": "cards/viento/Liliensternus (games).jpeg",
+      "stats": [
+        6,
+        4,
+        5,
+        4,
+        4
+      ],
+      "art": {
+        "left": "arte/viento/liliensternus_izq.webp",
+        "right": "arte/viento/liliensternus_der.webp"
+      }
+    },
+    {
+      "id": "neovenator",
+      "name": "Neovenator",
+      "image": "cartas/viento/Neovenator (game).jpeg",
+      "element": "viento",
+      "card": "cards/viento/Neovenator (game).jpeg",
+      "stats": [
+        5,
+        5,
+        7,
+        7,
+        4
+      ],
+      "art": {
+        "left": "arte/viento/neovenator_izq.webp",
+        "right": "arte/viento/neovenator_der.webp"
+      }
+    },
+    {
+      "id": "sinraptor",
+      "name": "Sinraptor",
+      "image": "cartas/viento/Sinraptor.jpeg",
+      "element": "viento",
+      "card": "cards/viento/Sinraptor.jpeg",
+      "stats": [
+        4,
+        4,
+        4,
+        5,
+        5
+      ],
+      "art": {
+        "left": "arte/viento/sinraptor_izq.webp",
+        "right": "arte/viento/sinraptor_der.webp"
+      }
+    },
+    {
+      "id": "szechuanosaurus",
+      "name": "Szechuanosaurus",
+      "image": "cartas/viento/Szechuanosaurus.jpeg",
+      "element": "viento",
+      "card": "cards/viento/Szechuanosaurus.jpeg",
+      "stats": [
+        5,
+        5,
+        7,
+        4,
+        4
+      ],
+      "art": {
+        "left": "arte/viento/szechuanosaurus_izq.webp",
+        "right": "arte/viento/szechuanosaurus_der.webp"
+      }
     },
     {
       "id": "afrovenator",
       "name": "Afrovenator",
-      "image": "viento/afrovenator_dinosaur_king.jpg",
+      "image": "cartas/viento/afrovenator_dinosaur_king.jpg",
       "element": "viento",
       "card": "cards/viento/afrovenator_dinosaur_king.jpg",
       "stats": [
@@ -740,12 +1605,16 @@
         7,
         6,
         4
-      ]
+      ],
+      "art": {
+        "left": "arte/viento/afrovenator_izq.webp",
+        "right": "arte/viento/afrovenator_der.webp"
+      }
     },
     {
       "id": "allosaurus",
       "name": "Allosaurus",
-      "image": "viento/allosaurus_dinosaur_king.jpg",
+      "image": "cartas/viento/allosaurus_dinosaur_king.jpg",
       "element": "viento",
       "card": "cards/viento/allosaurus_dinosaur_king.jpg",
       "stats": [
@@ -754,12 +1623,16 @@
         7,
         6,
         6
-      ]
+      ],
+      "art": {
+        "left": "arte/viento/allosaurus_izq.webp",
+        "right": "arte/viento/allosaurus_der.webp"
+      }
     },
     {
       "id": "carnotaurus",
       "name": "Carnotaurus",
-      "image": "viento/carnotaurus_dinosaur_king.jpg",
+      "image": "cartas/viento/carnotaurus_dinosaur_king.jpg",
       "element": "viento",
       "card": "cards/viento/carnotaurus_dinosaur_king.jpg",
       "stats": [
@@ -768,12 +1641,16 @@
         7,
         7,
         7
-      ]
+      ],
+      "art": {
+        "left": "arte/viento/carnotaurus_izq.webp",
+        "right": "arte/viento/carnotaurus_der.webp"
+      }
     },
     {
       "id": "ceratosaurus",
       "name": "Ceratosaurus",
-      "image": "viento/ceratosaurus_dinosaur_king.jpg",
+      "image": "cartas/viento/ceratosaurus_dinosaur_king.jpg",
       "element": "viento",
       "card": "cards/viento/ceratosaurus_dinosaur_king.jpg",
       "stats": [
@@ -782,12 +1659,16 @@
         4,
         4,
         4
-      ]
+      ],
+      "art": {
+        "left": "arte/viento/ceratosaurus_izq.webp",
+        "right": "arte/viento/ceratosaurus_der.webp"
+      }
     },
     {
       "id": "deltadromeus",
       "name": "Deltadromeus",
-      "image": "viento/deltadromeus_dinosaur_king.jpg",
+      "image": "cartas/viento/deltadromeus_dinosaur_king.jpg",
       "element": "viento",
       "card": "cards/viento/deltadromeus_dinosaur_king.jpg",
       "stats": [
@@ -796,12 +1677,16 @@
         6,
         6,
         4
-      ]
+      ],
+      "art": {
+        "left": "arte/viento/deltadromeus_izq.webp",
+        "right": "arte/viento/deltadromeus_der.webp"
+      }
     },
     {
       "id": "gojirasaurus",
       "name": "Gojirasaurus",
-      "image": "viento/gojirasaurus_dinosaur_king.jpg",
+      "image": "cartas/viento/gojirasaurus_dinosaur_king.jpg",
       "element": "viento",
       "card": "cards/viento/gojirasaurus_dinosaur_king.jpg",
       "stats": [
@@ -810,12 +1695,16 @@
         6,
         6,
         5
-      ]
+      ],
+      "art": {
+        "left": "arte/viento/gojirasaurus_izq.webp",
+        "right": "arte/viento/gojirasaurus_der.webp"
+      }
     },
     {
       "id": "majungasaurus",
       "name": "Majungasaurus",
-      "image": "viento/majungasaurus_dinosaur_king.jpg",
+      "image": "cartas/viento/majungasaurus_dinosaur_king.jpg",
       "element": "viento",
       "card": "cards/viento/majungasaurus_dinosaur_king.jpg",
       "stats": [
@@ -824,12 +1713,16 @@
         7,
         6,
         7
-      ]
+      ],
+      "art": {
+        "left": "arte/viento/majungasaurus_izq.webp",
+        "right": "arte/viento/majungasaurus_der.webp"
+      }
     },
     {
       "id": "megaraptor",
       "name": "Megaraptor",
-      "image": "viento/megaraptor_dinosaur_king.jpg",
+      "image": "cartas/viento/megaraptor_dinosaur_king.jpg",
       "element": "viento",
       "card": "cards/viento/megaraptor_dinosaur_king.jpg",
       "stats": [
@@ -838,12 +1731,16 @@
         7,
         7,
         5
-      ]
+      ],
+      "art": {
+        "left": "arte/viento/megaraptor_izq.webp",
+        "right": "arte/viento/megaraptor_der.webp"
+      }
     },
     {
       "id": "utahraptor",
       "name": "Utahraptor",
-      "image": "viento/utahraptor_dinosaur_king.jpg",
+      "image": "cartas/viento/utahraptor_dinosaur_king.jpg",
       "element": "viento",
       "card": "cards/viento/utahraptor_dinosaur_king.jpg",
       "stats": [
@@ -852,12 +1749,52 @@
         6,
         7,
         7
-      ]
+      ],
+      "art": {
+        "left": "arte/viento/utahraptor_izq.webp",
+        "right": "arte/viento/utahraptor_der.webp"
+      }
+    },
+    {
+      "id": "indoraptor",
+      "name": "Indoraptor",
+      "image": "cartas/especial/Indoraptor Card.jpeg",
+      "element": "especial",
+      "card": "cards/especial/Indoraptor Card.jpeg",
+      "stats": [
+        5,
+        4,
+        6,
+        4,
+        5
+      ],
+      "art": {
+        "left": "arte/especial/indoraptor_izq.webp",
+        "right": "arte/especial/indoraptor_der.webp"
+      }
+    },
+    {
+      "id": "brontosaurus",
+      "name": "Brontosaurus",
+      "image": "cartas/especial/brontosaurus (1).jpeg",
+      "element": "especial",
+      "card": "cards/especial/brontosaurus (1).jpeg",
+      "stats": [
+        7,
+        4,
+        4,
+        5,
+        5
+      ],
+      "art": {
+        "left": "arte/especial/brontosaurus_izq.webp",
+        "right": "arte/especial/brontosaurus_der.webp"
+      }
     },
     {
       "id": "cryolophosaurus",
       "name": "Cryolophosaurus",
-      "image": "especial/cryolophosaurus_dinosaur_king.jpg",
+      "image": "cartas/especial/cryolophosaurus_dinosaur_king.jpg",
       "element": "especial",
       "card": "cards/especial/cryolophosaurus_dinosaur_king.jpg",
       "frontSide": "right",
@@ -867,12 +1804,16 @@
         6,
         7,
         6
-      ]
+      ],
+      "art": {
+        "left": "arte/especial/cryolophosaurus_izq.webp",
+        "right": "arte/especial/cryolophosaurus_der.webp"
+      }
     },
     {
       "id": "deinonychus",
       "name": "Deinonychus",
-      "image": "especial/deinonychus_dinosaur_king.jpg",
+      "image": "cartas/especial/deinonychus_dinosaur_king.jpg",
       "element": "especial",
       "card": "cards/especial/deinonychus_dinosaur_king.jpg",
       "frontSide": "right",
@@ -882,12 +1823,34 @@
         6,
         6,
         7
-      ]
+      ],
+      "art": {
+        "left": "arte/especial/deinonychus_izq.webp",
+        "right": "arte/especial/deinonychus_der.webp"
+      }
+    },
+    {
+      "id": "indominus_rex",
+      "name": "Indominus Rex",
+      "image": "cartas/especial/indominus rex.jpeg",
+      "element": "especial",
+      "card": "cards/especial/indominus rex.jpeg",
+      "stats": [
+        4,
+        7,
+        7,
+        4,
+        6
+      ],
+      "art": {
+        "left": "arte/especial/indominus_rex_izq.webp",
+        "right": "arte/especial/indominus_rex_der.webp"
+      }
     },
     {
       "id": "megalosaurus",
       "name": "Megalosaurus",
-      "image": "especial/megalosaurus_dinosaur_king.jpg",
+      "image": "cartas/especial/megalosaurus_dinosaur_king.jpg",
       "element": "especial",
       "card": "cards/especial/megalosaurus_dinosaur_king.jpg",
       "frontSide": "right",
@@ -897,12 +1860,16 @@
         4,
         7,
         5
-      ]
+      ],
+      "art": {
+        "left": "arte/especial/megalosaurus_izq.webp",
+        "right": "arte/especial/megalosaurus_der.webp"
+      }
     },
     {
       "id": "pachycephalosaurus",
       "name": "Pachycephalosaurus",
-      "image": "especial/pachycephalosaurus_dinosaur_king.jpg",
+      "image": "cartas/especial/pachycephalosaurus_dinosaur_king.jpg",
       "element": "especial",
       "card": "cards/especial/pachycephalosaurus_dinosaur_king.jpg",
       "frontSide": "right",
@@ -912,12 +1879,16 @@
         7,
         7,
         5
-      ]
+      ],
+      "art": {
+        "left": "arte/especial/pachycephalosaurus_izq.webp",
+        "right": "arte/especial/pachycephalosaurus_der.webp"
+      }
     },
     {
       "id": "therizinosaurus",
       "name": "Therizinosaurus",
-      "image": "especial/therizinosaurus_dinosaur_king.jpg",
+      "image": "cartas/especial/therizinosaurus_dinosaur_king.jpg",
       "element": "especial",
       "card": "cards/especial/therizinosaurus_dinosaur_king.jpg",
       "frontSide": "right",
@@ -927,12 +1898,88 @@
         4,
         7,
         4
-      ]
+      ],
+      "art": {
+        "left": "arte/especial/therizinosaurus_izq.webp",
+        "right": "arte/especial/therizinosaurus_der.webp"
+      }
+    },
+    {
+      "id": "pawpawsaurus",
+      "name": "Pawpawsaurus",
+      "image": "cartas/normal/Pawpawsaurus.jpeg",
+      "element": "normal",
+      "card": "cards/normal/Pawpawsaurus.jpeg",
+      "stats": [
+        4,
+        4,
+        4,
+        4,
+        5
+      ],
+      "art": {
+        "left": "arte/normal/pawpawsaurus_izq.webp",
+        "right": "arte/normal/pawpawsaurus_der.webp"
+      }
+    },
+    {
+      "id": "piatnitzkysaurus",
+      "name": "Piatnitzkysaurus",
+      "image": "cartas/normal/Piatnitzkysaurus.jpg",
+      "element": "normal",
+      "card": "cards/normal/Piatnitzkysaurus.jpg",
+      "stats": [
+        4,
+        4,
+        5,
+        5,
+        5
+      ],
+      "art": {
+        "left": "arte/normal/piatnitzkysaurus_izq.webp",
+        "right": "arte/normal/piatnitzkysaurus_der.webp"
+      }
+    },
+    {
+      "id": "quetzalcoatlus",
+      "name": "Quetzalcoatlus",
+      "image": "cartas/normal/Quetzalcoalt.jpeg",
+      "element": "normal",
+      "card": "cards/normal/Quetzalcoalt.jpeg",
+      "stats": [
+        4,
+        5,
+        4,
+        5,
+        5
+      ],
+      "art": {
+        "left": "arte/normal/quetzalcoatlus_izq.webp",
+        "right": "arte/normal/quetzalcoatlus_der.webp"
+      }
+    },
+    {
+      "id": "anhanguera",
+      "name": "Anhanguera",
+      "image": "cartas/normal/anhanguera_dive_dinosaur_king.jpg",
+      "element": "normal",
+      "card": "cards/normal/anhanguera_dive_dinosaur_king.jpg",
+      "stats": [
+        5,
+        5,
+        5,
+        5,
+        4
+      ],
+      "art": {
+        "left": "arte/normal/anhanguera_izq.webp",
+        "right": "arte/normal/anhanguera_der.webp"
+      }
     },
     {
       "id": "velociraptor",
       "name": "Velociraptor",
-      "image": "normal/velociraptor_dinosaur_king.jpg",
+      "image": "cartas/normal/velociraptor_dinosaur_king.jpg",
       "element": "normal",
       "card": "cards/normal/velociraptor_dinosaur_king.jpg",
       "stats": [
@@ -941,7 +1988,11 @@
         5,
         4,
         5
-      ]
+      ],
+      "art": {
+        "left": "arte/normal/velociraptor_izq.webp",
+        "right": "arte/normal/velociraptor_der.webp"
+      }
     }
   ],
   "attacks": [
@@ -1280,120 +2331,10 @@
       "power": 50,
       "category": "fisico",
       "level": 15
-    },
-    {
-      "id": "futabasaurus_super_cannon",
-      "name": "Futabasaurus Super Cannon",
-      "element": "agua",
-      "power": 70,
-      "category": "especial",
-      "level": 1,
-      "moveCard": true,
-      "image": "agua/futabasaurus_super_cannon_dinosaur_king.jpg",
-      "card": "cards/agua/futabasaurus_super_cannon_dinosaur_king.jpg"
-    },
-    {
-      "id": "ocean_panic",
-      "name": "Ocean Panic",
-      "element": "agua",
-      "power": 70,
-      "category": "especial",
-      "level": 1,
-      "moveCard": true,
-      "image": "agua/ocean_panic_dinosaur_king.jpg",
-      "card": "cards/agua/ocean_panic_dinosaur_king.jpg"
-    },
-    {
-      "id": "shockwave",
-      "name": "Shockwave",
-      "element": "agua",
-      "power": 70,
-      "category": "especial",
-      "level": 1,
-      "moveCard": true,
-      "image": "agua/shockwave_dinosaur_king.jpg",
-      "card": "cards/agua/shockwave_dinosaur_king.jpg"
-    },
-    {
-      "id": "big_foot_assault",
-      "name": "Big Foot Assault",
-      "element": "planta",
-      "power": 70,
-      "category": "fisico",
-      "level": 1,
-      "moveCard": true,
-      "image": "planta/big_foot_assault_dinosaur_king.jpg",
-      "card": "cards/planta/big_foot_assault_dinosaur_king.jpg"
-    },
-    {
-      "id": "green_impulse",
-      "name": "Green Impulse",
-      "element": "planta",
-      "power": 70,
-      "category": "especial",
-      "level": 1,
-      "moveCard": true,
-      "image": "planta/green_impulse_dinosaur_king.jpg",
-      "card": "cards/planta/green_impulse_dinosaur_king.jpg"
-    },
-    {
-      "id": "metal_wing",
-      "name": "Metal Wing",
-      "element": "planta",
-      "power": 70,
-      "category": "fisico",
-      "level": 1,
-      "moveCard": true,
-      "image": "planta/metal_wing_dinosaur_king.jpg",
-      "card": "cards/planta/metal_wing_dinosaur_king.jpg"
-    },
-    {
-      "id": "super_impact",
-      "name": "Super Impact",
-      "element": "planta",
-      "power": 70,
-      "category": "fisico",
-      "level": 1,
-      "moveCard": true,
-      "image": "planta/super_impact_dinosaur_king.jpg",
-      "card": "cards/planta/super_impact_dinosaur_king.jpg"
-    },
-    {
-      "id": "anhanguera_dive",
-      "name": "Anhanguera Dive",
-      "element": "normal",
-      "power": 50,
-      "category": "fisico",
-      "level": 1,
-      "moveCard": true,
-      "image": "normal/anhanguera_dive_dinosaur_king.jpg",
-      "card": "cards/normal/anhanguera_dive_dinosaur_king.jpg"
-    },
-    {
-      "id": "tag_team",
-      "name": "Tag Team",
-      "element": "normal",
-      "power": 50,
-      "category": "fisico",
-      "level": 1,
-      "moveCard": true,
-      "image": "normal/tag_team_dinosaur_king.jpg",
-      "card": "cards/normal/tag_team_dinosaur_king.jpg"
-    },
-    {
-      "id": "venom_fang",
-      "name": "Venom Fang",
-      "element": "normal",
-      "power": 50,
-      "category": "fisico",
-      "level": 1,
-      "moveCard": true,
-      "image": "normal/venom_fang_dinosaur_king.jpg",
-      "card": "cards/normal/venom_fang_dinosaur_king.jpg"
     }
   ],
   "typeChart": {
-    "_comentario": "beats: cada elemento hace daño eficaz a los de su lista. alwaysEffective: siempre eficaz. El resto (incluido normal) es neutro.",
+    "_comentario": "beats: cada elemento hace daño eficaz (x1.5) a los de su lista. resisted: daño poco eficaz (x0.5) contra el elemento que le gana al ataque y contra su mismo elemento. Normal siempre es neutro.",
     "effective": 1.5,
     "neutral": 1,
     "beats": {
@@ -1417,11 +2358,12 @@
       ],
       "rayo": [
         "agua"
+      ],
+      "especial": [
+        "especial"
       ]
     },
-    "alwaysEffective": [
-      "especial"
-    ]
+    "resisted": 0.5
   },
   "stats": {
     "_comentario": "Estadísticas base [salud, ataque físico, defensa física, ataque especial, defensa especial] entre min y statCaps del elemento (máx. 10). Valor real = base x nivel.",

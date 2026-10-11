@@ -1,0 +1,91 @@
+{
+  "version": 1,
+  "cols": 3,
+  "rows": 3,
+  "tileSize": 32,
+  "tilesets": {
+    "Outside.png": "/assets/maps/Outside.png"
+  },
+  "cells": [
+    [
+      [
+        "Outside.png",
+        33,
+        1,
+        32
+      ],
+      [
+        "Outside.png",
+        33,
+        2,
+        32
+      ],
+      [
+        "Outside.png",
+        33,
+        3,
+        32
+      ]
+    ],
+    [
+      [
+        "Outside.png",
+        34,
+        1,
+        32
+      ],
+      [
+        "Outside.png",
+        34,
+        2,
+        32
+      ],
+      [
+        "Outside.png",
+        34,
+        3,
+        32
+      ]
+    ],
+    [
+      [
+        "Outside.png",
+        35,
+        1,
+        32
+      ],
+      [
+        "Outside.png",
+        35,
+        2,
+        32
+      ],
+      [
+        "Outside.png",
+        35,
+        3,
+        32
+      ]
+    ]
+  ],
+  "solid": [
+    [
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0
+    ]
+  ],
+  "name": "piso_4_con_pasto_verde_fondo",
+  "png": "objetos/piso_4_con_pasto_verde_fondo.png",
+  "tilesetKey": "objetos/piso_4_con_pasto_verde_fondo"
+}

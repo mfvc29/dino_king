@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "cols": 1,
+  "rows": 1,
+  "tileSize": 32,
+  "tilesets": {
+    "objetos_para_casa_3.png": "/custom_assets/objetos_para_casa_3.png"
+  },
+  "cells": [
+    [
+      [
+        "objetos_para_casa_3.png",
+        7,
+        4,
+        32
+      ]
+    ]
+  ],
+  "solid": [
+    [
+      0
+    ]
+  ],
+  "name": "piso_6",
+  "png": "objetos/piso_6.png",
+  "tilesetKey": "objetos/piso_6"
+}

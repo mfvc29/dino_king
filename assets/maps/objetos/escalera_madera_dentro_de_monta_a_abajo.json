@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "cols": 1,
+  "rows": 1,
+  "tileSize": 32,
+  "tilesets": {
+    "Caves.png": "/assets/maps/Caves.png"
+  },
+  "cells": [
+    [
+      [
+        "Caves.png",
+        19,
+        5,
+        32
+      ]
+    ]
+  ],
+  "solid": [
+    [
+      0
+    ]
+  ],
+  "name": "escalera_madera_dentro_de_monta_a_abajo",
+  "png": "objetos/escalera_madera_dentro_de_monta_a_abajo.png",
+  "tilesetKey": "objetos/escalera_madera_dentro_de_monta_a_abajo"
+}

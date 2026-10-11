@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "cols": 2,
+  "rows": 1,
+  "tileSize": 32,
+  "tilesets": {
+    "objetos_para_casa.png": "/custom_assets/objetos_para_casa.png"
+  },
+  "cells": [
+    [
+      [
+        "objetos_para_casa.png",
+        40,
+        3,
+        32
+      ],
+      [
+        "objetos_para_casa.png",
+        40,
+        4,
+        32
+      ]
+    ]
+  ],
+  "solid": [
+    [
+      0,
+      0
+    ]
+  ],
+  "name": "cuadro_2",
+  "png": "objetos/cuadro_2.png",
+  "tilesetKey": "objetos/cuadro_2"
+}

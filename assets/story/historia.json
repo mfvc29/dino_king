@@ -1,5 +1,5 @@
 {
-    "_comentario": "Historia de Dino Rey. Textos: {player} = tu nombre, {rival} = tu hermano (juega con su propia partida), {stones} = piedras conseguidas, {left} = piedras que faltan. Cada salto de línea (\\n) es una página de diálogo. Condiciones: flag, notFlag, defeated, notDefeated, stones (mínimo), stonesBelow, hasDino, noDino. Acciones: setFlag, starter, challenge, giveItem, giveMove, giveXp, notify, ending.",
+    "_comentario": "Historia de Dino Rey. Textos: {player} = tu nombre, {rival} = tu hermano (juega con su propia partida), {stones} = piedras conseguidas, {left} = piedras que faltan. Cada salto de línea (\\n) es una página de diálogo. Condiciones: flag, notFlag, defeated, notDefeated, stones (mínimo), stonesBelow, hasDino, noDino. Acciones: setFlag, starter, challenge, giveItem, giveXp, notify, ending.",
     "title": "Dino Rey",
     "newGame": {
         "map": "casa_martin",
@@ -13,7 +13,20 @@
         "world_map": "Pueblo Meteoro",
         "ruta_1": "Ruta 1",
         "cueva_meteoro": "Cueva Meteoro",
-        "torneo": "Estadio del Gran Torneo Mesozoico"
+        "torneo": "Estadio del Gran Torneo Mesozoico",
+        "casa_pintor": "Casa del Pintor",
+        "casa_lectora": "Casa de la Lectora",
+        "casa_deportista": "Casa del Deportista",
+        "casa_abuelos": "Casa de los Abuelos",
+        "laboratorio": "Laboratorio del Dr. Cretácico",
+        "cueva_meteoro_2": "Cueva Meteoro · Piso 2 · Galerías",
+        "cueva_meteoro_3": "Cueva Meteoro · Piso 3 · Profundidades",
+        "cueva_meteoro_4": "Cueva Meteoro · Piso 4 · Gruta Nevada",
+        "cueva_meteoro_5": "Cueva Meteoro · Piso 5 · Gruta de Hielo",
+        "cueva_meteoro_6": "Cueva Meteoro · Piso 6 · Corazón del Meteorito",
+        "gimnasio_ciudad": "Gimnasio de la Ciudad",
+        "gimnasio_viento": "Gimnasio del Viento",
+        "gimnasio_fuego": "Gimnasio del Fuego"
     },
     "stoneNames": {
         "fuego": "Piedra de Fuego",
@@ -95,8 +108,8 @@
         {
             "id": "profesora_ambar",
             "map": "world_map",
-            "x": 92,
-            "y": 66,
+            "x": 81,
+            "y": 51,
             "name": "Dr. Cretácico",
             "sprite": "Jack.png",
             "direction": "left",
@@ -138,8 +151,8 @@
         {
             "id": "vendedora_ambar",
             "map": "world_map",
-            "x": 95,
-            "y": 67,
+            "x": 79,
+            "y": 64,
             "name": "Vendedora Ámbar",
             "sprite": "Irena.png",
             "direction": "left",
@@ -166,11 +179,11 @@
         {
             "id": "grunt_zarpa",
             "map": "world_map",
-            "x": 19,
-            "y": 32,
+            "x": 30,
+            "y": 53,
             "name": "Recluta Darius",
             "sprite": "Darius.png",
-            "direction": "down",
+            "direction": "right",
             "type": "trainer",
             "sightRange": 3,
             "showIf": {
@@ -199,14 +212,10 @@
                     ]
                 }
             ],
-            "moveCard": "venom_fang",
             "rewardExp": 120,
             "onDefeat": [
                 {
-                    "giveMove": "venom_fang"
-                },
-                {
-                    "notify": "🃏 Darius dejó caer Venom Fang. 📜 Síguelo a la Cueva Meteoro, al norte por la Ruta 1."
+                    "notify": "📜 Darius huyó. Síguelo a la Cueva Meteoro, al norte por la Ruta 1."
                 }
             ],
             "ai": "dificil"
@@ -214,7 +223,7 @@
         {
             "id": "admin_helmep",
             "map": "cueva_meteoro",
-            "x": 14,
+            "x": 18,
             "y": 5,
             "name": "Comandante Helmep",
             "sprite": "Helmep.png",
@@ -256,7 +265,6 @@
                     ]
                 }
             ],
-            "moveCard": "tag_team",
             "rewardExp": 200,
             "onDefeat": [
                 {
@@ -271,8 +279,8 @@
         {
             "id": "boss_draco",
             "map": "world_map",
-            "x": 80,
-            "y": 36,
+            "x": 98,
+            "y": 51,
             "name": "Rolando, el Rey Usurpador",
             "sprite": "Rolando.png",
             "direction": "down",
@@ -314,7 +322,6 @@
                     ]
                 }
             ],
-            "moveCard": "ocean_panic",
             "rewardExp": 500,
             "onDefeat": [
                 {
@@ -342,8 +349,8 @@
         {
             "id": "carta_inicial",
             "map": "world_map",
-            "x": 90,
-            "y": 66,
+            "x": 52,
+            "y": 65,
             "kind": "starterCard",
             "showIf": {
                 "notFlag": "starter"

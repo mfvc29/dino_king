@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "cols": 1,
+  "rows": 1,
+  "tileSize": 32,
+  "tilesets": {
+    "charcos.png": "/assets/maps/charcos.png"
+  },
+  "cells": [
+    [
+      [
+        "charcos.png",
+        16,
+        3,
+        32
+      ]
+    ]
+  ],
+  "solid": [
+    [
+      0
+    ]
+  ],
+  "name": "izquierda_charco_agua",
+  "png": "objetos/izquierda_charco_agua.png",
+  "tilesetKey": "objetos/izquierda_charco_agua"
+}

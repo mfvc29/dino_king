@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "cols": 3,
+  "rows": 1,
+  "tileSize": 32,
+  "tilesets": {
+    "Outside.png": "/assets/maps/Outside.png"
+  },
+  "cells": [
+    [
+      [
+        "Outside.png",
+        22,
+        1,
+        32
+      ],
+      [
+        "Outside.png",
+        22,
+        2,
+        32
+      ],
+      [
+        "Outside.png",
+        22,
+        3,
+        32
+      ]
+    ]
+  ],
+  "solid": [
+    [
+      0,
+      0,
+      0
+    ]
+  ],
+  "name": "piso_5_con_pasto_verde_fondo_hor",
+  "png": "objetos/piso_5_con_pasto_verde_fondo_hor.png",
+  "tilesetKey": "objetos/piso_5_con_pasto_verde_fondo_hor"
+}

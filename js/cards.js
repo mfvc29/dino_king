@@ -1,12 +1,12 @@
 /**
- * CardSystem - Dinos, almanaque de cartas, experiencia, objetos y cartas de movimiento.
+ * CardSystem - Dinos, almanaque de cartas, experiencia y objetos.
  *
  * - Cada 20 a 100 pasos (losas) por la hierba alta aparece un dino salvaje del mismo
  *   nivel que el dino más fuerte de tu equipo. Solo puedes combatir o huir: si lo
  *   derrotas lo capturas (con un nivel menos).
  * - Experiencia: ganar a un dino salvaje da +15% de nivel a tu equipo; ganar a un
  *   entrenador, +20% por cada dino rival derrotado.
- * - Equipo de 3 dinos + 1 carta de movimiento. Los demás dinos se guardan en el almanaque.
+ * - Equipo de 3 dinos. Los demás dinos se guardan en el almanaque.
  * - En la hierba alta aparecen objetos (+5 a ataques de su elemento, 1 equipado a la vez)
  *   y cartas de movimiento.
  * - Tabla de tipos (typeChart en dinos.json): daño eficaz por ventaja de elemento.
@@ -37,6 +37,17 @@ const STARTER_DINOS = ['carnotaurus', 'triceratops', 'parasaurolophus']; // si u
 const CREDITS_PER_TRAINER_LEVEL = 40;  // Dino-Créditos por cada nivel medio del equipo rival vencido
 const ITEM_PRICE = 300;                // precio en la tienda de Ámbar
 const MOVE_CARD_PRICE = 600;
+const RESERVE_XP_SHARE = 0.5;          // los dinos del almanaque ganan la mitad de la experiencia del equipo
+
+// Cansancio (0-100): cada combate cansa al equipo y los dinos de la reserva descansan
+const FATIGUE_PER_BATTLE = { wild: 8, trainer: 15 };
+const FATIGUE_REST_PER_BATTLE = 6;
+const FATIGUE_LEVELS = [
+    { min: 100, label: 'Exhausto', icon: '🥵', factor: 0.6, color: '#ef4444' },
+    { min: 70, label: 'Agotado', icon: '😫', factor: 0.75, color: '#f97316' },
+    { min: 40, label: 'Cansado', icon: '😴', factor: 0.9, color: '#facc15' },
+    { min: 0, label: 'Descansado', icon: '💪', factor: 1, color: '#4ade80' }
+];
 
 // Objetos equipables: uno por elemento
 const EQUIP_ITEMS = {
@@ -46,8 +57,17 @@ const EQUIP_ITEMS = {
     fosil_ambar:        { name: 'Fósil de Ámbar',     icon: '⛰️', element: 'tierra' },
     hoja_milenaria:     { name: 'Hoja Milenaria',     icon: '🌿', element: 'planta' },
     pluma_ciclon:       { name: 'Pluma Ciclón',       icon: '🌪️', element: 'viento' },
-    garra_ancestral:    { name: 'Garra Ancestral',    icon: '✨', element: 'especial' }
+    garra_ancestral:    { name: 'Garra Ancestral',    icon: '✨', element: 'especial' },
+    // Amuletos: sólo se fabrican en el Taller con gemas de la cueva (js/mine.js) y dan más poder
+    amuleto_fuego:    { name: 'Amuleto de Rubí',       icon: '💎', element: 'fuego',    boost: 12, craftOnly: true },
+    amuleto_agua:     { name: 'Amuleto de Aguamarina', icon: '💎', element: 'agua',     boost: 12, craftOnly: true },
+    amuleto_rayo:     { name: 'Amuleto de Topacio',    icon: '💎', element: 'rayo',     boost: 12, craftOnly: true },
+    amuleto_tierra:   { name: 'Amuleto de Ámbar',      icon: '💎', element: 'tierra',   boost: 12, craftOnly: true },
+    amuleto_planta:   { name: 'Amuleto de Esmeralda',  icon: '💎', element: 'planta',   boost: 12, craftOnly: true },
+    amuleto_viento:   { name: 'Amuleto de Ópalo',      icon: '💎', element: 'viento',   boost: 12, craftOnly: true },
+    amuleto_especial: { name: 'Amuleto de Amatista',   icon: '💎', element: 'especial', boost: 12, craftOnly: true }
 };
+const itemBoost = (item) => (item && item.boost) || ELEMENT_ITEM_BOOST;
 
 // Tabla por defecto si dinos.json no trae typeChart
 const DEFAULT_TYPE_CHART = {
@@ -115,7 +135,7 @@ class CardSystem {
     deserialize(data = {}) {
         this.resetState();
         this.collection = (Array.isArray(data.collection) ? data.collection : [])
-            .map(c => ({ ...c, xp: Number(c.xp) || 0 }));
+            .map(c => ({ ...c, xp: Number(c.xp) || 0, fatigue: Number(c.fatigue) || 0 }));
         this.bag = data.bag || {};
         this.equippedItem = EQUIP_ITEMS[data.equippedItem] ? data.equippedItem : null;
         this.moveCards = data.moveCards || {};
@@ -141,7 +161,7 @@ class CardSystem {
     }
 
     getMoveCardList() {
-        return this.catalog.attacks.filter(a => a.moveCard);
+        return [];   // las cartas de movimiento ya no existen (sus cartas ahora son dinos)
     }
 
     /** Ataques que un dino puede aprender: los de su elemento y los normales (sin cartas de movimiento). */
@@ -197,7 +217,7 @@ class CardSystem {
     /** Bono del objeto equipado para un elemento de ataque. */
     getElementBoost(element) {
         const item = EQUIP_ITEMS[this.equippedItem];
-        return item && item.element === element ? ELEMENT_ITEM_BOOST : 0;
+        return item && item.element === element ? itemBoost(item) : 0;
     }
 
     /** Poder real de un ataque para el jugador (incluye el objeto equipado). */
@@ -213,7 +233,7 @@ class CardSystem {
 
     /** Carta de movimiento elegida para combatir (si todavía la tienes). */
     getPlayerMoveCard() {
-        return this.selectedMove && this.moveCards[this.selectedMove] > 0 ? this.selectedMove : null;
+        return null;
     }
 
     // ------------------------------------------------------------
@@ -231,7 +251,14 @@ class CardSystem {
         const chart = this.typeChart;
         if ((chart.alwaysEffective || []).includes(attackElement)) return chart.effective;
         const beats = (chart.beats || {})[attackElement] || [];
-        return beats.includes(defenderElement) ? chart.effective : chart.neutral;
+        if (beats.includes(defenderElement)) return chart.effective;
+        // Poco eficaz: el defensor es del elemento que le gana al ataque, o del mismo elemento
+        const resisted = chart.resisted;
+        if (resisted && attackElement !== 'normal' &&
+            (((chart.beats || {})[defenderElement] || []).includes(attackElement) || attackElement === defenderElement)) {
+            return resisted;
+        }
+        return chart.neutral;
     }
 
     rollEncounterSteps() {
@@ -244,9 +271,10 @@ class CardSystem {
     /** Suma `percent` % de nivel a cada dino del equipo. Devuelve los que subieron de nivel. */
     gainTeamXp(percent) {
         const leveled = [];
-        for (const card of this.getTeam()) {
+        for (const card of this.collection) {
             if (card.level >= MAX_CARD_LEVEL) continue;
-            card.xp = (card.xp || 0) + percent;
+            // La reserva también aprende mirando: gana la mitad
+            card.xp = (card.xp || 0) + (card.inTeam ? percent : Math.round(percent * RESERVE_XP_SHARE));
             let up = false;
             while (card.xp >= 100 && card.level < MAX_CARD_LEVEL) {
                 card.xp -= 100;
@@ -264,9 +292,51 @@ class CardSystem {
         const names = leveled.map(c => `${this.getDino(c.id)?.name || c.id} Nv. ${c.level}`);
         const canLearn = leveled.some(c => this.getLearnableAttacks(this.getDino(c.id))
             .some(a => a.level === c.level));
-        return `📈 Tu equipo gana +${percent}% de nivel.`
+        return `📈 Tu equipo gana +${percent}% de nivel (la reserva +${Math.round(percent * RESERVE_XP_SHARE)}%).`
             + (names.length ? ` ⬆️ ¡Subieron: ${names.join(', ')}!` : '')
             + (canLearn ? ' 📚 Hay ataques nuevos: visita al Maestro de ataques.' : '');
+    }
+
+    // ------------------------------------------------------------
+    // Cansancio
+    // ------------------------------------------------------------
+    fatigueLevel(card) {
+        const f = Number(card && card.fatigue) || 0;
+        return FATIGUE_LEVELS.find(l => f >= l.min) || FATIGUE_LEVELS[FATIGUE_LEVELS.length - 1];
+    }
+
+    /** Tras cada combate: el equipo se cansa y la reserva descansa. */
+    onBattleFatigue(kind) {
+        const add = FATIGUE_PER_BATTLE[kind] || 0;
+        if (!add) return;
+        const tired = [];
+        for (const c of this.collection) {
+            const before = this.fatigueLevel(c).label;
+            c.fatigue = Math.max(0, Math.min(100, (Number(c.fatigue) || 0) + (c.inTeam ? add : -FATIGUE_REST_PER_BATTLE)));
+            if (c.inTeam && this.fatigueLevel(c).label !== before && c.fatigue >= 40) tired.push(c);
+        }
+        if (tired.length) {
+            const names = tired.map(c => `${this.fatigueLevel(c).icon} ${this.getDino(c.id)?.name || c.id}`).join(', ');
+            setTimeout(() => this.game.notifyStatus(`${names}: ¡se está cansando! Cambia de dinos o usa un objeto que quite el cansancio.`), 2600);
+        }
+        this.game.hudTeamKey = null;
+        this.save();
+    }
+
+    /** Quita cansancio: a todo el equipo (team) o a todos tus dinos (all). amount = 100 lo deja en 0. */
+    restDinos(amount, scope = 'team') {
+        const list = scope === 'all' ? this.collection : this.getTeam();
+        list.forEach(c => { c.fatigue = Math.max(0, (Number(c.fatigue) || 0) - amount); });
+        this.game.hudTeamKey = null;
+        this.save();
+        return list.length;
+    }
+
+    fatigueHtml(card) {
+        const f = Math.round(Number(card.fatigue) || 0);
+        const lv = this.fatigueLevel(card);
+        return `<div class="dino-xp" title="Cansancio: ${lv.label}${lv.factor < 1 ? ` (−${Math.round((1 - lv.factor) * 100)}% de fuerza)` : ''}" style="margin-top:2px;">
+                    <div class="dino-xp-fill" style="width:${f}%;background:${lv.color};"></div><span>${lv.icon} ${f}%</span></div>`;
     }
 
     // ------------------------------------------------------------
@@ -303,7 +373,8 @@ class CardSystem {
         const tiles = [];
         for (let r = 0; r < tm.rows; r++) {
             for (let c = 0; c < tm.cols; c++) {
-                if (tm.tallGrassGrid[r] && tm.tallGrassGrid[r][c] && !(tm.solidGrid[r] && tm.solidGrid[r][c])) {
+                if (tm.tallGrassGrid[r] && tm.tallGrassGrid[r][c] && !(tm.solidGrid[r] && tm.solidGrid[r][c]) &&
+                    !(tm.npcBlockers && tm.npcBlockers.has(`${c},${r}`))) {
                     tiles.push({ col: c, row: r });
                 }
             }
@@ -314,11 +385,17 @@ class CardSystem {
 
         // ~1 objeto por cada 40 losas de hierba, entre 2 y 12
         const count = Math.max(2, Math.min(12, Math.round(tiles.length / 40)));
-        const itemIds = Object.keys(EQUIP_ITEMS);
-        const moveIds = this.getMoveCardList().map(a => a.id);
+        const itemIds = Object.keys(EQUIP_ITEMS).filter(id => !EQUIP_ITEMS[id].craftOnly);
+        const rules = this.game.mine.groundItemRules();
+        const allMoves = this.getMoveCardList();
+        const strong = allMoves.filter(a => a.power >= 70);
+        const moveIds = (rules.strongOnly && strong.length ? strong : allMoves).map(a => a.id);
         for (let i = 0; i < count && tiles.length > 0; i++) {
             const { col, row } = tiles.splice(Math.floor(Math.random() * tiles.length), 1)[0];
-            if (moveIds.length && Math.random() < 0.35) {
+            if (Math.random() < 0.22) {
+                // Objeto para quitar el cansancio (en la cueva salen hongos)
+                this.groundItems.push({ col, row, kind: 'consumable', itemId: this.game.mine.cfg ? 'hongo_luminoso' : 'baya_vigor' });
+            } else if (moveIds.length && Math.random() < rules.moveChance) {   // (sin cartas de movimiento, nunca)
                 this.groundItems.push({ col, row, kind: 'move', itemId: moveIds[Math.floor(Math.random() * moveIds.length)] });
             } else {
                 this.groundItems.push({ col, row, kind: 'item', itemId: itemIds[Math.floor(Math.random() * itemIds.length)] });
@@ -331,7 +408,10 @@ class CardSystem {
         if (idx < 0) return;
         const it = this.groundItems.splice(idx, 1)[0];
 
-        if (it.kind === 'move') {
+        if (it.kind === 'consumable') {
+            this.game.mine.addItem(it.itemId, 1);
+            this.game.notifyStatus(`✨ ¡Encontraste ${this.game.mine.itemName(it.itemId)}! Úsalo en el Taller (ENTER) para quitar el cansancio.`);
+        } else if (it.kind === 'move') {
             const move = this.getAttack(it.itemId);
             this.moveCards[it.itemId] = (this.moveCards[it.itemId] || 0) + 1;
             if (!this.getPlayerMoveCard()) this.selectedMove = it.itemId;
@@ -359,7 +439,7 @@ class CardSystem {
             ctx.beginPath();
             ctx.arc(cx, cy, 11, 0, Math.PI * 2);
             ctx.fill();
-            ctx.fillText(it.kind === 'move' ? '🃏' : EQUIP_ITEMS[it.itemId].icon, cx, cy);
+            ctx.fillText(it.kind === 'move' ? '🃏' : (it.kind === 'consumable' ? this.game.mine.itemIcon(it.itemId) : EQUIP_ITEMS[it.itemId].icon), cx, cy);
         }
         ctx.restore();
     }
@@ -381,12 +461,19 @@ class CardSystem {
             return false;
         }
 
-        const dino = dinos[Math.floor(Math.random() * dinos.length)];
-        const level = Math.max(...team.map(c => c.level));
+        // Rareza según el piso de la cueva (o el Cebo de Ámbar)
+        const { dino, levelBonus, tier } = this.game.mine.pickWild(dinos);
+        // Nivel = promedio del equipo (no el más alto), así entrenar dinos nuevos no se vuelve imposible
+        const avg = Math.round(team.reduce((s, c) => s + c.level, 0) / team.length);
+        const level = Math.min(MAX_CARD_LEVEL, avg + levelBonus);
         const wild = { id: dino.id, level, attacks: this.getDefaultAttacks(dino, level) };
 
         this.wildActive = true;
-        this.game.battle.start({ kind: 'wild', card: wild, title: `${dino.name} salvaje` });
+        const rare = tier.id !== 'comun' && (this.game.mine.cfg || tier.id === 'legendario');
+        if (rare) this.game.notifyStatus(`${tier.label}: ¡${dino.name} salvaje apareció!`);
+        // 📖 = ya lo tienes en el almanaque (como la Pokéball junto al nombre en Pokémon)
+        const registered = this.isRegistered(dino.id);
+        this.game.battle.start({ kind: 'wild', card: wild, title: `${registered ? '📖 ' : ''}${rare ? tier.label + ' · ' : ''}${dino.name} salvaje` });
         return true;
     }
 
@@ -408,6 +495,24 @@ class CardSystem {
         const leveled = this.gainTeamXp(XP_WILD_WIN);
         this.game.localPlayer.gainExp(10 + wild.level * 3, `¡Derrotaste a ${name} salvaje!`);
         this.credits += 10 + wild.level * 3;
+
+        // Ya registrado: no se captura otra vez; se va y deja un regalo
+        if (this.isRegistered(wild.id)) {
+            const bonus = 20 + wild.level * 4;
+            this.credits += bonus;
+            const gift = Math.random() < 0.3;
+            if (gift) this.game.mine.addItem('baya_vigor', 1);
+            this.save();
+            this.showModal({
+                title: '📖 YA REGISTRADO',
+                cards: [{ id: wild.id, level: wild.level, attacks: wild.attacks }],
+                message: `Ya tienes a ${name} en tu almanaque, así que lo dejaste volver a la naturaleza.<br>
+                          Como agradecimiento: 💰 +${bonus} Dino-Créditos${gift ? ' y 🫐 una Baya Vigor' : ''}.
+                          <br><small>${this.describeXpGain(XP_WILD_WIN, leveled)}</small>`,
+                buttons: [{ label: '▶ Continuar', cls: 'win', onClick: () => this.closeModal() }]
+            });
+            return;
+        }
 
         const captured = {
             uid: newUid(),
@@ -611,6 +716,14 @@ class CardSystem {
     // ------------------------------------------------------------
     // Render de cartas
     // ------------------------------------------------------------
+    /** Arte grande del dino (PNG sin fondo de assets/dinos/grande, copiado a arte/). side: 'left' | 'right'. */
+    artUrl(dinoId, side = 'right') {
+        const dino = this.getDino(dinoId);
+        const art = dino && dino.art;
+        const path = art && (art[side] || art.left || art.right);
+        return path ? `assets/dinos/${encodeURI(path)}` : null;
+    }
+
     renderCardHtml(card, { showBoost = false, vsElements = [] } = {}) {
         const dino = this.getDino(card.id);
         const { elements } = this.catalog;
@@ -631,9 +744,12 @@ class CardSystem {
         const xpHtml = card.xp !== undefined && card.level < MAX_CARD_LEVEL
             ? `<div class="dino-xp" title="Progreso al siguiente nivel"><div class="dino-xp-fill" style="width:${card.xp}%"></div><span>${card.xp}%</span></div>`
             : '';
+        // La carta y, encima, el dino (como al invocar un monstruo en Yu-Gi-Oh)
+        const art = this.artUrl(card.id, 'right');
+        const imgHtml = `<div class="battle-dino-img ${dino && dino.card ? '' : 'full-card'}" style="${cardStyle}"></div>`;
         return `
             <div class="battle-dino-card">
-                <div class="battle-dino-img ${dino && dino.card ? '' : 'full-card'}" style="${cardStyle}"></div>
+                ${art ? `<div class="dino-card-stage">${imgHtml}<img class="dino-card-art" src="${art}" alt="" loading="lazy"></div>` : imgHtml}
                 <strong>${escapeHtml(dino ? dino.name : card.id)}</strong>
                 <small style="color:${el ? el.color : '#94a3b8'}">${el ? el.icon + ' ' + el.name : ''} · Nv. ${card.level}</small>
                 ${xpHtml}
@@ -658,6 +774,21 @@ class CardSystem {
     // ------------------------------------------------------------
     // Equipo y objetos
     // ------------------------------------------------------------
+    isRegistered(dinoId) {
+        return this.collection.some(c => c.id === dinoId);
+    }
+
+    /** Liberar un dino del almanaque (no del equipo). Da Dino-Créditos según su nivel. */
+    releaseDino(uid) {
+        const card = this.collection.find(c => c.uid === uid);
+        if (!card || card.inTeam || this.collection.length <= 1) return 0;
+        this.collection = this.collection.filter(c => c !== card);
+        const reward = 15 + card.level * 5;
+        this.credits += reward;
+        this.save();
+        return reward;
+    }
+
     toggleTeam(uid) {
         const card = this.collection.find(c => c.uid === uid);
         if (!card) return false;
@@ -696,7 +827,7 @@ class CardSystem {
                     <span class="menu-item-icon">${item.icon}</span>
                     <div>
                         <strong>${item.name}</strong> <span style="color:#8892b0;">x${this.bag[id]}</span><br>
-                        <span style="color:${el ? el.color : '#94a3b8'}; font-size:0.78rem;">+${ELEMENT_ITEM_BOOST} a ataques de ${el ? el.name : item.element}</span><br>
+                        <span style="color:${el ? el.color : '#94a3b8'}; font-size:0.78rem;">+${itemBoost(item)} a ataques de ${el ? el.name : item.element}</span><br>
                         <span style="color:${isEq ? '#ffbe0b' : '#64748b'}; font-size:0.72rem; font-weight:bold;">${isEq ? '✔ EQUIPADO (clic para quitar)' : 'Clic para equipar'}</span>
                     </div>
                 </button>`;
@@ -741,44 +872,38 @@ class CardSystem {
         }).join('');
         return `
             <details class="type-chart">
-                <summary>📊 Tabla de tipos (eficaz = x${chart.effective} de daño)</summary>
+                <summary>📊 Tabla de tipos (eficaz = x${chart.effective} de daño${chart.resisted ? ` · poco eficaz = x${chart.resisted} contra el elemento que le gana y contra el mismo elemento` : ''})</summary>
                 <div class="type-chart-grid">${rows}</div>
             </details>`;
     }
 
-    /** Almanaque: todos tus dinos, tu equipo de 3 y tu carta de movimiento. */
+    /** Almanaque: todos tus dinos y tu equipo de 3. */
     renderCardsPanel(panel) {
         const team = this.getTeam();
         const stored = this.collection.filter(c => !c.inTeam);
         const cardHtml = (card) => `
             <div class="collection-card ${card.inTeam ? 'in-team' : ''}">
                 ${this.renderCardHtml(card, { showBoost: true })}
+                ${this.fatigueHtml(card)}
                 <button class="team-toggle-btn" data-uid="${card.uid}">${card.inTeam ? '★ En equipo (quitar)' : '☆ Llevar en el equipo'}</button>
+                ${card.inTeam ? '' : `<button class="team-toggle-btn release-btn" data-release="${card.uid}" style="background:#3b1d1d;color:#fca5a5;">🕊️ Liberar</button>`}
             </div>`;
 
-        const selectedMove = this.getPlayerMoveCard();
-        const ownedMoves = this.getMoveCardList().filter(m => this.moveCards[m.id] > 0);
-        const movesHtml = ownedMoves.map(m => `
-            <button class="move-card-btn" data-move="${m.id}">
-                ${this.renderMoveCardHtml(m, { selected: m.id === selectedMove, count: this.moveCards[m.id] })}
-                <span class="team-toggle-btn">${m.id === selectedMove ? '★ Elegida (quitar)' : '☆ Llevar esta carta'}</span>
-            </button>`).join('');
 
         panel.innerHTML = `
             <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px; gap:10px;">
                 <div>
                     <h3 style="color:#ffbe0b; margin-bottom:4px;">📖 Almanaque de Cartas (${this.collection.length})</h3>
-                    <p style="color:#8892b0; font-size:0.8rem;">Llevas 3 dinos + 1 carta de movimiento. Ganar a un salvaje da +${XP_WILD_WIN}% de nivel; a un entrenador, +${XP_PER_TRAINER_DINO}% por cada dino derrotado.</p>
+                    <p style="color:#8892b0; font-size:0.8rem;">Llevas 3 dinos en tu equipo. Ganar a un salvaje da +${XP_WILD_WIN}% de nivel; a un entrenador, +${XP_PER_TRAINER_DINO}% por cada dino derrotado (los guardados ganan la mitad).
+                    Cada combate <strong>cansa</strong> a tu equipo (😴 −10%, 😫 −25%, 🥵 −40% de fuerza) y los guardados descansan: ¡ve rotando! 📖 = especie ya registrada (no se captura dos veces).</p>
                 </div>
                 <span style="background:#1f283d; border:1px solid #3c486e; padding:4px 10px; border-radius:6px; font-size:0.75rem; color:#00e5ff; white-space:nowrap;">
-                    Equipo: ${team.length}/${MAX_TEAM_SIZE} · 🃏 ${selectedMove ? escapeHtml(this.getAttack(selectedMove).name) : 'sin carta'}
+                    Equipo: ${team.length}/${MAX_TEAM_SIZE} · 📖 ${this.collection.length} dinos
                 </span>
             </div>
             ${this.renderTypeChartHtml()}
             <h4 class="almanac-title">⚔️ Tu equipo</h4>
             <div class="collection-grid">${team.map(cardHtml).join('') || '<p style="color:#64748b;">Tu equipo está vacío. Elige dinos del almanaque.</p>'}</div>
-            <h4 class="almanac-title">🃏 Carta de movimiento (1)</h4>
-            <div class="collection-grid">${movesHtml || '<p style="color:#64748b;">Aún no tienes cartas de movimiento. Búscalas en la hierba alta 🌿.</p>'}</div>
             <h4 class="almanac-title">📖 Guardados en el almanaque (${stored.length})</h4>
             <div class="collection-grid">${stored.map(cardHtml).join('') || '<p style="color:#64748b;">No hay dinos guardados.</p>'}</div>
         `;
@@ -797,13 +922,23 @@ class CardSystem {
                 this.renderCardsPanel(panel);
             });
         });
+        panel.querySelectorAll('[data-release]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const card = this.collection.find(c => c.uid === btn.dataset.release);
+                const name = card ? (this.getDino(card.id)?.name || card.id) : '';
+                if (!card || !window.confirm(`¿Liberar a ${name} (Nv. ${card.level})? Volverá a la naturaleza y no podrás recuperarlo.`)) return;
+                const reward = this.releaseDino(card.uid);
+                this.game.notifyStatus(reward ? `🕊️ ${name} volvió a la naturaleza. 💰 +${reward} Dino-Créditos.` : '⚠️ No puedes liberar a tu último dino.');
+                this.renderCardsPanel(panel);
+            });
+        });
     }
 
     // ------------------------------------------------------------
     // Tienda de la Vendedora Ámbar (Dino-Créditos)
     // ------------------------------------------------------------
     get shopStock() {
-        const items = Object.entries(EQUIP_ITEMS).map(([id, it]) => ({ kind: 'item', id, icon: it.icon, name: it.name, price: ITEM_PRICE,
+        const items = Object.entries(EQUIP_ITEMS).filter(([, it]) => !it.craftOnly).map(([id, it]) => ({ kind: 'item', id, icon: it.icon, name: it.name, price: ITEM_PRICE,
             desc: `+${ELEMENT_ITEM_BOOST} a ataques de ${(this.catalog.elements[it.element] || {}).name || it.element}` }));
         const moves = this.getMoveCardList().map(m => ({ kind: 'move', id: m.id, icon: '🃏', name: m.name, price: MOVE_CARD_PRICE,
             desc: `Carta de movimiento · Poder ${m.power}` }));

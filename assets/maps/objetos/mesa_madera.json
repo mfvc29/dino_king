@@ -1,0 +1,52 @@
+{
+  "version": 1,
+  "cols": 2,
+  "rows": 2,
+  "tileSize": 32,
+  "tilesets": {
+    "objetos_para_casa_3.png": "/custom_assets/objetos_para_casa_3.png"
+  },
+  "cells": [
+    [
+      [
+        "objetos_para_casa_3.png",
+        23,
+        3,
+        32
+      ],
+      [
+        "objetos_para_casa_3.png",
+        23,
+        4,
+        32
+      ]
+    ],
+    [
+      [
+        "objetos_para_casa_3.png",
+        24,
+        3,
+        32
+      ],
+      [
+        "objetos_para_casa_3.png",
+        24,
+        4,
+        32
+      ]
+    ]
+  ],
+  "solid": [
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      0
+    ]
+  ],
+  "name": "mesa_madera",
+  "png": "objetos/mesa_madera.png",
+  "tilesetKey": "objetos/mesa_madera"
+}

@@ -1,0 +1,91 @@
+{
+  "version": 1,
+  "cols": 3,
+  "rows": 3,
+  "tileSize": 32,
+  "tilesets": {
+    "charcos.png": "/assets/maps/charcos.png"
+  },
+  "cells": [
+    [
+      [
+        "charcos.png",
+        15,
+        3,
+        32
+      ],
+      [
+        "charcos.png",
+        15,
+        4,
+        32
+      ],
+      [
+        "charcos.png",
+        15,
+        5,
+        32
+      ]
+    ],
+    [
+      [
+        "charcos.png",
+        16,
+        3,
+        32
+      ],
+      [
+        "charcos.png",
+        16,
+        4,
+        32
+      ],
+      [
+        "charcos.png",
+        16,
+        5,
+        32
+      ]
+    ],
+    [
+      [
+        "charcos.png",
+        17,
+        3,
+        32
+      ],
+      [
+        "charcos.png",
+        17,
+        4,
+        32
+      ],
+      [
+        "charcos.png",
+        17,
+        5,
+        32
+      ]
+    ]
+  ],
+  "solid": [
+    [
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0
+    ]
+  ],
+  "name": "charco_peque_o_fondo_verde_1",
+  "png": "objetos/charco_peque_o_fondo_verde_1.png",
+  "tilesetKey": "objetos/charco_peque_o_fondo_verde_1"
+}

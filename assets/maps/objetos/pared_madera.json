@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "cols": 1,
+  "rows": 1,
+  "tileSize": 32,
+  "tilesets": {
+    "objetos_para_casa_2.png": "/custom_assets/objetos_para_casa_2.png"
+  },
+  "cells": [
+    [
+      [
+        "objetos_para_casa_2.png",
+        4,
+        3,
+        32
+      ]
+    ]
+  ],
+  "solid": [
+    [
+      0
+    ]
+  ],
+  "name": "pared_madera",
+  "png": "objetos/pared_madera.png",
+  "tilesetKey": "objetos/pared_madera"
+}

@@ -110,7 +110,7 @@ condiciones, personajes (posición, sprite, equipo, diálogos) y qué Guardián 
   Dino-Créditos), Maestro Eldon (enseña ataques), Recluta Darius,
   Comandante Helmep (Cueva Meteoro) y Rolando, el Rey Usurpador.
 - **Guardianes (Pueblo Meteoro):** Beatrice 🔥, Cross 💧, Nelly ⚡, Trevor ⛰️, Livia 🌿, Tiberius 🌪️ y Ulises ✨.
-  Cada uno lleva 3 dinos de su elemento (3 ataques cada uno) y una carta de movimiento.
+  Cada uno lleva 3 dinos de su elemento (3 ataques cada uno).
 - **Ruta 1:** Ruth, Alvin, Amelia, Luter y Maxwell. **Cueva Meteoro:** Ritza, Vivian y Rose.
 
 ### ✏️ Editar y publicar mapas
@@ -118,10 +118,51 @@ Usa **`./generador_de_mapa/generador_de_mapa.sh`** (guía en `generador_de_mapa/
 y al terminar valida, actualiza el minimapa, sube a GitHub y despliega en Firebase.
 
 ### Mapas y rutas (`tools/generar_rutas.py`)
-- Pueblo Meteoro (norte, x 59-61) → **Ruta 1** → **Cueva Meteoro** (puerta en la pared de roca).
+- Pueblo Meteoro (norte, x 64-66) → **Ruta 1** → **Cueva Meteoro** (puerta en la pared de roca).
 - Las rutas se dibujan como texto en `tools/generar_rutas.py` (una letra por losa) usando `Outside.png` y
-  `Caves.png`. Edita el dibujo o los personajes y ejecuta `python3 tools/generar_rutas.py --preview`
+  `Caves.png`, más objetos del Constructor de Objetos (`assets/maps/objetos/`) colocados con `place(...)`.
+  Edita el dibujo, los objetos o los personajes y ejecuta `python3 tools/generar_rutas.py --preview`
   (la vista previa queda en `tools/vistas/`).
+
+### 🏠 Interiores (`tools/generar_interiores.py`)
+- Casa de Martín (con Mamá), Casa del Pintor, Casa de la Lectora, Casa del Deportista, Casa de los Abuelos y
+  Laboratorio del Dr. Cretácico, amueblados con `objetos_para_casa*.png` y con vecinos que dan pistas.
+- **Gimnasios** (`GYMS`): de la Ciudad (Cross), del Viento (Tiberius) y del Fuego (Beatrice). Guía en la entrada,
+  hileras de obstáculos en zigzag, 2 entrenadores y el líder al fondo. Los líderes se mudaron del pueblo a su
+  gimnasio con su `eventKey` antiguo, así las partidas donde ya los venciste no cambian.
+- Los NPC pueden reutilizar un sprite con otro color de ropa: campo `tint` (grados de `hue-rotate`).
+- Cada interior es una lista de muebles `(objeto, x, y)` en `build()`; el script también crea las puertas en el
+  Pueblo Meteoro. Ejecuta `python3 tools/generar_interiores.py --preview` tras cambiarlo (sobrescribe esos mapas).
+
+### 🔄 Variar de dinos (`js/field.js`, cansancio en `js/cards.js`)
+- **Habilidades por elemento** (sólo si un dino de ese elemento va en tu equipo): 💧 nadar (estanques y lagos, tesoros
+  en islas), 🌿 cortar arbustos (atajos `b` en la Ruta 1), 🔥 derretir hielo y ⛰️ romper rocas duras en la cueva,
+  ⚡ iluminar los pisos oscuros, 🌪️ volar a lugares conocidos (Taller → Habilidades).
+- **Cansancio**: cada combate cansa al equipo (+8 salvaje, +15 entrenador) y la reserva descansa (−6).
+  😴 ≥40 −10%, 😫 ≥70 −25%, 🥵 100 −40% de fuerza. Se quita hablando con Mamá (casa) o con objetos de un solo uso:
+  🫐 Baya Vigor (hierba alta), 🍄 Hongo Luminoso (cueva), y combinados en el Taller: 🧪 Tónico Jurásico y ✨ Elixir de
+  Meteorito. También hay tesoros 🎁 fijos (islas de la Ruta 1, lago y estanque del pueblo).
+- **Tabla de tipos**: eficaz x1.5, **poco eficaz x0.5** (contra el elemento que le gana y contra el mismo elemento);
+  Especial sólo es eficaz contra Especial (`typeChart` en `dinos.json`).
+- **Experiencia compartida**: los dinos guardados ganan el 50%. Los salvajes salen al nivel **promedio** del equipo.
+- **Reglas de gimnasio** (`gymRules`): nivel máximo y un elemento prohibido; el guía las explica en la entrada.
+- **Almanaque**: 📖 marca a las especies ya registradas (no se capturan dos veces: dejan créditos y a veces una baya)
+  y se pueden **liberar** dinos guardados (dan créditos).
+
+### ⛏️ Cueva Meteoro: exploración y Taller (`js/mine.js`)
+- **6 pisos** (`cueva_meteoro`, `cueva_meteoro_2` … `_6`): tierra (1-3), nieve (4) y hielo (5-6). Los pisos 2-6 son
+  laberintos generados con semilla fija en `tools/generar_rutas.py` (`FLOORS`); desde el piso 2 no hay mapa (M).
+- **Rocas** al azar en cada visita (nunca tapan el paso). Rose, en la entrada, regala el **pico**: Espacio/E frente a
+  una roca la golpea. Sueltan minerales y gemas; las **vetas** (con gema encima) siempre dan una gema; a veces sale un
+  dino salvaje; **una roca esconde la escalera** al piso siguiente. Rocas duras / hielo: sólo con el Pico Reforzado.
+- **Gemas ocultas** en los callejones más lejanos: brillan sólo de cerca (más lejos con la Linterna, todas con el Radar).
+- **Oscuridad** creciente con la profundidad; la Linterna de Cristal ilumina más.
+- **Más profundo = mejor botín:** dinos salvajes más raros (común / ✨ raro / 🌟 legendario según sus estadísticas) y
+  de más nivel.
+- **Taller** (ENTER → ⛏️ Taller): Pico Reforzado, Linterna, Radar, Cuerda de Escape, Cebo de Ámbar (próximo dino
+  legendario), Amuletos de gema (+12 a un elemento, sólo se fabrican) y Elixir de Núcleo. Las recetas están en
+  `MINE_RECIPES` y los materiales en `MINE_MATERIALS`.
+- Rose ofrece **atajos** a los pisos 3 y 5 cuando ya llegaste a ellos.
 
 ### Gran Torneo Mesozoico (`js/tournament.js`, mapa `torneo`, al sur del pueblo)
 - Al entrar al estadio el Árbitro ofrece combatir: **solo** (tú + tu hermano con IA + 6 NPCs) o **con alguien más**

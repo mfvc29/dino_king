@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "cols": 1,
+  "rows": 2,
+  "tileSize": 32,
+  "tilesets": {
+    "Outside.png": "/assets/maps/Outside.png"
+  },
+  "cells": [
+    [
+      [
+        "Outside.png",
+        0,
+        7,
+        32
+      ]
+    ],
+    [
+      [
+        "Outside.png",
+        1,
+        7,
+        32
+      ]
+    ]
+  ],
+  "solid": [
+    [
+      0
+    ],
+    [
+      0
+    ]
+  ],
+  "name": "hierba_alta_2",
+  "png": "objetos/hierba_alta_2.png",
+  "tilesetKey": "objetos/hierba_alta_2"
+}

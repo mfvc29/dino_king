@@ -169,6 +169,8 @@ class SaveManager {
                 direction: p.direction
             },
             cards: g.cards.serialize(),
+            mine: g.mine.serialize(),
+            field: g.field.serialize(),
             defeatedTrainers: [...g.defeatedTrainers],
             story: g.story.serialize()
         };

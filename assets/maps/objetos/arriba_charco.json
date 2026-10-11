@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "cols": 1,
+  "rows": 1,
+  "tileSize": 32,
+  "tilesets": {
+    "charcos.png": "/assets/maps/charcos.png"
+  },
+  "cells": [
+    [
+      [
+        "charcos.png",
+        15,
+        4,
+        32
+      ]
+    ]
+  ],
+  "solid": [
+    [
+      0
+    ]
+  ],
+  "name": "arriba_charco",
+  "png": "objetos/arriba_charco.png",
+  "tilesetKey": "objetos/arriba_charco"
+}

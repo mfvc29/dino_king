@@ -15,12 +15,16 @@ Tilesets usados (losas de 32 px): assets/maps/Outside.png y assets/maps/Caves.pn
 Leyenda exterior (Outside.png):
     .  pasto            ,  hierba alta (aparecen dinos salvajes)   f  flores
     =  camino de tierra  W  agua (estanque)                        T  bosque (sólido)
+    b  arbusto: atajo que sólo se abre cortándolo con un dino de Planta
     P  pino suelto (ocupa 2x3, se marca en la esquina superior izquierda)
     r  roca             M  pared de roca / acantilado               D  entrada de cueva
     S  suelo de piedra   A  cancha de combate                       B  edificio del estadio (8x12, esquina sup. izq.)
 Leyenda cueva (Caves.png):
     .  suelo            ,  suelo con dinos salvajes   #  pared de roca
     o  roca suelta      L  escalera de salida
+
+Encima del dibujo se colocan objetos del Constructor de Objetos (assets/maps/objetos/) con
+place(mapa, 'casa_1', x, y): montañas, árboles, casas, estatuas, gemas... (ver build_all).
 """
 
 import json
@@ -66,13 +70,13 @@ def trainer(npc_id, x, y, name, sprite, direction, team, move_card, dialog, defe
                      'image': d['image'], 'card': d['card'], 'level': level, 'attacks': attacks})
     return {'id': npc_id, 'x': x, 'y': y, 'name': name, 'sprite': sprite, 'direction': direction,
             'type': 'trainer', 'sightRange': sight, 'dialog': dialog, 'defeatDialog': defeat,
-            'team': full, 'moveCard': move_card, 'rewardExp': exp, 'ai': ai}
+            'team': full, 'rewardExp': exp, 'ai': ai}   # move_card: ya no se usa (no hay cartas de movimiento)
 
 
 def person(npc_id, x, y, name, sprite, direction, dialog):
     return {'id': npc_id, 'x': x, 'y': y, 'name': name, 'sprite': sprite, 'direction': direction,
             'type': 'npc', 'sightRange': 0, 'dialog': dialog, 'defeatDialog': '', 'team': [],
-            'moveCard': None, 'rewardExp': 0}
+            'rewardExp': 0}
 
 
 _EMPTY_CACHE = {}
@@ -216,172 +220,458 @@ CAVE_DARK = [(28, 1), (28, 2)]
 CAVE_ROCKS = [(21, 5), (22, 6), (22, 7)]
 CAVE_LADDER = (19, 4)
 
+# Temas de Caves.png: paredes (fila de arriba, centro, base; columnas 0-2), suelo, suelo con dinos, rocas y escalera
+CAVE_THEMES = {
+    'brown': {'walls': (21, 22, 24), 'floor': CAVE_FLOOR, 'dark': CAVE_DARK, 'rocks': CAVE_ROCKS, 'ladder': CAVE_LADDER,
+              'deco': [[(21, 7)], [(22, 7)]], 'boulder': 15},
+    'snow': {'walls': (84, 85, 87), 'floor': [(100, 5), (100, 5), (100, 6), (101, 5)], 'dark': [(108, 5), (108, 6)],
+             'rocks': [(85, 5)], 'ladder': (82, 4), 'deco': [[(84, 5)]], 'boulder': 78},
+    'ice': {'walls': (92, 93, 95), 'floor': [(124, 5), (124, 5), (124, 6), (125, 5)], 'dark': [(108, 5), (108, 6)],
+            'rocks': [(122, 6), (122, 7)], 'ladder': (118, 4), 'deco': [[(120, 7)], [(121, 7)]], 'boulder': 114},
+}
 
-def build_cave(map_id, name, layout, seed=2):
+
+def build_cave(map_id, name, layout, seed=2, theme='brown'):
+    t = CAVE_THEMES[theme]
     rnd = random.Random(seed)
     grid = parse(layout)
     H, W = len(grid), len(grid[0])
     m = new_map(map_id, name, grid, {'Caves': 'Caves.png'})
     base, terrain, decor = (L['grid'] for L in m['layers'])
-    put = lambda layer, r, c, t: layer[r].__setitem__(c, ['Caves', t[0], t[1], TS])
+    put = lambda layer, r, c, tile: layer[r].__setitem__(c, ['Caves', tile[0], tile[1], TS])
     floor = lambda rr, cc: 0 <= rr < H and 0 <= cc < W and grid[rr][cc] != '#'
+    top, mid, bottom = t['walls']
 
     for r in range(H):
         for c in range(W):
             ch = grid[r][c]
             if ch == '#':
-                row = 24 if floor(r + 1, c) else (21 if floor(r - 1, c) else 22)
+                row = bottom if floor(r + 1, c) else (top if floor(r - 1, c) else mid)
                 col = 0 if floor(r, c - 1) else (2 if floor(r, c + 1) else 1)
                 put(base, r, c, (row, col))
                 m['solid'][r][c] = 1
                 continue
-            put(base, r, c, rnd.choice(CAVE_DARK if ch == ',' else CAVE_FLOOR))
+            put(base, r, c, rnd.choice(t['dark'] if ch == ',' else t['floor']))
             if ch == ',':
                 m['tallGrass'][r][c] = 1
             elif ch == 'o':
-                put(decor, r, c, rnd.choice(CAVE_ROCKS))
+                put(decor, r, c, rnd.choice(t['rocks']))
                 m['solid'][r][c] = 1
             elif ch == 'L':
-                put(decor, r, c, CAVE_LADDER)
+                put(decor, r, c, t['ladder'])
     return m, grid
+
+
+def cave_floor_layout(w, h, seed, rooms=4, loops=0.06, dark=0.5):
+    """Laberinto de túneles (2 de ancho, paredes de 2) con cámaras redondas y bordes irregulares,
+    generado con una semilla fija. Devuelve (texto, callejones sin salida del más lejano al más cercano)."""
+    from collections import deque
+    rnd = random.Random(seed)
+    cw, ch = (w - 2) // 4, (h - 4) // 4
+    g = [['#'] * w for _ in range(h)]
+    cell = lambda cx, cy: (2 + cx * 4, 2 + cy * 4)            # esquina sup. izq. del bloque 2x2
+
+    def carve(x0, y0, x1, y1, c='.'):
+        for y in range(max(2, y0), min(h - 3, y1) + 1):
+            for x in range(max(2, x0), min(w - 3, x1) + 1):
+                g[y][x] = c
+
+    start = (cw // 2, ch - 1)
+    links = {start: set()}
+    stack, seen = [start], {start}
+    while stack:
+        cx, cy = stack[-1]
+        nb = [(cx + dx, cy + dy) for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1))
+              if 0 <= cx + dx < cw and 0 <= cy + dy < ch and (cx + dx, cy + dy) not in seen]
+        if not nb:
+            stack.pop()
+            continue
+        nx, ny = rnd.choice(nb)
+        seen.add((nx, ny)); stack.append((nx, ny))
+        links.setdefault((cx, cy), set()).add((nx, ny)); links.setdefault((nx, ny), set()).add((cx, cy))
+    # algunos atajos para que no sea un solo camino
+    for cx in range(cw):
+        for cy in range(ch):
+            for dx, dy in ((1, 0), (0, 1)):
+                n = (cx + dx, cy + dy)
+                if n[0] < cw and n[1] < ch and n not in links[(cx, cy)] and rnd.random() < loops:
+                    links[(cx, cy)].add(n); links[n].add((cx, cy))
+    for (cx, cy), ns in links.items():
+        x, y = cell(cx, cy)
+        carve(x, y, x + 1, y + 1)
+        for nx, ny in ns:
+            X, Y = cell(nx, ny)
+            carve(min(x, X), min(y, Y), max(x, X) + 1, max(y, Y) + 1)
+    # bordes irregulares: la roca se desgasta un poco junto a los túneles
+    for y in range(3, h - 4):
+        for x in range(3, w - 3):
+            if g[y][x] == '#' and rnd.random() < 0.22 and sum(g[y + dy][x + dx] == '.' for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1))) == 1:
+                g[y][x] = 'e'
+    for y in range(h):
+        for x in range(w):
+            if g[y][x] == 'e':
+                g[y][x] = '.'
+    # cámaras redondas (algunas con suelo donde aparecen dinos salvajes)
+    room_cells = set()
+    for _ in range(rooms):
+        rx, ry = rnd.randint(1, cw - 2), rnd.randint(0, ch - 2)
+        X, Y = cell(rx, ry)
+        a, b = rnd.uniform(3.5, 5.5), rnd.uniform(2.6, 3.8)
+        is_dark = rnd.random() < dark
+        for y in range(2, h - 3):
+            for x in range(2, w - 2):
+                d = ((x - X - 0.5) / a) ** 2 + ((y - Y - 0.5) / b) ** 2
+                if d <= 1:
+                    g[y][x] = ',' if is_dark and d <= 0.55 else '.'
+                    room_cells.add((x, y))
+    # tramos de túnel con dinos salvajes
+    for (cx, cy) in links:
+        if rnd.random() < dark * 0.3:
+            x, y = cell(cx, cy)
+            carve(x, y, x + 1, y + 1, ',')
+    # escalera de subida debajo de la entrada
+    sx, sy = cell(*start)
+    carve(sx, sy, sx, h - 3)
+    g[h - 2][sx] = 'L'
+    # callejones sin salida (1 sola conexión), del más lejano al más cercano a la entrada
+    dist = {start: 0}; q = deque([start])
+    while q:
+        c0 = q.popleft()
+        for n in links[c0]:
+            if n not in dist:
+                dist[n] = dist[c0] + 1; q.append(n)
+    ends = [c0 for c0, ns in links.items() if len(ns) == 1 and c0 != start and cell(*c0) not in room_cells
+            and dist.get(c0, 0) >= 4]
+    ends.sort(key=lambda c0: -dist.get(c0, 0))
+    return '\n'.join(''.join(r) for r in g), [cell(*c0) for c0 in ends]
+
+
+# ============================================================
+# Objetos armados en el Constructor de Objetos (assets/maps/objetos/<nombre>.json + .png)
+# ============================================================
+OBJ_DIR = os.path.join(MAPS_DIR, 'objetos')
+OBJ_SHEETS = {'Outside.png': 'Outside', 'Caves.png': 'Caves', 'charcos.png': 'charcos'}
+sheet_key = lambda f: OBJ_SHEETS.get(f, f[:-4] if f.lower().endswith('.png') else f)  # 'objetos_para_casa.png' -> 'objetos_para_casa'
+_OBJ_CACHE = {}
+
+
+def load_object(name):
+    """Celdas del objeto con su cobertura (fracción de píxeles visibles) para decidir colisiones."""
+    if name not in _OBJ_CACHE:
+        from PIL import Image
+        data = json.load(open(os.path.join(OBJ_DIR, f'{name}.json'), encoding='utf-8'))
+        alpha = Image.open(os.path.join(OBJ_DIR, f'{name}.png')).convert('RGBA').getchannel('A')
+        t = data['tileSize']
+        cells = []
+        for r, row in enumerate(data['cells']):
+            out = []
+            for c, ref in enumerate(row):
+                hist = alpha.crop((c * t, r * t, c * t + t, r * t + t)).histogram()
+                cov = 1 - hist[0] / (t * t)
+                out.append((sheet_key(ref[0]), ref[1], ref[2], ref[3], cov) if ref and cov > 0 else None)
+            cells.append(out)
+        _OBJ_CACHE[name] = cells
+    return _OBJ_CACHE[name]
+
+
+def put_top(m, r, c, cell):
+    """Pone la losa en la primera capa libre desde 'Decoración' (crea capas nuevas si hace falta)."""
+    for layer in m['layers'][2:]:
+        if layer['grid'][r][c] is None:
+            layer['grid'][r][c] = cell
+            return
+    grid = [[None] * m['cols'] for _ in range(m['rows'])]
+    grid[r][c] = cell
+    m['layers'].append({'id': f'layer_{len(m["layers"])}', 'name': f'Objetos {len(m["layers"]) - 2}',
+                        'visible': True, 'grid': grid})
+
+
+def use_sheet(m, sheet):
+    if sheet not in m['tilesets']:
+        m['tilesets'][sheet] = {'Outside': 'Outside.png', 'Caves': 'Caves.png', 'charcos': 'charcos.png'}.get(sheet, f'{sheet}.png')
+        m['tilesetTileSizes'][sheet] = TS
+
+
+def place(m, name, x, y, solid='auto', walk=()):
+    """Coloca un objeto (esquina superior izquierda en x, y).
+    solid: 'auto' (lo que se ve bloquea), 'all' o 'none'. walk: celdas (dx, dy) que se pueden pisar."""
+    for dy, row in enumerate(load_object(name)):
+        for dx, cell in enumerate(row):
+            r, c = y + dy, x + dx
+            if not cell or not (0 <= r < m['rows'] and 0 <= c < m['cols']):
+                continue
+            use_sheet(m, cell[0])
+            put_top(m, r, c, [cell[0], cell[1], cell[2], cell[3]])
+            if solid == 'all' or (solid == 'auto' and cell[4] > 0.3):
+                m['solid'][r][c] = 1
+    for dx, dy in walk:
+        m['solid'][y + dy][x + dx] = 0
+
+
+def place_tiles(m, sheet, tiles, x, y, solid=True):
+    """Losas sueltas de un tileset: tiles = filas de (fila, columna) del tileset."""
+    use_sheet(m, sheet)
+    for dy, row in enumerate(tiles):
+        for dx, t in enumerate(row):
+            put_top(m, y + dy, x + dx, [sheet, t[0], t[1], TS])
+            if solid:
+                m['solid'][y + dy][x + dx] = 1
 
 
 # ============================================================
 # MAPAS
 # ============================================================
 RUTA_1 = """
-TTTTTTTTTTTTTTTTTTTTTTTTTT
-TTTTTTTTTTTTTTTTTTTTTTTTTT
-TTTTMMMMMMMMMMMMMMMMMMTTTT
-TTTTMMMMMMMMMMMMMMMMMMTTTT
-TTTTMMMMMMMMMDMMMMMMMMTTTT
-TTTT.......f===f......TTTT
-TTTT,,,,......=......,TTTT
-TTTT,,,,,.....=....,,,TTTT
-TTTT,,,,,.....=....,,,TTTT
-TTTT,,,,......=.....,,TTTT
-TTTT........====......TTTT
-TTTT..P.....=.....r...TTTT
-TTTT........=.........TTTT
-TTTT........=..WWWWW..TTTT
-TTTT,,,.....=..WWWWW..TTTT
-TTTT,,,,....=..WWWWW..TTTT
-TTTT,,,,....=..WWWWW..TTTT
-TTTT,,,.....=.........TTTT
-TTTT........=......f..TTTT
-TTTTTTTT....=....TTTTTTTTT
-TTTTTTTT....=....TTTTTTTTT
-TTTTTTTT....=....TTTTTTTTT
-TTTT........=.........TTTT
-TTTT..,,,,,,=,,,,,,...TTTT
-TTTT..,,,,,,=,,,,,,...TTTT
-TTTT..,,,,,,=,,,,,,...TTTT
-TTTT..,,,,,,=,,,,,,...TTTT
-TTTT........=.........TTTT
-TTTT.f......=......P..TTTT
-TTTT........========..TTTT
-TTTT...............=..TTTT
-TTTT..r............=..TTTT
-TTTT,,,,,,.........=..TTTT
-TTTT,,,,,,.........=..TTTT
-TTTT,,,,,,.....=====..TTTT
-TTTT,,,,,,.....=......TTTT
-TTTT...........=......TTTT
-TTTTTTTTTT.....=..TTTTTTTT
-TTTTTTTTTT.....=..TTTTTTTT
-TTTT...........=......TTTT
-TTTT..f........=....f.TTTT
-TTTT...........=......TTTT
-TTTTTTTTTTTT===TTTTTTTTTTT
-TTTTTTTTTTTT===TTTTTTTTTTT
+TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+TTTT........................TTTTTT
+TTTT........................TTTTTT
+TTTT........................TTTTTT
+TTTT........................TTTTTT
+TTTT........................TTTTTT
+TTTT........................TTTTTT
+TTTT........==................TTTT
+TTTTP.....f.==..f..r...f.r....TTTT
+TTTT..r.....==................TTTT
+TTTT........================..TTTT
+TTTT....f...================..TTTT
+TTTT.....r............r.......TTTT
+TTTTTTTT.TTTTTTTTTTTTTTTTT...TTTTT
+TTTTTTTT.TTTTTTTTTTTTTTTTT...TTTTT
+TTTTTTTTbTTTTTTTTTTTTTTTTT...TTTTT
+TTTT,,,,......................TTTT
+TTTT,,,,..........,,,,,,,,,,,,TTTT
+TTTT,,,,.WWWWWWWW.,,,,,,,,,,,,TTTT
+TTTT,,,,.WWWWWWWW.,,,,,,,,,,,,TTTT
+TTTT.....WWW..WWW.,,,,,,,,,,,,TTTT
+TTTT.....WWWWWWWW.,,,,,,,,,,,,TTTT
+TTTTf....WWWWWWWW.,,,,,,,,,,,,TTTT
+TTTT..............,,,,,,,,,,,,TTTT
+TTTTT...TTTTTTTTTTTTTTTTT.TTTTTTTT
+TTTTT...TTTTTTTTTTTTTTTTT.TTTTTTTT
+TTTTT...TTTTTTTTTTTTTTTTTbTTTTTTTT
+TTTTP................P........TTTT
+TTTT........................f.TTTT
+TTTT..WWWWWWW.,,,,,,,,,,,.....TTTT
+TTTT..WWWWWWW.,,,,,,,,,,,.....TTTT
+TTTT..WW...WW.,,,,,,,,,,,.,,,,TTTT
+TTTT..WW...WW.,,,,,,,,,,,.,,,,TTTT
+TTTT..WWWWWWWf,,,,,,,,,,,.,,,,TTTT
+TTTT..WWWWWWW.,,,,,,,,,,,.,,,,TTTT
+TTTT..........,,,,,,,,,,,.,,,,TTTT
+TTTTTTTT.TTTTTTTTTTTTTTTT...TTTTTT
+TTTTTTTT.TTTTTTTTTTTTTTTT...TTTTTT
+TTTTTTTTbTTTTTTTTTTTTTTTT...TTTTTT
+TTTT.......................P..TTTT
+TTTT.f....WWWWWWWWWWWf..P.....TTTT
+TTTT,,,,,.WWWWWWWWWWW.........TTTT
+TTTT,,,,,.WWWW...WWWW.,,,,,,,,TTTT
+TTTT,,,,,.WWWW...WWWW.,,,,,,,,TTTT
+TTTT,,,,,.WWWWWWWWWWW.,,,,,,,,TTTT
+TTTT,,,,,.WWWWWWWWWWW.,,,,,,,,TTTT
+TTTT,,,,,.............,,,,,,,,TTTT
+TTTTT...TTTTTTTTTTTTTTTT.TTTTTTTTT
+TTTTT...TTTTTTTTTTTTTTTT.TTTTTTTTT
+TTTTT...TTTTTTTTTTTTTTTTbTTTTTTTTT
+TTTT..============..,,,,,,,,,,TTTT
+TTTT..============..,,,,,,,,,,TTTT
+TTTT,,,,,,,,,..===..,,,,,,,,,,TTTT
+TTTT,,,,,,,,,..===..,,,,,,,,,,TTTT
+TTTT,,,,,,,,,..===..,,,,,,,,,,TTTT
+TTTTTTTTTTTTTTT===TTTTTTTTTTTTTTTT
+TTTTTTTTTTTTTTT===TTTTTTTTTTTTTTTT
 """
 
 CUEVA = """
-##############################
-##############################
-###....,,,,,,.....,,,,,,....##
-###...,,,,,,,......,,,,,,...##
-###...,,o,,,,..o...,,,,,,...##
-###.......................o.##
-#######....######....########
-#######....######....########
-###....,,,,......,,,,,,.....##
-###...,,,,,,....,,,,,,,,....##
-###o..,,,,,,....,,,o,,,,....##
-###.........................##
-#########....########....#####
-#########....########....#####
-###.....,,,,,,.....,,,,,,...##
-###....,,,,,,,,....,,,,,,,..##
-###....,,,,o,,,....,,,,,,,..##
-###.........................##
-#############.L.##############
-##############################
+####################################
+####################################
+####################################
+############.............###########
+#########..,.............,..########
+#######.,,,,,,,.......,,,,,,,.######
+######.,,,,,,,,,.....,,,,,,,,,.#####
+#######.,,,,,,,.......,,,,,,,.######
+######.....,.............,.....#####
+######...###.............###...#####
+######...#######....########...#####
+######...#######....########...#####
+######...#######....########...#####
+######.....#####....######.....#####
+####.........###....####..,,,,,..###
+####.........###....####.,,,,,,,.###
+###...,,,,,...##....###..,,,,,,,..##
+###..,,,,,,,..##.....##..,,,,,,,..##
+###..,,,,,,,..............,,,,,...##
+####.,,,,,,,.....................###
+####..,,,,,..#.........#.........###
+######.....###.........###.....#####
+###############.......##############
+################.....###############
+#################..#################
+#################LL#################
+####################################
 """
 
-
 TORNEO = """
-TTTTTTTTB.......TTTTTTTT
-TTTTTTTT........TTTTTTTT
-TTTTTTTT........TTTTTTTT
-TTTTTTTT........TTTTTTTT
-TTTTTTTT........TTTTTTTT
-TTTTTTTT........TTTTTTTT
-TTTTTTTT........TTTTTTTT
-TTTTTTTT........TTTTTTTT
-TTTTTTTT........TTTTTTTT
-TTTTTTTT........TTTTTTTT
-TTTTTTTT........TTTTTTTT
-TTTTTTTT........TTTTTTTT
-TTff..SSSSSSSSSSSSSS..ffTT
-TT....SAAAAAAAAAAAAS....TT
-TT....SAAAAAAAAAAAAS....TT
-TT....SAAAAAAAAAAAAS....TT
-TT....SAAAAAAAAAAAAS....TT
-TT....SAAAAAAAAAAAAS....TT
-TT....SAAAAAAAAAAAAS....TT
-TT....SSSSSSSSSSSSSS....TT
-TTf.........SS.........fTT
-TT..P.......SS......P...TT
-TT..........SS..........TT
-TT..........SS..........TT
-TTTTTTTTTTT.SS.TTTTTTTTTTT
-TTTTTTTTTTT.SS.TTTTTTTTTTT
+TTTTTTTTTT................TTTTTTTTTT
+TTTTTTTTTT................TTTTTTTTTT
+TTTTTTTTTT................TTTTTTTTTT
+TTTTTTTTTT................TTTTTTTTTT
+TT................................TT
+TT................................TT
+TT................................TT
+TT................................TT
+TT................................TT
+TT................................TT
+TT................................TT
+TT................................TT
+TT................................TT
+TT................................TT
+TT.ff..........................ff.TT
+TT.ff..........SSSSSS..........ff.TT
+TT.......SSSSSSSSSSSSSSSSSS.......TT
+TT.......SAAAAAAAAAAAAAAAAS.......TT
+TT.......SAAAAAAAAAAAAAAAAS.......TT
+TT.......SAAAAAAAAAAAAAAAAS.......TT
+TT.......SAAAAAAAAAAAAAAAAS.......TT
+TT.......SAAAAAAAAAAAAAAAAS.......TT
+TT.ff....SAAAAAAAAAAAAAAAAS....ff.TT
+TT.ff....SAAAAAAAAAAAAAAAAS....ff.TT
+TT.......SSSSSSSSSSSSSSSSSS.......TT
+TT..P............SS..........P....TT
+TT...............SS...............TT
+TT...............SS...............TT
+TT...............SS...............TT
+TT...............SS...............TT
+TTTTTTTTTTTTTTTTTSSTTTTTTTTTTTTTTTTT
+TTTTTTTTTTTTTTTTTSSTTTTTTTTTTTTTTTTT
 """
 
 
 def build_all():
     maps = []
+    # ---------------- Cueva Meteoro ----------------
+    cueva, cgrid = build_cave('cueva_meteoro', 'Cueva Meteoro', CUEVA, seed=7)
+    ch = len(cgrid)
+    lx = cgrid[ch - 2].index('L')
+    cueva_spawn = (lx, ch - 3)
+    # Decoración: fósil de amonite, cristales del meteorito, rocas grandes y estalagmitas
+    place_tiles(cueva, 'Caves', [[(19, 6), (19, 7)], [(20, 6), (20, 7)]], 21, 4)
+    place_tiles(cueva, 'Caves', [[(19, 6), (19, 7)], [(20, 6), (20, 7)]], 5, 20)
+    place_tiles(cueva, 'Caves', [[(15, 0), (15, 1), (15, 2)], [(16, 0), (16, 1), (16, 2)], [(17, 0), (17, 1), (17, 2)]], 9, 4)
+    place_tiles(cueva, 'Caves', [[(15, 0), (15, 1), (15, 2)], [(16, 0), (16, 1), (16, 2)], [(17, 0), (17, 1), (17, 2)]], 25, 4)
+    for x, y in [(7, 14), (29, 14), (14, 20), (22, 20), (19, 11), (6, 6), (30, 6), (23, 13)]:
+        place_tiles(cueva, 'Caves', [[(21, 7)], [(22, 7)]], x, y - 1)
+    for x, y in [(11, 18), (25, 16), (16, 21), (20, 22), (4, 15), (32, 19)]:
+        place_tiles(cueva, 'Caves', [[(22, 5 + (x + y) % 2)]], x, y)
+    cueva['spawn'] = {'x': cueva_spawn[0], 'y': cueva_spawn[1]}
+    # Exploración (js/mine.js): rocas que se rompen con el pico, escalera escondida y gemas ocultas
+    cueva['mine'] = {'floor': 1, 'theme': 'brown', 'darkness': 0, 'rocks': 16, 'hard': 0,
+                     'hiddenGems': [{'id': 'cueva_meteoro_g1', 'x': 4, 'y': 15, 'item': 'rubi'},
+                                    {'id': 'cueva_meteoro_g2', 'x': 30, 'y': 9, 'item': 'topacio'}]}
+    cueva['npcs'] = [
+        trainer('cueva_ritza', 31, 17, 'Ritza', 'Ritza.png', 'left',
+                [('pachycephalosaurus', 14), ('lexovisaurus', 14), ('suchomimus', 15)],
+                'shockwave',
+                'Exploro esta cueva buscando fragmentos del meteorito.\n¡No me distraigas... o combate!',
+                'Tus dinos brillan más que el meteorito.', sight=5, ai='experto', exp=150),
+        trainer('cueva_vivian', 12, 15, 'Vivian', 'Vivian.png', 'down',
+                [('carcharodontosaurus', 15), ('utahraptor', 15), ('iguanodon', 15)],
+                'super_impact',
+                'La Banda Meteoro llegó antes que tú.\nYo los vi pasar... ¡pero primero, un combate!',
+                'El comandante Helmep está al fondo de la cueva, al norte.', sight=6, ai='experto', exp=160),
+        dict(person('cueva_rose', 20, 23, 'Rose', 'Rose.png', 'left',
+                    'Soy Rose, exploradora de cuevas.\nEn la tierra oscura de la cueva aparecen dinos salvajes, igual que en la hierba alta.'),
+             mineGuide=True),
+    ]
+    maps.append((cueva, cgrid, 'cave'))
+
+    # ---------------- Pisos profundos de la Cueva Meteoro ----------------
+    # (piso, nombre, tema, ancho, alto, semilla, oscuridad, rocas, % rocas duras, gemas ocultas)
+    FLOORS = [
+        (2, 'Galerías', 'brown', 46, 36, 21, 0.35, 24, 0.0, ['esmeralda', 'rubi', 'ambar']),
+        (3, 'Profundidades', 'brown', 50, 40, 33, 0.7, 28, 0.15, ['topacio', 'esmeralda', 'ambar']),
+        (4, 'Gruta Nevada', 'snow', 50, 40, 47, 0.6, 30, 0.3, ['aguamarina', 'opalo', 'topacio']),
+        (5, 'Gruta de Hielo', 'ice', 54, 40, 58, 0.85, 32, 0.45, ['aguamarina', 'amatista', 'opalo', 'amatista']),
+        (6, 'Corazón del Meteorito', 'ice', 42, 32, 64, 0.9, 24, 0.5, ['nucleo', 'amatista', 'aguamarina']),
+    ]
+    floor_maps = [cueva]
+    for n, title, theme, w, h, seed, darkness, rocks, hard, gems in FLOORS:
+        layout, ends = cave_floor_layout(w, h, seed, rooms=3 + n // 2)
+        fm, fgrid = build_cave(f'cueva_meteoro_{n}', f'Cueva Meteoro · Piso {n} · {title}', layout, seed=seed, theme=theme)
+        fh = len(fgrid)
+        lx2 = fgrid[fh - 2].index('L')
+        fm['spawn'] = {'x': lx2, 'y': fh - 3}
+        fm['warps'].append({'x': lx2, 'y': fh - 2, 'targetMap': 'cueva_meteoro', 'targetX': cueva_spawn[0],
+                            'targetY': cueva_spawn[1], 'desc': 'Entrada de la Cueva Meteoro'})
+        # Estalagmitas y rocas grandes sólo en el centro de las cámaras (nunca tapan un túnel)
+        trnd = random.Random(seed + 1)
+        open_cells = [(x, y) for y in range(2, fh - 3) for x in range(2, w - 2)
+                      if all(fgrid[y + dy][x + dx] in '.,' for dy in (-1, 0, 1) for dx in (-1, 0, 1))]
+        for x, y in trnd.sample(open_cells, min(len(open_cells), 6 + n)):
+            if all(not fm['solid'][y + dy][x + dx] for dy in (-1, 0, 1) for dx in (-1, 0, 1)):
+                deco = CAVE_THEMES[theme]['deco']
+                place_tiles(fm, 'Caves', deco, x, y - len(deco) + 1)
+        # Gemas ocultas en los callejones más lejanos (difíciles de encontrar)
+        fm['mine'] = {'floor': n, 'theme': theme, 'darkness': darkness, 'rocks': rocks, 'hard': hard,
+                      'hiddenGems': [{'id': f'cueva_meteoro_{n}_g{i + 1}', 'x': ex + (i % 2), 'y': ey + (i // 2) % 2,
+                                      'item': item} for i, (item, (ex, ey)) in enumerate(zip(gems, ends))]}
+        floor_maps.append(fm)
+        maps.append((fm, fgrid, 'cave'))
+    # Cada piso sabe a dónde lleva su escalera escondida
+    for upper, lower in zip(floor_maps, floor_maps[1:]):
+        upper['mine']['next'] = lower['_id']
+        upper['mine']['nextArrival'] = [lower['spawn']['x'], lower['spawn']['y']]
 
     # ---------------- Ruta 1 ----------------
     ruta, grid = build_outside('ruta_1', 'Ruta 1', RUTA_1, seed=11)
     H = len(grid)
-    door_x = grid[4].index('D')
-    for x in (12, 13, 14):
-        ruta['warps'].append({'x': x, 'y': H - 1, 'targetMap': 'world_map', 'targetX': 60, 'targetY': 2,
+    # Cordillera al norte con la entrada a la Cueva Meteoro (la boca está en las columnas 2-3 de la montaña)
+    place(ruta, 'tierra_sobre_monta_a_co_fondo', 4, 2, solid='all')
+    place(ruta, 'tierra_monta_a__sobre_monta_a_con_entrada_1', 10, 2, solid='all', walk=[(2, 5), (3, 5)])
+    place(ruta, 'tierra_sobre_monta_a_co_fondo', 16, 2, solid='all')
+    place(ruta, 'tierra_sobre_monta_a_co_fondo', 22, 2, solid='all')
+    door = (12, 7)
+    # Atajos tapados por arbustos (se cortan con un dino de Planta) y tesoros en las islas (se llega nadando)
+    ruta['fieldObjects'] = [{'kind': 'bush', 'x': x, 'y': y} for y, row in enumerate(grid) for x, ch in enumerate(row) if ch == 'b']
+    ruta['treasures'] = [
+        {'id': 'ruta1_isla_1', 'x': 15, 'y': 43, 'item': 'tonico_jurasico', 'n': 1},
+        {'id': 'ruta1_isla_2', 'x': 9, 'y': 32, 'item': 'baya_vigor', 'n': 3},
+        {'id': 'ruta1_isla_3', 'x': 12, 'y': 21, 'item': 'elixir_meteoro', 'n': 1},
+    ]
+    # Ruta en zigzag: muros de bosque con aberturas alternadas, estanques y hierba alta
+    place(ruta, 'maceta_1', 14, 55)                      # letrero "Ruta 1"
+    for x in (12, 13):
+        ruta['warps'].append({'x': x, 'y': door[1], 'targetMap': 'cueva_meteoro',
+                              'targetX': cueva_spawn[0], 'targetY': cueva_spawn[1], 'desc': 'Cueva Meteoro'})
+    for x in (15, 16, 17):
+        ruta['warps'].append({'x': x, 'y': H - 1, 'targetMap': 'world_map', 'targetX': 65, 'targetY': 2,
                               'desc': 'Pueblo Meteoro'})
-    ruta['warps'].append({'x': door_x, 'y': 4, 'targetMap': 'cueva_meteoro', 'targetX': 14, 'targetY': 17,
-                          'desc': 'Cueva Meteoro'})
-    ruta['spawn'] = {'x': 13, 'y': H - 3}
+    ruta['spawn'] = {'x': 16, 'y': H - 3}
     ruta['npcs'] = [
-        person('ruta1_ruth', 16, H - 4, 'Ruth', 'Ruth.png', 'left',
+        person('ruta1_ruth', 19, H - 4, 'Ruth', 'Ruth.png', 'left',
                '¡Bienvenido a la Ruta 1!\nEn la hierba alta aparecen dinos salvajes. Si los derrotas, ¡los capturas!\nAl final del camino está la Cueva Meteoro... dicen que allí cayó el meteorito.'),
-        trainer('ruta1_alvin', 7, 36, 'Alvin', 'Alvin.png', 'right',
+        trainer('ruta1_alvin', 11, 47, 'Alvin', 'Alvin.png', 'left',
                 [('velociraptor', 10), ('saurolophus_verde', 10), ('baryonyx', 11)],
                 'tag_team',
                 '¡Eh! Acabo de empezar mi colección de cartas.\n¡Seguro que te gano!',
                 '¡Vaya! Tengo que entrenar más en la hierba alta.', sight=5),
-        trainer('ruta1_amelia', 21, 31, 'Amelia', 'Amelia.png', 'left',
+        trainer('ruta1_amelia', 23, 40, 'Amelia', 'Amelia.png', 'right',
                 [('achelousaurus', 11), ('edmontonia', 11), ('ceratosaurus', 12)],
                 'anhanguera_dive',
                 '¡Mis dinos rayo y tierra son un equipo perfecto!\n¿Te atreves?',
                 'Combinar elementos no bastó... ¡Bien jugado!', sight=4),
-        trainer('ruta1_luter', 5, 18, 'Luter', 'Luter.png', 'right',
+        trainer('ruta1_luter', 14, 28, 'Luter', 'Luter.png', 'left',
                 [('torvosaurus', 12), ('shunosaurus', 11), ('fukuisaurus', 12)],
                 'big_foot_assault',
                 'Fuego, agua y planta: ¡tengo respuesta para todo!',
                 '¡Me encontraste el punto débil!', sight=6),
-        trainer('ruta1_maxwell', 17, 8, 'Maxwell', 'Maxwell.png', 'left',
+        trainer('ruta1_blanche', 24, 17, 'Blanche', 'Blanche.png', 'left',
+                [('saltasaurus', 12), ('mapusaurus', 13), ('pentaceratops', 13)],
+                'ocean_panic',
+                'Este bosque es un laberinto... ¡y yo soy su guardiana!\nSi quieres llegar a la cueva, tendrás que vencerme.',
+                'Bien jugado. La cueva está al norte, cruzando el último claro.', sight=6, exp=130),
+        trainer('ruta1_maxwell', 17, 10, 'Maxwell', 'Maxwell.png', 'left',
                 [('megaraptor', 13), ('pachyrhinosaurus', 13), ('stegosaurus', 13)],
                 'metal_wing',
                 'Nadie entra a la Cueva Meteoro sin pasar por mí.\n¡Demuéstrame que eres fuerte!',
@@ -389,49 +679,50 @@ def build_all():
     ]
     maps.append((ruta, grid, 'outside'))
 
-    # ---------------- Cueva Meteoro ----------------
-    cueva, cgrid = build_cave('cueva_meteoro', 'Cueva Meteoro', CUEVA, seed=7)
-    ch = len(cgrid)
-    lx = cgrid[18].index('L')
-    cueva['warps'].append({'x': lx, 'y': 18, 'targetMap': 'ruta_1', 'targetX': door_x, 'targetY': 5,
-                           'desc': 'Salida a la Ruta 1'})
-    cueva['spawn'] = {'x': lx, 'y': 17}
-    cueva['npcs'] = [
-        trainer('cueva_ritza', 22, 15, 'Ritza', 'Ritza.png', 'left',
-                [('pachycephalosaurus', 14), ('lexovisaurus', 14), ('suchomimus', 15)],
-                'shockwave',
-                'Exploro esta cueva buscando fragmentos del meteorito.\n¡No me distraigas... o combate!',
-                'Tus dinos brillan más que el meteorito.', sight=5, ai='experto', exp=150),
-        trainer('cueva_vivian', 6, 9, 'Vivian', 'Vivian.png', 'right',
-                [('carcharodontosaurus', 15), ('utahraptor', 15), ('iguanodon', 15)],
-                'super_impact',
-                'La Banda Meteoro llegó antes que tú.\nYo los vi pasar... ¡pero primero, un combate!',
-                'El comandante Helmep está al fondo de la cueva, al norte.', sight=6, ai='experto', exp=160),
-        person('cueva_rose', 25, 3, 'Rose', 'Rose.png', 'left',
-               'Me perdí buscando dinos raros...\nEn la tierra oscura de la cueva aparecen dinos salvajes, igual que en la hierba alta.'),
-    ]
-    maps.append((cueva, cgrid, 'cave'))
+    # Cuerda de Escape: lleva a la boca de la cueva en la Ruta 1; Rose ofrece atajos a los pisos 3 y 5
+    for fm in floor_maps:
+        fm['mine']['exit'] = {'map': 'ruta_1', 'x': door[0], 'y': door[1] + 1}
+    cueva['mine']['shortcuts'] = {str(fm['mine']['floor']): [fm['spawn']['x'], fm['spawn']['y']]
+                                  for fm in floor_maps if fm['mine']['floor'] in (3, 5)}
+
+    # Salida de la cueva: justo frente a la boca de la montaña
+    for x in (lx, lx + 1):
+        if cgrid[ch - 2][x] == 'L':
+            cueva['warps'].append({'x': x, 'y': ch - 2, 'targetMap': 'ruta_1', 'targetX': door[0], 'targetY': door[1] + 1,
+                                   'desc': 'Salida a la Ruta 1'})
 
     # ---------------- Estadio del Gran Torneo Mesozoico ----------------
     torneo, tgrid = build_outside('torneo', 'Estadio del Gran Torneo Mesozoico', TORNEO, seed=5)
     th = len(tgrid)
-    for x in (12, 13):
-        torneo['warps'].append({'x': x, 'y': th - 1, 'targetMap': 'world_map', 'targetX': 60, 'targetY': 86,
+    place(torneo, 'museo_plateada_1', 10, 0, walk=[(x, y) for x in range(16) for y in (13, 14)])  # estadio
+    place(torneo, 'tienda_pokemon_techo_amarillo_1', 2, 4)
+    place(torneo, 'tienda_pokemon_techo_verde_2', 26, 4)
+    place(torneo, 'estatua_1', 14, 25)
+    place(torneo, 'estatua_1', 20, 25)
+    place(torneo, 'jardinera_flores_1', 10, 26)
+    place(torneo, 'jardinera_flores_1', 23, 26)
+    place(torneo, 'estatua_peque_a_1', 9, 14)
+    place(torneo, 'estatua_peque_a_1', 26, 14)
+    place(torneo, 'bicileta_1', 28, 20)
+    place(torneo, 'bicileta_2', 4, 18)
+    place(torneo, 'maceta_1', 16, 29)
+    for x in (17, 18):
+        torneo['warps'].append({'x': x, 'y': th - 1, 'targetMap': 'world_map', 'targetX': 65, 'targetY': 106,
                                 'desc': 'Pueblo Meteoro'})
-    torneo['spawn'] = {'x': 12, 'y': th - 4}
-    referee = person('torneo_arbitro', 12, 12, 'Árbitro del Torneo', 'Roderick.png', 'down',
+    torneo['spawn'] = {'x': 17, 'y': th - 3}
+    referee = person('torneo_arbitro', 18, 15, 'Árbitro del Torneo', 'Roderick.png', 'down',
                      '¡Bienvenidos al Gran Torneo Mesozoico!')
     referee['tournament'] = True
     torneo['npcs'] = [
         referee,
-        person('torneo_fan', 4, 15, 'Fan del torneo', 'Luter.png', 'right',
+        person('torneo_fan', 6, 20, 'Fan del torneo', 'Luter.png', 'right',
                '¡Dicen que en la Gran Final a veces aparece un Dinosaurio Alfa!\nAquí todos los dinos combaten a nivel 50: gana quien tenga mejor estrategia.'),
     ]
     maps.append((torneo, tgrid, 'outside'))
     return maps
 
 
-def connect_world_map(ruta_entry):
+def connect_world_map(ruta_entry, torneo_entry):
     """Entrada a la Ruta 1 por el borde norte del Pueblo Meteoro (world_map y proyecto_actual)."""
     for name in ('world_map.json', 'proyecto_actual.json'):
         path = os.path.join(MAPS_DIR, name)
@@ -439,12 +730,17 @@ def connect_world_map(ruta_entry):
             continue
         data = json.load(open(path, encoding='utf-8'))
         warps = [w for w in data.get('warps', []) if w.get('targetMap') != 'ruta_1']
-        for x in (59, 60, 61):
+        for x in (64, 65, 66):
             warps.append({'x': x, 'y': 1, 'targetMap': 'ruta_1', 'targetX': ruta_entry[0], 'targetY': ruta_entry[1], 'desc': 'Ruta 1'})
         warps = [w for w in warps if w.get('targetMap') != 'torneo']
-        for x in (59, 60, 61):
-            warps.append({'x': x, 'y': 88, 'targetMap': 'torneo', 'targetX': 12, 'targetY': 22, 'desc': 'Estadio del Gran Torneo'})
+        for x in (64, 65, 66):
+            warps.append({'x': x, 'y': data['rows'] - 2, 'targetMap': 'torneo', 'targetX': torneo_entry[0], 'targetY': torneo_entry[1], 'desc': 'Estadio del Gran Torneo'})
         data['warps'] = warps
+        # Tesoros en el agua: sólo se alcanzan nadando con un dino de Agua
+        data['treasures'] = [
+            {'id': 'pueblo_lago_cristal', 'x': 120, 'y': 46, 'item': 'elixir_meteoro', 'n': 1},
+            {'id': 'pueblo_estanque_bosque', 'x': 11, 'y': 35, 'item': 'tonico_jurasico', 'n': 1},
+        ]
         json.dump(data, open(path, 'w', encoding='utf-8'))
 
 
@@ -479,11 +775,15 @@ def preview(m, out_path):
 
 if __name__ == '__main__':
     os.chdir(ROOT)
-    ruta_entry = (13, 0)
+    ruta_entry, torneo_entry = (16, 55), (17, 29)
     for m, grid, kind in build_all():
         if m['_id'] == 'ruta_1':
             ruta_entry = (m['spawn']['x'], m['spawn']['y'])
+        if m['_id'] == 'torneo':
+            torneo_entry = (m['spawn']['x'], m['spawn']['y'])
         map_id = m.pop('_id')
+        for n in m['npcs']:  # nadie se para sobre hierba alta (ahí también aparecen objetos)
+            m['tallGrass'][n['y']][n['x']] = 0
         path = os.path.join(MAPS_DIR, f'{map_id}.json')
         json.dump(m, open(path, 'w', encoding='utf-8'), ensure_ascii=False)
         print(f'🗺️  {path} ({m["cols"]}x{m["rows"]}, {len(m["npcs"])} personajes)')
@@ -491,5 +791,5 @@ if __name__ == '__main__':
             out_dir = os.path.join(ROOT, 'tools', 'vistas')
             os.makedirs(out_dir, exist_ok=True)
             preview(m, os.path.join(out_dir, f'{map_id}.png'))
-    connect_world_map(ruta_entry)
-    print('🚪 Entradas: Ruta 1 al norte del Pueblo Meteoro (x 59-61, y 1) y Estadio al sur (x 59-61, y 88).')
+    connect_world_map(ruta_entry, torneo_entry)
+    print('🚪 Entradas: Ruta 1 al norte del Pueblo Meteoro (x 64-66, y 1) y Estadio al sur (x 64-66, y 108).')

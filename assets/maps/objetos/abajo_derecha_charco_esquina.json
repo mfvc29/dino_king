@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "cols": 1,
+  "rows": 1,
+  "tileSize": 32,
+  "tilesets": {
+    "charcos.png": "/assets/maps/charcos.png"
+  },
+  "cells": [
+    [
+      [
+        "charcos.png",
+        17,
+        5,
+        32
+      ]
+    ]
+  ],
+  "solid": [
+    [
+      0
+    ]
+  ],
+  "name": "abajo_derecha_charco_esquina",
+  "png": "objetos/abajo_derecha_charco_esquina.png",
+  "tilesetKey": "objetos/abajo_derecha_charco_esquina"
+}

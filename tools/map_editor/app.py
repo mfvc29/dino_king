@@ -18,6 +18,8 @@ import glob
 import shutil
 import urllib.parse
 import webbrowser
+import base64
+import re
 
 PORT = 8080
 EDITOR_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -29,9 +31,21 @@ GAME_CHARACTERS_DIR = os.path.join(PROJECT_ROOT, 'assets', 'characters')
 GAME_DINOS_DIR = os.path.join(PROJECT_ROOT, 'assets', 'dinos')
 
 # Tilesets que se ofrecen para pintar (los que usa el juego por ahora)
-PALETTE_TILESETS = ['Outside.png', 'Caves.png', 'charcos.png']
+PALETTE_TILESETS = ['Outside.png', 'Caves.png', 'charcos.png',
+                    'objetos_para_casa.png', 'objetos_para_casa_2.png', 'objetos_para_casa_3.png']
 # Copias del mapa principal que no se muestran en la lista
 HIDDEN_MAPS = {'proyecto_actual.json', 'world_map_antiguo_backup.json'}
+
+# Objetos armados tile por tile (casas, árboles...): cada uno es un PNG + JSON que el juego
+# puede usar como tileset con la clave "objetos/<nombre>"
+GAME_OBJECTS_DIR = os.path.join(GAME_MAPS_DIR, 'objetos')
+
+
+def safe_object_name(raw):
+    """Nombre de archivo en minúsculas y sin caracteres raros (el juego busca los tilesets en minúsculas)."""
+    name = re.sub(r'[^a-z0-9_-]+', '_', (raw or '').strip().lower()).strip('_')
+    return name[:60]
+
 
 os.makedirs(PROJECTS_DIR, exist_ok=True)
 os.makedirs(CUSTOM_ASSETS_DIR, exist_ok=True)
@@ -96,11 +110,11 @@ class AdvanceMapRequestHandler(http.server.SimpleHTTPRequestHandler):
                 with open(catalog_path, 'r', encoding='utf-8') as f:
                     catalog.update(json.load(f))
             known_images = {d.get('image') for d in catalog['dinos'] + catalog['attacks']}
-            for img_path in sorted(glob.glob(os.path.join(GAME_DINOS_DIR, '*', '*.jpg'))):
+            card_files = glob.glob(os.path.join(GAME_DINOS_DIR, 'cartas', '*', '*.jpg')) + \
+                glob.glob(os.path.join(GAME_DINOS_DIR, 'cartas', '*', '*.jpeg'))
+            for img_path in sorted(card_files):
                 element = os.path.basename(os.path.dirname(img_path))
-                if element == 'cards':
-                    continue
-                img = f"{element}/{os.path.basename(img_path)}"
+                img = f"cartas/{element}/{os.path.basename(img_path)}"
                 if img not in known_images:
                     dino_id = os.path.basename(img_path).rsplit('.', 1)[0].replace('_dinosaur_king', '')
                     catalog['dinos'].append({
@@ -172,6 +186,48 @@ class AdvanceMapRequestHandler(http.server.SimpleHTTPRequestHandler):
                 self.wfile.write(data)
             else:
                 self.send_error(404, "Proyecto no encontrado")
+            return
+
+        # 3b. API: Tilesets para el Constructor de Objetos (los del juego + los PNG añadidos)
+        elif path == '/api/builder_tilesets':
+            game = [{"name": n, "url": f"/assets/maps/{n}"} for n in PALETTE_TILESETS
+                    if os.path.exists(os.path.join(GAME_MAPS_DIR, n))]
+            custom = [{"name": os.path.basename(f), "url": f"/custom_assets/{urllib.parse.quote(os.path.basename(f))}"}
+                      for f in sorted(glob.glob(os.path.join(CUSTOM_ASSETS_DIR, '*.png')))]
+            self._send_json({"game": game, "custom": custom})
+            return
+
+        # 3c. API: Listar objetos armados (assets/maps/objetos/*.json)
+        elif path == '/api/objects':
+            names = sorted(os.path.basename(f)[:-5] for f in glob.glob(os.path.join(GAME_OBJECTS_DIR, '*.json')))
+            self._send_json(names)
+            return
+
+        # 3d. API: Cargar un objeto para seguir editándolo
+        elif path == '/api/object':
+            name = safe_object_name(query.get('name', [''])[0])
+            obj_path = os.path.join(GAME_OBJECTS_DIR, f"{name}.json")
+            if name and os.path.exists(obj_path):
+                with open(obj_path, 'r', encoding='utf-8') as f:
+                    self._send_json(json.load(f))
+            else:
+                self.send_error(404, "Objeto no encontrado")
+            return
+
+        # 4a. Servir los PNG de objetos (assets/maps/objetos/<nombre>.png)
+        elif urllib.parse.unquote(path).startswith('/assets/maps/objetos/'):
+            filename = os.path.basename(urllib.parse.unquote(path))
+            target_path = os.path.join(GAME_OBJECTS_DIR, filename)
+            if filename.lower().endswith('.png') and os.path.isfile(target_path):
+                with open(target_path, 'rb') as f:
+                    content = f.read()
+                self.send_response(200)
+                self.send_header('Content-Type', 'image/png')
+                self.send_header('Content-Length', str(len(content)))
+                self.end_headers()
+                self.wfile.write(content)
+            else:
+                self.send_error(404, "Objeto no encontrado")
             return
 
         # 4. Servir imágenes de tilesets (desde el juego o desde custom_assets)
@@ -320,7 +376,44 @@ class AdvanceMapRequestHandler(http.server.SimpleHTTPRequestHandler):
                 self.send_error(500, str(e))
                 return
 
+        # 4. API: Guardar un objeto armado tile por tile (PNG + JSON en assets/maps/objetos/)
+        elif path == '/api/object':
+            try:
+                name = safe_object_name(query.get('name', [''])[0])
+                if not name:
+                    self.send_error(400, "Nombre de objeto inválido")
+                    return
+
+                length = int(self.headers.get('Content-Length', 0))
+                data = json.loads(self.rfile.read(length).decode('utf-8'))
+                png_b64 = data.pop('pngData', '').split(',', 1)[-1]
+
+                os.makedirs(GAME_OBJECTS_DIR, exist_ok=True)
+                with open(os.path.join(GAME_OBJECTS_DIR, f"{name}.png"), 'wb') as f:
+                    f.write(base64.b64decode(png_b64))
+                data['name'] = name
+                data['png'] = f"objetos/{name}.png"
+                data['tilesetKey'] = f"objetos/{name}"
+                with open(os.path.join(GAME_OBJECTS_DIR, f"{name}.json"), 'w', encoding='utf-8') as f:
+                    json.dump(data, f, indent=2, ensure_ascii=False)
+
+                self._send_json({"status": "ok", "name": name,
+                                 "message": f"Objeto '{name}' guardado en assets/maps/objetos/{name}.png"})
+                print(f"  🏠 Objeto guardado: assets/maps/objetos/{name}.png")
+                return
+            except Exception as e:
+                self.send_error(500, str(e))
+                return
+
         super().do_POST()
+
+    def _send_json(self, obj):
+        data = json.dumps(obj, ensure_ascii=False).encode('utf-8')
+        self.send_response(200)
+        self.send_header('Content-Type', 'application/json')
+        self.send_header('Content-Length', str(len(data)))
+        self.end_headers()
+        self.wfile.write(data)
 
     def end_headers(self):
         self.send_header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')

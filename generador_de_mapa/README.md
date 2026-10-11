@@ -66,7 +66,7 @@ Si no hay cambios de mapas, no hace nada.
 - Capas: **Suelo base → Terreno → Decoración**. Las capas de arriba se dibujan sobre las de abajo.
 - **Colisiones** (🚫): marca en rojo lo sólido (árboles, agua, paredes). **Hierba alta**: zonas donde aparecen dinos salvajes.
 - **Puertas / warps** (🚪): llevan a otro mapa (`targetMap`, `targetX`, `targetY`).
-- **Personajes** (🧑): entrenadores con 3 dinos, 3 ataques cada uno, carta de movimiento e IA (`normal`, `dificil`, `experto`).
+- **Personajes** (🧑): entrenadores con 3 dinos, 3 ataques cada uno e IA (`normal`, `dificil`, `experto`).
 - Los mapas nuevos aparecen solos en el editor, en el minimapa y en el juego al publicar.
 
 ### Editor en la nube

@@ -25,3 +25,7 @@ descargas/
 
 # Caché local de Firebase CLI
 .firebase/
+
+# Assets pesados no usados directamente en el runtime web
+assets/dinos/grande/
+

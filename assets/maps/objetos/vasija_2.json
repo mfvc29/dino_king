@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "cols": 1,
+  "rows": 1,
+  "tileSize": 32,
+  "tilesets": {
+    "objetos_para_casa_2.png": "/custom_assets/objetos_para_casa_2.png"
+  },
+  "cells": [
+    [
+      [
+        "objetos_para_casa_2.png",
+        8,
+        5,
+        32
+      ]
+    ]
+  ],
+  "solid": [
+    [
+      0
+    ]
+  ],
+  "name": "vasija_2",
+  "png": "objetos/vasija_2.png",
+  "tilesetKey": "objetos/vasija_2"
+}

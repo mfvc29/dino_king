@@ -2,9 +2,14 @@
 """
 Actualiza dinos.json a partir de las carpetas por tipo (agua/, fuego/, planta/, ...).
 
-- Cada carpeta es un elemento; cada .jpg dentro es una carta (frente | reverso).
-- Cartas con marco NARANJA = cartas de movimiento -> se registran como ataques
-  ("moveCard": true). El resto son dinosaurios.
+- cartas/<elemento>/: cada .jpg / .jpeg es una carta (frente | reverso). Aquí se ponen las cartas nuevas.
+- TODAS las cartas son dinosaurios (también las de marco naranja, que antes eran
+  cartas de movimiento: ahora el dino que aparece en ellas es una carta de dino).
+- El nombre sale del archivo, limpiando "(games)", "- Dinosaur King", "Card", etc.
+- Arte del dino (estilo Yu-Gi-Oh, sale sobre la carta en el almanaque y en los combates):
+  grande/<elemento>/izquierda/*.png y grande/<elemento>/derecha/*.png (dino mirando a cada lado, con
+  fondo transparente) se copian livianos a arte/<elemento>/<id>_izq.webp y _der.webp. Los originales de
+  grande/ no se modifican (y grande/<elemento>/jpeg tampoco se usa).
 - Detecta qué mitad es el frente: el reverso es casi idéntico al de otras cartas,
   la ilustración no (las cartas especiales traen el frente a la derecha).
 - Genera la miniatura del frente en cards/<elemento>/<archivo>.jpg y borra las
@@ -23,6 +28,7 @@ import itertools
 import json
 import os
 import random
+import re
 from collections import OrderedDict
 
 from PIL import Image, ImageChops, ImageStat
@@ -30,6 +36,7 @@ from PIL import Image, ImageChops, ImageStat
 DIR = os.path.dirname(os.path.abspath(__file__))
 CATALOG = os.path.join(DIR, 'dinos.json')
 CARDS_DIR = os.path.join(DIR, 'cards')
+CARDS_SRC = os.path.join(DIR, 'cartas')   # cartas originales, una carpeta por elemento
 THUMB_WIDTH = 360
 
 # Nombres que no salen bien del nombre de archivo
@@ -40,6 +47,32 @@ NAME_OVERRIDES = {
     'saurolophus_green': ('saurolophus_verde', 'Saurolophus Verde'),
     'maiasaura_with_baby': ('maiasaura', 'Maiasaura'),
 }
+
+# Cartas que antes eran de movimiento (o con nombre raro): el dino que aparece en la carta.
+# Las que no tienen el nombre del dino en el archivo conservan el nombre de la carta hasta que se agregue aquí.
+CARD_OVERRIDES = {
+    'futabasaurus_super_cannon': ('futabasaurus', 'Futabasaurus'),
+    'anhanguera_dive': ('anhanguera', 'Anhanguera'),
+    'quetzalcoalt': ('quetzalcoatlus', 'Quetzalcoatlus'),
+    'escolossauro': ('scolosaurus', 'Scolosaurus'),
+}
+# Palabras que sobran en los nombres de archivo nuevos
+NAME_NOISE = [r'\(games?\)', r'\(\d+\)', r'-\s*dinosaur king', r'\bmove card\b', r'\bcard\b', r'\baquatic shot\b']
+SKIP_FOLDERS = {'cards', 'chibis', 'grande', 'arte', '__pycache__'}
+
+# Arte grande del dino (PNG transparente) -> versión liviana para el juego
+ART_SRC = os.path.join(DIR, 'grande')
+ART_OUT = os.path.join(DIR, 'arte')
+ART_WIDTH = 520
+ART_SIDES = {'izquierda': ('left', 'izq'), 'derecha': ('right', 'der')}
+# Nombres de archivo del arte que no coinciden con el id del dino
+ART_ALIASES = {
+    'inndominus_rex': 'indominus_rex',
+    'eionosaurus': 'einiosaurus',
+    'sauralophus_green': 'saurolophus_verde',
+    'saurolophus_green': 'saurolophus_verde',
+}
+IMAGE_EXT = ('.jpg', '.jpeg')
 
 # Dinos protagonistas: reciben las combinaciones más fuertes de su tipo
 STAR_DINOS = [
@@ -61,7 +94,14 @@ def id_and_name(filename):
     stem = stem_of(filename)
     if stem in NAME_OVERRIDES:
         return NAME_OVERRIDES[stem]
-    return stem, ' '.join(w.capitalize() for w in stem.split('_'))
+    clean = stem
+    for pat in NAME_NOISE:
+        clean = re.sub(pat, ' ', clean, flags=re.IGNORECASE)
+    words = re.sub(r'[^0-9a-zA-ZáéíóúñÁÉÍÓÚÑ]+', ' ', clean).split()
+    cid = '_'.join(w.lower() for w in words)
+    if cid in CARD_OVERRIDES:
+        return CARD_OVERRIDES[cid]
+    return cid, ' '.join(w.capitalize() for w in words)
 
 
 def small_halves(path):
@@ -172,6 +212,46 @@ def assign_stats(dinos, elements, stat_min, stat_max):
     return changed + len(pending)
 
 
+def build_art(dinos):
+    """Copia liviana (webp, recortada al dino) del arte de grande/ y la anota en cada dino como "art"."""
+    by_id = {d['id']: d for d in dinos}
+    made, unmatched = 0, []
+    for d in dinos:
+        d.pop('art', None)
+    if not os.path.isdir(ART_SRC):
+        return made, unmatched
+    for element in sorted(os.listdir(ART_SRC)):
+        for side_dir, (side, suffix) in ART_SIDES.items():
+            src_dir = os.path.join(ART_SRC, element, side_dir)
+            if not os.path.isdir(src_dir):
+                continue
+            for fn in sorted(os.listdir(src_dir)):
+                if not fn.lower().endswith('.png'):
+                    continue
+                cid, _ = id_and_name(fn)
+                cid = ART_ALIASES.get(cid, cid)
+                dino = by_id.get(cid)
+                if not dino:
+                    unmatched.append(f'{element}/{side_dir}/{fn}')
+                    continue
+                rel = f'arte/{element}/{cid}_{suffix}.webp'
+                dest = os.path.join(DIR, rel)
+                src = os.path.join(src_dir, fn)
+                if not os.path.exists(dest) or os.path.getmtime(dest) < os.path.getmtime(src):
+                    os.makedirs(os.path.dirname(dest), exist_ok=True)
+                    with Image.open(src) as im:
+                        im = im.convert('RGBA')
+                        box = im.getchannel('A').getbbox()
+                        if box:
+                            im = im.crop(box)
+                        if im.width > ART_WIDTH:
+                            im = im.resize((ART_WIDTH, round(im.height * ART_WIDTH / im.width)), Image.LANCZOS)
+                        im.save(dest, 'WEBP', quality=82, method=6)
+                    made += 1
+                dino.setdefault('art', OrderedDict())[side] = rel
+    return made, unmatched
+
+
 def main():
     with open(CATALOG, encoding='utf-8') as f:
         catalog = json.load(f, object_pairs_hook=OrderedDict)
@@ -183,12 +263,12 @@ def main():
     dinos, moves, used_thumbs = [], [], set()
     new_thumbs = 0
 
-    folders = [e for e in elements if os.path.isdir(os.path.join(DIR, e))]
-    folders += sorted(d for d in os.listdir(DIR)
-                      if os.path.isdir(os.path.join(DIR, d)) and d not in folders and d not in ('cards', 'chibis'))
+    folders = [e for e in elements if os.path.isdir(os.path.join(CARDS_SRC, e))]
+    folders += sorted(d for d in os.listdir(CARDS_SRC)
+                      if os.path.isdir(os.path.join(CARDS_SRC, d)) and d not in folders and d not in SKIP_FOLDERS)
 
-    all_paths = [os.path.join(DIR, e, fn) for e in folders
-                 for fn in sorted(os.listdir(os.path.join(DIR, e))) if fn.lower().endswith('.jpg')]
+    all_paths = [os.path.join(CARDS_SRC, e, fn) for e in folders
+                 for fn in sorted(os.listdir(os.path.join(CARDS_SRC, e))) if fn.lower().endswith(IMAGE_EXT)]
     sides = detect_front_sides(all_paths)
     old_sides = {os.path.basename(d.get('image', '')): d.get('frontSide', 'left') for d in catalog.get('dinos', [])}
     old_sides.update({os.path.basename(a.get('image', '')): a.get('frontSide', 'left') for a in catalog.get('attacks', []) if a.get('moveCard')})
@@ -196,10 +276,10 @@ def main():
     for element in folders:
         if element not in catalog['elements']:
             print(f'⚠️  Carpeta "{element}" no es un elemento de dinos.json; se registra igual.')
-        for filename in sorted(os.listdir(os.path.join(DIR, element))):
-            if not filename.lower().endswith('.jpg'):
+        for filename in sorted(os.listdir(os.path.join(CARDS_SRC, element))):
+            if not filename.lower().endswith(IMAGE_EXT):
                 continue
-            rel = f'{element}/{filename}'
+            rel = f'cartas/{element}/{filename}'
             card_rel = f'cards/{element}/{filename}'
             used_thumbs.add(card_rel)
             side = sides[os.path.join(DIR, rel)]
@@ -210,21 +290,8 @@ def main():
                 new_thumbs += 1
 
             cid, name = id_and_name(filename)
-            if is_move_card(os.path.join(DIR, rel), side):
-                prev = old_attacks.get(cid, {})
-                moves.append(OrderedDict([
-                    ('id', cid),
-                    ('name', prev.get('name', name)),
-                    ('element', element),
-                    ('power', prev.get('power', MOVE_POWER.get(element, MOVE_POWER_DEFAULT))),
-                    ('category', prev.get('category', 'fisico')),
-                    ('level', prev.get('level', 1)),
-                    ('moveCard', True),
-                    ('image', rel),
-                    ('card', card_rel),
-                ]))
-                if side == 'right':
-                    moves[-1]['frontSide'] = 'right'
+            if False:  # ya no hay cartas de movimiento: todas son dinos
+                pass
             else:
                 prev = old_dinos.get(filename, {})
                 entry = OrderedDict([
@@ -241,13 +308,15 @@ def main():
                     entry['stats'] = prev['stats']
                 dinos.append(entry)
 
+    art_made, art_unmatched = build_art(dinos)
+
     stat_cfg = catalog.get('stats', {})
     new_stats = assign_stats(dinos, catalog['elements'], stat_cfg.get('min', 4), stat_cfg.get('max', 10))
 
-    # Ataques normales (sin carta) se conservan; las cartas de movimiento se regeneran
+    # Ataques normales (sin carta) se conservan; las cartas de movimiento ya no existen
     plain_attacks = [a for a in catalog.get('attacks', []) if not a.get('moveCard')]
     catalog['dinos'] = dinos
-    catalog['attacks'] = plain_attacks + moves
+    catalog['attacks'] = plain_attacks
 
     with open(CATALOG, 'w', encoding='utf-8') as f:
         json.dump(catalog, f, indent=2, ensure_ascii=False)
@@ -267,7 +336,14 @@ def main():
             if not os.listdir(p):
                 os.rmdir(p)
 
-    print(f'✔ {len(dinos)} dinos y {len(moves)} cartas de movimiento en dinos.json')
+    print(f'✔ {len(dinos)} dinos en dinos.json')
+    with_art = sum(1 for d in dinos if d.get('art'))
+    print(f'✔ Arte: {with_art}/{len(dinos)} dinos con imagen grande ({art_made} imágenes nuevas en arte/)')
+    if art_unmatched:
+        print(f'⚠️  Arte sin dino en el catálogo (revisa el nombre): {art_unmatched}')
+    sin_arte = [d['name'] for d in dinos if not d.get('art')]
+    if sin_arte:
+        print(f'   Dinos sin arte todavía: {", ".join(sin_arte)}')
     print(f'✔ {new_thumbs} miniaturas generadas, {removed} miniaturas antiguas borradas')
     print(f'✔ {new_stats} dinos con estadísticas nuevas o ampliadas (5 stats)')
     for el in folders:

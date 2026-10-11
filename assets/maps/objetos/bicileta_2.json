@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "cols": 3,
+  "rows": 2,
+  "tileSize": 32,
+  "tilesets": {
+    "Outside.png": "/assets/maps/Outside.png"
+  },
+  "cells": [
+    [
+      [
+        "Outside.png",
+        244,
+        9,
+        16
+      ],
+      [
+        "Outside.png",
+        244,
+        10,
+        16
+      ],
+      [
+        "Outside.png",
+        244,
+        11,
+        16
+      ]
+    ],
+    [
+      [
+        "Outside.png",
+        245,
+        9,
+        16
+      ],
+      [
+        "Outside.png",
+        245,
+        10,
+        16
+      ],
+      [
+        "Outside.png",
+        245,
+        11,
+        16
+      ]
+    ]
+  ],
+  "solid": [
+    [
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0
+    ]
+  ],
+  "name": "bicileta_2",
+  "png": "objetos/bicileta_2.png",
+  "tilesetKey": "objetos/bicileta_2"
+}

@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "cols": 1,
+  "rows": 2,
+  "tileSize": 32,
+  "tilesets": {
+    "objetos_para_casa.png": "/custom_assets/objetos_para_casa.png"
+  },
+  "cells": [
+    [
+      [
+        "objetos_para_casa.png",
+        39,
+        6,
+        32
+      ]
+    ],
+    [
+      [
+        "objetos_para_casa.png",
+        40,
+        6,
+        32
+      ]
+    ]
+  ],
+  "solid": [
+    [
+      0
+    ],
+    [
+      0
+    ]
+  ],
+  "name": "ventana_1",
+  "png": "objetos/ventana_1.png",
+  "tilesetKey": "objetos/ventana_1"
+}

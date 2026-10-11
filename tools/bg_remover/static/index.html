@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dino King - QuitaFondos Studio & Retoque Manual</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-brand">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>DINO KING <span>QUITAFONDOS</span></h1>
+          <p class="subtitle">Selector por carpeta y retoque manual pixel a pixel</p>
+        </div>
+      </div>
+
+      <!-- Two-Step Folder + Image Selector -->
+      <div class="cascading-selectors">
+        <!-- 1. Folder Selector -->
+        <div class="selector-box">
+          <label for="folderSelect">📁 Carpeta:</label>
+          <div class="folder-input-group">
+            <select id="folderSelect">
+              <option value="" selected disabled>📂 Abre tu carpeta con "Examinar..." o "Ruta"</option>
+            </select>
+            <input type="file" id="directFilePicker" accept=".jpg,.jpeg,image/jpeg" multiple style="display: none;">
+            <input type="file" id="localFolderPicker" webkitdirectory directory multiple style="display: none;">
+            <button id="btnOpenDirectFile" class="btn-subtle" title="Abrir una o varias imágenes JPEG directamente">🖼️ Abrir JPEG...</button>
+            <button id="btnBrowseFolder" class="btn-subtle" title="Examinar y abrir cualquier carpeta desde tu equipo">📂 Carpeta...</button>
+            <button id="btnCustomPath" class="btn-subtle" title="Pegar o escribir ruta de carpeta (ej. /home/...)">⌨️ Ruta</button>
+          </div>
+        </div>
+
+        <!-- 2. Image Selector -->
+        <div class="selector-box">
+          <label for="imageSelect">🖼️ Imagen:</label>
+          <div class="nav-select-wrapper">
+            <button id="btnPrevImg" class="btn-icon-tiny" title="Imagen anterior (Flecha Izquierda)" disabled>◀</button>
+            <select id="imageSelect" disabled>
+              <option value="" selected disabled>-- Primero elige carpeta --</option>
+            </select>
+            <button id="btnNextImg" class="btn-icon-tiny" title="Imagen siguiente (Flecha Derecha)" disabled>▶</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Header Actions -->
+      <div class="header-actions">
+        <button id="btnHeaderAutoCut" class="btn btn-cyan btn-large" style="font-weight: 800; box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);" title="Eliminar fondo blanco automáticamente de inmediato">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          ⚡ BORRAR FONDO AUTOMÁTICO
+        </button>
+        <button id="btnHeaderSave" class="btn btn-emerald" title="Guardar PNG en la carpeta del juego">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+          Guardar PNG
+        </button>
+        <button id="btnHeaderDownload" class="btn btn-secondary" title="Descargar PNG transparente al navegador">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Descargar
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="workspace">
+      <!-- Sidebar: Manual Tools & Auto Controls -->
+      <aside class="sidebar">
+        <!-- 1. Borrador Manual -->
+        <div class="sidebar-section">
+          <div class="section-header-row">
+            <h2 class="section-title">Borrador Manual</h2>
+            <div class="undo-redo-group">
+              <button id="btnUndo" class="btn-icon-small" title="Deshacer (Ctrl + Z)" disabled>
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 00-9-9 9 9 0 00-6 2.3L3 13"/></svg>
+              </button>
+              <button id="btnRedo" class="btn-icon-small" title="Rehacer (Ctrl + Y)" disabled>
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 7v6h-6"/><path d="M3 17a9 9 0 019-9 9 9 0 016 2.3l3 2.7"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="tools-grid-simple">
+            <button class="tool-btn active" id="btnToolEraser" data-tool="brush_eraser" title="Borrador manual: Arrastra el ratón sobre la imagen para borrar fondo blanco">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 20H7L3 16C2 15 2 13 3 12L13 2C14 1 16 1 17 2L21 6C22 7 22 9 21 10L14 17"/><path d="M6 11l7 7"/></svg>
+              <span>Borrador</span>
+            </button>
+            <button class="tool-btn" id="btnToolWand" data-tool="magic_wand" title="Varita Mágica: Haz 1 clic en cualquier hueco blanco (como entre las patas) para borrarlo">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 4l5 5L8 21H3v-5L15 4z"/></svg>
+              <span>Varita (1 Clic)</span>
+            </button>
+            <button class="tool-btn" id="btnToolRestore" data-tool="brush_restore" title="Restaurar piel/cuerpo: Pinta sobre zonas borradas por error para recuperar los píxeles originales">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+              <span>Restaurar</span>
+            </button>
+            <button class="tool-btn" id="btnToolPan" data-tool="pan" title="Mano: Mover y desplazar el lienzo">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0"/><path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2"/><path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></svg>
+              <span>Mover</span>
+            </button>
+          </div>
+
+          <!-- Slider Tamaño de Borrador / Restaurador -->
+          <div class="control-group" id="brushControls">
+            <div class="control-label">
+              <span>Tamaño de Pincel</span>
+              <span id="brushSizeVal" class="badge-val">24 px</span>
+            </div>
+            <input type="range" id="brushSizeRange" min="2" max="150" value="24" step="1">
+            <div class="range-marks">
+              <span>2 px (Detalle)</span>
+              <span>150 px (Áreas grandes)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Modo de Recorte (Opciones anteriores) -->
+        <div class="sidebar-section">
+          <div class="section-header-row">
+            <h2 class="section-title">Modo de Recorte</h2>
+            <button id="btnResetOriginal" class="btn-text-danger" title="Restaurar toda la imagen al original sin cortes">Restablecer original</button>
+          </div>
+          <div class="mode-grid">
+            <button class="mode-card active" data-mode="border_only">
+              <span class="mode-badge">Seguro (Cartas)</span>
+              <div class="mode-header">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+                <h3>Solo Exterior</h3>
+              </div>
+              <p>Corta estrictamente desde los bordes. NO agujerea dinosaurios blancos o claros.</p>
+            </button>
+
+            <button class="mode-card" data-mode="smart">
+              <div class="mode-header">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                <h3>Inteligente</h3>
+              </div>
+              <p>Exterior + huecos entre patas. (Limpia el espacio entre las patas).</p>
+            </button>
+
+            <button class="mode-card" data-mode="all_white">
+              <div class="mode-header">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                <h3>Global</h3>
+              </div>
+              <p>Elimina todo color blanco del lienzo sin importar su posición.</p>
+            </button>
+          </div>
+
+          <!-- BOTÓN PRINCIPAL DE BORRADO AUTOMÁTICO VISIBLE ARRIBA SIN SCROLL -->
+          <button id="btnProcessTop" class="btn btn-cyan btn-large" style="width: 100%; margin-top: 14px; font-weight: 800; padding: 14px 16px; font-size: 1rem; box-shadow: 0 4px 18px rgba(0, 229, 255, 0.4);">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            ⚡ BORRAR FONDO AUTOMÁTICO
+          </button>
+        </div>
+
+        <!-- 3. Ajustes de Precisión (Opciones anteriores) -->
+        <div class="sidebar-section">
+          <h2 class="section-title">Ajustes de Precisión</h2>
+          
+          <!-- Slider: Tolerancia -->
+          <div class="control-group">
+            <div class="control-label">
+              <span>Tolerancia de Blanco</span>
+              <span id="toleranceVal" class="badge-val">25</span>
+            </div>
+            <input type="range" id="toleranceRange" min="5" max="80" value="25" step="1">
+            <div class="range-marks">
+              <span>5 (Muy estricto)</span>
+              <span>80 (Agresivo)</span>
+            </div>
+          </div>
+
+          <!-- Slider: Choke / Anti-halo -->
+          <div class="control-group">
+            <div class="control-label">
+              <span>Limpieza de Halo JPEG (Choke)</span>
+              <span id="chokeVal" class="badge-val">1 px</span>
+            </div>
+            <input type="range" id="chokeRange" min="0" max="4" value="1" step="1">
+            <p class="control-help">Elimina la franja blanquecina de 1-2px que deja la compresión JPEG.</p>
+          </div>
+
+          <!-- Slider: Feather / Suavizado -->
+          <div class="control-group">
+            <div class="control-label">
+              <span>Suavizado de Bordes (Feather)</span>
+              <span id="featherVal" class="badge-val">0.8 px</span>
+            </div>
+            <input type="range" id="featherRange" min="0" max="3" value="0.8" step="0.1">
+            <p class="control-help">Difumina suavemente el corte para evitar bordes pixelados.</p>
+          </div>
+
+          <!-- Toggles -->
+          <div class="toggles-group">
+            <label class="toggle-item">
+              <input type="checkbox" id="cleanPocketsCheck">
+              <span class="toggle-slider"></span>
+              <span class="toggle-text">Limpiar huecos interiores aislados (desactivado para dinosaurios blancos)</span>
+            </label>
+
+            <label class="toggle-item">
+              <input type="checkbox" id="trimCheck">
+              <span class="toggle-slider"></span>
+              <span class="toggle-text">Auto-recortar márgenes transparentes (Trim)</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Acciones -->
+        <div class="sidebar-footer">
+          <button id="btnProcess" class="btn btn-cyan btn-large">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            <span>Procesar Automático</span>
+          </button>
+          <button id="btnBatch" class="btn btn-outline" title="Procesar todas las imágenes de esta carpeta">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+            <span>Procesar Carpeta Completa</span>
+          </button>
+        </div>
+      </aside>
+
+      <!-- Viewport & Canvas Interactive Stage -->
+      <section class="viewport-area">
+        <!-- Viewport Toolbar -->
+        <div class="viewport-toolbar">
+          <div class="toolbar-left">
+            <!-- View Mode -->
+            <div class="btn-group" id="viewModeGroup">
+              <button class="btn-tool active" data-view="editor" title="Lienzo de edición activa">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                Editor
+              </button>
+              <button class="btn-tool" data-view="split" title="Comparación con split deslizante">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/></svg>
+                Split Antes/Después
+              </button>
+            </div>
+
+            <!-- BG Pattern Switcher -->
+            <div class="bg-pattern-selector">
+              <span class="label-tiny">Fondo:</span>
+              <button class="btn-pattern active" data-pattern="checkerboard" title="Cuadrícula de transparencia"></button>
+              <button class="btn-pattern bg-black" data-pattern="black" title="Fondo negro para ver bordes"></button>
+              <button class="btn-pattern bg-green" data-pattern="green" title="Croma verde"></button>
+              <button class="btn-pattern bg-white" data-pattern="white" title="Fondo blanco"></button>
+            </div>
+
+            <button id="btnHoldOriginal" class="btn-tool" title="Mantén pulsado para comparar con el original">
+              👁️ Mantén: Ver Original
+            </button>
+          </div>
+
+          <!-- Zoom & Pan Controls -->
+          <div class="toolbar-right">
+            <button id="btnZoomOut" class="btn-icon" title="Alejar zoom (Rueda abajo)">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+            </button>
+            <span id="zoomLevel" class="zoom-text">100%</span>
+            <button id="btnZoomIn" class="btn-icon" title="Acercar zoom (Rueda arriba)">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+            </button>
+            <button id="btnZoomReset" class="btn-tool" title="Ajustar a la pantalla">Ajustar</button>
+          </div>
+        </div>
+
+        <!-- Canvas Container -->
+        <div class="canvas-stage pattern-checkerboard" id="canvasStage">
+          <!-- Empty State Message when no image is selected -->
+          <div class="empty-state" id="emptyState">
+            <div class="empty-icon">
+              <svg viewBox="0 0 24 24" width="64" height="64" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <polyline points="21 15 16 10 5 21"/>
+              </svg>
+            </div>
+            <h3 class="empty-title">Carga tu imagen de dinosaurio</h3>
+            <p class="empty-desc">
+              Arrastra cualquier archivo JPEG directamente aquí o usa los botones:
+            </p>
+            <div style="display: flex; gap: 12px; margin-top: 15px; flex-wrap: wrap; justify-content: center;">
+              <button id="btnEmptyOpenImage" class="btn btn-cyan btn-large" style="font-weight: 700; padding: 12px 24px; box-shadow: 0 4px 15px rgba(0,229,255,0.4);">
+                🖼️ Seleccionar Imagen JPEG
+              </button>
+              <button id="btnEmptyOpenFolder" class="btn btn-secondary btn-large" style="font-weight: 700; padding: 12px 24px;">
+                📂 Abrir Carpeta
+              </button>
+            </div>
+          </div>
+
+          <!-- Virtual Brush Cursor Overlay -->
+          <div id="brushCursor" class="brush-cursor"></div>
+
+          <!-- Canvas Wrapper that receives Zoom & Pan Transform -->
+          <div class="canvas-transform-wrapper" id="canvasTransformWrapper" style="display: none;">
+            <!-- Active Interactive Canvas -->
+            <canvas id="mainCanvas"></canvas>
+
+            <!-- Split Comparison Overlay (When Split View is Active) -->
+            <div class="split-overlay-container" id="splitOverlayContainer" style="display: none;">
+              <canvas id="splitOriginalCanvas"></canvas>
+              <div class="split-divider" id="splitDivider">
+                <div class="divider-handle">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M8 5l-5 7 5 7V5zm8 0v14l5-7-5-7z"/></svg>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Loading Overlay -->
+          <div class="loading-overlay" id="loadingOverlay">
+            <div class="spinner"></div>
+            <p id="loadingMsg">Cargando imagen...</p>
+          </div>
+        </div>
+
+        <!-- Status & Stats Bar -->
+        <footer class="stats-bar">
+          <div class="stat-item">
+            <span class="stat-dot green" id="statusDot"></span>
+            <span id="statusText">Listo</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <span class="stat-label">Archivo:</span>
+            <span class="stat-val" id="statFilename">--</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <span class="stat-label">Resolución:</span>
+            <span class="stat-val" id="statDimensions">--</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <span class="stat-label">Herramienta:</span>
+            <span class="stat-val cyan" id="statActiveTool">Varita Mágica</span>
+          </div>
+        </footer>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

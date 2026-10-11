@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "cols": 1,
+  "rows": 2,
+  "tileSize": 32,
+  "tilesets": {
+    "objetos_para_casa_2.png": "/custom_assets/objetos_para_casa_2.png"
+  },
+  "cells": [
+    [
+      [
+        "objetos_para_casa_2.png",
+        13,
+        5,
+        32
+      ]
+    ],
+    [
+      [
+        "objetos_para_casa_2.png",
+        14,
+        5,
+        32
+      ]
+    ]
+  ],
+  "solid": [
+    [
+      0
+    ],
+    [
+      0
+    ]
+  ],
+  "name": "bonzai",
+  "png": "objetos/bonzai.png",
+  "tilesetKey": "objetos/bonzai"
+}

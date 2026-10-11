@@ -17,7 +17,7 @@ const ROUND_NAMES = ['Cuartos de final', 'Semifinal', 'Gran Final'];
 const ALPHA_CHANCE = 0.25;
 const CHAMPION_CREDITS = 1500;
 const ALPHA_CREDITS = 500;
-const TOURNAMENT_MAPS = ['world_map', 'ruta_1', 'cueva_meteoro'];
+const TOURNAMENT_MAPS = ['world_map', 'ruta_1', 'cueva_meteoro', 'gimnasio_ciudad', 'gimnasio_viento', 'gimnasio_fuego'];
 const REFEREE_LINES = {
     welcome: '¡Bienvenidos al Gran Torneo Mesozoico! Ocho Tamers, todos los dinos a nivel 50... ¡y solo un campeón!',
     start: '¡Damas y caballeros! ¡El enfrentamiento de hoy hará temblar la tierra! ¡Tamers, preparen sus Cartas Dino... y a luchar!',

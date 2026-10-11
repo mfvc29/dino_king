@@ -14,6 +14,7 @@ class LPCRenderer {
         this.accentColor = options.accentColor || '#00e5ff';
         this.archetype = options.archetype || 'guerrero';
         this.name = options.name || 'Entrenador';
+        this.filter = options.filter || null;   // p. ej. 'hue-rotate(120deg)' para reutilizar un sprite con otros colores
 
         // Definición de animaciones estándar LPC
         this.animations = {
@@ -123,6 +124,8 @@ class LPCRenderer {
         if (this.loaded && this.image) {
             if (isHurt) {
                 ctx.filter = 'brightness(2) drop-shadow(0 0 4px #ff3333)';
+            } else if (this.filter) {
+                ctx.filter = this.filter;
             }
             ctx.drawImage(
                 this.image,

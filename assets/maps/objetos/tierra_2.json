@@ -1,0 +1,52 @@
+{
+  "version": 1,
+  "cols": 2,
+  "rows": 2,
+  "tileSize": 32,
+  "tilesets": {
+    "Outside.png": "/assets/maps/Outside.png"
+  },
+  "cells": [
+    [
+      [
+        "Outside.png",
+        77,
+        3,
+        32
+      ],
+      [
+        "Outside.png",
+        77,
+        4,
+        32
+      ]
+    ],
+    [
+      [
+        "Outside.png",
+        78,
+        3,
+        32
+      ],
+      [
+        "Outside.png",
+        78,
+        4,
+        32
+      ]
+    ]
+  ],
+  "solid": [
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      0
+    ]
+  ],
+  "name": "tierra_2",
+  "png": "objetos/tierra_2.png",
+  "tilesetKey": "objetos/tierra_2"
+}

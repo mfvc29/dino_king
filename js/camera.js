@@ -33,10 +33,11 @@ class Camera {
     }
 
     clamp() {
-        const maxCamX = Math.max(0, this.worldWidth - this.viewportWidth / this.zoom);
-        const maxCamY = Math.max(0, this.worldHeight - this.viewportHeight / this.zoom);
-        this.x = Math.max(0, Math.min(this.x, maxCamX));
-        this.y = Math.max(0, Math.min(this.y, maxCamY));
+        const viewW = this.viewportWidth / this.zoom;
+        const viewH = this.viewportHeight / this.zoom;
+        // Mapas más chicos que la pantalla (interiores de casas): centrados
+        this.x = this.worldWidth < viewW ? -(viewW - this.worldWidth) / 2 : Math.max(0, Math.min(this.x, this.worldWidth - viewW));
+        this.y = this.worldHeight < viewH ? -(viewH - this.worldHeight) / 2 : Math.max(0, Math.min(this.y, this.worldHeight - viewH));
     }
 
     apply(ctx) {

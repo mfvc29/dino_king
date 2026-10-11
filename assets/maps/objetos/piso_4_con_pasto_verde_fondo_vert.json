@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "cols": 1,
+  "rows": 3,
+  "tileSize": 32,
+  "tilesets": {
+    "Outside.png": "/assets/maps/Outside.png"
+  },
+  "cells": [
+    [
+      [
+        "Outside.png",
+        33,
+        0,
+        32
+      ]
+    ],
+    [
+      [
+        "Outside.png",
+        34,
+        0,
+        32
+      ]
+    ],
+    [
+      [
+        "Outside.png",
+        35,
+        0,
+        32
+      ]
+    ]
+  ],
+  "solid": [
+    [
+      0
+    ],
+    [
+      0
+    ],
+    [
+      0
+    ]
+  ],
+  "name": "piso_4_con_pasto_verde_fondo_vert",
+  "png": "objetos/piso_4_con_pasto_verde_fondo_vert.png",
+  "tilesetKey": "objetos/piso_4_con_pasto_verde_fondo_vert"
+}

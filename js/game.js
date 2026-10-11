@@ -53,6 +53,8 @@ class Game {
         this.remotePlayers = {}; // id -> Player
 
         this.cards = new CardSystem(this);     // dinos, almanaque, objetos (js/cards.js)
+        this.mine = new MineSystem(this);      // exploración de la cueva y Taller (js/mine.js)
+        this.field = new FieldSystem(this);    // habilidades por elemento, tesoros y reglas de gimnasio (js/field.js)
         this.battle = new BattleSystem(this);  // combates 3 contra 3 estilo Persona 5 (js/battle.js)
         this.story = new StorySystem(this);    // historia de Dino Rey (js/story.js)
         this.tournament = new TournamentSystem(this); // Gran Torneo Mesozoico (js/tournament.js)
@@ -107,6 +109,9 @@ class Game {
         this.camera.worldHeight = this.tileMap.height;
         this.miniMap.updateScaleAndPrerender();
         this.spawnNPCs();
+        this.mine.onMapLoaded();
+        this.field.onMapLoaded();
+        this.refreshNpcBlockers();
         this.cards.spawnGroundItems();
         if (this.tileMap.spawn && !this.isTransitioning && !this.placingFromSave) {
             this.placePlayerAtTile(this.tileMap.spawn.x, this.tileMap.spawn.y);
@@ -131,6 +136,7 @@ class Game {
         const ts = this.tileMap.tileSize;
         this.localPlayer.x = col * ts + ts / 2;
         this.localPlayer.y = row * ts + ts / 2;
+        this.mine.clearAt(col, row);
         this.camera.x = this.localPlayer.x - this.camera.viewportWidth / 2;
         this.camera.y = this.localPlayer.y - this.camera.viewportHeight / 2;
         this.camera.clamp();
@@ -152,6 +158,8 @@ class Game {
         this.protagonist = protagonist;
         this.defeatedTrainers = new Set();
         this.cards.deserialize({});
+        this.mine.reset();
+        this.field.reset();
         this.story.deserialize({ rival: { name: rival.name, sprite: rival.sprite, starter: null } });
 
         const p = this.localPlayer;
@@ -181,6 +189,8 @@ class Game {
         this.playTime = Number(data.playTime) || 0;
         this.defeatedTrainers = new Set(data.defeatedTrainers || []);
         this.cards.deserialize(data.cards || {});
+        this.mine.deserialize(data.mine || {});
+        this.field.deserialize(data.field || {});
         this.story.deserialize(data.story || {});
 
         const sp = data.player || {};
@@ -436,6 +446,7 @@ class Game {
             return;
         }
 
+        this.tileMap.canSurf = this.field.has('agua');   // con un dino de Agua se cruza el agua
         this.localPlayer.update(this.input.getMoveInput(), this.tileMap);
 
         // Warps / puertas
@@ -456,6 +467,8 @@ class Game {
         } else {
             this.lastWarp = null;
         }
+        this.mine.onStep(col, row);
+        this.field.onStep(col, row);
 
         // Hierba alta: objetos y dinos salvajes cada 20-100 pasos
         if (!this.isTransitioning && this.cards.onPlayerUpdate()) {
@@ -484,6 +497,8 @@ class Game {
         this.camera.apply(ctx);
         this.tileMap.draw(ctx, this.camera);
         this.cards.drawGroundItems(ctx);
+        this.mine.draw(ctx);
+        this.field.draw(ctx);
         this.story.drawEvents(ctx, this.tileMap.currentMapId || 'world_map', this.tileMap.tileSize);
 
         const currentMap = this.tileMap.currentMapId || 'world_map';
@@ -492,6 +507,7 @@ class Game {
         entities.sort((a, b) => a.y - b.y);
         entities.forEach(e => e.draw(ctx));
         this.camera.restore(ctx);
+        this.mine.drawDarkness(ctx);
 
         // Interfaz fija
         if (this.dialog) this.drawDialogBox();
@@ -545,6 +561,11 @@ class Game {
 
     toggleWorldMap() {
         if (this.state !== 'overworld' || this.isMenuOpen || this.activeEvent || this.dialog || this.cards.isEncounterActive) return;
+        // En lo profundo de la cueva no hay mapa: hay que explorar
+        if (!this.isMapOpen && this.mine.floor > 1) {
+            this.notifyStatus('🗺️ Aquí abajo no hay mapa... ¡tendrás que explorar!');
+            return;
+        }
         this.isMapOpen = !this.isMapOpen;
     }
 
@@ -562,7 +583,8 @@ class Game {
     }
 
     refreshNpcBlockers() {
-        this.tileMap.npcBlockers = new Set(this.npcs.map(n => `${n.col},${n.row}`));
+        this.tileMap.npcBlockers = new Set([...this.npcs.map(n => `${n.col},${n.row}`), ...this.mine.blockerKeys(),
+            ...(this.field ? this.field.blockerKeys() : [])]);
     }
 
     getPlayerTile() {
@@ -625,6 +647,15 @@ class Game {
     }
 
     openTrainerChallenge(npc) {
+        // Gimnasios con reglas (nivel máximo / elemento prohibido)
+        const rule = this.field.gymViolation();
+        if (rule && !this.defeatedTrainers.has(npc.eventKey)) {
+            this.showDialog(npc.name, rule, () => {
+                this.activeEvent = null;
+                this.stepBackFrom(npc);
+            });
+            return;
+        }
         const text = npc.dialog || '¡Eh, tú! ¡Nuestras miradas se cruzaron, eso significa combate!';
         this.showDialog(npc.name, text, () => this.startBattle(npc));
     }
@@ -639,10 +670,26 @@ class Game {
             this.story.runEvent(ev);
             return;
         }
+        if (this.mine.tryHit(col + d.dx, row + d.dy)) return;
+        if (this.field.tryCut(col + d.dx, row + d.dy)) return;
         const npc = this.npcs.find(n => n.occupiesTile(col + d.dx, row + d.dy));
         if (!npc) return;
 
         this.faceEachOther(npc);
+        if (npc.data.mineGuide) {
+            this.mine.talkGuide(npc);
+            return;
+        }
+        if (npc.data.restHome) {
+            // Descansar en casa: todos tus dinos se recuperan del cansancio
+            this.showDialog(npc.name, npc.dialog || '¡Descansa un poco!', () => {
+                if (this.cards.collection.length) {
+                    this.cards.restDinos(100, 'all');
+                    this.notifyStatus('🛏️ Tus dinos descansaron en casa: ¡todos recuperaron su energía!');
+                }
+            });
+            return;
+        }
         if (npc.data.tournament) {
             this.tournament.greet(npc);
             return;
@@ -773,7 +820,11 @@ class Game {
             this.notifyStatus(`💨 Escapaste del combate contra ${npc.name}.`);
             this.dialog = null;
         }
-        // Retroceder una losa para no volver a entrar en su visión inmediatamente
+        this.stepBackFrom(npc);
+    }
+
+    /** Retroceder una losa para no volver a entrar en su visión inmediatamente. */
+    stepBackFrom(npc) {
         const d = NPC_DIRS[npc.direction];
         const ts = this.tileMap.tileSize;
         const bx = this.localPlayer.x + d.dx * ts;
@@ -811,7 +862,7 @@ class Game {
 
         // Equipo: solo se redibuja si cambió
         const team = this.cards.getTeam();
-        const key = team.map(c => `${c.id}:${c.level}:${c.xp}`).join('|') + `#${this.dinoCatalog.dinos.length}`;
+        const key = team.map(c => `${c.id}:${c.level}:${c.xp}:${c.fatigue || 0}`).join('|') + `#${this.dinoCatalog.dinos.length}`;
         if (key !== this.hudTeamKey) {
             this.hudTeamKey = key;
             const el = document.getElementById('hudTeam');
@@ -821,8 +872,10 @@ class Game {
                 const d = this.cards.getDino(c.id);
                 const src = d && (d.card || d.image);
                 const style = src ? `background-image:url('assets/dinos/${encodeURI(src)}')` : '';
-                return `<div class="hud-dino" style="${style}" title="${d ? d.name : c.id} · Nv. ${c.level} (${c.xp}%)">
+                const tired = this.cards.fatigueLevel(c);
+                return `<div class="hud-dino" style="${style}" title="${d ? d.name : c.id} · Nv. ${c.level} (${c.xp}%) · ${tired.icon} ${tired.label} (${Math.round(c.fatigue || 0)}%)">
                             <span class="hud-dino-lvl">${c.level}</span>
+                            ${(c.fatigue || 0) >= 40 ? `<span style="position:absolute;top:1px;right:1px;font-size:12px;line-height:1;">${tired.icon}</span>` : ''}
                             <span class="hud-dino-xp" style="width:${c.xp}%"></span>
                         </div>`;
             }).join('');
@@ -922,6 +975,8 @@ class Game {
             this.cards.renderCardsPanel(panel);
         } else if (tab === 'bag') {
             this.cards.renderBagPanel(panel);
+        } else if (tab === 'workshop') {
+            this.mine.renderWorkshopPanel(panel);
         } else if (tab === 'trainer') {
             this.renderTrainerPanel(panel);
         } else if (tab === 'story') {
@@ -1055,7 +1110,7 @@ class Game {
                 ${tile('Dinos en el almanaque', this.cards.collection.length)}
                 ${tile('Entrenadores vencidos', this.defeatedTrainers.size)}
                 ${tile('Piedras Elementales', `${this.story.stones.length}/7`)}
-                ${tile('Cartas de movimiento', Object.values(this.cards.moveCards).reduce((a, b) => a + b, 0))}
+                ${tile('Especies registradas', new Set(this.cards.collection.map(c => c.id)).size)}
                 ${tile('Tiempo de juego', SaveManager.formatTime(this.playTime))}
                 ${tile('Dino-Créditos', `💰 ${this.cards.credits}`)}
                 ${tile('Torneos ganados', `🏆 ${this.story.flags.torneoVictorias || 0}`)}

@@ -1,7 +1,20 @@
 [
   "world_map.json",
+  "casa_abuelos.json",
+  "casa_deportista.json",
+  "casa_lectora.json",
   "casa_martin.json",
+  "casa_pintor.json",
   "cueva_meteoro.json",
+  "cueva_meteoro_2.json",
+  "cueva_meteoro_3.json",
+  "cueva_meteoro_4.json",
+  "cueva_meteoro_5.json",
+  "cueva_meteoro_6.json",
+  "gimnasio_ciudad.json",
+  "gimnasio_fuego.json",
+  "gimnasio_viento.json",
+  "laboratorio.json",
   "ruta_1.json",
   "torneo.json"
 ]
