@@ -657,7 +657,57 @@ class Game {
             return;
         }
         const text = npc.dialog || '¡Eh, tú! ¡Nuestras miradas se cruzaron, eso significa combate!';
-        this.showDialog(npc.name, text, () => this.startBattle(npc));
+        this.showDialog(npc.name, text, () => (this.isLeader(npc) ? this.askReady(npc) : this.startBattle(npc)));
+    }
+
+    /** Líderes: los Guardianes (dan Piedra Elemental), los jefes de la historia y los marcados con "leader". */
+    isLeader(npc) {
+        const story = this.story.data || {};
+        return !!((story.guardians || {})[npc.id] || npc.data.leader ||
+            (story.npcs || []).some(n => n.id === npc.id && n.type === 'trainer'));
+    }
+
+    /** Antes de un líder: ¿listo o quieres cambiar tu equipo? */
+    askReady(npc) {
+        const elements = this.cards.catalog.elements || {};
+        const rivalEls = [...new Set((npc.team || []).map(m => (this.cards.getDino(m.species || m.id) || m).element).filter(Boolean))];
+        const hint = rivalEls.length
+            ? `${npc.name} usa dinos de ${rivalEls.map(e => (elements[e] ? `${elements[e].icon} ${elements[e].name}` : e)).join(', ')}.`
+            : '';
+        // Equipo en versión compacta (carta, dino, nivel y cansancio) para que los botones se vean sin bajar
+        const teamHtml = this.cards.getTeam().map(c => {
+            const d = this.cards.getDino(c.id);
+            const el = d && elements[d.element];
+            const src = d && (d.card || d.image);
+            const art = this.cards.artUrl(c.id, 'right');
+            const tired = this.cards.fatigueLevel(c);
+            return `<div class="ready-dino">
+                        <span class="ready-card" style="${src ? `background-image:url('assets/dinos/${encodeURI(src)}')` : ''}"></span>
+                        ${art ? `<img class="ready-art" src="${art}" alt="">` : ''}
+                        <span class="ready-info"><strong>${escapeHtml(d ? d.name : c.id)}</strong>
+                        <small style="color:${el ? el.color : '#94a3b8'}">${el ? el.icon + ' ' + el.name : ''} · Nv. ${c.level}</small>
+                        <small>${tired.icon} ${tired.label}</small></span>
+                    </div>`;
+        }).join('');
+        this.cards.showModal({
+            title: `⚔️ ¿Listo para enfrentar a ${npc.name}?`,
+            cards: [],
+            message: `${hint}<div class="ready-team">${teamHtml}</div>¿Estás listo o quieres cambiar tu equipo antes del combate?`,
+            buttons: [
+                { label: '⚔️ ¡Estoy listo!', cls: 'win', onClick: () => { this.cards.closeModal(); this.startBattle(npc); } },
+                {
+                    label: '🔄 Cambiar mi equipo', cls: 'swap', onClick: () => {
+                        this.cards.closeModal();
+                        this.activeEvent = null;
+                        this.stepBackFrom(npc);
+                        npc.bubbleAlert = false;
+                        this.activeMenuTab = 'cards';
+                        this.toggleMenu();
+                        this.notifyStatus(`📖 Arma tu equipo y vuelve a hablar con ${npc.name} cuando estés listo.`);
+                    }
+                }
+            ]
+        });
     }
 
     /** Espacio / E: hablar con el personaje que tienes enfrente. */

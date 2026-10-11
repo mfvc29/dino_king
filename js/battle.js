@@ -4,22 +4,22 @@
  *
  * - Todos los dinos están en el campo a la vez. Una moneda decide qué bando actúa primero;
  *   después cada bando actúa por completo (cada dino vivo hace una acción) y pasa el turno.
- * - En tu turno eliges, para cada dino: un ataque o la carta de movimiento y a qué rival
- *   atacar, o "Defender" (recibe la mitad de daño y no puede ser derribado). También puedes huir.
+ * - En tu turno eliges qué dino actúa (en el orden que quieras) y, para cada uno: un ataque y a qué
+ *   rival atacar, o "Defender" (recibe la mitad de daño y no puede ser derribado). También puedes huir.
+ * - El equipo rival actúa por velocidad: primero el dino más rápido.
  * - DERRIBO y ¡UNA MÁS!: un ataque eficaz por tipo (o un golpe crítico físico) derriba al
  *   objetivo y el atacante actúa otra vez. Un dino derribado pierde su siguiente acción
  *   (la usa para levantarse).
  * - RELEVO: durante "¡Una más!" puedes pasar la acción extra a otro dino de tu equipo; su ataque
  *   hace +50% de daño (+100% si se encadenan dos relevos).
- * - ATAQUE TOTAL: si todos los rivales están derribados, todo tu equipo ataca a la vez.
  * - El ataque más fuerte de cada dino no se puede usar dos veces seguidas.
  * - Ataques físicos usan ataque/defensa físicos; los especiales, ataque/defensa especiales.
  * - Daño = poder (+5 del objeto) x (ataque / defensa) x (nivel propio + nivel rival) / 50
  *   x ventaja de tipo x variación aleatoria (x1.5 si es crítico).
  * - Ataques de estado (poder 0, p. ej. Rugido) intimidan: el siguiente ataque del objetivo hace -30%.
  * - IA de los rivales (campo "ai" del entrenador): 'normal', 'dificil' o 'experto'. La difícil y la
- *   experta se defienden cuando corren peligro, buscan derribos para encadenar acciones, preparan
- *   y lanzan Ataques totales, intimidan al dino más peligroso y rematan al que pueden debilitar.
+ *   experta se defienden cuando corren peligro, buscan derribos para encadenar acciones,
+ *   intimidan al dino más peligroso y rematan al que pueden debilitar.
  */
 
 const BATTLE_DELAY = 700;
@@ -28,7 +28,6 @@ const GUARD_FACTOR = 0.5;
 const CRIT_CHANCE = 0.08;
 const CRIT_FACTOR = 1.5;
 const BATON_BOOSTS = [1, 1.5, 2];
-const ALL_OUT_POWER = 45;
 const RIVAL_MAX_EXTRA = 2;
 const AI_RANDOM = { normal: 0.2, dificil: 0.08, experto: 0 };
 
@@ -70,7 +69,7 @@ class BattleSystem {
         // Cansancio: tus dinos cansados pelean con menos fuerza (no aplica en el torneo)
         const tired = side === 'player' && src.fatigue ? this.cards.fatigueLevel(src) : null;
         if (tired && tired.factor < 1) {
-            for (const k of ['atk', 'def', 'spa', 'spd']) stats[k] = Math.max(1, Math.round(stats[k] * tired.factor));
+            for (const k of ['atk', 'def', 'spa', 'spd', 'vel']) stats[k] = Math.max(1, Math.round((stats[k] || 0) * tired.factor));
         }
         const attacks = (src.attacks && src.attacks.length) ? src.attacks.slice(0, 3)
             : (dino ? this.cards.getDefaultAttacks(dino, level) : ['embestida']);
@@ -90,6 +89,7 @@ class BattleSystem {
             def: stats.def,
             spa: stats.spa,
             spd: stats.spd,
+            vel: stats.vel || 0,
             intimidated: false,
             guarding: false,
             down: false,
@@ -198,7 +198,7 @@ class BattleSystem {
         this.overlay.classList.toggle('wild', isWild);
         this.overlay.querySelector('.battle-window').classList.remove('defeat', 'victory');
         this.overlay.classList.toggle('pvp', this.battle.humans.rival);
-        this.logEl.innerHTML = '';
+        if (this.logEl) this.logEl.innerHTML = '';
         this.turnEl.textContent = '';
         this.overlay.style.display = 'flex';
         this.render();
@@ -266,18 +266,41 @@ class BattleSystem {
         }
     }
 
-    /** Pasa al siguiente dino del bando humano que no haya actuado; si no quedan, cambia de bando. */
+    /** Dinos del bando humano que todavía pueden actuar este turno. */
+    readyHumans() {
+        const b = this.battle;
+        return b[b.turn].filter(f => f.hp > 0 && !b.acted.has(f.idx));
+    }
+
+    /** Tú eliges qué dino actúa; si sólo queda uno, actúa él; si no queda ninguno, cambia de bando. */
     nextHumanActor() {
         const b = this.battle;
         b.oneMore = false;
         b.batonChain = [];
-        const next = b[b.turn].find(f => f.hp > 0 && !b.acted.has(f.idx));
-        if (!next) {
+        b.pending = null;
+        const ready = this.readyHumans();
+        if (!ready.length) {
             b.actor = null;
             this.startSide(otherSide(b.turn));
             return;
         }
-        this.setActor(next);
+        if (ready.length === 1) {
+            this.setActor(ready[0]);
+            return;
+        }
+        b.actor = null;
+        const who = b.humans.rival ? `${b.names[b.turn]} · ` : '';
+        this.turnEl.textContent = `${b.turn === 'player' ? '🟢' : '🔴'} Turno ${b.round}: ${who}elige qué dino actúa`;
+        this.render();
+    }
+
+    /** Elegir (o cambiar, antes de atacar) el dino que va a actuar. */
+    selectActor(idx) {
+        const b = this.battle;
+        if (!b || b.phase !== 'human' || b.busy || b.oneMore) return;
+        const f = b[b.turn][idx];
+        if (!f || f.hp <= 0 || b.acted.has(f.idx)) return;
+        this.setActor(f);
     }
 
     setActor(f) {
@@ -297,9 +320,10 @@ class BattleSystem {
         b.actor = null;
         this.turnEl.textContent = `🔴 Turno ${b.round}: ${b.names[side]}`;
         this.render();
-        const smart = b.ai !== 'normal';
 
-        for (const f of b[side]) {
+        // El dino más rápido ataca primero
+        const order = [...b[side]].sort((x, y) => (y.vel - x.vel) || (Math.random() - 0.5));
+        for (const f of order) {
             if (f.hp <= 0) continue;
             await sleep(BATTLE_DELAY);
             if (this.battle !== b) return;
@@ -312,11 +336,6 @@ class BattleSystem {
             f.guarding = false;
             // Si derriba a un dino tuyo, actúa otra vez (máximo RIVAL_MAX_EXTRA veces)
             for (let extra = 0; extra <= RIVAL_MAX_EXTRA; extra++) {
-                if (extra > 0 && smart && this.allDown(otherSide(side))) {
-                    await this.allOutAttack(side, f);
-                    if (this.battle !== b) return;
-                    break;
-                }
                 const action = this.chooseAIAction(f, extra > 0);
                 if (action.guard) {
                     f.guarding = true;
@@ -364,8 +383,7 @@ class BattleSystem {
     /**
      * Elige la acción de un dino controlado por la IA: { attackId, target } o { guard: true }.
      * normal: daño esperado y remates, con un 20% de azar.
-     * dificil / experto: además se defiende si corre peligro, busca derribos (y preparar el Ataque
-     * total), intimida al más peligroso, evita golpear a quien se defiende y remata primero
+     * dificil / experto: además se defiende si corre peligro, busca derribos, intimida al más peligroso, evita golpear a quien se defiende y remata primero
      * al dino que más daño puede hacer.
      */
     chooseAIAction(f, isExtra = false) {
@@ -415,11 +433,7 @@ class BattleSystem {
                         score = Math.min(1, damage / t.maxHp) * 100;
                         if (kills) score += 220 + threats.get(t) * 120;
                         const knocks = !kills && mult > 1 && !t.down && !t.guarding;
-                        if (knocks) {
-                            score += 70;
-                            const othersDown = targets.filter(o => o !== t).every(o => o.down);
-                            if (othersDown) score += 120; // prepara el Ataque total
-                        }
+                        if (knocks) score += 70;
                         if (t.guarding) score -= 25;
                         if (level === 'experto') score += threats.get(t) * 25;
                     }
@@ -482,7 +496,7 @@ class BattleSystem {
             // ¡Una más! El mismo dino vuelve a actuar (o pasa el relevo)
             b.oneMore = true;
             this.splash('¡UNA MÁS!', 'player');
-            this.log(`🔁 <strong>¡UNA MÁS!</strong> ${me.name} puede actuar otra vez.${this.allDown(this.foeSide) ? ' ¡Todos derribados: <strong>ATAQUE TOTAL</strong> disponible!' : ''}`);
+            this.log(`🔁 <strong>¡UNA MÁS!</strong> ${me.name} puede actuar otra vez.`);
             this.setActor(me);
             return;
         }
@@ -512,61 +526,6 @@ class BattleSystem {
         this.splash('¡RELEVO!', 'baton');
         this.log(`🤝 ${from.name} pasa el relevo a ${to.name}: su ataque hará <strong>x${boost}</strong> de daño.`);
         this.setActor(to);
-    }
-
-    allDown(side) {
-        const foes = this.alive(side);
-        return foes.length > 0 && foes.every(f => f.down);
-    }
-
-    /** Todo el equipo de `side` ataca a la vez a todos los rivales derribados. */
-    async allOutAttack(side = null, aiActor = null) {
-        const b = this.battle;
-        const attackerSide = side || b.turn;
-        const foeSide = otherSide(attackerSide);
-        const human = !aiActor;
-        if (!b || b.busy || !this.allDown(foeSide)) return;
-        if (human && !b.oneMore) return;
-        const me = human ? this.currentActor() : aiActor;
-        b.busy = true;
-        b.pending = null;
-        this.render();
-        this.splash('¡ATAQUE TOTAL!', 'allout');
-        this.log(`💥 <strong>¡ATAQUE TOTAL!</strong> El equipo de ${escapeHtml(b.names[attackerSide])} se lanza sobre los rivales derribados.`);
-        document.querySelectorAll(`.battle-fighter[data-side="${attackerSide}"]:not(.fainted) .battle-fighter-img`)
-            .forEach(el => { el.classList.remove('attacking'); void el.offsetWidth; el.classList.add('attacking'); });
-        await sleep(1100);
-        if (this.battle !== b) return;
-
-        const allies = this.alive(attackerSide);
-        for (const foe of this.alive(foeSide)) {
-            let total = 0;
-            for (const ally of allies) {
-                const atk = (ally.atk + ally.spa) / 2;
-                const def = Math.max(1, (foe.def + foe.spd) / 2);
-                total += ALL_OUT_POWER * (atk / def) * ((ally.level + foe.level) / 50);
-            }
-            const damage = Math.max(1, Math.round(total * (0.9 + Math.random() * 0.1)));
-            foe.hp = Math.max(0, foe.hp - damage);
-            foe.down = false;
-            if (foe.hp <= 0) foe.justKO = true;
-            this.render();
-            this.animate(foe, 'hit');
-            this.impact(foe, damage, { color: '#ffd60a', crit: true, weak: false });
-            this.log(`💥 ${foe.name} recibe ${damage} de daño.`);
-            if (foe.hp <= 0) this.log(`☠️ ${foe.name} se debilitó.`);
-        }
-        this.render();
-        await sleep(BATTLE_DELAY);
-        if (this.battle !== b) return;
-        b.busy = false;
-        if (!human) {
-            this.checkEnd();
-            return;
-        }
-        b.acted.add(me.idx);
-        if (this.checkEnd()) return;
-        this.nextHumanActor();
     }
 
     /** Termina la acción extra sin hacer nada más. */
@@ -766,13 +725,14 @@ class BattleSystem {
     // Interfaz
     // ------------------------------------------------------------
     log(html) {
+        if (!this.logEl) return;   // el registro del combate ya no se muestra
         const line = document.createElement('div');
         line.innerHTML = html;
         this.logEl.appendChild(line);
         this.logEl.scrollTop = this.logEl.scrollHeight;
     }
 
-    /** Texto grande que cruza la pantalla (¡UNA MÁS!, ¡DÉBIL!, ¡ATAQUE TOTAL!...). */
+    /** Texto grande que cruza la pantalla (¡UNA MÁS!, ¡DÉBIL!, ¡RELEVO!...). */
     splash(text, kind = '') {
         const el = this.splashEl;
         if (!el) return;
@@ -856,21 +816,26 @@ class BattleSystem {
         const since = Date.now() - f.summonedAt;
         const artHtml = art ? `<img class="fighter-art ${since < 1200 ? 'summon' : ''} ${f.side}" src="${art}" alt=""
                                    style="${since < 1200 ? `animation-delay:-${since}ms;` : ''}--glow:${el ? el.color : '#fff'}">` : '';
+        // Puedes elegir este dino para que actúe (tu turno, sin ataque pendiente)
+        const selectable = b.phase === 'human' && f.side === b.turn && !b.pending && !b.oneMore && !b.busy &&
+            f.hp > 0 && !b.acted.has(f.idx) && !isActor;
         return `
           <div class="fighter-slot ${f.hp <= 0 ? 'fainted' : ''} ${f.down ? 'down' : ''}">
-            ${artHtml}
-            <div class="battle-fighter ${isActor ? 'actor' : ''} ${targetable ? 'targetable' : ''} ${f.hp <= 0 ? 'fainted' : ''} ${f.justKO ? 'ko-anim' : ''} ${f.down ? 'down' : ''}"
+            <div class="battle-fighter ${isActor ? 'actor' : ''} ${targetable ? 'targetable' : ''} ${selectable ? 'selectable' : ''} ${f.hp <= 0 ? 'fainted' : ''} ${f.justKO ? 'ko-anim' : ''} ${f.down ? 'down' : ''}"
                  data-side="${f.side}" data-idx="${f.idx}">
                 ${effTag}
                 ${targetable && targetNumber ? `<kbd class="fighter-key">${targetNumber}</kbd>` : ''}
                 ${f.down ? '<span class="fighter-down">DERRIBADO</span>' : ''}
                 ${f.hp <= 0 ? '<span class="fighter-ko">K.O.</span>' : ''}
-                <div class="battle-fighter-img battle-dino-img ${f.fullCard ? 'full-card' : ''}" style="${imgStyle}"></div>
+                <div class="fighter-visual ${f.side}">
+                    <div class="battle-fighter-img battle-dino-img ${f.fullCard ? 'full-card' : ''}" style="${imgStyle}"></div>
+                    ${artHtml}
+                </div>
                 <div class="battle-fighter-info">
                     <strong>${escapeHtml(f.name)} <span class="fighter-status">${status}</span></strong>
                     <small style="color:${el ? el.color : '#94a3b8'}">${el ? el.icon + ' ' + el.name : f.element} · Nv. ${f.level}</small>
                     <div class="battle-hp-bar"><div class="battle-hp-fill ${hpClass}" style="width:${hpPct}%"></div></div>
-                    <small class="battle-hp-text">❤️ ${f.hp}/${f.maxHp}</small>
+                    <small class="battle-hp-text">❤️ ${f.hp}/${f.maxHp} · 💨 ${f.vel}</small>
                 </div>
             </div>
           </div>`;
@@ -903,6 +868,9 @@ class BattleSystem {
         [rivalRow, playerRow].forEach(row => row.querySelectorAll('.battle-fighter.targetable').forEach(el => {
             el.addEventListener('click', () => this.chooseTarget(Number(el.dataset.idx)));
         }));
+        [rivalRow, playerRow].forEach(row => row.querySelectorAll('.battle-fighter.selectable').forEach(el => {
+            el.addEventListener('click', () => this.selectActor(Number(el.dataset.idx)));
+        }));
 
         const actions = this.actionsEl;
         actions.innerHTML = '';
@@ -916,6 +884,16 @@ class BattleSystem {
             };
             this.addButton(`battle-btn ${b.over === 'won' ? 'win' : 'flee'} battle-continue`, label, ' ', done);
             this.hotkeys.Enter = done;
+            return;
+        }
+
+        // Tu turno: elige qué dino actúa
+        if (b.phase === 'human' && b.actor === null) {
+            actions.insertAdjacentHTML('beforeend', `<p class="battle-wait">👆 Elige qué dino actúa ahora (clic en su carta o teclas <kbd>1</kbd>-<kbd>3</kbd>).</p>`);
+            this.readyHumans().forEach((f, i) => {
+                this.addButton('battle-btn pick-actor', `${escapeHtml(f.name)} <small>💨 ${f.vel}</small>`, String(i + 1), () => this.selectActor(f.idx), b.busy);
+            });
+            if (this.canFlee(b)) this.addButton('battle-btn flee', '🏃 Huir', 'h', () => this.flee(), b.busy);
             return;
         }
 
@@ -942,10 +920,6 @@ class BattleSystem {
 
         if (b.humans.rival) {
             actions.insertAdjacentHTML('beforeend', `<p class="battle-wait pvp-turn">🎮 Turno de <strong>${escapeHtml(b.names[b.turn])}</strong></p>`);
-        }
-
-        if (b.oneMore && this.allDown(foeSide)) {
-            this.addButton('battle-btn allout', '💥 ¡ATAQUE TOTAL!', 't', () => this.allOutAttack(), b.busy);
         }
 
         attackIds.forEach((id, i) => {
@@ -979,6 +953,10 @@ class BattleSystem {
         }
 
         this.addButton('battle-btn guard', '🛡️ Defender', 'd', () => this.guard(), b.busy);
+        // Cambiar de dino antes de atacar
+        if (this.readyHumans().length > 1) {
+            this.addButton('battle-btn flee', '↩ Otro dino', 'Escape', () => { b.actor = null; this.nextHumanActor(); }, b.busy);
+        }
         if (this.canFlee(b)) this.addButton('battle-btn flee', '🏃 Huir', 'h', () => this.flee(), b.busy);
     }
 }

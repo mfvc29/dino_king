@@ -15,6 +15,7 @@ Actualiza dinos.json a partir de las carpetas por tipo (agua/, fuego/, planta/, 
 - Genera la miniatura del frente en cards/<elemento>/<archivo>.jpg y borra las
   miniaturas que ya no correspondan a ninguna carta.
 - Conserva ids, nombres, poderes y estadísticas que ya estuvieran en dinos.json.
+- Asigna "speed" (velocidad base 1-10, según el elemento) a los dinos que no la tengan.
 - Asigna estadísticas base [salud, ataque físico, defensa física, ataque especial,
   defensa especial] a cada dino: entre el mínimo
   (stats.min) y el máximo de su elemento (statCaps), sin repetir combinación
@@ -212,6 +213,24 @@ def assign_stats(dinos, elements, stat_min, stat_max):
     return changed + len(pending)
 
 
+# Velocidad base (decide quién ataca primero en el equipo rival). Rango por elemento: los de viento son
+# los más rápidos y los de tierra los más lentos. Se puede editar a mano en dinos.json ("speed").
+SPEED_RANGES = {'viento': (6, 10), 'rayo': (5, 9), 'fuego': (5, 9), 'especial': (5, 10),
+                'normal': (5, 9), 'agua': (4, 8), 'planta': (4, 8), 'tierra': (4, 7)}
+
+
+def assign_speed(dinos):
+    added = 0
+    for d in dinos:
+        lo, hi = SPEED_RANGES.get(d['element'], (4, 9))
+        if isinstance(d.get('speed'), int) and 1 <= d['speed'] <= 10:
+            continue
+        rng = random.Random(int(hashlib.md5((d['id'] + ':speed').encode()).hexdigest(), 16))
+        d['speed'] = rng.randint(lo, hi)
+        added += 1
+    return added
+
+
 def build_art(dinos):
     """Copia liviana (webp, recortada al dino) del arte de grande/ y la anota en cada dino como "art"."""
     by_id = {d['id']: d for d in dinos}
@@ -306,9 +325,12 @@ def main():
                 # Solo conservar las stats si el dino sigue en el mismo elemento
                 if 'stats' in prev and prev.get('element') == element:
                     entry['stats'] = prev['stats']
+                if 'speed' in prev:
+                    entry['speed'] = prev['speed']
                 dinos.append(entry)
 
     art_made, art_unmatched = build_art(dinos)
+    new_speed = assign_speed(dinos)
 
     stat_cfg = catalog.get('stats', {})
     new_stats = assign_stats(dinos, catalog['elements'], stat_cfg.get('min', 4), stat_cfg.get('max', 10))
@@ -336,7 +358,7 @@ def main():
             if not os.listdir(p):
                 os.rmdir(p)
 
-    print(f'✔ {len(dinos)} dinos en dinos.json')
+    print(f'✔ {len(dinos)} dinos en dinos.json ({new_speed} con velocidad nueva)')
     with_art = sum(1 for d in dinos if d.get('art'))
     print(f'✔ Arte: {with_art}/{len(dinos)} dinos con imagen grande ({art_made} imágenes nuevas en arte/)')
     if art_unmatched:

@@ -93,10 +93,12 @@ condiciones, personajes (posición, sprite, equipo, diálogos) y qué Guardián 
 - **Debilidad → DERRIBO → ¡UNA MÁS!:** un ataque eficaz por tipo (o un crítico físico) derriba al rival y
   tu dino actúa otra vez. Un dino derribado pierde su siguiente acción. **Defender** evita ser derribado.
 - **Relevo:** durante "¡Una más!" pasa la acción a otro dino (+50% de daño, x2 si encadenas dos).
-- **Ataque total:** con todos los rivales derribados, todo tu equipo ataca a la vez.
+- **Orden de ataque:** en tu turno eliges qué dino actúa (clic en su carta o `1`-`3`); el equipo rival ataca
+  por **velocidad** (💨, campo `speed` de `dinos.json`): primero el más rápido.
+- En el campo se ve cada carta con su dino al lado (el tuyo mira al rival y el rival te mira a ti).
 - Los rivales también aprovechan tus debilidades. De los combates de historia no se puede huir.
-- **Teclado:** `1`-`4` ataques, `1`-`3` objetivo, `D` defender, `H` huir, `Z`/`X` relevo, `T` ataque total,
-  `Q` terminar la acción extra, `Esc` cancelar, `Espacio`/`Enter` continuar.
+- **Teclado:** `1`-`3` elegir dino, `1`-`4` ataques, `1`-`3` objetivo, `D` defender, `H` huir, `Z`/`X` relevo,
+  `Q` terminar la acción extra, `Esc` cancelar / elegir otro dino, `Espacio`/`Enter` continuar.
 
 ### Niveles
 - Los dinos **no evolucionan**: solo suben de nivel (máx. 50). Ganar a un salvaje da +15% de nivel al

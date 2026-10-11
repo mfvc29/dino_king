@@ -201,12 +201,20 @@ class CardSystem {
         const base = this.getBaseStats(dinoId);
         const out = {};
         STAT_DEFS.forEach((s, i) => { out[s.key] = base[i] * level; });
+        out.vel = this.getSpeed(dinoId) * level;   // velocidad: decide el orden de ataque del rival
         return out;
     }
 
+    /** Velocidad base (1-10) del catálogo ("speed"). */
+    getSpeed(dinoId) {
+        const dino = this.getDino(dinoId);
+        return dino && Number(dino.speed) ? Number(dino.speed) : 5;
+    }
+
     renderStatsHtml(dinoId, level) {
-        const base = this.getBaseStats(dinoId);
-        return `<div class="dino-stats">${STAT_DEFS.map((s, i) => `
+        const base = [...this.getBaseStats(dinoId), this.getSpeed(dinoId)];
+        const defs = [...STAT_DEFS, { key: 'vel', icon: '💨', name: 'Velocidad' }];
+        return `<div class="dino-stats">${defs.map((s, i) => `
             <div class="dino-stat" title="${s.name}: ${base[i]}/10 base · ${base[i] * level} a Nv. ${level}">
                 <span>${s.icon}</span>
                 <div class="dino-stat-bar"><div class="dino-stat-fill ${s.key}" style="width:${base[i] * 10}%"></div></div>
@@ -744,12 +752,12 @@ class CardSystem {
         const xpHtml = card.xp !== undefined && card.level < MAX_CARD_LEVEL
             ? `<div class="dino-xp" title="Progreso al siguiente nivel"><div class="dino-xp-fill" style="width:${card.xp}%"></div><span>${card.xp}%</span></div>`
             : '';
-        // La carta y, encima, el dino (como al invocar un monstruo en Yu-Gi-Oh)
+        // La carta y, al lado, el dino (como al invocar un monstruo en Yu-Gi-Oh)
         const art = this.artUrl(card.id, 'right');
         const imgHtml = `<div class="battle-dino-img ${dino && dino.card ? '' : 'full-card'}" style="${cardStyle}"></div>`;
         return `
-            <div class="battle-dino-card">
-                ${art ? `<div class="dino-card-stage">${imgHtml}<img class="dino-card-art" src="${art}" alt="" loading="lazy"></div>` : imgHtml}
+            <div class="battle-dino-card ${art ? 'has-art' : ''}">
+                ${art ? `<div class="dino-card-stage">${imgHtml}<div class="dino-card-art-box"><img class="dino-card-art" src="${art}" alt="" loading="lazy"></div></div>` : imgHtml}
                 <strong>${escapeHtml(dino ? dino.name : card.id)}</strong>
                 <small style="color:${el ? el.color : '#94a3b8'}">${el ? el.icon + ' ' + el.name : ''} · Nv. ${card.level}</small>
                 ${xpHtml}

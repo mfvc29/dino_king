@@ -2031,31 +2031,47 @@
 }
 
 /* ============================================================
-   Arte del dino sobre la carta (estilo Yu-Gi-Oh)
+   Carta + dino al lado (estilo Yu-Gi-Oh)
    ============================================================ */
-/* Almanaque / capturas: la carta abajo a la izquierda y el dino saliendo de ella */
+/* Sin registro lateral: el campo de combate usa todo el ancho */
+.battle-window {
+    grid-template-columns: minmax(0, 1fr);
+    width: min(1100px, 100%);
+}
+
+/* Almanaque / capturas: la carta a la izquierda y el dino a su lado */
+.battle-dino-card.has-art {
+    width: 250px;
+}
+
 .dino-card-stage {
-    position: relative;
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
     width: 100%;
-    height: 150px;
+    height: 124px;
     margin-bottom: 4px;
 }
 
 .dino-card-stage .battle-dino-img {
-    position: absolute;
-    left: 4px;
-    bottom: 0;
-    width: 70px;
-    height: 98px;
+    flex: none;
+    width: 82px;
+    height: 116px;
     margin: 0;
 }
 
+.dino-card-art-box {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
 .dino-card-art {
-    position: absolute;
-    right: -6px;
-    top: 0;
-    max-width: 118%;
-    max-height: 118px;
+    max-width: 100%;
+    max-height: 100%;
     object-fit: contain;
     filter: drop-shadow(0 6px 6px rgba(0, 0, 0, 0.55));
     animation: dino-breathe 3.2s ease-in-out infinite;
@@ -2066,39 +2082,53 @@
     50% { transform: translateY(-3px) scale(1.015); }
 }
 
-/* Combate: cada dino invocado sobre su carta */
+/* Combate: carta y dino lado a lado, datos debajo */
 .battle-row .fighter-slot {
     position: relative;
     flex: 0 1 calc((100% - 20px) / 3);
     min-width: 0;
     display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    padding-top: 96px;
 }
 
 .battle-row .fighter-slot .battle-fighter {
-    flex: none;
+    flex: 1;
     width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+}
+
+.fighter-visual {
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    height: 118px;
+}
+
+/* El dino rival va a la izquierda de su carta (mira hacia ti) */
+.fighter-visual.rival {
+    flex-direction: row-reverse;
+}
+
+.fighter-visual .battle-fighter-img {
+    flex: none;
+    width: 80px;
+    height: 112px;
 }
 
 .fighter-art {
-    position: absolute;
-    left: 50%;
-    bottom: calc(100% - 104px);
-    height: 104px;
-    max-width: 120%;
+    flex: 1;
+    min-width: 0;
+    height: 112px;
     object-fit: contain;
-    transform: translateX(-50%);
-    transform-origin: 50% 100%;
+    object-position: center bottom;
     filter: drop-shadow(0 0 6px var(--glow, #fff)) drop-shadow(0 8px 6px rgba(0, 0, 0, 0.6));
     animation: fighter-idle 2.8s ease-in-out infinite;
     pointer-events: none;
-    z-index: 2;
 }
 
 @keyframes fighter-idle {
-    50% { transform: translateX(-50%) translateY(-4px); }
+    50% { transform: translateY(-4px); }
 }
 
 /* Invocación: sale de la carta con un destello */
@@ -2107,10 +2137,13 @@
 }
 
 @keyframes fighter-summon {
-    0% { opacity: 0; transform: translateX(-50%) translateY(60px) scale(0.15); filter: brightness(4) drop-shadow(0 0 22px var(--glow, #fff)); }
+    0% { opacity: 0; transform: scale(0.15); filter: brightness(4) drop-shadow(0 0 22px var(--glow, #fff)); }
     55% { opacity: 1; filter: brightness(2) drop-shadow(0 0 18px var(--glow, #fff)); }
-    100% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+    100% { opacity: 1; transform: scale(1); }
 }
+
+.fighter-visual.player .fighter-art.summon { transform-origin: 0% 100%; }
+.fighter-visual.rival .fighter-art.summon { transform-origin: 100% 100%; }
 
 /* Embestida hacia el rival y golpe recibido */
 .fighter-art.art-lunge {
@@ -2122,11 +2155,11 @@
 }
 
 @keyframes art-lunge-up {
-    45% { transform: translateX(-30%) translateY(-26px) scale(1.12); }
+    45% { transform: translate(18px, -14px) scale(1.12); }
 }
 
 @keyframes art-lunge-down {
-    45% { transform: translateX(-70%) translateY(26px) scale(1.12); }
+    45% { transform: translate(-18px, 14px) scale(1.12); }
 }
 
 .fighter-art.art-hit {
@@ -2134,13 +2167,13 @@
 }
 
 @keyframes art-hit {
-    20%, 60% { transform: translateX(-56%); filter: brightness(2.5) drop-shadow(0 0 10px #ff3b3b); }
-    40%, 80% { transform: translateX(-44%); }
+    20%, 60% { transform: translateX(-6px); filter: brightness(2.5) drop-shadow(0 0 10px #ff3b3b); }
+    40%, 80% { transform: translateX(6px); }
 }
 
 /* Derribado / debilitado */
 .fighter-slot.down .fighter-art {
-    transform: translateX(-50%) rotate(-12deg) translateY(10px);
+    transform: rotate(-12deg) translateY(10px);
     filter: brightness(0.6);
     animation: none;
 }
@@ -2149,4 +2182,61 @@
     opacity: 0.25;
     filter: grayscale(1);
     animation: none;
+}
+
+/* Tu turno: los dinos que puedes elegir para actuar */
+.battle-fighter.selectable {
+    cursor: pointer;
+    box-shadow: inset 0 0 0 2px #38bdf8;
+}
+
+.battle-fighter.selectable:hover {
+    background: #12304d;
+}
+
+.battle-btn.pick-actor small {
+    opacity: 0.75;
+    margin-left: 4px;
+}
+
+.dino-stat-fill.vel { background: #a3e635; }
+
+/* Antes de un líder: tu equipo en versión compacta */
+.ready-team {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin: 12px 0;
+}
+
+.ready-dino {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    background: #0f172a;
+    border: 1px solid #1e3a5f;
+    border-radius: 8px;
+}
+
+.ready-card {
+    width: 46px;
+    height: 64px;
+    border-radius: 4px;
+    background: #1e293b center / cover no-repeat;
+}
+
+.ready-art {
+    width: 92px;
+    height: 64px;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.5));
+}
+
+.ready-info {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    font-size: 0.8rem;
 }

@@ -114,7 +114,8 @@
       "art": {
         "left": "arte/fuego/alioramus_izq.webp",
         "right": "arte/fuego/alioramus_der.webp"
-      }
+      },
+      "speed": 9
     },
     {
       "id": "alpha_acrocanthosaurus",
@@ -132,7 +133,8 @@
       "art": {
         "left": "arte/fuego/alpha_acrocanthosaurus_izq.webp",
         "right": "arte/fuego/alpha_acrocanthosaurus_der.webp"
-      }
+      },
+      "speed": 9
     },
     {
       "id": "black_tyrannosaurus_rex",
@@ -150,7 +152,8 @@
       "art": {
         "left": "arte/fuego/black_tyrannosaurus_rex_izq.webp",
         "right": "arte/fuego/black_tyrannosaurus_rex_der.webp"
-      }
+      },
+      "speed": 8
     },
     {
       "id": "eocarcharia",
@@ -168,7 +171,8 @@
       "art": {
         "left": "arte/fuego/eocarcharia_izq.webp",
         "right": "arte/fuego/eocarcharia_der.webp"
-      }
+      },
+      "speed": 6
     },
     {
       "id": "giganotosaurus",
@@ -186,7 +190,8 @@
       "art": {
         "left": "arte/fuego/giganotosaurus_izq.webp",
         "right": "arte/fuego/giganotosaurus_der.webp"
-      }
+      },
+      "speed": 8
     },
     {
       "id": "acrocanthosaurus",
@@ -204,7 +209,8 @@
       "art": {
         "left": "arte/fuego/acrocanthosaurus_izq.webp",
         "right": "arte/fuego/acrocanthosaurus_der.webp"
-      }
+      },
+      "speed": 9
     },
     {
       "id": "carcharodontosaurus",
@@ -222,7 +228,8 @@
       "art": {
         "left": "arte/fuego/carcharodontosaurus_izq.webp",
         "right": "arte/fuego/carcharodontosaurus_der.webp"
-      }
+      },
+      "speed": 7
     },
     {
       "id": "daspletosaurus",
@@ -240,7 +247,8 @@
       "art": {
         "left": "arte/fuego/daspletosaurus_izq.webp",
         "right": "arte/fuego/daspletosaurus_der.webp"
-      }
+      },
+      "speed": 9
     },
     {
       "id": "gigas",
@@ -258,7 +266,8 @@
       "art": {
         "left": "arte/fuego/gigas_izq.webp",
         "right": "arte/fuego/gigas_der.webp"
-      }
+      },
+      "speed": 8
     },
     {
       "id": "mapusaurus",
@@ -276,7 +285,8 @@
       "art": {
         "left": "arte/fuego/mapusaurus_izq.webp",
         "right": "arte/fuego/mapusaurus_der.webp"
-      }
+      },
+      "speed": 7
     },
     {
       "id": "rajasaurus",
@@ -294,7 +304,8 @@
       "art": {
         "left": "arte/fuego/rajasaurus_izq.webp",
         "right": "arte/fuego/rajasaurus_der.webp"
-      }
+      },
+      "speed": 6
     },
     {
       "id": "saurophaganax",
@@ -312,7 +323,8 @@
       "art": {
         "left": "arte/fuego/saurophaganax_izq.webp",
         "right": "arte/fuego/saurophaganax_der.webp"
-      }
+      },
+      "speed": 8
     },
     {
       "id": "torvosaurus",
@@ -330,7 +342,8 @@
       "art": {
         "left": "arte/fuego/torvosaurus_izq.webp",
         "right": "arte/fuego/torvosaurus_der.webp"
-      }
+      },
+      "speed": 8
     },
     {
       "id": "tyrannosaurus_rex",
@@ -348,7 +361,8 @@
       "art": {
         "left": "arte/fuego/tyrannosaurus_rex_izq.webp",
         "right": "arte/fuego/tyrannosaurus_rex_der.webp"
-      }
+      },
+      "speed": 7
     },
     {
       "id": "yangchuanosaurus",
@@ -366,7 +380,8 @@
       "art": {
         "left": "arte/fuego/yangchuanosaurus_izq.webp",
         "right": "arte/fuego/yangchuanosaurus_der.webp"
-      }
+      },
+      "speed": 8
     },
     {
       "id": "bajadasaurus",
@@ -384,7 +399,8 @@
       "art": {
         "left": "arte/agua/bajadasaurus_izq.webp",
         "right": "arte/agua/bajadasaurus_der.webp"
-      }
+      },
+      "speed": 7
     },
     {
       "id": "camarasaurus",
@@ -402,7 +418,8 @@
       "art": {
         "left": "arte/agua/camarasaurus_izq.webp",
         "right": "arte/agua/camarasaurus_der.webp"
-      }
+      },
+      "speed": 6
     },
     {
       "id": "elasmosaurus",
@@ -420,7 +437,8 @@
       "art": {
         "left": "arte/agua/elasmosaurus_izq.webp",
         "right": "arte/agua/elasmosaurus_der.webp"
-      }
+      },
+      "speed": 5
     },
     {
       "id": "irritator",
@@ -438,7 +456,8 @@
       "art": {
         "left": "arte/agua/irritator_izq.webp",
         "right": "arte/agua/irritator_der.webp"
-      }
+      },
+      "speed": 5
     },
     {
       "id": "ophthalmosaurus",
@@ -456,7 +475,8 @@
       "art": {
         "left": "arte/agua/ophthalmosaurus_izq.webp",
         "right": "arte/agua/ophthalmosaurus_der.webp"
-      }
+      },
+      "speed": 4
     },
     {
       "id": "amargasaurus",
@@ -474,7 +494,8 @@
       "art": {
         "left": "arte/agua/amargasaurus_izq.webp",
         "right": "arte/agua/amargasaurus_der.webp"
-      }
+      },
+      "speed": 5
     },
     {
       "id": "ampelosaurus",
@@ -492,7 +513,8 @@
       "art": {
         "left": "arte/agua/ampelosaurus_izq.webp",
         "right": "arte/agua/ampelosaurus_der.webp"
-      }
+      },
+      "speed": 8
     },
     {
       "id": "baryonyx",
@@ -510,7 +532,8 @@
       "art": {
         "left": "arte/agua/baryonyx_izq.webp",
         "right": "arte/agua/baryonyx_der.webp"
-      }
+      },
+      "speed": 6
     },
     {
       "id": "futabasaurus",
@@ -528,7 +551,8 @@
       "art": {
         "left": "arte/agua/futabasaurus_izq.webp",
         "right": "arte/agua/futabasaurus_der.webp"
-      }
+      },
+      "speed": 5
     },
     {
       "id": "isisaurus",
@@ -546,7 +570,8 @@
       "art": {
         "left": "arte/agua/isisaurus_izq.webp",
         "right": "arte/agua/isisaurus_der.webp"
-      }
+      },
+      "speed": 6
     },
     {
       "id": "jobaria",
@@ -564,7 +589,8 @@
       "art": {
         "left": "arte/agua/jobaria_izq.webp",
         "right": "arte/agua/jobaria_der.webp"
-      }
+      },
+      "speed": 4
     },
     {
       "id": "saltasaurus",
@@ -582,7 +608,8 @@
       "art": {
         "left": "arte/agua/saltasaurus_izq.webp",
         "right": "arte/agua/saltasaurus_der.webp"
-      }
+      },
+      "speed": 8
     },
     {
       "id": "shunosaurus",
@@ -600,7 +627,8 @@
       "art": {
         "left": "arte/agua/shunosaurus_izq.webp",
         "right": "arte/agua/shunosaurus_der.webp"
-      }
+      },
+      "speed": 7
     },
     {
       "id": "spinosaurus_atacando",
@@ -618,7 +646,8 @@
       "art": {
         "left": "arte/agua/spinosaurus_atacando_izq.webp",
         "right": "arte/agua/spinosaurus_atacando_der.webp"
-      }
+      },
+      "speed": 6
     },
     {
       "id": "spinosaurus",
@@ -636,7 +665,8 @@
       "art": {
         "left": "arte/agua/spinosaurus_izq.webp",
         "right": "arte/agua/spinosaurus_der.webp"
-      }
+      },
+      "speed": 7
     },
     {
       "id": "suchomimus",
@@ -654,7 +684,8 @@
       "art": {
         "left": "arte/agua/suchomimus_izq.webp",
         "right": "arte/agua/suchomimus_der.webp"
-      }
+      },
+      "speed": 6
     },
     {
       "id": "centrosaurus",
@@ -672,7 +703,8 @@
       "art": {
         "left": "arte/rayo/centrosaurus_izq.webp",
         "right": "arte/rayo/centrosaurus_der.webp"
-      }
+      },
+      "speed": 8
     },
     {
       "id": "chasmosaurus",
@@ -690,7 +722,8 @@
       "art": {
         "left": "arte/rayo/chasmosaurus_izq.webp",
         "right": "arte/rayo/chasmosaurus_der.webp"
-      }
+      },
+      "speed": 7
     },
     {
       "id": "einiosaurus",
@@ -708,7 +741,8 @@
       "art": {
         "left": "arte/rayo/einiosaurus_izq.webp",
         "right": "arte/rayo/einiosaurus_der.webp"
-      }
+      },
+      "speed": 7
     },
     {
       "id": "machairoceratops",
@@ -726,7 +760,8 @@
       "art": {
         "left": "arte/rayo/machairoceratops_izq.webp",
         "right": "arte/rayo/machairoceratops_der.webp"
-      }
+      },
+      "speed": 9
     },
     {
       "id": "monoclonius",
@@ -744,7 +779,8 @@
       "art": {
         "left": "arte/rayo/monoclonius_izq.webp",
         "right": "arte/rayo/monoclonius_der.webp"
-      }
+      },
+      "speed": 6
     },
     {
       "id": "zuniceratops",
@@ -762,7 +798,8 @@
       "art": {
         "left": "arte/rayo/zuniceratops_izq.webp",
         "right": "arte/rayo/zuniceratops_der.webp"
-      }
+      },
+      "speed": 5
     },
     {
       "id": "achelousaurus",
@@ -780,7 +817,8 @@
       "art": {
         "left": "arte/rayo/achelousaurus_izq.webp",
         "right": "arte/rayo/achelousaurus_der.webp"
-      }
+      },
+      "speed": 8
     },
     {
       "id": "anchiceratops",
@@ -798,7 +836,8 @@
       "art": {
         "left": "arte/rayo/anchiceratops_izq.webp",
         "right": "arte/rayo/anchiceratops_der.webp"
-      }
+      },
+      "speed": 6
     },
     {
       "id": "maximus",
@@ -816,7 +855,8 @@
       "art": {
         "left": "arte/rayo/maximus_izq.webp",
         "right": "arte/rayo/maximus_der.webp"
-      }
+      },
+      "speed": 6
     },
     {
       "id": "nedoceratops",
@@ -834,7 +874,8 @@
       "art": {
         "left": "arte/rayo/nedoceratops_izq.webp",
         "right": "arte/rayo/nedoceratops_der.webp"
-      }
+      },
+      "speed": 9
     },
     {
       "id": "pachyrhinosaurus",
@@ -852,7 +893,8 @@
       "art": {
         "left": "arte/rayo/pachyrhinosaurus_izq.webp",
         "right": "arte/rayo/pachyrhinosaurus_der.webp"
-      }
+      },
+      "speed": 9
     },
     {
       "id": "pentaceratops",
@@ -870,7 +912,8 @@
       "art": {
         "left": "arte/rayo/pentaceratops_izq.webp",
         "right": "arte/rayo/pentaceratops_der.webp"
-      }
+      },
+      "speed": 5
     },
     {
       "id": "styracosaurus",
@@ -888,7 +931,8 @@
       "art": {
         "left": "arte/rayo/styracosaurus_izq.webp",
         "right": "arte/rayo/styracosaurus_der.webp"
-      }
+      },
+      "speed": 7
     },
     {
       "id": "torosaurus",
@@ -906,7 +950,8 @@
       "art": {
         "left": "arte/rayo/torosaurus_izq.webp",
         "right": "arte/rayo/torosaurus_der.webp"
-      }
+      },
+      "speed": 6
     },
     {
       "id": "triceratops",
@@ -924,7 +969,8 @@
       "art": {
         "left": "arte/rayo/triceratops_izq.webp",
         "right": "arte/rayo/triceratops_der.webp"
-      }
+      },
+      "speed": 8
     },
     {
       "id": "dacentrurus",
@@ -942,7 +988,8 @@
       "art": {
         "left": "arte/tierra/dacentrurus_izq.webp",
         "right": "arte/tierra/dacentrurus_der.webp"
-      }
+      },
+      "speed": 5
     },
     {
       "id": "gigantspinosaurus",
@@ -960,7 +1007,8 @@
       "art": {
         "left": "arte/tierra/gigantspinosaurus_izq.webp",
         "right": "arte/tierra/gigantspinosaurus_der.webp"
-      }
+      },
+      "speed": 4
     },
     {
       "id": "kentrosaurus",
@@ -978,7 +1026,8 @@
       "art": {
         "left": "arte/tierra/kentrosaurus_izq.webp",
         "right": "arte/tierra/kentrosaurus_der.webp"
-      }
+      },
+      "speed": 4
     },
     {
       "id": "pinacosaurus",
@@ -996,7 +1045,8 @@
       "art": {
         "left": "arte/tierra/pinacosaurus_izq.webp",
         "right": "arte/tierra/pinacosaurus_der.webp"
-      }
+      },
+      "speed": 6
     },
     {
       "id": "polacanthus",
@@ -1014,7 +1064,8 @@
       "art": {
         "left": "arte/tierra/polacanthus_izq.webp",
         "right": "arte/tierra/polacanthus_der.webp"
-      }
+      },
+      "speed": 5
     },
     {
       "id": "sauropelta",
@@ -1032,7 +1083,8 @@
       "art": {
         "left": "arte/tierra/sauropelta_izq.webp",
         "right": "arte/tierra/sauropelta_der.webp"
-      }
+      },
+      "speed": 7
     },
     {
       "id": "ankylosaurus",
@@ -1050,7 +1102,8 @@
       "art": {
         "left": "arte/tierra/ankylosaurus_izq.webp",
         "right": "arte/tierra/ankylosaurus_der.webp"
-      }
+      },
+      "speed": 6
     },
     {
       "id": "armatus",
@@ -1068,7 +1121,8 @@
       "art": {
         "left": "arte/tierra/armatus_izq.webp",
         "right": "arte/tierra/armatus_der.webp"
-      }
+      },
+      "speed": 5
     },
     {
       "id": "edmontonia",
@@ -1086,7 +1140,8 @@
       "art": {
         "left": "arte/tierra/edmontonia_izq.webp",
         "right": "arte/tierra/edmontonia_der.webp"
-      }
+      },
+      "speed": 6
     },
     {
       "id": "scolosaurus",
@@ -1104,7 +1159,8 @@
       "art": {
         "left": "arte/tierra/scolosaurus_izq.webp",
         "right": "arte/tierra/scolosaurus_der.webp"
-      }
+      },
+      "speed": 4
     },
     {
       "id": "euoplocephalus",
@@ -1122,7 +1178,8 @@
       "art": {
         "left": "arte/tierra/euoplocephalus_izq.webp",
         "right": "arte/tierra/euoplocephalus_der.webp"
-      }
+      },
+      "speed": 7
     },
     {
       "id": "lexovisaurus",
@@ -1140,7 +1197,8 @@
       "art": {
         "left": "arte/tierra/lexovisaurus_izq.webp",
         "right": "arte/tierra/lexovisaurus_der.webp"
-      }
+      },
+      "speed": 7
     },
     {
       "id": "saichania",
@@ -1158,7 +1216,8 @@
       "art": {
         "left": "arte/tierra/saichania_izq.webp",
         "right": "arte/tierra/saichania_der.webp"
-      }
+      },
+      "speed": 7
     },
     {
       "id": "stegosaurus",
@@ -1176,7 +1235,8 @@
       "art": {
         "left": "arte/tierra/stegosaurus_izq.webp",
         "right": "arte/tierra/stegosaurus_der.webp"
-      }
+      },
+      "speed": 5
     },
     {
       "id": "tuojiangosaurus",
@@ -1194,7 +1254,8 @@
       "art": {
         "left": "arte/tierra/tuojiangosaurus_izq.webp",
         "right": "arte/tierra/tuojiangosaurus_der.webp"
-      }
+      },
+      "speed": 4
     },
     {
       "id": "charonosaurus",
@@ -1212,7 +1273,8 @@
       "art": {
         "left": "arte/planta/charonosaurus_izq.webp",
         "right": "arte/planta/charonosaurus_der.webp"
-      }
+      },
+      "speed": 4
     },
     {
       "id": "corythosaurus",
@@ -1230,7 +1292,8 @@
       "art": {
         "left": "arte/planta/corythosaurus_izq.webp",
         "right": "arte/planta/corythosaurus_der.webp"
-      }
+      },
+      "speed": 4
     },
     {
       "id": "olorotitan",
@@ -1248,7 +1311,8 @@
       "art": {
         "left": "arte/planta/olorotitan_izq.webp",
         "right": "arte/planta/olorotitan_der.webp"
-      }
+      },
+      "speed": 8
     },
     {
       "id": "pteranodon",
@@ -1266,7 +1330,8 @@
       "art": {
         "left": "arte/planta/pteranodon_izq.webp",
         "right": "arte/planta/pteranodon_der.webp"
-      }
+      },
+      "speed": 7
     },
     {
       "id": "seismosaurus",
@@ -1284,7 +1349,8 @@
       "art": {
         "left": "arte/planta/seismosaurus_izq.webp",
         "right": "arte/planta/seismosaurus_der.webp"
-      }
+      },
+      "speed": 6
     },
     {
       "id": "supersaurus",
@@ -1302,7 +1368,8 @@
       "art": {
         "left": "arte/planta/supersaurus_izq.webp",
         "right": "arte/planta/supersaurus_der.webp"
-      }
+      },
+      "speed": 8
     },
     {
       "id": "tupandactylus",
@@ -1321,7 +1388,8 @@
       "art": {
         "left": "arte/planta/tupandactylus_izq.webp",
         "right": "arte/planta/tupandactylus_der.webp"
-      }
+      },
+      "speed": 5
     },
     {
       "id": "tupuxuara",
@@ -1339,7 +1407,8 @@
       "art": {
         "left": "arte/planta/tupuxuara_izq.webp",
         "right": "arte/planta/tupuxuara_der.webp"
-      }
+      },
+      "speed": 6
     },
     {
       "id": "altirhinus",
@@ -1357,7 +1426,8 @@
       "art": {
         "left": "arte/planta/altirhinus_izq.webp",
         "right": "arte/planta/altirhinus_der.webp"
-      }
+      },
+      "speed": 5
     },
     {
       "id": "fukuisaurus",
@@ -1375,7 +1445,8 @@
       "art": {
         "left": "arte/planta/fukuisaurus_izq.webp",
         "right": "arte/planta/fukuisaurus_der.webp"
-      }
+      },
+      "speed": 8
     },
     {
       "id": "iguanodon",
@@ -1393,7 +1464,8 @@
       "art": {
         "left": "arte/planta/iguanodon_izq.webp",
         "right": "arte/planta/iguanodon_der.webp"
-      }
+      },
+      "speed": 8
     },
     {
       "id": "lanzhousaurus",
@@ -1411,7 +1483,8 @@
       "art": {
         "left": "arte/planta/lanzhousaurus_izq.webp",
         "right": "arte/planta/lanzhousaurus_der.webp"
-      }
+      },
+      "speed": 8
     },
     {
       "id": "maiasaura",
@@ -1429,7 +1502,8 @@
       "art": {
         "left": "arte/planta/maiasaura_izq.webp",
         "right": "arte/planta/maiasaura_der.webp"
-      }
+      },
+      "speed": 5
     },
     {
       "id": "parasaurolophus",
@@ -1447,7 +1521,8 @@
       "art": {
         "left": "arte/planta/parasaurolophus_izq.webp",
         "right": "arte/planta/parasaurolophus_der.webp"
-      }
+      },
+      "speed": 5
     },
     {
       "id": "saurolophus_naranja",
@@ -1465,7 +1540,8 @@
       "art": {
         "left": "arte/planta/saurolophus_naranja_izq.webp",
         "right": "arte/planta/saurolophus_naranja_der.webp"
-      }
+      },
+      "speed": 5
     },
     {
       "id": "saurolophus_verde",
@@ -1483,7 +1559,8 @@
       "art": {
         "left": "arte/planta/saurolophus_verde_izq.webp",
         "right": "arte/planta/saurolophus_verde_der.webp"
-      }
+      },
+      "speed": 5
     },
     {
       "id": "shantungosaurus",
@@ -1501,7 +1578,8 @@
       "art": {
         "left": "arte/planta/shantungosaurus_izq.webp",
         "right": "arte/planta/shantungosaurus_der.webp"
-      }
+      },
+      "speed": 7
     },
     {
       "id": "dilophosaurus",
@@ -1519,7 +1597,8 @@
       "art": {
         "left": "arte/viento/dilophosaurus_izq.webp",
         "right": "arte/viento/dilophosaurus_der.webp"
-      }
+      },
+      "speed": 7
     },
     {
       "id": "liliensternus",
@@ -1537,7 +1616,8 @@
       "art": {
         "left": "arte/viento/liliensternus_izq.webp",
         "right": "arte/viento/liliensternus_der.webp"
-      }
+      },
+      "speed": 10
     },
     {
       "id": "neovenator",
@@ -1555,7 +1635,8 @@
       "art": {
         "left": "arte/viento/neovenator_izq.webp",
         "right": "arte/viento/neovenator_der.webp"
-      }
+      },
+      "speed": 6
     },
     {
       "id": "sinraptor",
@@ -1573,7 +1654,8 @@
       "art": {
         "left": "arte/viento/sinraptor_izq.webp",
         "right": "arte/viento/sinraptor_der.webp"
-      }
+      },
+      "speed": 10
     },
     {
       "id": "szechuanosaurus",
@@ -1591,7 +1673,8 @@
       "art": {
         "left": "arte/viento/szechuanosaurus_izq.webp",
         "right": "arte/viento/szechuanosaurus_der.webp"
-      }
+      },
+      "speed": 10
     },
     {
       "id": "afrovenator",
@@ -1609,7 +1692,8 @@
       "art": {
         "left": "arte/viento/afrovenator_izq.webp",
         "right": "arte/viento/afrovenator_der.webp"
-      }
+      },
+      "speed": 7
     },
     {
       "id": "allosaurus",
@@ -1627,7 +1711,8 @@
       "art": {
         "left": "arte/viento/allosaurus_izq.webp",
         "right": "arte/viento/allosaurus_der.webp"
-      }
+      },
+      "speed": 7
     },
     {
       "id": "carnotaurus",
@@ -1645,7 +1730,8 @@
       "art": {
         "left": "arte/viento/carnotaurus_izq.webp",
         "right": "arte/viento/carnotaurus_der.webp"
-      }
+      },
+      "speed": 7
     },
     {
       "id": "ceratosaurus",
@@ -1663,7 +1749,8 @@
       "art": {
         "left": "arte/viento/ceratosaurus_izq.webp",
         "right": "arte/viento/ceratosaurus_der.webp"
-      }
+      },
+      "speed": 8
     },
     {
       "id": "deltadromeus",
@@ -1681,7 +1768,8 @@
       "art": {
         "left": "arte/viento/deltadromeus_izq.webp",
         "right": "arte/viento/deltadromeus_der.webp"
-      }
+      },
+      "speed": 10
     },
     {
       "id": "gojirasaurus",
@@ -1699,7 +1787,8 @@
       "art": {
         "left": "arte/viento/gojirasaurus_izq.webp",
         "right": "arte/viento/gojirasaurus_der.webp"
-      }
+      },
+      "speed": 8
     },
     {
       "id": "majungasaurus",
@@ -1717,7 +1806,8 @@
       "art": {
         "left": "arte/viento/majungasaurus_izq.webp",
         "right": "arte/viento/majungasaurus_der.webp"
-      }
+      },
+      "speed": 9
     },
     {
       "id": "megaraptor",
@@ -1735,7 +1825,8 @@
       "art": {
         "left": "arte/viento/megaraptor_izq.webp",
         "right": "arte/viento/megaraptor_der.webp"
-      }
+      },
+      "speed": 10
     },
     {
       "id": "utahraptor",
@@ -1753,7 +1844,8 @@
       "art": {
         "left": "arte/viento/utahraptor_izq.webp",
         "right": "arte/viento/utahraptor_der.webp"
-      }
+      },
+      "speed": 8
     },
     {
       "id": "indoraptor",
@@ -1771,7 +1863,8 @@
       "art": {
         "left": "arte/especial/indoraptor_izq.webp",
         "right": "arte/especial/indoraptor_der.webp"
-      }
+      },
+      "speed": 7
     },
     {
       "id": "brontosaurus",
@@ -1789,7 +1882,8 @@
       "art": {
         "left": "arte/especial/brontosaurus_izq.webp",
         "right": "arte/especial/brontosaurus_der.webp"
-      }
+      },
+      "speed": 9
     },
     {
       "id": "cryolophosaurus",
@@ -1808,7 +1902,8 @@
       "art": {
         "left": "arte/especial/cryolophosaurus_izq.webp",
         "right": "arte/especial/cryolophosaurus_der.webp"
-      }
+      },
+      "speed": 8
     },
     {
       "id": "deinonychus",
@@ -1827,7 +1922,8 @@
       "art": {
         "left": "arte/especial/deinonychus_izq.webp",
         "right": "arte/especial/deinonychus_der.webp"
-      }
+      },
+      "speed": 5
     },
     {
       "id": "indominus_rex",
@@ -1845,7 +1941,8 @@
       "art": {
         "left": "arte/especial/indominus_rex_izq.webp",
         "right": "arte/especial/indominus_rex_der.webp"
-      }
+      },
+      "speed": 6
     },
     {
       "id": "megalosaurus",
@@ -1864,7 +1961,8 @@
       "art": {
         "left": "arte/especial/megalosaurus_izq.webp",
         "right": "arte/especial/megalosaurus_der.webp"
-      }
+      },
+      "speed": 9
     },
     {
       "id": "pachycephalosaurus",
@@ -1883,7 +1981,8 @@
       "art": {
         "left": "arte/especial/pachycephalosaurus_izq.webp",
         "right": "arte/especial/pachycephalosaurus_der.webp"
-      }
+      },
+      "speed": 9
     },
     {
       "id": "therizinosaurus",
@@ -1902,7 +2001,8 @@
       "art": {
         "left": "arte/especial/therizinosaurus_izq.webp",
         "right": "arte/especial/therizinosaurus_der.webp"
-      }
+      },
+      "speed": 9
     },
     {
       "id": "pawpawsaurus",
@@ -1920,7 +2020,8 @@
       "art": {
         "left": "arte/normal/pawpawsaurus_izq.webp",
         "right": "arte/normal/pawpawsaurus_der.webp"
-      }
+      },
+      "speed": 7
     },
     {
       "id": "piatnitzkysaurus",
@@ -1938,7 +2039,8 @@
       "art": {
         "left": "arte/normal/piatnitzkysaurus_izq.webp",
         "right": "arte/normal/piatnitzkysaurus_der.webp"
-      }
+      },
+      "speed": 8
     },
     {
       "id": "quetzalcoatlus",
@@ -1956,7 +2058,8 @@
       "art": {
         "left": "arte/normal/quetzalcoatlus_izq.webp",
         "right": "arte/normal/quetzalcoatlus_der.webp"
-      }
+      },
+      "speed": 6
     },
     {
       "id": "anhanguera",
@@ -1974,7 +2077,8 @@
       "art": {
         "left": "arte/normal/anhanguera_izq.webp",
         "right": "arte/normal/anhanguera_der.webp"
-      }
+      },
+      "speed": 8
     },
     {
       "id": "velociraptor",
@@ -1992,7 +2096,8 @@
       "art": {
         "left": "arte/normal/velociraptor_izq.webp",
         "right": "arte/normal/velociraptor_der.webp"
-      }
+      },
+      "speed": 5
     }
   ],
   "attacks": [
