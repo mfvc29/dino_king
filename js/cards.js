@@ -29,6 +29,9 @@ const ENCOUNTER_MIN_STEPS = 20;
 const ENCOUNTER_MAX_STEPS = 100;
 const ELEMENT_ITEM_BOOST = 5;
 const MAX_TEAM_SIZE = 3;
+// Cada dino lleva 2 ataques: el FUERTE (el de más poder) y el NORMAL (siempre disponible).
+// Tras usar el fuerte hay que esperar turnos según su poder: 70+ → 3, 55-69 → 2, menos → 1.
+const STRONG_COOLDOWN = (power) => (power >= 70 ? 3 : (power >= 55 ? 2 : 1));
 const MAX_CARD_LEVEL = 50;
 const XP_WILD_WIN = 15;          // % de nivel por ganar a un dino salvaje
 const XP_PER_TRAINER_DINO = 20;  // % de nivel por cada dino de entrenador derrotado
@@ -135,7 +138,8 @@ class CardSystem {
     deserialize(data = {}) {
         this.resetState();
         this.collection = (Array.isArray(data.collection) ? data.collection : [])
-            .map(c => ({ ...c, xp: Number(c.xp) || 0, fatigue: Number(c.fatigue) || 0 }));
+            .map(c => ({ ...c, xp: Number(c.xp) || 0, fatigue: Number(c.fatigue) || 0,
+                attacks: this.normalizeAttacks(c.id, c.attacks, c.level) }));
         this.bag = data.bag || {};
         this.equippedItem = EQUIP_ITEMS[data.equippedItem] ? data.equippedItem : null;
         this.moveCards = data.moveCards || {};
@@ -167,21 +171,38 @@ class CardSystem {
     /** Ataques que un dino puede aprender: los de su elemento y los normales (sin cartas de movimiento). */
     getLearnableAttacks(dino) {
         if (!dino) return [];
-        return this.catalog.attacks.filter(a => !a.moveCard && (a.element === dino.element || a.element === 'normal'));
+        return this.catalog.attacks.filter(a => !a.moveCard && a.power > 0 && (a.element === dino.element || a.element === 'normal'));
     }
 
     /** Ataques por defecto para un nivel: los 2 más fuertes de su elemento + el normal más fuerte. */
+    /** Los 2 ataques de un dino a su nivel: el más fuerte de su elemento y el siguiente (o uno normal). */
     getDefaultAttacks(dino, level = 1) {
-        const learnable = this.getLearnableAttacks(dino).filter(a => (a.level || 1) <= level && a.power > 0);
+        const learnable = this.getLearnableAttacks(dino).filter(a => (a.level || 1) <= level);
         const byPower = (a, b) => b.power - a.power;
         const own = learnable.filter(a => a.element === dino.element).sort(byPower);
         const normal = learnable.filter(a => a.element === 'normal').sort(byPower);
-        const picked = [...own.slice(0, 2), ...normal].slice(0, 3);
-        for (const a of [...own, ...normal]) {
-            if (picked.length >= 3) break;
-            if (!picked.includes(a)) picked.push(a);
+        const picked = [];
+        for (const a of [own[0], own[1], ...normal, ...own]) {
+            if (a && !picked.includes(a)) picked.push(a);
+            if (picked.length >= 2) break;
         }
-        return picked.map(a => a.id);
+        return picked.sort(byPower).map(a => a.id);
+    }
+
+    /** Deja cualquier lista de ataques (partidas viejas, entrenadores) en 2: [fuerte, normal]. */
+    normalizeAttacks(dinoId, ids, level = 1) {
+        const list = [...new Set(ids || [])].map(id => this.getAttack(id)).filter(a => a && a.power > 0 && !a.moveCard);
+        if (list.length < 2) {
+            const dino = this.getDino(dinoId);
+            return dino ? this.getDefaultAttacks(dino, level) : list.map(a => a.id);
+        }
+        return list.sort((a, b) => b.power - a.power).slice(0, 2).map(a => a.id);
+    }
+
+    /** Turnos de recarga de un ataque dentro de la pareja del dino (0 = siempre disponible). */
+    attackCooldown(attacks, id) {
+        const a = this.getAttack(id);
+        return a && attacks && attacks[0] === id ? STRONG_COOLDOWN(a.power) : 0;
     }
 
     getCategory(attack) {
@@ -668,9 +689,9 @@ class CardSystem {
             <div class="tutor-main">
                 <div class="tutor-card">${this.renderCardHtml(card)}</div>
                 <div class="tutor-attacks">
-                    <p class="tutor-hint">1. Elige el ataque que quieres olvidar:</p>
+                    <p class="tutor-hint">Cada dino lleva 2 ataques: el 💥 fuerte (con recarga) y el normal (siempre disponible).<br>1. Elige el ataque que quieres olvidar:</p>
                     <div class="tutor-slots">${slotsHtml}</div>
-                    <p class="tutor-hint">2. Elige el ataque nuevo (💪 físico · 🔮 especial · 🌀 estado):</p>
+                    <p class="tutor-hint">2. Elige el ataque nuevo (💪 físico · 🔮 especial):</p>
                     <div class="tutor-learnable">${learnHtml}</div>
                 </div>
             </div>`;
@@ -688,6 +709,7 @@ class CardSystem {
             const old = this.getAttack(card.attacks[sel.slot]);
             const learned = this.getAttack(b.dataset.atk);
             card.attacks[sel.slot] = b.dataset.atk;
+            card.attacks = this.normalizeAttacks(card.id, card.attacks, card.level);
             this.save();
             this.game.notifyStatus(`📚 ${dino ? dino.name : card.id} olvidó ${old ? old.name : '...'} y aprendió ${learned.name}.`);
             this.renderTutor();
@@ -740,6 +762,7 @@ class CardSystem {
         const cardStyle = src ? `background-image:url('assets/dinos/${encodeURI(src)}')` : '';
         const atkHtml = (card.attacks || []).map(aid => {
             const a = this.getAttack(aid);
+            const cd = this.attackCooldown(card.attacks, aid);
             const ael = a && elements[a.element];
             const boost = showBoost && a && a.power > 0 ? this.getElementBoost(a.element) : 0;
             const power = a ? a.power + boost : '';
@@ -747,7 +770,8 @@ class CardSystem {
             const effective = a && a.power > 0 && vsElements.some(de => this.getTypeMultiplier(a.element, de) > 1);
             const effHtml = effective ? ` <em class="atk-effective" title="Eficaz contra el rival">x${this.typeChart.effective}</em>` : '';
             const cat = a ? this.getCategory(a).icon : '';
-            return `<li title="${a ? this.getCategory(a).name : ''}">${ael ? ael.icon : '•'}${cat} ${escapeHtml(a ? a.name : aid)}${a ? ` <span>${a.power > 0 ? power : '—'}${boostHtml}${effHtml}</span>` : ''}</li>`;
+            const role = cd ? `<em class="atk-role strong" title="Ataque fuerte: después de usarlo espera ${cd} turno(s)">💥 recarga ${cd}</em>` : '<em class="atk-role" title="Ataque normal: siempre disponible">♾️</em>';
+            return `<li title="${a ? this.getCategory(a).name : ''}">${ael ? ael.icon : '•'}${cat} ${escapeHtml(a ? a.name : aid)} ${a ? role : ''}${a ? ` <span>${a.power > 0 ? power : '—'}${boostHtml}${effHtml}</span>` : ''}</li>`;
         }).join('') || '<li><em>Sin ataques</em></li>';
         const xpHtml = card.xp !== undefined && card.level < MAX_CARD_LEVEL
             ? `<div class="dino-xp" title="Progreso al siguiente nivel"><div class="dino-xp-fill" style="width:${card.xp}%"></div><span>${card.xp}%</span></div>`
@@ -896,6 +920,18 @@ class CardSystem {
                 <button class="team-toggle-btn" data-uid="${card.uid}">${card.inTeam ? '★ En equipo (quitar)' : '☆ Llevar en el equipo'}</button>
                 ${card.inTeam ? '' : `<button class="team-toggle-btn release-btn" data-release="${card.uid}" style="background:#3b1d1d;color:#fca5a5;">🕊️ Liberar</button>`}
             </div>`;
+        // Guardados ordenados por tipo (orden de los elementos del catálogo) y, dentro de cada tipo, por nivel
+        const elements = this.catalog.elements || {};
+        const elementOf = (c) => (this.getDino(c.id) || {}).element || 'normal';
+        const typeOrder = [...Object.keys(elements), ...new Set(stored.map(elementOf))];
+        const storedHtml = [...new Set(typeOrder)].map(type => {
+            const group = stored.filter(c => elementOf(c) === type).sort((a, b) =>
+                (b.level - a.level) || String(this.getDino(a.id)?.name || a.id).localeCompare(this.getDino(b.id)?.name || b.id));
+            if (!group.length) return '';
+            const el = elements[type];
+            return `<h5 class="almanac-type" style="--type:${el ? el.color : '#94a3b8'}">${el ? el.icon : '•'} ${el ? el.name : type} <span>(${group.length})</span></h5>
+                    <div class="collection-grid">${group.map(cardHtml).join('')}</div>`;
+        }).join('');
 
 
         panel.innerHTML = `
@@ -913,7 +949,7 @@ class CardSystem {
             <h4 class="almanac-title">⚔️ Tu equipo</h4>
             <div class="collection-grid">${team.map(cardHtml).join('') || '<p style="color:#64748b;">Tu equipo está vacío. Elige dinos del almanaque.</p>'}</div>
             <h4 class="almanac-title">📖 Guardados en el almanaque (${stored.length})</h4>
-            <div class="collection-grid">${stored.map(cardHtml).join('') || '<p style="color:#64748b;">No hay dinos guardados.</p>'}</div>
+            ${storedHtml || '<p style="color:#64748b;">No hay dinos guardados.</p>'}
         `;
 
         panel.querySelectorAll('.team-toggle-btn[data-uid]').forEach(btn => {

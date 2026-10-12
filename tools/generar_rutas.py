@@ -44,19 +44,28 @@ TS = 32  # tamaño de losa en el tileset y en el juego
 # Utilidades
 # ============================================================
 def auto_attacks(species, level, i=0):
-    """3 ataques válidos para el nivel: los mejores de su elemento y uno normal (variados por posición)."""
+    """Los 2 ataques del dino a su nivel: el más fuerte de su elemento (con recarga en combate) y el
+    siguiente, o uno normal si todavía no sabe otro (igual que getDefaultAttacks en js/cards.js)."""
     el = DINO_BY_ID[species]['element']
     learn = [a for a in DINOS['attacks'] if not a.get('moveCard') and a.get('level', 1) <= level and a['power'] > 0]
-    own = [a['id'] for a in sorted([a for a in learn if a['element'] == el], key=lambda a: -a['power'])]
-    nor = [a['id'] for a in sorted([a for a in learn if a['element'] == 'normal'], key=lambda a: -a['power'])]
-    pick = [own[0], own[min(1 + i % 2, len(own) - 1)], nor[min(i % 2, len(nor) - 1)]] if own else nor[:3]
-    out = []
-    for a in pick + own + nor:
-        if a not in out:
-            out.append(a)
-    if i == 1 and level >= 8 and 'grito_salvaje' not in out:
-        out[2] = 'grito_salvaje'  # el segundo dino intimida
-    return out[:3]
+    own = sorted([a for a in learn if a['element'] == el], key=lambda a: -a['power'])
+    nor = sorted([a for a in learn if a['element'] == 'normal'], key=lambda a: -a['power'])
+    picked = []
+    for a in own[:2] + nor + own:
+        if a not in picked:
+            picked.append(a)
+        if len(picked) == 2:
+            break
+    return [a['id'] for a in sorted(picked, key=lambda a: -a['power'])]
+
+
+def normalize_attacks(species, attacks, level):
+    """Cualquier lista de ataques -> 2: [el más fuerte, el siguiente]."""
+    by_id = {a['id']: a for a in DINOS['attacks']}
+    lst = [by_id[x] for x in dict.fromkeys(attacks or []) if x in by_id and by_id[x]['power'] > 0]
+    if len(lst) < 2:
+        return auto_attacks(species, level)
+    return [a['id'] for a in sorted(lst, key=lambda a: -a['power'])[:2]]
 
 
 def trainer(npc_id, x, y, name, sprite, direction, team, move_card, dialog, defeat, sight=4, exp=80, ai='dificil'):
@@ -64,7 +73,7 @@ def trainer(npc_id, x, y, name, sprite, direction, team, move_card, dialog, defe
     full = []
     for i, entry in enumerate(team):
         species, level = entry[0], entry[1]
-        attacks = entry[2] if len(entry) > 2 else auto_attacks(species, level, i)
+        attacks = normalize_attacks(species, entry[2], level) if len(entry) > 2 else auto_attacks(species, level, i)
         d = DINO_BY_ID[species]
         full.append({'species': species, 'name': d['name'], 'element': d['element'],
                      'image': d['image'], 'card': d['card'], 'level': level, 'attacks': attacks})

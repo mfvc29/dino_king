@@ -149279,8 +149279,7 @@
           "level": 5,
           "attacks": [
             "acua_cola",
-            "chorro_agua",
-            "mordisco"
+            "chorro_agua"
           ]
         },
         {
@@ -149292,8 +149291,7 @@
           "level": 6,
           "attacks": [
             "acua_cola",
-            "mordisco",
-            "rugido"
+            "mordisco"
           ]
         },
         {
@@ -149305,8 +149303,7 @@
           "level": 6,
           "attacks": [
             "acua_cola",
-            "chorro_agua",
-            "pisoton"
+            "chorro_agua"
           ]
         }
       ],
@@ -149334,8 +149331,7 @@
           "level": 6,
           "attacks": [
             "cuerno_voltio",
-            "choque_electrico",
-            "pisoton"
+            "choque_electrico"
           ]
         },
         {
@@ -149347,8 +149343,7 @@
           "level": 7,
           "attacks": [
             "cuerno_voltio",
-            "mordisco",
-            "rugido"
+            "mordisco"
           ]
         },
         {
@@ -149360,8 +149355,7 @@
           "level": 7,
           "attacks": [
             "cuerno_voltio",
-            "choque_electrico",
-            "pisoton"
+            "choque_electrico"
           ]
         }
       ],
@@ -149389,8 +149383,7 @@
           "level": 6,
           "attacks": [
             "bofeton_lodo",
-            "avalancha",
-            "pisoton"
+            "avalancha"
           ]
         },
         {
@@ -149402,8 +149395,7 @@
           "level": 7,
           "attacks": [
             "bofeton_lodo",
-            "mordisco",
-            "rugido"
+            "mordisco"
           ]
         },
         {
@@ -149415,8 +149407,7 @@
           "level": 7,
           "attacks": [
             "bofeton_lodo",
-            "avalancha",
-            "pisoton"
+            "avalancha"
           ]
         }
       ],
@@ -149444,8 +149435,7 @@
           "level": 7,
           "attacks": [
             "hoja_afilada",
-            "latigo_cepa",
-            "pisoton"
+            "latigo_cepa"
           ]
         },
         {
@@ -149457,8 +149447,7 @@
           "level": 7,
           "attacks": [
             "hoja_afilada",
-            "mordisco",
-            "rugido"
+            "mordisco"
           ]
         },
         {
@@ -149470,8 +149459,7 @@
           "level": 8,
           "attacks": [
             "rayo_solar",
-            "latigo_cepa",
-            "pisoton"
+            "latigo_cepa"
           ]
         }
       ],
@@ -149499,8 +149487,7 @@
           "level": 7,
           "attacks": [
             "colmillo_igneo",
-            "bola_fuego",
-            "pisoton"
+            "bola_fuego"
           ]
         },
         {
@@ -149512,8 +149499,7 @@
           "level": 7,
           "attacks": [
             "colmillo_igneo",
-            "mordisco",
-            "rugido"
+            "mordisco"
           ]
         },
         {
@@ -149525,8 +149511,7 @@
           "level": 8,
           "attacks": [
             "garra_ardiente",
-            "bola_fuego",
-            "pisoton"
+            "bola_fuego"
           ]
         }
       ],
@@ -149554,8 +149539,7 @@
           "level": 8,
           "attacks": [
             "rafaga",
-            "ataque_aereo",
-            "pisoton"
+            "ataque_aereo"
           ]
         },
         {
@@ -149567,8 +149551,7 @@
           "level": 8,
           "attacks": [
             "rafaga",
-            "mordisco",
-            "rugido"
+            "mordisco"
           ]
         },
         {
@@ -149580,8 +149563,7 @@
           "level": 9,
           "attacks": [
             "rafaga",
-            "cuchilla_aire",
-            "pisoton"
+            "cuchilla_aire"
           ]
         }
       ],
@@ -149609,8 +149591,7 @@
           "level": 9,
           "attacks": [
             "zarpazo_primigenio",
-            "poder_ancestral",
-            "pisoton"
+            "poder_ancestral"
           ]
         },
         {
@@ -149622,8 +149603,7 @@
           "level": 9,
           "attacks": [
             "zarpazo_primigenio",
-            "mordisco",
-            "rugido"
+            "mordisco"
           ]
         },
         {
@@ -149635,8 +149615,7 @@
           "level": 10,
           "attacks": [
             "furia_jurasica",
-            "poder_ancestral",
-            "doble_golpe"
+            "poder_ancestral"
           ]
         }
       ],

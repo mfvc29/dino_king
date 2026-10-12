@@ -12,7 +12,8 @@
  *   (la usa para levantarse).
  * - RELEVO: durante "¡Una más!" puedes pasar la acción extra a otro dino de tu equipo; su ataque
  *   hace +50% de daño (+100% si se encadenan dos relevos).
- * - El ataque más fuerte de cada dino no se puede usar dos veces seguidas.
+ * - Cada dino tiene 2 ataques: el FUERTE, que después de usarlo necesita 1, 2 o 3 turnos de recarga
+ *   (según su poder), y el NORMAL, que siempre se puede usar.
  * - Ataques físicos usan ataque/defensa físicos; los especiales, ataque/defensa especiales.
  * - Daño = poder (+5 del objeto) x (ataque / defensa) x (nivel propio + nivel rival) / 50
  *   x ventaja de tipo x variación aleatoria (x1.5 si es crítico).
@@ -71,8 +72,8 @@ class BattleSystem {
         if (tired && tired.factor < 1) {
             for (const k of ['atk', 'def', 'spa', 'spd', 'vel']) stats[k] = Math.max(1, Math.round((stats[k] || 0) * tired.factor));
         }
-        const attacks = (src.attacks && src.attacks.length) ? src.attacks.slice(0, 3)
-            : (dino ? this.cards.getDefaultAttacks(dino, level) : ['embestida']);
+        const attacks = this.cards.normalizeAttacks(dinoId, src.attacks, level);
+        if (!attacks.length) attacks.push('embestida');
         const f = {
             side,
             idx,
@@ -95,6 +96,7 @@ class BattleSystem {
             down: false,
             boost: 1,
             lastMove: null,
+            readyRound: {},     // ataque fuerte: ronda desde la que se puede volver a usar
             tired: tired && tired.factor < 1 ? tired : null
         };
         f.strongest = this.strongestMove(f, moveId);
@@ -118,7 +120,13 @@ class BattleSystem {
 
     /** El ataque más fuerte no se puede repetir dos veces seguidas. */
     canUse(f, id) {
-        return !(id === f.strongest && f.lastMove === id);
+        return this.turnsToWait(f, id) <= 0;
+    }
+
+    /** Turnos que faltan para volver a usar un ataque (0 = disponible). */
+    turnsToWait(f, id) {
+        const ready = (f.readyRound || {})[id] || 0;
+        return this.battle ? ready - this.battle.round : 0;
     }
 
     /**
@@ -583,6 +591,9 @@ class BattleSystem {
         const cat = this.cards.getCategory(attack);
         const mine = this.battle.humans[attacker.side] && !this.battle.humans.rival ? 'player' : (attacker.side === 'player' ? 'player' : 'rival');
         attacker.lastMove = attackId;
+        // El ataque fuerte entra en recarga
+        const cd = this.cards.attackCooldown(attacker.attacks, attackId);
+        if (cd) attacker.readyRound[attackId] = this.battle.round + cd + 1;
         this.log(`${el ? el.icon : '•'}${cat.icon} ${this.ownerLabel(attacker)} ${attacker.name} usó ${attack.moveCard ? '🃏 ' : ''}<strong>${escapeHtml(attack.name)}</strong> contra ${defender.name}.`);
         this.animateCard(attacker, attacker.side === 'player' ? 'lunge-up' : 'lunge-down');
         await sleep(BATTLE_DELAY / 2);
@@ -929,17 +940,19 @@ class BattleSystem {
             const cat = this.cards.getCategory(a);
             const itemBoost = useItem && a.power > 0 ? this.cards.getElementBoost(a.element) : 0;
             const eff = a.power > 0 && foes.some(f => !f.down && this.cards.getTypeMultiplier(a.element, f.element) > 1);
-            const cooldown = !this.canUse(me, id);
+            const cd = this.cards.attackCooldown(me.attacks, id);
+            const wait = Math.min(this.turnsToWait(me, id), cd);   // en el mismo turno en que se usó cuenta desde el siguiente
+            const cooldown = wait > 0;
             const btn = this.addButton(
                 `battle-atk-btn ${a.moveCard ? 'move' : ''}`,
-                `<span>${a.moveCard ? '🃏' : (ael ? ael.icon : '•')}${cat.icon} ${escapeHtml(a.name)}</span>
-                 <span class="atk-power">${cooldown ? '⏳ recarga' : `${a.power > 0 ? a.power + itemBoost : '—'}${itemBoost ? ` <em class="atk-boost">+${itemBoost}</em>` : ''}${eff ? ' <em class="atk-effective">DÉBIL</em>' : ''}${boost > 1 && a.power > 0 ? ` <em class="atk-boost">x${boost}</em>` : ''}`}</span>`,
+                `<span>${cd ? '💥' : ''}${ael ? ael.icon : '•'}${cat.icon} ${escapeHtml(a.name)}</span>
+                 <span class="atk-power">${cooldown ? `⏳ ${wait} turno${wait > 1 ? 's' : ''}` : `${a.power > 0 ? a.power + itemBoost : '—'}${itemBoost ? ` <em class="atk-boost">+${itemBoost}</em>` : ''}${eff ? ' <em class="atk-effective">DÉBIL</em>' : ''}${boost > 1 && a.power > 0 ? ` <em class="atk-boost">x${boost}</em>` : ''}`}</span>`,
                 String(i + 1),
                 () => this.chooseAttack(id),
                 cooldown || b.busy
             );
             btn.style.setProperty('--el', ael ? ael.color : '#94a3b8');
-            btn.title = `${cat.name}${id === me.strongest ? ' · Ataque más fuerte: no se puede usar dos veces seguidas' : ''}`;
+            btn.title = `${cat.name}${cd ? ` · Ataque fuerte: después de usarlo espera ${cd} turno(s)` : ' · Ataque normal: siempre disponible'}`;
         });
 
         if (b.oneMore) {

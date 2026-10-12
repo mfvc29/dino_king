@@ -2240,3 +2240,82 @@
     text-align: left;
     font-size: 0.8rem;
 }
+
+/* Almanaque: dinos guardados agrupados por tipo */
+.almanac-type {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 14px 0 8px;
+    padding: 4px 10px;
+    font-size: 0.85rem;
+    color: var(--type);
+    border-left: 4px solid var(--type);
+    background: linear-gradient(90deg, color-mix(in srgb, var(--type) 18%, transparent), transparent 70%);
+}
+
+.almanac-type span {
+    color: #94a3b8;
+    font-weight: normal;
+}
+
+/* ============================================================
+   Acciones al costado del campo (sin desplazarse hacia abajo)
+   ============================================================ */
+.battle-window {
+    width: min(1240px, 100%);
+}
+
+.battle-main {
+    flex-direction: row;
+    align-items: stretch;
+}
+
+.battle-main .battle-field {
+    flex: 1;
+    min-width: 0;
+}
+
+.battle-main .battle-actions-grid {
+    flex: none;
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+    padding: 4px;
+    overflow-y: auto;
+}
+
+.battle-main .battle-actions-grid .battle-wait {
+    margin: 0 0 4px;
+    font-size: 0.85rem;
+    line-height: 1.35;
+}
+
+.battle-main .battle-actions-grid .battle-atk-btn,
+.battle-main .battle-actions-grid .battle-btn {
+    width: 100%;
+}
+
+/* Etiqueta del ataque fuerte / normal en las cartas */
+.atk-role {
+    font-style: normal;
+    font-size: 0.68rem;
+    color: #94a3b8;
+}
+
+.atk-role.strong {
+    color: #fb923c;
+}
+
+/* Pantallas angostas: las acciones vuelven abajo */
+@media (max-width: 900px) {
+    .battle-main {
+        flex-direction: column;
+    }
+
+    .battle-main .battle-actions-grid {
+        width: auto;
+    }
+}

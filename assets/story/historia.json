@@ -197,18 +197,16 @@
                     "species": "velociraptor",
                     "level": 8,
                     "attacks": [
-                        "mordisco",
-                        "coletazo",
-                        "pisoton"
+                        "pisoton",
+                        "mordisco"
                     ]
                 },
                 {
                     "species": "rajasaurus",
                     "level": 9,
                     "attacks": [
-                        "bola_fuego",
-                        "colmillo_igneo",
-                        "garra_ardiente"
+                        "garra_ardiente",
+                        "colmillo_igneo"
                     ]
                 }
             ],
@@ -242,7 +240,6 @@
                     "level": 15,
                     "attacks": [
                         "pulso_fosil",
-                        "zarpazo_primigenio",
                         "furia_jurasica"
                     ]
                 },
@@ -251,8 +248,7 @@
                     "level": 14,
                     "attacks": [
                         "terremoto",
-                        "cabezazo_roca",
-                        "rugido"
+                        "cabezazo_roca"
                     ]
                 },
                 {
@@ -260,8 +256,7 @@
                     "level": 15,
                     "attacks": [
                         "ciclon",
-                        "rafaga",
-                        "doble_golpe"
+                        "rafaga"
                     ]
                 }
             ],
@@ -298,18 +293,16 @@
                     "species": "gigas",
                     "level": 19,
                     "attacks": [
-                        "garra_ardiente",
                         "volcan_furioso",
-                        "rugido"
+                        "garra_ardiente"
                     ]
                 },
                 {
                     "species": "spinosaurus",
                     "level": 18,
                     "attacks": [
-                        "hidropulso",
                         "tsunami",
-                        "acua_cola"
+                        "hidropulso"
                     ]
                 },
                 {
@@ -317,8 +310,7 @@
                     "level": 20,
                     "attacks": [
                         "llamarada",
-                        "volcan_furioso",
-                        "hiper_colmillo"
+                        "volcan_furioso"
                     ]
                 }
             ],
