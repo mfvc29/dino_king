@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dino Rey</title>
-    <link rel="stylesheet" href="css/style.css?v=20261003f">
-    <link rel="stylesheet" href="css/dinorey.css?v=20261011e">
+    <link rel="stylesheet" href="css/style.css?v=20261011a">
+    <link rel="stylesheet" href="css/dinorey.css?v=20261011f">
+    <link rel="stylesheet" href="css/battle.css?v=20261011b">
 </head>
 <body>
 
@@ -121,27 +122,35 @@
             <canvas id="gameCanvas" width="960" height="540"></canvas>
             <div id="gameStatus" class="status-msg"></div>
 
-            <!-- Combate por turnos 3 contra 3 (js/battle.js) -->
-            <div id="battleOverlay" class="overlay battle-overlay" style="display: none;">
-                <div class="battle-window">
-                    <div class="battle-head">
-                        <span class="battle-title">⚔️ Combate</span>
-                        <span class="battle-vs-name">vs <strong id="battleTrainerName">Rival</strong></span>
-                        <div class="battle-coin-wrap">
-                            <div id="battleCoin" class="battle-coin">🪙</div>
-                            <span id="battleTurn" class="battle-turn"></span>
+            <!-- Combate por turnos 3 contra 3, estilo duelo de cartas (js/battle.js + js/battleFx.js) -->
+            <div id="battleOverlay" class="overlay duel-overlay" style="display: none;">
+                <div class="duel-window">
+                    <div class="duel-head">
+                        <span class="duel-title">⚔️ Combate</span>
+                        <span class="duel-vs-name">vs <strong id="battleTrainerName">Rival</strong></span>
+                        <div class="duel-head-right">
+                            <span id="battleTurn" class="duel-turn"></span>
+                            <button id="battleSpeedBtn" class="duel-speed" title="Velocidad de las animaciones (V)">⏩ x1</button>
                         </div>
                     </div>
-                    <div class="battle-main">
-                        <div class="battle-field">
-                            <div class="battle-side-label rival">RIVAL</div>
-                            <div class="battle-row rival" id="battleRivalSide"></div>
-                            <div class="battle-vs" aria-hidden="true">VS</div>
-                            <div class="battle-row player" id="battlePlayerSide"></div>
-                            <div class="battle-side-label player">TU EQUIPO</div>
+                    <div class="duel-main">
+                        <div id="battleField" class="duel-field">
+                            <div class="duel-backdrop" aria-hidden="true"></div>
+                            <div class="duel-mat" aria-hidden="true"><div class="duel-emblem"></div></div>
+                            <div class="duel-motes" aria-hidden="true">
+                                <i style="--x:6%;--t:-1s"></i><i style="--x:17%;--t:-6s"></i><i style="--x:29%;--t:-3s"></i>
+                                <i style="--x:41%;--t:-8s"></i><i style="--x:53%;--t:-2s"></i><i style="--x:64%;--t:-5s"></i>
+                                <i style="--x:76%;--t:-9s"></i><i style="--x:88%;--t:-4s"></i><i style="--x:95%;--t:-7s"></i>
+                            </div>
+                            <div id="battleTrainerRival" class="duel-trainer rival"></div>
+                            <div id="battleTrainerPlayer" class="duel-trainer player"></div>
+                            <div class="duel-row rival" id="battleRivalSide"></div>
+                            <div class="duel-row player" id="battlePlayerSide"></div>
+                            <div id="battleFx" class="duel-fx" aria-hidden="true"></div>
                         </div>
-                        <div id="battleActions" class="battle-actions-grid"></div>
+                        <div id="battleActions" class="duel-command"></div>
                     </div>
+                    <div id="battleBanner" class="duel-banner" aria-hidden="true"></div>
                     <div id="battleSplash" class="battle-splash"></div>
                 </div>
             </div>
@@ -225,7 +234,7 @@
             <span><kbd>Espacio</kbd> hablar</span>
             <span><kbd>M</kbd> mapa</span>
             <span><kbd>Enter</kbd> menú</span>
-            <span><kbd>1</kbd>-<kbd>4</kbd> ataques en combate</span>
+            <span><kbd>1</kbd>-<kbd>3</kbd> combate · <kbd>V</kbd> velocidad</span>
         </footer>
     </div>
 
@@ -236,14 +245,15 @@
     <script src="js/npc.js?v=20261011a"></script>
     <script src="js/input.js?v=20261003f"></script>
     <script src="js/player.js?v=20261003f"></script>
-    <script src="js/cards.js?v=20261011e"></script>
-    <script src="js/mine.js?v=20261011a"></script>
-    <script src="js/field.js?v=20261011a"></script>
-    <script src="js/battle.js?v=20261011d"></script>
-    <script src="js/tournament.js?v=20261011a"></script>
+    <script src="js/cards.js?v=20261011i"></script>
+    <script src="js/mine.js?v=20261011b"></script>
+    <script src="js/field.js?v=20261011b"></script>
+    <script src="js/battleFx.js?v=20261011b"></script>
+    <script src="js/battle.js?v=20261011g"></script>
+    <script src="js/tournament.js?v=20261011b"></script>
     <script src="js/story.js?v=20261003f"></script>
     <script src="js/save.js?v=20261011a"></script>
     <script src="js/characterSelect.js?v=20261003f"></script>
-    <script src="js/game.js?v=20261011c"></script>
+    <script src="js/game.js?v=20261011e"></script>
 </body>
 </html>

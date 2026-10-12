@@ -9,6 +9,8 @@
  * - Gemas ocultas: brillan sólo cuando estás cerca (la linterna amplía el radio). Se guardan al recogerlas.
  * - Pisos oscuros: sólo se ve alrededor del jugador (la Linterna de Cristal ilumina más).
  * - Más profundo = dinos salvajes más raros y de más nivel.
+ * - Los objetos de elemento de la Mochila (Colmillo Volcánico, Perla del Lago...) también entran al
+ *   Taller: los repetidos se funden en la gema de su elemento y con uno de cada se hace el Talismán.
  */
 
 // Materiales: tile = gema de Caves.png (fila 8) para dibujarla; img = la misma gema como objeto del constructor
@@ -33,6 +35,17 @@ const MINE_ITEMS = {
     elixir_meteoro:  { name: 'Elixir de Meteorito', icon: '✨', heal: 100, scope: 'all', desc: 'TODOS tus dinos (equipo y almanaque) quedan descansados.' },
     cuerda:          { name: 'Cuerda de Escape', icon: '🧵', desc: 'Te saca de la cueva al instante.' },
     cebo:            { name: 'Cebo de Ámbar', icon: '🍖', desc: 'El próximo dino salvaje será LEGENDARIO.' }
+};
+
+// Objetos de elemento de la Mochila (EQUIP_ITEMS de js/cards.js): al fundirlos dan la gema de su elemento
+const BAG_GEMS = {
+    colmillo_volcanico: 'rubi',
+    perla_lago: 'aguamarina',
+    cuerno_tormenta: 'topacio',
+    fosil_ambar: 'ambar',
+    hoja_milenaria: 'esmeralda',
+    pluma_ciclon: 'opalo',
+    garra_ancestral: 'amatista'
 };
 
 // Rocas por tema de cueva (losas de Caves.png)
@@ -79,6 +92,9 @@ const MINE_RECIPES = [
     { id: 'amuleto_planta', kind: 'equip', icon: '💎', name: 'Amuleto de Esmeralda', desc: '+12 a ataques de Planta.', cost: { esmeralda: 3, fragmento: 2 } },
     { id: 'amuleto_viento', kind: 'equip', icon: '💎', name: 'Amuleto de Ópalo', desc: '+12 a ataques de Viento.', cost: { opalo: 3, fragmento: 2 } },
     { id: 'amuleto_especial', kind: 'equip', icon: '💎', name: 'Amuleto de Amatista', desc: '+12 a ataques Especiales.', cost: { amatista: 3, fragmento: 2 } },
+    { id: 'talisman_siete', kind: 'equip', icon: '🧿', name: 'Talismán de los Siete',
+      desc: '+8 a los ataques de TODOS los elementos (menos Normal): ideal para un equipo variado. Lleva un objeto de cada elemento de la Mochila.',
+      cost: { colmillo_volcanico: 1, perla_lago: 1, cuerno_tormenta: 1, fosil_ambar: 1, hoja_milenaria: 1, pluma_ciclon: 1, garra_ancestral: 1 } },
     { id: 'elixir_nucleo', kind: 'consumable', icon: '☄️', name: 'Elixir de Núcleo',
       desc: 'Con la energía del meteorito: TODOS tus dinos quedan descansados (un solo uso).',
       cost: { nucleo: 1, rubi: 1, aguamarina: 1, topacio: 1 }, gives: 'elixir_meteoro' }
@@ -137,15 +153,22 @@ class MineSystem {
     }
 
     count(id) {
+        if (EQUIP_ITEMS[id]) return this.bagAvailable(id);
         return (MINE_ITEMS[id] ? this.consumables[id] : this.materials[id]) || 0;
     }
 
+    /** Objetos de la Mochila que se pueden gastar en el Taller (el equipado no se toca). */
+    bagAvailable(id) {
+        const cards = this.game.cards;
+        return Math.max(0, (cards.bag[id] || 0) - (cards.equippedItem === id ? 1 : 0));
+    }
+
     itemName(id) {
-        return (MINE_ITEMS[id] || MINE_MATERIALS[id] || { name: id }).name;
+        return (MINE_ITEMS[id] || MINE_MATERIALS[id] || EQUIP_ITEMS[id] || { name: id }).name;
     }
 
     itemIcon(id) {
-        return (MINE_ITEMS[id] || MINE_MATERIALS[id] || { icon: '❔' }).icon || '💎';
+        return (MINE_ITEMS[id] || MINE_MATERIALS[id] || EQUIP_ITEMS[id] || { icon: '❔' }).icon || '💎';
     }
 
     hasTool(id) {
@@ -515,7 +538,7 @@ class MineSystem {
     // Taller (pestaña del menú)
     // ------------------------------------------------------------
     materialIcon(id, size = 22) {
-        const m = MINE_MATERIALS[id] || MINE_ITEMS[id];
+        const m = MINE_MATERIALS[id] || MINE_ITEMS[id] || EQUIP_ITEMS[id];
         if (m.img) return `<img src="assets/maps/objetos/${m.img}.png" alt="" style="width:${size}px;height:${size}px;image-rendering:pixelated;vertical-align:middle;">`;
         return `<span style="font-size:${Math.round(size * 0.8)}px;vertical-align:middle;">${m.icon}</span>`;
     }
@@ -529,11 +552,12 @@ class MineSystem {
     craft(id) {
         const recipe = MINE_RECIPES.find(r => r.id === id);
         if (!recipe || !this.canCraft(recipe)) return;
+        const cards = this.game.cards;
         for (const [m, n] of Object.entries(recipe.cost)) {
-            if (MINE_ITEMS[m]) this.consumables[m] -= n;
+            if (EQUIP_ITEMS[m]) cards.bag[m] -= n;
+            else if (MINE_ITEMS[m]) this.consumables[m] -= n;
             else this.materials[m] -= n;
         }
-        const cards = this.game.cards;
         let msg = `🔨 Fabricaste ${recipe.name}.`;
         if (recipe.kind === 'tool') {
             this.tools[recipe.id] = true;
@@ -547,6 +571,42 @@ class MineSystem {
         cards.save();
         this.save();
         this.game.notifyStatus(msg);
+    }
+
+    /** Funde objetos de elemento de la Mochila: cada uno da la gema de su elemento. Devuelve cuántos fundió. */
+    melt(id, n = 1) {
+        const gem = BAG_GEMS[id];
+        const k = Math.min(n, this.bagAvailable(id));
+        if (!gem || k <= 0) return 0;
+        const cards = this.game.cards;
+        cards.bag[id] -= k;
+        if (cards.bag[id] <= 0) delete cards.bag[id];
+        this.materials[gem] = (this.materials[gem] || 0) + k;
+        cards.save();
+        this.save();
+        return k;
+    }
+
+    meltOne(id) {
+        if (this.melt(id)) this.game.notifyStatus(`♻️ Fundiste ${this.itemName(id)}: +1 ${this.itemName(BAG_GEMS[id])}.`);
+    }
+
+    /** Repetidos de la Mochila (todo lo que pasa de uno por objeto). */
+    duplicateCount() {
+        const bag = this.game.cards.bag;
+        return Object.keys(BAG_GEMS).reduce((sum, id) => sum + Math.max(0, (bag[id] || 0) - 1), 0);
+    }
+
+    /** Funde todos los repetidos y deja uno de cada objeto (para equiparlo o para el Talismán). */
+    meltDuplicates() {
+        const bag = this.game.cards.bag;
+        const got = [];
+        for (const id of Object.keys(BAG_GEMS)) {
+            const extra = (bag[id] || 0) - 1;
+            const k = extra > 0 ? this.melt(id, extra) : 0;
+            if (k) got.push(`+${k} ${this.itemName(BAG_GEMS[id])}`);
+        }
+        this.game.notifyStatus(got.length ? `♻️ Fundiste los repetidos: ${got.join(', ')}.` : '♻️ No tienes objetos repetidos.');
     }
 
     useConsumable(id) {
@@ -608,6 +668,32 @@ class MineSystem {
                 <strong style="margin-left:auto;color:#ffbe0b;">${this.materials[id] || 0}</strong>
             </div>`).join('');
 
+        // Objetos de elemento de la Mochila: se funden en gemas
+        const cards = this.game.cards;
+        const bagIds = Object.keys(BAG_GEMS).filter(id => (cards.bag[id] || 0) > 0);
+        const bagHtml = bagIds.map(id => {
+            const it = EQUIP_ITEMS[id];
+            const gem = BAG_GEMS[id];
+            const free = this.bagAvailable(id);
+            return `<div style="display:flex;align-items:center;gap:6px;padding:4px 6px;background:#0f172a;border-radius:6px;">
+                        <span style="font-size:1.05rem;">${it.icon}</span>
+                        <span style="font-size:0.78rem;">${it.name} <strong style="color:#ffbe0b;">x${cards.bag[id]}</strong>
+                            ${cards.equippedItem === id ? '<em style="color:#00e5ff;font-style:normal;font-size:0.7rem;">(1 equipado)</em>' : ''}</span>
+                        <button data-melt="${id}" ${free ? '' : 'disabled'} title="Fundir 1 ${it.name}: te da 1 ${this.itemName(gem)}"
+                            style="margin-left:auto;padding:2px 8px;border-radius:6px;border:none;white-space:nowrap;cursor:${free ? 'pointer' : 'default'};
+                            background:${free ? '#7c3aed' : '#334155'};color:${free ? '#fff' : '#64748b'};font-weight:bold;">♻️ → ${this.materialIcon(gem, 16)}</button>
+                    </div>`;
+        }).join('');
+        const dupes = this.duplicateCount();
+        const bagSection = bagIds.length
+            ? `<p style="color:#8892b0;font-size:0.76rem;margin:0 0 6px;">Funde los repetidos: cada objeto se convierte en la gema de su elemento
+                   (3 gemas + 2 fragmentos = un amuleto de +12). Con uno de cada elemento se fabrica el 🧿 Talismán de los Siete.</p>
+               <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:6px;">${bagHtml}</div>
+               <button data-melt-all ${dupes ? '' : 'disabled'} style="margin-top:6px;padding:5px 12px;border-radius:6px;border:none;
+                   cursor:${dupes ? 'pointer' : 'default'};background:${dupes ? '#7c3aed' : '#334155'};color:${dupes ? '#fff' : '#64748b'};font-weight:bold;">
+                   ♻️ Fundir todos los repetidos (${dupes}) · deja 1 de cada</button>`
+            : '<p style="color:#64748b;font-size:0.78rem;">Aún no tienes objetos de elemento: brillan entre la hierba alta 🌿 y la Vendedora Ámbar los vende.</p>';
+
         const consHtml = Object.entries(MINE_ITEMS).map(([id, r]) => {
             const n = this.consumables[id] || 0;
             return `<button class="menu-item-slot" data-use="${id}" ${n ? '' : 'disabled'} style="opacity:${n ? 1 : 0.5};" title="${r.desc}">
@@ -643,6 +729,7 @@ class MineSystem {
             <h4 style="color:#e2e8f0;margin:10px 0 4px;">Herramientas</h4><div>${toolsHtml}</div>
             <h4 style="color:#e2e8f0;margin:10px 0 4px;">Materiales</h4>
             <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:6px;">${matsHtml}</div>
+            <h4 style="color:#e2e8f0;margin:10px 0 4px;">🎒 Objetos de la Mochila</h4>${bagSection}
             <h4 style="color:#e2e8f0;margin:10px 0 4px;">Objetos (un solo uso)</h4><div class="menu-items-grid">${consHtml}</div>
             <h4 style="color:#e2e8f0;margin:10px 0 4px;">Recetas</h4>
             <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px;">${recipesHtml}</div>`;
@@ -651,6 +738,15 @@ class MineSystem {
             this.craft(btn.dataset.craft);
             this.renderWorkshopPanel(panel);
         }));
+        panel.querySelectorAll('[data-melt]').forEach(btn => btn.addEventListener('click', () => {
+            this.meltOne(btn.dataset.melt);
+            this.renderWorkshopPanel(panel);
+        }));
+        const meltAll = panel.querySelector('[data-melt-all]');
+        if (meltAll) meltAll.addEventListener('click', () => {
+            this.meltDuplicates();
+            this.renderWorkshopPanel(panel);
+        });
         this.game.field.bindPanel(panel);
         panel.querySelectorAll('[data-use]').forEach(btn => btn.addEventListener('click', () => {
             this.useConsumable(btn.dataset.use);

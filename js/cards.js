@@ -32,6 +32,9 @@ const MAX_TEAM_SIZE = 3;
 // Cada dino lleva 2 ataques: el FUERTE (el de más poder) y el NORMAL (siempre disponible).
 // Tras usar el fuerte hay que esperar turnos según su poder: 70+ → 3, 55-69 → 2, menos → 1.
 const STRONG_COOLDOWN = (power) => (power >= 70 ? 3 : (power >= 55 ? 2 : 1));
+// Tamaño del dino (1-6, "size" en dinos.json): el arte se dibuja a esta escala en combates y almanaque.
+const SIZE_LABELS = ['', 'Pequeño', 'Mediano', 'Grande', 'Muy grande', 'Gigante', 'Colosal'];
+const sizeScale = (size) => 0.36 + 0.12 * size;   // 1 → 0.48 · 6 → 1.08
 const MAX_CARD_LEVEL = 50;
 const XP_WILD_WIN = 15;          // % de nivel por ganar a un dino salvaje
 const XP_PER_TRAINER_DINO = 20;  // % de nivel por cada dino de entrenador derrotado
@@ -45,6 +48,7 @@ const RESERVE_XP_SHARE = 0.5;          // los dinos del almanaque ganan la mitad
 // Cansancio (0-100): cada combate cansa al equipo y los dinos de la reserva descansan
 const FATIGUE_PER_BATTLE = { wild: 8, trainer: 15 };
 const FATIGUE_REST_PER_BATTLE = 6;
+const FATIGUE_SWAP_AT = 40;   // desde "Cansado" el dino sale del equipo automáticamente (si hay reemplazo)
 const FATIGUE_LEVELS = [
     { min: 100, label: 'Exhausto', icon: '🥵', factor: 0.6, color: '#ef4444' },
     { min: 70, label: 'Agotado', icon: '😫', factor: 0.75, color: '#f97316' },
@@ -68,7 +72,9 @@ const EQUIP_ITEMS = {
     amuleto_tierra:   { name: 'Amuleto de Ámbar',      icon: '💎', element: 'tierra',   boost: 12, craftOnly: true },
     amuleto_planta:   { name: 'Amuleto de Esmeralda',  icon: '💎', element: 'planta',   boost: 12, craftOnly: true },
     amuleto_viento:   { name: 'Amuleto de Ópalo',      icon: '💎', element: 'viento',   boost: 12, craftOnly: true },
-    amuleto_especial: { name: 'Amuleto de Amatista',   icon: '💎', element: 'especial', boost: 12, craftOnly: true }
+    amuleto_especial: { name: 'Amuleto de Amatista',   icon: '💎', element: 'especial', boost: 12, craftOnly: true },
+    // Se fabrica en el Taller con uno de cada objeto de elemento: sube los ataques de todos (menos Normal)
+    talisman_siete:   { name: 'Talismán de los Siete', icon: '🧿', element: 'todos',    boost: 8,  craftOnly: true }
 };
 const itemBoost = (item) => (item && item.boost) || ELEMENT_ITEM_BOOST;
 
@@ -77,14 +83,15 @@ const DEFAULT_TYPE_CHART = {
     effective: 1.5,
     neutral: 1,
     beats: {
-        fuego: ['planta'],
+        fuego: ['planta', 'rayo'],
         planta: ['agua', 'tierra'],
-        agua: ['fuego'],
-        tierra: ['fuego', 'viento', 'rayo'],
-        viento: ['planta'],
-        rayo: ['agua']
+        agua: ['fuego', 'tierra'],
+        tierra: ['viento', 'rayo'],
+        viento: ['planta', 'fuego'],
+        rayo: ['agua', 'viento'],
+        especial: ['especial']
     },
-    alwaysEffective: ['especial']
+    resisted: 0.5
 };
 
 const randInt = (min, max) => min + Math.floor(Math.random() * (max - min + 1));
@@ -232,6 +239,28 @@ class CardSystem {
         return dino && Number(dino.speed) ? Number(dino.speed) : 5;
     }
 
+    /** Tamaño (1-6) del catálogo ("size"); 3 si no lo tiene. */
+    getSize(dinoId) {
+        const dino = this.getDino(dinoId);
+        const size = dino && Number(dino.size);
+        return size >= 1 && size <= 6 ? Math.round(size) : 3;
+    }
+
+    /** Escala del arte según el tamaño (1 = la mitad que un dino colosal). */
+    sizeScale(dinoId) {
+        return sizeScale(this.getSize(dinoId));
+    }
+
+    sizeLabel(dinoId) {
+        return SIZE_LABELS[this.getSize(dinoId)];
+    }
+
+    /** Pose en combate: 'vuela' (pterosaurios), 'nada' (reptiles marinos) o '' (en tierra). */
+    getPose(dinoId) {
+        const dino = this.getDino(dinoId);
+        return (dino && dino.pose) || '';
+    }
+
     renderStatsHtml(dinoId, level) {
         const base = [...this.getBaseStats(dinoId), this.getSpeed(dinoId)];
         const defs = [...STAT_DEFS, { key: 'vel', icon: '💨', name: 'Velocidad' }];
@@ -243,10 +272,12 @@ class CardSystem {
             </div>`).join('')}</div>`;
     }
 
-    /** Bono del objeto equipado para un elemento de ataque. */
+    /** Bono del objeto equipado para un elemento de ataque (el Talismán de los Siete sirve para todos menos Normal). */
     getElementBoost(element) {
         const item = EQUIP_ITEMS[this.equippedItem];
-        return item && item.element === element ? itemBoost(item) : 0;
+        if (!item) return 0;
+        const all = item.element === 'todos' && element !== 'normal';
+        return all || item.element === element ? itemBoost(item) : 0;
     }
 
     /** Poder real de un ataque para el jugador (incluye el objeto equipado). */
@@ -344,12 +375,42 @@ class CardSystem {
             c.fatigue = Math.max(0, Math.min(100, (Number(c.fatigue) || 0) + (c.inTeam ? add : -FATIGUE_REST_PER_BATTLE)));
             if (c.inTeam && this.fatigueLevel(c).label !== before && c.fatigue >= 40) tired.push(c);
         }
-        if (tired.length) {
-            const names = tired.map(c => `${this.fatigueLevel(c).icon} ${this.getDino(c.id)?.name || c.id}`).join(', ');
-            setTimeout(() => this.game.notifyStatus(`${names}: ¡se está cansando! Cambia de dinos o usa un objeto que quite el cansancio.`), 2600);
+        // Cambio automático: los cansados salen y entran dinos descansados de la reserva
+        const swaps = this.autoSwapTired();
+        const stillTired = tired.filter(c => c.inTeam);
+        const name = (c) => this.getDino(c.id)?.name || c.id;
+        const msgs = swaps.map(([out, inn]) => `🔄 ${name(out)} está ${this.fatigueLevel(out).label.toLowerCase()} ${this.fatigueLevel(out).icon}: entra ${name(inn)} al equipo.`);
+        if (stillTired.length) {
+            msgs.push(`${stillTired.map(c => `${this.fatigueLevel(c).icon} ${name(c)}`).join(', ')}: ¡se está cansando! Usa un objeto que quite el cansancio o captura más dinos.`);
         }
+        if (msgs.length) setTimeout(() => this.game.notifyStatus(msgs.join(' ')), 2600);
         this.game.hudTeamKey = null;
         this.save();
+    }
+
+    /**
+     * Cambia los dinos cansados del equipo por los más descansados de la reserva (se puede apagar en Opciones).
+     * Prefiere uno del mismo elemento (para no perder habilidades), luego el menos cansado y el de más nivel.
+     * Devuelve [[saliente, entrante], ...].
+     */
+    autoSwapTired() {
+        const settings = this.game.saves && this.game.saves.settings;
+        if (settings && settings.autoSwapTired === false) return [];
+        const swaps = [];
+        const elementOf = (c) => (this.getDino(c.id) || {}).element;
+        for (const card of this.getTeam()) {
+            if ((Number(card.fatigue) || 0) < FATIGUE_SWAP_AT) continue;
+            const pick = this.collection
+                .filter(c => !c.inTeam && (Number(c.fatigue) || 0) < FATIGUE_SWAP_AT && this.game.field.cardAllowed(c))
+                .sort((a, b) => ((elementOf(b) === elementOf(card)) - (elementOf(a) === elementOf(card))) ||
+                    ((a.fatigue || 0) - (b.fatigue || 0)) || (b.level - a.level))[0];
+            if (!pick) continue;
+            card.inTeam = false;
+            pick.inTeam = true;
+            swaps.push([card, pick]);
+        }
+        if (swaps.length) this.game.hudTeamKey = null;
+        return swaps;
     }
 
     /** Quita cansancio: a todo el equipo (team) o a todos tus dinos (all). amount = 100 lo deja en 0. */
@@ -779,11 +840,14 @@ class CardSystem {
         // La carta y, al lado, el dino (como al invocar un monstruo en Yu-Gi-Oh)
         const art = this.artUrl(card.id, 'right');
         const imgHtml = `<div class="battle-dino-img ${dino && dino.card ? '' : 'full-card'}" style="${cardStyle}"></div>`;
+        const size = this.getSize(card.id);
+        const artScale = Math.round(sizeScale(size) / sizeScale(6) * 100);
         return `
             <div class="battle-dino-card ${art ? 'has-art' : ''}">
-                ${art ? `<div class="dino-card-stage">${imgHtml}<div class="dino-card-art-box"><img class="dino-card-art" src="${art}" alt="" loading="lazy"></div></div>` : imgHtml}
+                ${art ? `<div class="dino-card-stage">${imgHtml}<div class="dino-card-art-box"><img class="dino-card-art" src="${art}" alt="" loading="lazy" style="width:${artScale}%"></div></div>` : imgHtml}
                 <strong>${escapeHtml(dino ? dino.name : card.id)}</strong>
                 <small style="color:${el ? el.color : '#94a3b8'}">${el ? el.icon + ' ' + el.name : ''} · Nv. ${card.level}</small>
+                <small class="dino-size" title="Tamaño ${size} de 6">📏 ${SIZE_LABELS[size]} <span>${'▮'.repeat(size)}${'▯'.repeat(6 - size)}</span></small>
                 ${xpHtml}
                 ${this.renderStatsHtml(card.id, card.level)}
                 <ul class="battle-dino-attacks">${atkHtml}</ul>
@@ -854,12 +918,13 @@ class CardSystem {
             const item = EQUIP_ITEMS[id];
             const el = elements[item.element];
             const isEq = this.equippedItem === id;
+            const target = item.element === 'todos' ? 'todos los elementos (menos Normal)' : (el ? el.name : item.element);
             return `
                 <button class="menu-item-slot equip-slot ${isEq ? 'equipped' : ''}" data-item="${id}">
                     <span class="menu-item-icon">${item.icon}</span>
                     <div>
                         <strong>${item.name}</strong> <span style="color:#8892b0;">x${this.bag[id]}</span><br>
-                        <span style="color:${el ? el.color : '#94a3b8'}; font-size:0.78rem;">+${itemBoost(item)} a ataques de ${el ? el.name : item.element}</span><br>
+                        <span style="color:${el ? el.color : '#fbbf24'}; font-size:0.78rem;">+${itemBoost(item)} a ataques de ${target}</span><br>
                         <span style="color:${isEq ? '#ffbe0b' : '#64748b'}; font-size:0.72rem; font-weight:bold;">${isEq ? '✔ EQUIPADO (clic para quitar)' : 'Clic para equipar'}</span>
                     </div>
                 </button>`;
@@ -873,7 +938,13 @@ class CardSystem {
             </p>
             <div class="menu-items-grid">${itemsHtml}</div>
             ${owned.length ? '' : '<p style="color:#64748b; font-size:0.8rem;">Aún no tienes objetos. Búscalos brillando entre la hierba alta 🌿.</p>'}
+            ${owned.length ? `<p style="color:#8892b0; font-size:0.8rem; margin-top:12px;">
+                ♻️ ¿Objetos repetidos? En el <strong style="color:#ffbe0b;">⛏️ Taller</strong> se funden en gemas para fabricar amuletos,
+                y con uno de cada elemento se fabrica el <strong style="color:#ffbe0b;">🧿 Talismán de los Siete</strong>.
+                <button id="bagToWorkshop" class="btn-ghost" style="margin-left:6px;">⛏️ Ir al Taller</button></p>` : ''}
         `;
+        const toWorkshop = panel.querySelector('#bagToWorkshop');
+        if (toWorkshop) toWorkshop.addEventListener('click', () => this.game.setMenuTab('workshop'));
 
         panel.querySelectorAll('.equip-slot[data-item]').forEach(btn => {
             btn.addEventListener('click', () => {

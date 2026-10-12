@@ -185,6 +185,14 @@ class FieldSystem {
         return parts.join(' y ') || 'sin reglas';
     }
 
+    /** ¿Este dino cumple las reglas del gimnasio en el que estás? (fuera de un gimnasio, siempre sí) */
+    cardAllowed(card) {
+        const rules = this.game.tileMap.gymRules;
+        if (!rules) return true;
+        const d = this.game.cards.getDino(card.id);
+        return !(rules.maxLevel && card.level > rules.maxLevel) && !(rules.bannedElement && d && d.element === rules.bannedElement);
+    }
+
     /** Devuelve el motivo si tu equipo no cumple las reglas del gimnasio (o null). */
     gymViolation() {
         const rules = this.game.tileMap.gymRules;

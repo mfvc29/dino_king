@@ -341,11 +341,14 @@ class TournamentSystem {
             return { ...st, maxHp: st.hp, element: dino.element, level: m.level, attacks: [...m.attacks, p.move].filter(Boolean) };
         });
         const sides = [make(a), make(b)];
+        sides.forEach((team, s) => team.forEach(f => { f.side = s; }));
         const alive = (s) => sides[s].filter(f => f.hp > 0);
-        let turn = Math.random() < 0.5 ? 0 : 1;
+        // Igual que en los combates: actúan todos por velocidad, del más rápido al más lento
         for (let round = 0; round < 60 && alive(0).length && alive(1).length; round++) {
-            for (const f of alive(turn)) {
-                const foes = alive(1 - turn);
+            const order = [...alive(0), ...alive(1)].sort((x, y) => (y.vel - x.vel) || (y.level - x.level) || (x.side - y.side));
+            for (const f of order) {
+                if (f.hp <= 0) continue;
+                const foes = alive(1 - f.side);
                 if (!foes.length) break;
                 let best = null;
                 for (const id of f.attacks) {
@@ -362,7 +365,6 @@ class TournamentSystem {
                 }
                 if (best) best.t.hp -= Math.round(best.dmg);
             }
-            turn = 1 - turn;
         }
         const left = (s) => alive(s).reduce((sum, f) => sum + f.hp / f.maxHp, 0);
         return left(0) >= left(1) ? a : b;

@@ -16,6 +16,7 @@ Actualiza dinos.json a partir de las carpetas por tipo (agua/, fuego/, planta/, 
   miniaturas que ya no correspondan a ninguna carta.
 - Conserva ids, nombres, poderes y estadísticas que ya estuvieran en dinos.json.
 - Asigna "speed" (velocidad base 1-10, según el elemento) a los dinos que no la tengan.
+- Asigna "size" (tamaño 1-6, según su tamaño real; tabla SIZES) y "pose" (vuela / nada) a los dinos.
 - Asigna estadísticas base [salud, ataque físico, defensa física, ataque especial,
   defensa especial] a cada dino: entre el mínimo
   (stats.min) y el máximo de su elemento (statCaps), sin repetir combinación
@@ -231,6 +232,65 @@ def assign_speed(dinos):
     return added
 
 
+# Tamaño del dino (1-6) según su tamaño real: en los combates y en el almanaque el arte se dibuja a esa escala.
+#   1 pequeño (< 3 m) · 2 mediano (3-5 m) · 3 grande (5-8 m) · 4 muy grande (8-11 m) · 5 gigante (11-15 m)
+#   6 colosal (> 15 m). Las versiones jefe de Dinosaur King (Alpha, Black, Gigas, Maximus, Armatus) van un
+#   punto por encima de su especie. Se puede editar a mano en dinos.json ("size"); los dinos nuevos que no
+#   estén en esta tabla reciben 3.
+SIZES = {
+    # agua
+    'bajadasaurus': 5, 'camarasaurus': 6, 'elasmosaurus': 5, 'irritator': 3, 'ophthalmosaurus': 3,
+    'amargasaurus': 4, 'ampelosaurus': 5, 'baryonyx': 4, 'futabasaurus': 4, 'isisaurus': 6, 'jobaria': 6,
+    'saltasaurus': 4, 'shunosaurus': 4, 'spinosaurus_atacando': 6, 'spinosaurus': 6, 'suchomimus': 4,
+    # especial
+    'indoraptor': 3, 'brontosaurus': 6, 'cryolophosaurus': 3, 'deinonychus': 2, 'indominus_rex': 5,
+    'megalosaurus': 3, 'pachycephalosaurus': 2, 'therizinosaurus': 4,
+    # fuego
+    'alioramus': 3, 'alpha_acrocanthosaurus': 6, 'black_tyrannosaurus_rex': 6, 'eocarcharia': 3,
+    'giganotosaurus': 5, 'acrocanthosaurus': 5, 'carcharodontosaurus': 5, 'daspletosaurus': 4, 'gigas': 6,
+    'mapusaurus': 5, 'rajasaurus': 3, 'saurophaganax': 5, 'torvosaurus': 4, 'tyrannosaurus_rex': 5,
+    'yangchuanosaurus': 4,
+    # normal
+    'pawpawsaurus': 2, 'piatnitzkysaurus': 2, 'quetzalcoatlus': 4, 'anhanguera': 2, 'velociraptor': 1,
+    # planta
+    'charonosaurus': 5, 'corythosaurus': 4, 'olorotitan': 4, 'pteranodon': 3, 'seismosaurus': 6,
+    'supersaurus': 6, 'tupandactylus': 2, 'tupuxuara': 2, 'altirhinus': 3, 'fukuisaurus': 2, 'iguanodon': 4,
+    'lanzhousaurus': 4, 'maiasaura': 4, 'parasaurolophus': 4, 'saurolophus_naranja': 4,
+    'saurolophus_verde': 4, 'shantungosaurus': 6,
+    # rayo
+    'centrosaurus': 3, 'chasmosaurus': 3, 'einiosaurus': 2, 'machairoceratops': 3, 'monoclonius': 3,
+    'zuniceratops': 2, 'achelousaurus': 3, 'anchiceratops': 3, 'maximus': 5, 'nedoceratops': 4,
+    'pachyrhinosaurus': 4, 'pentaceratops': 3, 'styracosaurus': 3, 'torosaurus': 4, 'triceratops': 4,
+    # tierra
+    'dacentrurus': 4, 'gigantspinosaurus': 2, 'kentrosaurus': 2, 'pinacosaurus': 2, 'polacanthus': 2,
+    'sauropelta': 3, 'ankylosaurus': 3, 'armatus': 4, 'edmontonia': 3, 'scolosaurus': 3, 'euoplocephalus': 3,
+    'lexovisaurus': 3, 'saichania': 3, 'stegosaurus': 4, 'tuojiangosaurus': 3,
+    # viento
+    'dilophosaurus': 3, 'liliensternus': 2, 'neovenator': 3, 'sinraptor': 3, 'szechuanosaurus': 3,
+    'afrovenator': 3, 'allosaurus': 4, 'carnotaurus': 4, 'ceratosaurus': 3, 'deltadromeus': 4,
+    'gojirasaurus': 3, 'majungasaurus': 3, 'megaraptor': 4, 'utahraptor': 3,
+}
+
+# Pose en combate: los pterosaurios vuelan sobre su carta y los reptiles marinos flotan como en el agua.
+POSES = {
+    'pteranodon': 'vuela', 'quetzalcoatlus': 'vuela', 'anhanguera': 'vuela', 'tupandactylus': 'vuela',
+    'tupuxuara': 'vuela',
+    'elasmosaurus': 'nada', 'futabasaurus': 'nada', 'ophthalmosaurus': 'nada',
+}
+
+
+def assign_size(dinos):
+    """Pone "size" (1-6) a los dinos que no lo tengan y "pose" a los que vuelan o nadan."""
+    added = 0
+    for d in dinos:
+        if not (isinstance(d.get('size'), int) and 1 <= d['size'] <= 6):
+            d['size'] = SIZES.get(d['id'], 3)
+            added += 1
+        if 'pose' not in d and d['id'] in POSES:
+            d['pose'] = POSES[d['id']]
+    return added
+
+
 def build_art(dinos):
     """Copia liviana (webp, recortada al dino) del arte de grande/ y la anota en cada dino como "art"."""
     by_id = {d['id']: d for d in dinos}
@@ -325,12 +385,14 @@ def main():
                 # Solo conservar las stats si el dino sigue en el mismo elemento
                 if 'stats' in prev and prev.get('element') == element:
                     entry['stats'] = prev['stats']
-                if 'speed' in prev:
-                    entry['speed'] = prev['speed']
+                for key in ('speed', 'size', 'pose'):
+                    if key in prev:
+                        entry[key] = prev[key]
                 dinos.append(entry)
 
     art_made, art_unmatched = build_art(dinos)
     new_speed = assign_speed(dinos)
+    new_size = assign_size(dinos)
 
     stat_cfg = catalog.get('stats', {})
     new_stats = assign_stats(dinos, catalog['elements'], stat_cfg.get('min', 4), stat_cfg.get('max', 10))
@@ -358,7 +420,7 @@ def main():
             if not os.listdir(p):
                 os.rmdir(p)
 
-    print(f'✔ {len(dinos)} dinos en dinos.json ({new_speed} con velocidad nueva)')
+    print(f'✔ {len(dinos)} dinos en dinos.json ({new_speed} con velocidad nueva, {new_size} con tamaño nuevo)')
     with_art = sum(1 for d in dinos if d.get('art'))
     print(f'✔ Arte: {with_art}/{len(dinos)} dinos con imagen grande ({art_made} imágenes nuevas en arte/)')
     if art_unmatched:

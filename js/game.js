@@ -1246,6 +1246,8 @@ class Game {
             <h3 class="panel-title">⚙️ Opciones</h3>
             <div class="settings-list">
                 ${row('Pantalla completa', '<button id="menuFullscreenBtn" class="btn-ghost">Alternar</button>')}
+                ${row('Cambiar automáticamente los dinos cansados 😴', `<button id="menuAutoSwapBtn" class="btn-ghost">${this.saves.settings.autoSwapTired === false ? '❌ No' : '✅ Sí'}</button>`)}
+                ${row('Animaciones de combate (también con <kbd>V</kbd> en el combate)', `<button id="menuBattleSpeedBtn" class="btn-ghost">${this.saves.settings.battleSpeed === 2 ? '⏩ Rápidas' : '▶ Normales'}</button>`)}
                 ${row('Moverse', '<span><kbd>WASD</kbd> / <kbd>Flechas</kbd></span>')}
                 ${row('Correr', '<kbd>Shift</kbd>')}
                 ${row('Hablar / avanzar diálogo', '<span><kbd>Espacio</kbd> / <kbd>E</kbd></span>')}
@@ -1254,6 +1256,14 @@ class Game {
             </div>
         `;
         document.getElementById('menuFullscreenBtn').addEventListener('click', () => this.toggleFullscreen());
+        document.getElementById('menuAutoSwapBtn').addEventListener('click', () => {
+            this.saves.setSetting('autoSwapTired', this.saves.settings.autoSwapTired === false);
+            this.renderSettingsPanel(panel);
+        });
+        document.getElementById('menuBattleSpeedBtn').addEventListener('click', () => {
+            this.saves.setSetting('battleSpeed', this.saves.settings.battleSpeed === 2 ? 1 : 2);
+            this.renderSettingsPanel(panel);
+        });
     }
 }
 

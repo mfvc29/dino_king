@@ -2,11 +2,11 @@
  * BattleSystem - Combate por turnos 3 contra 3 al estilo Persona 5, contra entrenadores,
  * dinos salvajes y en el Gran Torneo Mesozoico (incluido jugador contra jugador en la misma pantalla).
  *
- * - Todos los dinos están en el campo a la vez. Una moneda decide qué bando actúa primero;
- *   después cada bando actúa por completo (cada dino vivo hace una acción) y pasa el turno.
- * - En tu turno eliges qué dino actúa (en el orden que quieras) y, para cada uno: un ataque y a qué
- *   rival atacar, o "Defender" (recibe la mitad de daño y no puede ser derribado). También puedes huir.
- * - El equipo rival actúa por velocidad: primero el dino más rápido.
+ * - Todos los dinos están en el campo a la vez. El orden lo decide la VELOCIDAD (💨) de todos, sin
+ *   moneda: en cada ronda actúa primero el dino más rápido del campo, sea tuyo o del rival, y así hasta
+ *   el más lento (empate: más nivel; si sigue empatado, el tuyo primero).
+ * - Cuando le toca a uno de tus dinos eliges un ataque y a qué rival atacar, o "Defender" (recibe la
+ *   mitad de daño y no puede ser derribado). También puedes huir.
  * - DERRIBO y ¡UNA MÁS!: un ataque eficaz por tipo (o un golpe crítico físico) derriba al
  *   objetivo y el atacante actúa otra vez. Un dino derribado pierde su siguiente acción
  *   (la usa para levantarse).
@@ -21,9 +21,15 @@
  * - IA de los rivales (campo "ai" del entrenador): 'normal', 'dificil' o 'experto'. La difícil y la
  *   experta se defienden cuando corren peligro, buscan derribos para encadenar acciones,
  *   intimidan al dino más peligroso y rematan al que pueden debilitar.
+ *
+ * Presentación (estilo duelo de cartas): cada dino tiene su carta en una zona del campo y el dino
+ * sale de ella (a la escala de su tamaño 1-6). Los físicos cruzan el campo para golpear; los especiales
+ * lanzan un proyectil de su elemento (efectos en js/battleFx.js). La arena se arma una vez por combate
+ * y render() sólo actualiza estados, así las animaciones no se cortan.
  */
 
 const BATTLE_DELAY = 700;
+const AI_DELAY = 420;
 const INTIMIDATE_FACTOR = 0.7;
 const GUARD_FACTOR = 0.5;
 const CRIT_CHANCE = 0.08;
@@ -31,6 +37,11 @@ const CRIT_FACTOR = 1.5;
 const BATON_BOOSTS = [1, 1.5, 2];
 const RIVAL_MAX_EXTRA = 2;
 const AI_RANDOM = { normal: 0.2, dificil: 0.08, experto: 0 };
+// Posición horizontal (% del campo) de cada carta según cuántos dinos hay en el bando
+const SLOT_X = {
+    player: { 1: [34], 2: [22, 46], 3: [13, 35.5, 58] },
+    rival: { 1: [66], 2: [56, 77], 3: [45, 66, 87] }
+};
 
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 const otherSide = (side) => (side === 'player' ? 'rival' : 'player');
@@ -41,13 +52,23 @@ class BattleSystem {
         this.battle = null;
 
         this.overlay = document.getElementById('battleOverlay');
+        this.windowEl = this.overlay.querySelector('.duel-window');
         this.logEl = document.getElementById('battleLog');
         this.actionsEl = document.getElementById('battleActions');
-        this.coinEl = document.getElementById('battleCoin');
         this.turnEl = document.getElementById('battleTurn');
         this.splashEl = document.getElementById('battleSplash');
+        this.bannerEl = document.getElementById('battleBanner');
+        this.rivalRow = document.getElementById('battleRivalSide');
+        this.playerRow = document.getElementById('battlePlayerSide');
+        this.trainerEls = {
+            rival: document.getElementById('battleTrainerRival'),
+            player: document.getElementById('battleTrainerPlayer')
+        };
+        this.speedBtn = document.getElementById('battleSpeedBtn');
+        this.fx = new BattleFx(this);
         this.hotkeys = {};
 
+        if (this.speedBtn) this.speedBtn.addEventListener('click', () => this.toggleSpeed());
         window.addEventListener('keydown', (e) => this.onKey(e));
     }
 
@@ -57,6 +78,29 @@ class BattleSystem {
 
     get isActive() {
         return !!this.battle;
+    }
+
+    /** Velocidad de las animaciones: 1 (normal) o 2 (rápida). Se guarda en Opciones. */
+    get speed() {
+        const s = this.game.saves && this.game.saves.settings;
+        return s && s.battleSpeed === 2 ? 2 : 1;
+    }
+
+    wait(ms) {
+        return sleep(ms / this.speed);
+    }
+
+    toggleSpeed() {
+        if (this.game.saves) this.game.saves.setSetting('battleSpeed', this.speed === 2 ? 1 : 2);
+        this.applySpeed();
+    }
+
+    applySpeed() {
+        this.overlay.style.setProperty('--spd', this.speed);
+        if (this.speedBtn) {
+            this.speedBtn.textContent = this.speed === 2 ? '⏩ x2' : '▶ x1';
+            this.speedBtn.classList.toggle('fast', this.speed === 2);
+        }
     }
 
     // ------------------------------------------------------------
@@ -103,7 +147,7 @@ class BattleSystem {
         return f;
     }
 
-    /** El ataque más fuerte del dino (entre sus 3 ataques y la carta de movimiento). */
+    /** El ataque más fuerte del dino (entre sus ataques y la carta de movimiento). */
     strongestMove(f, moveId) {
         const ids = moveId ? [...f.attacks, moveId] : f.attacks;
         let best = null;
@@ -118,7 +162,7 @@ class BattleSystem {
         return best;
     }
 
-    /** El ataque más fuerte no se puede repetir dos veces seguidas. */
+    /** ¿Se puede usar este ataque ahora? (el fuerte necesita recarga) */
     canUse(f, id) {
         return this.turnsToWait(f, id) <= 0;
     }
@@ -184,10 +228,13 @@ class BattleSystem {
             moves: { player: playerMove, rival: rivalMove },
             playerMove,
             rivalMove,
-            phase: 'coin',
-            turn: null,        // bando que está eligiendo acción (humano)
+            phase: 'intro',    // intro | round | human | ai | over
+            queue: [],         // orden de la ronda: todos los dinos, del más rápido al más lento
+            qi: -1,            // posición en el orden
+            turn: null,        // bando del dino humano que está eligiendo acción
             actor: null,       // índice del dino que está eligiendo acción
-            acted: new Set(),  // dinos que ya actuaron este turno
+            aiActor: null,     // dino de la IA que está actuando
+            acted: new Set(),  // dinos que ya actuaron en esta ronda
             pending: null,     // ataque elegido esperando objetivo
             oneMore: false,    // el actor tiene una acción extra (¡Una más!)
             batonChain: [],    // dinos que ya pasaron el relevo en esta cadena
@@ -198,17 +245,15 @@ class BattleSystem {
         };
 
         document.getElementById('battleTrainerName').textContent = title;
-        const labels = this.overlay.querySelectorAll('.battle-side-label');
-        labels.forEach(el => {
-            const side = el.classList.contains('rival') ? 'rival' : 'player';
-            el.textContent = isTournament ? this.battle.names[side].toUpperCase() : (side === 'rival' ? (isWild ? 'SALVAJE' : 'RIVAL') : 'TU EQUIPO');
-        });
         this.overlay.classList.toggle('wild', isWild);
-        this.overlay.querySelector('.battle-window').classList.remove('defeat', 'victory');
         this.overlay.classList.toggle('pvp', this.battle.humans.rival);
+        this.windowEl.classList.remove('defeat', 'victory');
         if (this.logEl) this.logEl.innerHTML = '';
         this.turnEl.textContent = '';
+        this.fx.clear();
+        this.applySpeed();
         this.overlay.style.display = 'flex';
+        this.buildArena();
         this.render();
         this.splash(isWild ? '¡SALVAJE!' : (isTournament ? '¡A LUCHAR!' : '¡DESAFÍO!'), 'intro');
         if (isTournament) {
@@ -219,7 +264,7 @@ class BattleSystem {
         if (rivalMove) this.log(`🃏 ${escapeHtml(this.battle.names.rival)} lleva la carta de movimiento <strong>${this.cards.getAttack(rivalMove).name}</strong>.`);
         this.battle.player.filter(f => f.tired).forEach(f =>
             this.log(`${f.tired.icon} ${f.name} está ${f.tired.label.toLowerCase()}: pelea con −${Math.round((1 - f.tired.factor) * 100)}% de fuerza.`));
-        this.flipCoin();
+        this.beginDuel();
     }
 
     alive(side) {
@@ -227,142 +272,141 @@ class BattleSystem {
     }
 
     // ------------------------------------------------------------
-    // Moneda y turnos
+    // Turnos: todos los dinos por velocidad
     // ------------------------------------------------------------
-    async flipCoin() {
+    /** Mientras las cartas salen al campo; luego empieza la primera ronda. */
+    async beginDuel() {
         const b = this.battle;
-        await sleep(900);
+        await this.wait(1500);
         if (this.battle !== b) return;
-        this.log('🪙 Se lanza una moneda para decidir qué bando ataca primero...');
-        this.coinEl.className = 'battle-coin flipping';
-        this.coinEl.textContent = '🪙';
-        await sleep(1300);
-        if (this.battle !== b) return;
-
-        const playerFirst = Math.random() < 0.5;
-        b.firstSide = playerFirst ? 'player' : 'rival';
-        this.coinEl.className = `battle-coin landed ${playerFirst ? 'heads' : 'tails'}`;
-        this.coinEl.textContent = playerFirst ? 'CARA' : 'CRUZ';
-        this.log(playerFirst ? `🪙 ¡Cara! ${b.kind === 'tournament' ? escapeHtml(b.names.player) : 'Tu equipo'} actúa primero.` : `🪙 ¡Cruz! ${escapeHtml(b.names.rival)} actúa primero.`);
-        await sleep(BATTLE_DELAY);
-        if (this.battle !== b) return;
-
-        this.startSide(b.firstSide);
+        this.startRound();
     }
 
-    startSide(side) {
-        const b = this.battle;
-        if (side === b.firstSide) b.round++;
-        if (b.humans[side]) {
-            b.phase = 'human';
-            b.turn = side;
-            b.acted = new Set();
-            b.oneMore = false;
-            b.batonChain = [];
-            // Los dinos derribados gastan su acción en levantarse
-            for (const f of this.alive(side)) {
-                if (f.down) {
-                    f.down = false;
-                    b.acted.add(f.idx);
-                    this.log(`💫 ${f.name} se levanta y pierde su acción.`);
-                }
-            }
-            if (b.humans.rival) this.splash(`TURNO DE ${b.names[side].toUpperCase()}`, side === 'player' ? 'baton' : 'rival');
-            this.nextHumanActor();
-        } else {
-            this.aiPhase(side);
-        }
+    /** Orden de una ronda: todos los dinos vivos, del más rápido al más lento. */
+    turnOrder() {
+        const sideRank = (f) => (f.side === 'player' ? 0 : 1);
+        return [...this.alive('player'), ...this.alive('rival')].sort((x, y) =>
+            (y.vel - x.vel) || (y.level - x.level) || (sideRank(x) - sideRank(y)) || (x.idx - y.idx));
     }
 
-    /** Dinos del bando humano que todavía pueden actuar este turno. */
-    readyHumans() {
+    async startRound() {
         const b = this.battle;
-        return b[b.turn].filter(f => f.hp > 0 && !b.acted.has(f.idx));
+        b.round++;
+        b.queue = this.turnOrder();
+        b.qi = -1;
+        b.acted = new Set();
+        b.phase = 'round';
+        b.turn = null;
+        b.actor = null;
+        b.aiActor = null;
+        const first = b.queue[0];
+        this.turnEl.textContent = `💨 Ronda ${b.round}: orden por velocidad`;
+        this.log(`💨 Ronda ${b.round}: ${b.queue.map(f => f.name).join(' → ')}`);
+        this.banner(first.side, `RONDA ${b.round}`, `💨 ${first.name} es el más rápido`);
+        this.render();
+        await this.wait(800);
+        if (this.battle !== b) return;
+        this.nextTurn();
     }
 
-    /** Tú eliges qué dino actúa; si sólo queda uno, actúa él; si no queda ninguno, cambia de bando. */
-    nextHumanActor() {
+    /** Pasa al siguiente dino del orden; si ya actuaron todos, empieza otra ronda. */
+    async nextTurn() {
         const b = this.battle;
+        if (!b || b.over) return;
         b.oneMore = false;
         b.batonChain = [];
         b.pending = null;
-        const ready = this.readyHumans();
-        if (!ready.length) {
-            b.actor = null;
-            this.startSide(otherSide(b.turn));
-            return;
-        }
-        if (ready.length === 1) {
-            this.setActor(ready[0]);
-            return;
-        }
+        b.turn = null;
         b.actor = null;
-        const who = b.humans.rival ? `${b.names[b.turn]} · ` : '';
-        this.turnEl.textContent = `${b.turn === 'player' ? '🟢' : '🔴'} Turno ${b.round}: ${who}elige qué dino actúa`;
-        this.render();
+        b.aiActor = null;
+        let f = null;
+        while (++b.qi < b.queue.length) {
+            const c = b.queue[b.qi];
+            if (c.hp > 0 && !b.acted.has(c)) {
+                f = c;
+                break;
+            }
+        }
+        if (!f) {
+            this.startRound();
+            return;
+        }
+        // Un dino derribado gasta su acción en levantarse
+        if (f.down) {
+            f.down = false;
+            b.acted.add(f);
+            b.phase = 'round';
+            this.log(`💫 ${f.name} se levanta y pierde su acción.`);
+            this.fx.cue(f, '💫 ¡Se levanta!', '#facc15');
+            this.render();
+            await this.wait(650);
+            if (this.battle !== b) return;
+            this.nextTurn();
+            return;
+        }
+        if (b.humans[f.side]) {
+            this.fx.cue(f, b.humans.rival ? `🎮 ¡Turno de ${b.names[f.side]}!` : '¡TU TURNO!', f.side === 'player' ? '#38bdf8' : '#fb7185');
+            this.setActor(f);
+        } else {
+            this.aiTurn(f);
+        }
     }
 
-    /** Elegir (o cambiar, antes de atacar) el dino que va a actuar. */
-    selectActor(idx) {
-        const b = this.battle;
-        if (!b || b.phase !== 'human' || b.busy || b.oneMore) return;
-        const f = b[b.turn][idx];
-        if (!f || f.hp <= 0 || b.acted.has(f.idx)) return;
-        this.setActor(f);
-    }
-
+    /** Un dino humano elige qué hacer (también tras ¡Una más! o un relevo). */
     setActor(f) {
         const b = this.battle;
+        b.phase = 'human';
+        b.turn = f.side;
         b.actor = f.idx;
         b.pending = null;
         f.guarding = false; // la defensa dura hasta su siguiente acción
-        const who = b.humans.rival ? `${b.names[b.turn]} · ` : '';
-        this.turnEl.textContent = `${b.turn === 'player' ? '🟢' : '🔴'} Turno ${b.round}: ${who}${f.name}${b.oneMore ? ' · ¡UNA MÁS!' : ''}`;
+        const who = b.humans.rival ? `${b.names[f.side]} · ` : '';
+        this.turnEl.textContent = `${f.side === 'player' ? '🟢' : '🔴'} Ronda ${b.round}: ${who}${f.name}${b.oneMore ? ' · ¡UNA MÁS!' : ''}`;
         this.render();
     }
 
-    async aiPhase(side) {
+    /** Turno de un dino de la IA (si derriba a uno tuyo, actúa otra vez: máximo RIVAL_MAX_EXTRA). */
+    async aiTurn(f) {
         const b = this.battle;
         b.phase = 'ai';
         b.turn = null;
         b.actor = null;
-        this.turnEl.textContent = `🔴 Turno ${b.round}: ${b.names[side]}`;
+        b.aiActor = f;
+        f.guarding = false;
+        this.turnEl.textContent = `🔴 Ronda ${b.round}: ${f.name}`;
         this.render();
-
-        // El dino más rápido ataca primero
-        const order = [...b[side]].sort((x, y) => (y.vel - x.vel) || (Math.random() - 0.5));
-        for (const f of order) {
-            if (f.hp <= 0) continue;
-            await sleep(BATTLE_DELAY);
-            if (this.battle !== b) return;
-            if (f.down) {
-                f.down = false;
-                this.log(`💫 ${f.name} se levanta y pierde su acción.`);
+        await this.wait(AI_DELAY);
+        if (this.battle !== b) return;
+        for (let extra = 0; extra <= RIVAL_MAX_EXTRA; extra++) {
+            const action = this.chooseAIAction(f, extra > 0);
+            if (action.guard) {
+                f.guarding = true;
+                f.lastMove = null;
+                this.log(`🛡️ ${f.name} se pone en guardia.`);
+                this.fx.cue(f, '🛡️ ¡En guardia!', '#7dd3fc');
                 this.render();
-                continue;
-            }
-            f.guarding = false;
-            // Si derriba a un dino tuyo, actúa otra vez (máximo RIVAL_MAX_EXTRA veces)
-            for (let extra = 0; extra <= RIVAL_MAX_EXTRA; extra++) {
-                const action = this.chooseAIAction(f, extra > 0);
-                if (action.guard) {
-                    f.guarding = true;
-                    f.lastMove = null;
-                    this.log(`🛡️ ${f.name} se pone en guardia.`);
-                    this.render();
-                    break;
-                }
-                const result = await this.performAttack(f, action.target, action.attackId);
+                await this.wait(600);
                 if (this.battle !== b) return;
-                if (this.checkEnd()) return;
-                if (!result.knocked || f.hp <= 0) break;
-                this.splash('¡UNA MÁS!', 'rival');
-                this.log(`🔁 ¡${f.name} actúa otra vez!`);
-                await sleep(BATTLE_DELAY);
-                if (this.battle !== b) return;
+                break;
             }
+            const result = await this.performAttack(f, action.target, action.attackId);
+            if (this.battle !== b) return;
+            if (this.checkEnd()) return;
+            if (!result.knocked || f.hp <= 0) break;
+            this.splash('¡UNA MÁS!', 'rival');
+            this.log(`🔁 ¡${f.name} actúa otra vez!`);
+            await this.wait(BATTLE_DELAY);
+            if (this.battle !== b) return;
         }
-        this.startSide(otherSide(side));
+        b.acted.add(f);
+        this.nextTurn();
+    }
+
+    /** El dino al que le toca ahora (humano o de la IA). */
+    currentFighter() {
+        const b = this.battle;
+        if (!b) return null;
+        return b.phase === 'ai' ? b.aiActor : this.currentActor();
     }
 
     // ------------------------------------------------------------
@@ -468,7 +512,7 @@ class BattleSystem {
         const b = this.battle;
         if (!b || b.phase !== 'human' || b.busy) return;
         const me = this.currentActor();
-        if (!this.canUse(me, attackId)) return;
+        if (!me || !this.canUse(me, attackId)) return;
         const targets = this.alive(this.foeSide);
         if (targets.length === 1) {
             this.humanAct(attackId, targets[0]);
@@ -497,7 +541,7 @@ class BattleSystem {
         if (this.battle !== b) return;
         me.boost = 1;
         b.busy = false;
-        b.acted.add(me.idx);
+        b.acted.add(me);   // si recibió un relevo antes de su turno, ya no vuelve a actuar en esta ronda
         if (this.checkEnd()) return;
 
         if (result.knocked) {
@@ -508,29 +552,36 @@ class BattleSystem {
             this.setActor(me);
             return;
         }
-        this.nextHumanActor();
+        this.nextTurn();
     }
 
     guard() {
         const b = this.battle;
         if (!b || b.phase !== 'human' || b.busy) return;
         const me = this.currentActor();
+        if (!me) return;
         me.guarding = true;
         me.lastMove = null;
-        b.acted.add(me.idx);
+        b.acted.add(me);
         this.log(`🛡️ ${me.name} se pone en guardia: recibirá la mitad de daño y no podrá ser derribado.`);
-        this.nextHumanActor();
+        this.fx.cue(me, '🛡️ ¡En guardia!', '#7dd3fc');
+        this.nextTurn();
     }
 
     /** Pasa la acción extra a otro dino del equipo, con más poder. */
-    batonPass(idx) {
+    async batonPass(idx) {
         const b = this.battle;
         if (!b || !b.oneMore || b.busy) return;
         const from = this.currentActor();
         const to = b[b.turn][idx];
-        if (!to || to.hp <= 0 || to.idx === from.idx || b.batonChain.includes(to.idx)) return;
+        if (!from || !to || to.hp <= 0 || to.idx === from.idx || b.batonChain.includes(to.idx)) return;
         b.batonChain.push(from.idx);
         const boost = BATON_BOOSTS[Math.min(b.batonChain.length, BATON_BOOSTS.length - 1)];
+        b.busy = true;
+        this.render();
+        await this.fx.relay(from, to);
+        if (this.battle !== b) return;
+        b.busy = false;
         this.splash('¡RELEVO!', 'baton');
         this.log(`🤝 ${from.name} pasa el relevo a ${to.name}: su ataque hará <strong>x${boost}</strong> de daño.`);
         this.setActor(to);
@@ -540,7 +591,7 @@ class BattleSystem {
     skipExtra() {
         const b = this.battle;
         if (!b || !b.oneMore || b.busy) return;
-        this.nextHumanActor();
+        this.nextTurn();
     }
 
     flee() {
@@ -584,25 +635,32 @@ class BattleSystem {
         return b.kind === 'wild' ? 'El' : 'El rival';
     }
 
-    /** Devuelve { knocked } = true si el ataque derribó al objetivo (debilidad o crítico). */
+    /**
+     * Un ataque completo con su animación: el dino se prepara, sale de su carta (físico) o lanza su
+     * elemento (especial), golpea y vuelve. Devuelve { knocked } = true si derribó al objetivo.
+     */
     async performAttack(attacker, defender, attackId) {
+        const b = this.battle;
         const attack = this.cards.getAttack(attackId) || { id: attackId, name: attackId, element: 'normal', power: 20, category: 'fisico' };
         const el = this.cards.catalog.elements[attack.element];
         const cat = this.cards.getCategory(attack);
-        const mine = this.battle.humans[attacker.side] && !this.battle.humans.rival ? 'player' : (attacker.side === 'player' ? 'player' : 'rival');
         attacker.lastMove = attackId;
         // El ataque fuerte entra en recarga
         const cd = this.cards.attackCooldown(attacker.attacks, attackId);
-        if (cd) attacker.readyRound[attackId] = this.battle.round + cd + 1;
+        if (cd) attacker.readyRound[attackId] = b.round + cd + 1;
         this.log(`${el ? el.icon : '•'}${cat.icon} ${this.ownerLabel(attacker)} ${attacker.name} usó ${attack.moveCard ? '🃏 ' : ''}<strong>${escapeHtml(attack.name)}</strong> contra ${defender.name}.`);
-        this.animateCard(attacker, attacker.side === 'player' ? 'lunge-up' : 'lunge-down');
-        await sleep(BATTLE_DELAY / 2);
+        b.striking = { attacker, defender, attack };
+        this.render();
+        await this.fx.windup(attacker, attack);
+        if (this.battle !== b) return { knocked: false };
 
         if (attack.power <= 0) {
+            this.fx.roar(attacker);
             defender.intimidated = true;
             this.log(`😨 ${defender.name} quedó intimidado: su próximo ataque hará menos daño.`);
+            b.striking = null;
             this.render();
-            await sleep(BATTLE_DELAY);
+            await this.wait(BATTLE_DELAY);
             return { knocked: false };
         }
 
@@ -610,23 +668,38 @@ class BattleSystem {
         const { damage, mult } = this.calcDamage(attacker, defender, attack, true, crit);
         const weak = mult > 1;
         const resisted = mult < 1;
+        const physical = attack.category !== 'especial';
+
+        // Viaje: el dino cruza el campo (físico) o lanza su elemento (especial)
+        const comeBack = physical ? await this.fx.dash(attacker, defender) : null;
+        if (!physical) await this.fx.projectile(attacker, defender, attack.element);
+        if (this.battle !== b) {
+            if (comeBack) comeBack();
+            return { knocked: false };
+        }
+
         attacker.intimidated = false;
+        const guarded = defender.guarding;
         defender.hp = Math.max(0, defender.hp - damage);
         const knocked = (weak || crit) && !defender.down && !defender.guarding && defender.hp > 0;
         if (knocked) defender.down = true;
-        if (defender.hp <= 0) defender.justKO = true;
+        const ko = defender.hp <= 0;
+        this.fx.impact(attacker, defender, { damage, weak: weak && !guarded, crit, resisted, guarded, element: attack.element, physical, ko });
+        if (ko) this.fx.ko(defender);
         this.render();
-        this.animate(defender, 'hit');
-        this.impact(defender, damage, { color: el ? el.color : '#ffffff', crit, weak: weak && !defender.guarding });
-        if (weak && !defender.guarding) this.splash('¡DÉBIL!', mine === 'player' ? 'weak' : 'rival');
-        else if (crit) this.splash('¡CRÍTICO!', mine === 'player' ? 'weak' : 'rival');
-        this.log(`💥 ${defender.name} recibe ${damage} de daño.${weak ? ' <span class="log-effective">¡Es muy eficaz!</span>' : ''}${resisted ? ' <span style="color:#94a3b8;">No es muy eficaz...</span>' : ''}${crit ? ' <span class="log-effective">¡Crítico!</span>' : ''}${defender.guarding ? ' 🛡️' : ''}`);
+        this.log(`💥 ${defender.name} recibe ${damage} de daño.${weak ? ' <span class="log-effective">¡Es muy eficaz!</span>' : ''}${resisted ? ' <span style="color:#94a3b8;">No es muy eficaz...</span>' : ''}${crit ? ' <span class="log-effective">¡Crítico!</span>' : ''}${guarded ? ' 🛡️' : ''}`);
         if (knocked) this.log(`💫 <strong>¡${defender.name} fue derribado!</strong>`);
-        if (defender.hp <= 0) {
+        if (ko) {
             this.log(`☠️ ${defender.name} se debilitó.`);
             this.announceLastDino(defender.side);
         }
-        await sleep(BATTLE_DELAY);
+
+        if (comeBack) await comeBack();
+        else await this.wait(380);
+        if (this.battle !== b) return { knocked };
+        b.striking = null;
+        this.render();
+        await this.wait(ko ? 700 : 260);
         return { knocked };
     }
 
@@ -669,14 +742,17 @@ class BattleSystem {
         b.over = result;
         b.phase = 'over';
         b.actor = null;
+        b.aiActor = null;
         b.turn = null;
         b.oneMore = false;
+        b.striking = null;
         const winner = result === 'won' ? b.names.player : b.names.rival;
-        const win = this.overlay.querySelector('.battle-window');
         const lostLocal = result === 'lost' && !b.humans.rival;
+        const win = this.windowEl;
         win.classList.remove('defeat', 'victory');
         void win.offsetWidth;
         win.classList.add(lostLocal ? 'defeat' : 'victory');
+        this.fx.cheer(result === 'won' ? 'player' : 'rival');
         if (b.kind === 'tournament') {
             this.turnEl.textContent = `🏆 Gana ${winner}`;
             this.splash(`¡GANA ${winner.toUpperCase()}!`, result === 'won' || b.humans.rival ? 'win' : 'lose');
@@ -699,9 +775,13 @@ class BattleSystem {
 
     close() {
         this.battle = null;
-        this.overlay.querySelector('.battle-window').classList.remove('defeat', 'victory');
+        this.windowEl.classList.remove('defeat', 'victory');
         this.overlay.style.display = 'none';
-        this.overlay.classList.remove('pvp');
+        this.overlay.classList.remove('pvp', 'wild');
+        this.fx.clear();
+        this.rivalRow.innerHTML = '';
+        this.playerRow.innerHTML = '';
+        if (this.bannerEl) this.bannerEl.className = 'duel-banner';
         if (document.activeElement) document.activeElement.blur();
     }
 
@@ -712,6 +792,11 @@ class BattleSystem {
         if (!this.battle || e.repeat) return;
         const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
         const b = this.battle;
+        if (key === 'v') {
+            e.preventDefault();
+            this.toggleSpeed();
+            return;
+        }
         if (b.pending && /^[1-9]$/.test(key)) {
             const foes = b[this.foeSide].filter(f => f.hp > 0);
             const foe = foes[Number(key) - 1];
@@ -733,7 +818,7 @@ class BattleSystem {
     }
 
     // ------------------------------------------------------------
-    // Interfaz
+    // Interfaz: textos grandes
     // ------------------------------------------------------------
     log(html) {
         if (!this.logEl) return;   // el registro del combate ya no se muestra
@@ -743,7 +828,7 @@ class BattleSystem {
         this.logEl.scrollTop = this.logEl.scrollHeight;
     }
 
-    /** Texto grande que cruza la pantalla (¡UNA MÁS!, ¡DÉBIL!, ¡RELEVO!...). */
+    /** Texto grande que cruza la pantalla (¡UNA MÁS!, ¡RELEVO!, ¡VICTORIA!...). */
     splash(text, kind = '') {
         const el = this.splashEl;
         if (!el) return;
@@ -752,115 +837,219 @@ class BattleSystem {
         void el.offsetWidth;
         el.className = `battle-splash show ${kind}`;
         clearTimeout(this.splashTimer);
-        this.splashTimer = setTimeout(() => { el.className = 'battle-splash'; }, kind === 'allout' ? 1400 : 950);
+        this.splashTimer = setTimeout(() => { el.className = 'battle-splash'; }, 950);
     }
 
-    animate(f, cls) {
-        const el = document.querySelector(`.battle-fighter[data-side="${f.side}"][data-idx="${f.idx}"] .battle-fighter-img`);
-        if (!el) return;
-        el.classList.remove(cls);
-        void el.offsetWidth; // reiniciar animación
-        el.classList.add(cls);
-    }
-
-    fighterEl(f) {
-        return document.querySelector(`.battle-fighter[data-side="${f.side}"][data-idx="${f.idx}"]`);
-    }
-
-    /** Animación de toda la carta (embestida hacia el rival). */
-    animateCard(f, cls) {
-        const el = this.fighterEl(f);
-        if (!el) return;
-        el.classList.remove(cls);
+    /** Franja que cruza el campo al empezar cada ronda. */
+    banner(side, big, small = '') {
+        const el = this.bannerEl;
+        if (!el || !this.battle) return;
+        el.className = 'duel-banner';
+        el.innerHTML = `<div>${small ? `<small>${escapeHtml(small)}</small>` : ''}<b>${escapeHtml(big)}</b></div>`;
         void el.offsetWidth;
-        el.classList.add(cls);
-        // El dino también embiste
-        const art = el.parentElement && el.parentElement.querySelector('.fighter-art');
-        if (art) {
-            art.classList.remove('summon', 'art-lunge', 'art-lunge-down');
-            void art.offsetWidth;
-            art.classList.add(f.side === 'player' ? 'art-lunge' : 'art-lunge-down');
-        }
+        el.className = `duel-banner show ${side}`;
     }
 
-    /** Golpe: destello del color del elemento y número de daño flotante. */
-    impact(f, damage, { color = '#fff', crit = false, weak = false } = {}) {
-        const el = this.fighterEl(f);
-        if (!el) return;
-        const art = el.parentElement && el.parentElement.querySelector('.fighter-art');
-        if (art) {
-            art.classList.remove('summon', 'art-hit');
-            void art.offsetWidth;
-            art.classList.add('art-hit');
-        }
-        const slash = document.createElement('span');
-        slash.className = 'fx-slash';
-        slash.style.setProperty('--fx', color);
-        const pop = document.createElement('span');
-        pop.className = `dmg-pop ${crit ? 'crit' : ''} ${weak ? 'weak' : ''}`;
-        pop.textContent = `-${damage}`;
-        el.append(slash, pop);
-        setTimeout(() => { slash.remove(); pop.remove(); }, 1100);
-        if (f.justKO) setTimeout(() => { f.justKO = false; }, 1200);
+    // ------------------------------------------------------------
+    // Interfaz: el campo (se arma una vez por combate)
+    // ------------------------------------------------------------
+    slotEl(f) {
+        const row = f.side === 'rival' ? this.rivalRow : this.playerRow;
+        return row.querySelector(`.duel-slot[data-idx="${f.idx}"]`);
     }
 
-    renderFighter(f, targetNumber = 0) {
+    buildArena() {
         const b = this.battle;
-        const el = this.cards.catalog.elements[f.element];
-        const hpPct = Math.round((f.hp / f.maxHp) * 100);
-        const hpClass = hpPct > 50 ? 'high' : (hpPct > 20 ? 'mid' : 'low');
-        const imgStyle = f.image ? `background-image:url('assets/dinos/${encodeURI(f.image)}')` : '';
+        for (const side of ['rival', 'player']) {
+            const row = side === 'rival' ? this.rivalRow : this.playerRow;
+            row.innerHTML = '';
+            const xs = SLOT_X[side][b[side].length] || SLOT_X[side][3];
+            b[side].forEach((f, i) => {
+                // Primero salen las cartas del rival y luego las tuyas
+                const delay = (side === 'rival' ? 0.15 : 0.6) + i * 0.18;
+                row.appendChild(this.createSlot(f, xs[i], delay));
+            });
+            this.renderTrainerPlate(side);
+        }
+        const slots = [...this.rivalRow.children, ...this.playerRow.children];
+        clearTimeout(this.summonTimer);
+        this.summonTimer = setTimeout(() => slots.forEach(s => s.classList.remove('summon')), 3200 / this.speed);
+    }
+
+    createSlot(f, x, delay) {
+        const { elements } = this.cards.catalog;
+        const el = elements[f.element];
+        const color = el ? el.color : '#94a3b8';
+        const art = this.cards.artUrl(f.dinoId, f.side === 'player' ? 'right' : 'left');
+        const card = f.image ? `assets/dinos/${encodeURI(f.image)}` : '';
+        const pose = this.cards.getPose(f.dinoId);
+        const slot = document.createElement('div');
+        slot.className = `duel-slot ${f.side} summon ${pose ? `pose-${pose}` : ''} ${art ? '' : 'no-art'}`;
+        slot.dataset.side = f.side;
+        slot.dataset.idx = f.idx;
+        slot.style.cssText = `--x:${x}%;--el:${color};--k:${this.cards.sizeScale(f.dinoId).toFixed(2)};--d:${delay.toFixed(2)}s;--idle:${(-Math.random() * 3).toFixed(2)}s`;
+        slot.title = `${f.name} · ${this.cards.sizeLabel(f.dinoId)} (tamaño ${this.cards.getSize(f.dinoId)}/6)`;
+        slot.innerHTML = `
+            <div class="duel-zone"><i class="duel-ring"></i></div>
+            <div class="duel-card-anchor"><div class="duel-card-lie"><div class="duel-card-inner">
+                <div class="duel-card-face ${f.fullCard ? 'full-card' : ''}" style="${card ? `background-image:url('${card}')` : ''}"></div>
+                <div class="duel-card-back"></div>
+            </div></div></div>
+            <div class="duel-beam"></div>
+            <div class="duel-shadow"></div>
+            <div class="duel-dino-wrap">
+                <div class="duel-dino-fx"><div class="duel-dino-pose">
+                    <img class="duel-dino" src="${art || card}" alt="${escapeHtml(f.name)}" draggable="false">
+                </div></div>
+                <div class="duel-guard"></div>
+                <div class="duel-dizzy"><i>✦</i><i>✦</i><i>✦</i></div>
+                <div class="duel-reticle"></div>
+                <div class="duel-tags"></div>
+            </div>
+            <div class="duel-plate">
+                <span class="duel-order-n"></span>
+                <div class="duel-plate-top"><span class="duel-name">${escapeHtml(f.name)}</span><span class="duel-status"></span><span class="duel-lv">Nv.${f.level}</span></div>
+                <div class="duel-hp"><i class="duel-hp-ghost"></i><i class="duel-hp-fill"></i></div>
+                <div class="duel-plate-bot"><span class="duel-el">${el ? el.icon : ''}</span><span class="duel-hp-text">❤️ <b data-v="${f.hp}">${f.hp}</b>/${f.maxHp}</span><span class="duel-vel">💨 ${f.vel}</span></div>
+            </div>
+            <div class="duel-badge"></div>`;
+        slot.addEventListener('click', () => this.onSlotClick(f));
+        return slot;
+    }
+
+    /** Clic en un dino del campo: elegirlo como objetivo o pasarle el relevo. */
+    onSlotClick(f) {
+        const b = this.battle;
+        if (!b || b.phase !== 'human' || b.busy) return;
+        if (b.pending) {
+            if (f.side === this.foeSide && f.hp > 0) this.chooseTarget(f.idx);
+            return;
+        }
+        if (b.oneMore && f.side === b.turn && f.idx !== b.actor) this.batonPass(f.idx);
+    }
+
+    /** Placa del entrenador (nombre y puntos de vida de todo su equipo, como los LP de Yu-Gi-Oh). */
+    renderTrainerPlate(side) {
+        const b = this.battle;
+        const el = this.trainerEls[side];
+        if (!el) return;
+        const tag = side === 'player'
+            ? (b.kind === 'tournament' ? (b.humans.rival ? 'JUGADOR 1' : 'TU EQUIPO') : 'TU EQUIPO')
+            : (b.kind === 'wild' ? 'SALVAJE' : (b.humans.rival ? 'JUGADOR 2' : 'RIVAL'));
+        const hp = b[side].reduce((s, f) => s + f.hp, 0);
+        el.innerHTML = `
+            <span class="duel-trainer-tag">${tag}</span>
+            <b class="duel-trainer-name">${escapeHtml(b.names[side])}</b>
+            <div class="duel-lp"><span>PV</span><b class="duel-lp-num" data-v="${hp}">${hp}</b><i class="duel-pips"></i></div>
+            <div class="duel-lp-bar"><i class="duel-lp-fill"></i></div>`;
+    }
+
+    /** Cuenta un número hacia su nuevo valor (como los puntos de vida de Yu-Gi-Oh). */
+    countTo(el, to) {
+        if (!el) return;
+        const from = Number(el.dataset.v);
+        el.dataset.v = to;
+        if (!Number.isFinite(from) || from === to) {
+            el.textContent = to;
+            return;
+        }
+        const t0 = performance.now();
+        const dur = 650 / this.speed;
+        const step = (t) => {
+            if (el.dataset.v !== String(to)) return;   // llegó otro valor: esa animación manda
+            const p = Math.min(1, (t - t0) / dur);
+            el.textContent = Math.round(from + (to - from) * (1 - Math.pow(1 - p, 3)));
+            if (p < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+    }
+
+    renderSlot(f, keys) {
+        const b = this.battle;
+        const slot = this.slotEl(f);
+        if (!slot) return;
+        const human = b.phase === 'human' && !b.busy;
         const isActor = b.phase === 'human' && f.side === b.turn && b.actor === f.idx;
-        const targetable = b.phase === 'human' && f.side === this.foeSide && b.pending && f.hp > 0;
-        let effTag = '';
+        const aiActor = b.phase === 'ai' && b.aiActor === f;
+        const targetable = human && b.pending && f.side === this.foeSide && f.hp > 0;
+        const batonable = human && b.oneMore && f.side === b.turn && f.hp > 0 && !isActor && !b.batonChain.includes(f.idx);
+        const done = b.acted.has(f) && !isActor && !aiActor && f.hp > 0;
+        const striking = b.striking && (b.striking.attacker === f || b.striking.defender === f);
+        const classes = {
+            actor: isActor || aiActor,
+            targetable, batonable, done,
+            striking: !!striking,
+            down: f.down && f.hp > 0,
+            fainted: f.hp <= 0,
+            guarding: f.guarding && f.hp > 0,
+            intimidated: f.intimidated
+        };
+        for (const [cls, on] of Object.entries(classes)) slot.classList.toggle(cls, !!on);
+
+        // Etiquetas sobre el dino: tecla, debilidad / resistencia contra el ataque elegido
+        let tags = '';
+        const key = keys.get(f);
+        if (key) tags += `<kbd class="duel-key">${key}</kbd>`;
         if (targetable) {
             const a = this.cards.getAttack(b.pending);
-            if (a && a.power > 0 && this.cards.getTypeMultiplier(a.element, f.element) > 1) {
-                effTag = `<span class="fighter-eff">DÉBIL x${this.cards.typeChart.effective}</span>`;
-            }
+            const mult = a && a.power > 0 ? this.cards.getTypeMultiplier(a.element, f.element) : 1;
+            if (mult > 1) tags += `<span class="duel-eff weak">DÉBIL x${this.cards.typeChart.effective}</span>`;
+            else if (mult < 1) tags += `<span class="duel-eff resist">RESISTE x${mult}</span>`;
         }
-        const done = b.phase === 'human' && f.side === b.turn && b.acted.has(f.idx) && !isActor;
-        const status = `${f.guarding ? '🛡️' : ''}${f.intimidated ? '😨' : ''}${done ? '✔' : ''}`;
-        // El dino aparece sobre su carta (estilo Yu-Gi-Oh): tus dinos miran a la derecha, los rivales a la izquierda
-        const art = this.cards.artUrl(f.dinoId, f.side === 'player' ? 'right' : 'left');
-        if (!f.summonedAt) f.summonedAt = Date.now();
-        const since = Date.now() - f.summonedAt;
-        const artHtml = art ? `<img class="fighter-art ${since < 1200 ? 'summon' : ''} ${f.side}" src="${art}" alt=""
-                                   style="${since < 1200 ? `animation-delay:-${since}ms;` : ''}--glow:${el ? el.color : '#fff'}">` : '';
-        // Puedes elegir este dino para que actúe (tu turno, sin ataque pendiente)
-        const selectable = b.phase === 'human' && f.side === b.turn && !b.pending && !b.oneMore && !b.busy &&
-            f.hp > 0 && !b.acted.has(f.idx) && !isActor;
-        return `
-          <div class="fighter-slot ${f.hp <= 0 ? 'fainted' : ''} ${f.down ? 'down' : ''}">
-            <div class="battle-fighter ${isActor ? 'actor' : ''} ${targetable ? 'targetable' : ''} ${selectable ? 'selectable' : ''} ${f.hp <= 0 ? 'fainted' : ''} ${f.justKO ? 'ko-anim' : ''} ${f.down ? 'down' : ''}"
-                 data-side="${f.side}" data-idx="${f.idx}">
-                ${effTag}
-                ${targetable && targetNumber ? `<kbd class="fighter-key">${targetNumber}</kbd>` : ''}
-                ${f.down ? '<span class="fighter-down">DERRIBADO</span>' : ''}
-                ${f.hp <= 0 ? '<span class="fighter-ko">K.O.</span>' : ''}
-                <div class="fighter-visual ${f.side}">
-                    <div class="battle-fighter-img battle-dino-img ${f.fullCard ? 'full-card' : ''}" style="${imgStyle}"></div>
-                    ${artHtml}
-                </div>
-                <div class="battle-fighter-info">
-                    <strong>${escapeHtml(f.name)} <span class="fighter-status">${status}</span></strong>
-                    <small style="color:${el ? el.color : '#94a3b8'}">${el ? el.icon + ' ' + el.name : f.element} · Nv. ${f.level}</small>
-                    <div class="battle-hp-bar"><div class="battle-hp-fill ${hpClass}" style="width:${hpPct}%"></div></div>
-                    <small class="battle-hp-text">❤️ ${f.hp}/${f.maxHp} · 💨 ${f.vel}</small>
-                </div>
-            </div>
-          </div>`;
+        if (batonable) tags += '<span class="duel-eff baton">🤝 RELEVO</span>';
+        const tagsEl = slot.querySelector('.duel-tags');
+        if (tagsEl.innerHTML !== tags) tagsEl.innerHTML = tags;
+
+        const badge = f.hp <= 0 ? '<span class="ko">K.O.</span>' : (f.down ? '<span class="down">DERRIBADO</span>' : '');
+        const badgeEl = slot.querySelector('.duel-badge');
+        if (badgeEl.innerHTML !== badge) badgeEl.innerHTML = badge;
+
+        // Placa: vida, estado y velocidad
+        const pct = Math.max(0, Math.round((f.hp / f.maxHp) * 100));
+        const fill = slot.querySelector('.duel-hp-fill');
+        fill.style.width = `${pct}%`;
+        fill.className = `duel-hp-fill ${pct > 50 ? 'high' : (pct > 20 ? 'mid' : 'low')}`;
+        slot.querySelector('.duel-hp-ghost').style.width = `${pct}%`;
+        this.countTo(slot.querySelector('.duel-hp-text b'), f.hp);
+        const status = `${f.guarding && f.hp > 0 ? '🛡️' : ''}${f.intimidated ? '😨' : ''}${f.tired ? f.tired.icon : ''}${f.boost > 1 ? `x${f.boost}` : ''}`;
+        const statusEl = slot.querySelector('.duel-status');
+        if (statusEl.textContent !== status) statusEl.textContent = status;
+
+        // Puesto en el orden de la ronda (por velocidad)
+        const pos = b.queue.indexOf(f);
+        const orderEl = slot.querySelector('.duel-order-n');
+        const order = f.hp <= 0 || pos < 0 ? '' : (done ? '✔' : `${pos + 1}º`);
+        if (orderEl.textContent !== order) orderEl.textContent = order;
+        orderEl.classList.toggle('now', !!(isActor || aiActor));
+        orderEl.classList.toggle('done', done);
     }
 
-    /** Crea un botón de acción con atajo de teclado. */
-    addButton(cls, html, key, onClick, disabled = false) {
+    renderTrainers() {
+        const b = this.battle;
+        for (const side of ['rival', 'player']) {
+            const el = this.trainerEls[side];
+            if (!el || !el.firstElementChild) continue;
+            const hp = b[side].reduce((s, f) => s + f.hp, 0);
+            const max = b[side].reduce((s, f) => s + f.maxHp, 0) || 1;
+            this.countTo(el.querySelector('.duel-lp-num'), hp);
+            el.querySelector('.duel-lp-fill').style.width = `${Math.round((hp / max) * 100)}%`;
+            const pips = b[side].map(f => `<i class="${f.hp > 0 ? 'on' : ''}"></i>`).join('');
+            const pipsEl = el.querySelector('.duel-pips');
+            if (pipsEl.innerHTML !== pips) pipsEl.innerHTML = pips;
+            const cur = this.currentFighter();
+            el.classList.toggle('active', !!(cur && cur.side === side));
+        }
+    }
+
+    /** Crea un botón del panel de órdenes con atajo de teclado. */
+    addButton(cls, html, key, onClick, disabled = false, parent = this.actionsEl) {
         const btn = document.createElement('button');
         btn.className = cls;
         const keyLabel = key === ' ' ? 'Espacio' : (key === 'Escape' ? 'Esc' : (key || '').toUpperCase());
         btn.innerHTML = `${key ? `<kbd class="btn-key">${keyLabel}</kbd>` : ''}${html}`;
         btn.disabled = disabled;
         btn.addEventListener('click', onClick);
-        this.actionsEl.appendChild(btn);
+        parent.appendChild(btn);
         if (key && !disabled) this.hotkeys[key] = onClick;
         return btn;
     }
@@ -869,70 +1058,164 @@ class BattleSystem {
         const b = this.battle;
         if (!b) return;
         this.hotkeys = {};
-        const rivalRow = document.getElementById('battleRivalSide');
-        const playerRow = document.getElementById('battlePlayerSide');
-        const foeSide = this.foeSide;
-        let n = 0;
-        const numbered = (f) => (f.side === foeSide && f.hp > 0 ? ++n : 0);
-        rivalRow.innerHTML = b.rival.map(f => this.renderFighter(f, foeSide === 'rival' ? numbered(f) : 0)).join('');
-        playerRow.innerHTML = b.player.map(f => this.renderFighter(f, foeSide === 'player' ? numbered(f) : 0)).join('');
-        [rivalRow, playerRow].forEach(row => row.querySelectorAll('.battle-fighter.targetable').forEach(el => {
-            el.addEventListener('click', () => this.chooseTarget(Number(el.dataset.idx)));
-        }));
-        [rivalRow, playerRow].forEach(row => row.querySelectorAll('.battle-fighter.selectable').forEach(el => {
-            el.addEventListener('click', () => this.selectActor(Number(el.dataset.idx)));
-        }));
+        // Números de tecla sobre los objetivos al elegir a quién atacar
+        const keys = new Map();
+        if (b.phase === 'human' && !b.busy && b.pending) this.alive(this.foeSide).forEach((f, i) => keys.set(f, i + 1));
+        for (const f of [...b.rival, ...b.player]) this.renderSlot(f, keys);
+        this.renderTrainers();
+        this.renderCommand();
+    }
 
-        const actions = this.actionsEl;
-        actions.innerHTML = '';
-        actions.classList.toggle('one-more', !!b.oneMore);
+    // ------------------------------------------------------------
+    // Interfaz: panel de órdenes (a la derecha del campo)
+    // ------------------------------------------------------------
+    /** Mini carta + datos de un dino para la cabecera del panel. */
+    dinoHead(f, subtitle) {
+        const el = this.cards.catalog.elements[f.element];
+        const card = f.image ? `assets/dinos/${encodeURI(f.image)}` : '';
+        return `
+            <div class="duel-cmd-dino" style="--el:${el ? el.color : '#94a3b8'}">
+                <div class="duel-cmd-card ${f.fullCard ? 'full-card' : ''}" style="${card ? `background-image:url('${card}')` : ''}"></div>
+                <div class="duel-cmd-info">
+                    <small class="duel-cmd-sub">${subtitle}</small>
+                    <b>${escapeHtml(f.name)}</b>
+                    <small>${el ? `${el.icon} ${el.name}` : f.element} · Nv. ${f.level}</small>
+                    <small>❤️ ${f.hp}/${f.maxHp} · 💨 ${f.vel}${f.tired ? ` · ${f.tired.icon}` : ''}</small>
+                </div>
+            </div>`;
+    }
 
+    /** Orden de la ronda (todos los dinos por velocidad): el que actúa, los que ya actuaron y los que vienen. */
+    queueHtml() {
+        const b = this.battle;
+        const queue = b.queue.length ? b.queue : this.turnOrder();
+        const now = this.currentFighter();
+        const rows = queue.map((f, i) => {
+            const art = this.cards.artUrl(f.dinoId, f.side === 'player' ? 'right' : 'left');
+            const cls = [f.side, f === now ? 'now' : '', b.acted.has(f) && f !== now ? 'done' : '', f.hp <= 0 ? 'ko' : ''].join(' ');
+            return `<li class="${cls}"><span class="q-n">${i + 1}</span>${art ? `<img src="${art}" alt="">` : ''}<span class="q-name">${escapeHtml(f.name)}</span><small>💨 ${f.vel}</small></li>`;
+        }).join('');
+        return `<p class="duel-cmd-text">💨 Ronda ${Math.max(1, b.round)} · orden por velocidad</p><ol>${rows}</ol>`;
+    }
+
+    /** Botón con el dino (arte, nombre, vida): para elegir a quién atacar. */
+    dinoButton(f, key, onClick, extra = '') {
+        const el = this.cards.catalog.elements[f.element];
+        const art = this.cards.artUrl(f.dinoId, f.side === 'player' ? 'right' : 'left');
+        const pct = Math.round((f.hp / f.maxHp) * 100);
+        const btn = this.addButton('duel-pick',
+            `${art ? `<img class="pick-art" src="${art}" alt="">` : ''}
+             <span class="pick-info"><span class="pick-name"><b>${escapeHtml(f.name)}</b>${extra}</span>
+                <small>${el ? el.icon : ''} ❤️ ${f.hp}/${f.maxHp} · 💨 ${f.vel}</small>
+                <i class="pick-hp"><i style="width:${pct}%"></i></i></span>`,
+            key, onClick, false, this.cmdList);
+        btn.style.setProperty('--el', el ? el.color : '#94a3b8');
+        return btn;
+    }
+
+    renderCommand() {
+        const b = this.battle;
+        const panel = this.actionsEl;
+        panel.innerHTML = '';
+        panel.classList.toggle('one-more', !!b.oneMore);
+        panel.classList.toggle('rival-turn', b.phase === 'human' && b.turn === 'rival');
+        const head = document.createElement('div');
+        head.className = 'duel-cmd-head';
+        const list = document.createElement('div');
+        list.className = 'duel-cmd-list';
+        const queue = document.createElement('div');
+        queue.className = 'duel-queue';
+        const foot = document.createElement('div');
+        foot.className = 'duel-cmd-foot';
+        panel.append(head, list, queue, foot);
+        this.cmdList = list;
+        if (!b.over) queue.innerHTML = this.queueHtml();
+
+        // Fin del combate
         if (b.over) {
-            const label = b.kind === 'wild' && b.over === 'won' ? '🃏 Capturar' : '▶ Continuar';
+            const won = b.over === 'won';
+            const title = b.kind === 'tournament'
+                ? `🏆 Gana ${escapeHtml(won ? b.names.player : b.names.rival)}`
+                : (won ? '🏆 ¡Victoria!' : '💀 Derrota');
+            const sub = b.kind === 'wild' && won ? `¡${escapeHtml(b.title)} está a tu alcance!` : (won ? '¡Tus dinos lo dieron todo!' : 'Tus dinos necesitan descansar...');
+            head.innerHTML = `<div class="duel-cmd-title ${won || b.humans.rival ? 'win' : 'lose'}">${title}</div><p class="duel-cmd-text">${sub}</p>`;
+            const label = b.kind === 'wild' && won ? '🃏 Capturar' : '▶ Continuar';
             const done = () => {
                 this.close();
                 this.report(b, b.over);
             };
-            this.addButton(`battle-btn ${b.over === 'won' ? 'win' : 'flee'} battle-continue`, label, ' ', done);
+            this.addButton(`duel-btn primary ${won ? 'win' : ''}`, label, ' ', done, false, list);
             this.hotkeys.Enter = done;
             return;
         }
 
-        // Tu turno: elige qué dino actúa
-        if (b.phase === 'human' && b.actor === null) {
-            actions.insertAdjacentHTML('beforeend', `<p class="battle-wait">👆 Elige qué dino actúa ahora (clic en su carta o teclas <kbd>1</kbd>-<kbd>3</kbd>).</p>`);
-            this.readyHumans().forEach((f, i) => {
-                this.addButton('battle-btn pick-actor', `${escapeHtml(f.name)} <small>💨 ${f.vel}</small>`, String(i + 1), () => this.selectActor(f.idx), b.busy);
-            });
-            if (this.canFlee(b)) this.addButton('battle-btn flee', '🏃 Huir', 'h', () => this.flee(), b.busy);
+        if (b.phase === 'intro') {
+            head.innerHTML = '<div class="duel-cmd-title">⚡ ¡Duelo!</div><p class="duel-cmd-text">Las cartas salen al campo. El orden de ataque lo decide la velocidad 💨 de cada dino.</p>';
             return;
         }
 
-        if (b.phase !== 'human' || b.actor === null) {
-            const acting = b.phase === 'coin' ? '🪙 Lanzando la moneda...' : `⏳ ${escapeHtml(b.names.rival)} está actuando...`;
-            actions.innerHTML = `<p class="battle-wait">${acting}</p>`;
+        if (b.phase === 'round') {
+            head.innerHTML = `<div class="duel-cmd-title">💨 Ronda ${b.round}</div><p class="duel-cmd-text">Actúa primero el dino más rápido del campo, sea tuyo o del rival.</p>`;
             return;
         }
 
-        if (b.pending) {
-            const a = this.cards.getAttack(b.pending);
-            actions.innerHTML = `<p class="battle-wait">🎯 Elige a qué rival atacar con <strong>${escapeHtml(a ? a.name : b.pending)}</strong> (clic en su carta o teclas <kbd>1</kbd>-<kbd>3</kbd>).</p>`;
-            this.addButton('battle-btn flee', '↩ Cancelar', 'Escape', () => { b.pending = null; this.render(); });
+        // Turno de la IA
+        if (b.phase === 'ai') {
+            const f = b.aiActor;
+            const whose = b.kind === 'wild' ? '¡Ataca el salvaje!' : `Turno de ${escapeHtml(b.names.rival)}`;
+            head.innerHTML = f
+                ? this.dinoHead(f, `⏳ ${whose}`)
+                : `<div class="duel-cmd-title rival">⏳ ${whose}</div>`;
+            const s = b.striking;
+            if (s && s.attack && s.attacker === f) {
+                const ael = this.cards.catalog.elements[s.attack.element];
+                head.insertAdjacentHTML('beforeend', `<div class="duel-cmd-chosen" style="--el:${ael ? ael.color : '#94a3b8'}">${ael ? ael.icon : '•'} ${escapeHtml(s.attack.name)} ➜ ${escapeHtml(s.defender.name)}</div>`);
+            }
+            return;
+        }
+
+        const pvp = b.humans.rival ? `🎮 ${escapeHtml(b.names[b.turn])} · ` : '';
+
+        // Ataque en marcha
+        if (b.busy) {
+            const me = this.currentActor();
+            head.innerHTML = me ? this.dinoHead(me, `${pvp}⚔️ ¡Al ataque!`) : '';
+            const s = b.striking;
+            if (s && s.attack) {
+                const ael = this.cards.catalog.elements[s.attack.element];
+                head.insertAdjacentHTML('beforeend', `<div class="duel-cmd-chosen" style="--el:${ael ? ael.color : '#94a3b8'}">${ael ? ael.icon : '•'} ${escapeHtml(s.attack.name)} ➜ ${escapeHtml(s.defender.name)}</div>`);
+            }
             return;
         }
 
         const me = this.currentActor();
+        if (!me) return;
+
+        // Elegir a quién atacar
+        if (b.pending) {
+            const a = this.cards.getAttack(b.pending);
+            const ael = a && this.cards.catalog.elements[a.element];
+            head.innerHTML = `${this.dinoHead(me, `${pvp}🎯 ¿A quién atacas?`)}
+                <div class="duel-cmd-chosen" style="--el:${ael ? ael.color : '#94a3b8'}">${ael ? ael.icon : '•'} ${escapeHtml(a ? a.name : b.pending)}</div>`;
+            this.alive(this.foeSide).forEach((f, i) => {
+                const mult = a && a.power > 0 ? this.cards.getTypeMultiplier(a.element, f.element) : 1;
+                const tag = mult > 1 ? '<em class="pick-tag weak">DÉBIL</em>' : (mult < 1 ? '<em class="pick-tag resist">RESISTE</em>' : '');
+                this.dinoButton(f, String(i + 1), () => this.chooseTarget(f.idx), tag);
+            });
+            this.addButton('duel-btn flee', '↩ Cancelar', 'Escape', () => { b.pending = null; this.render(); }, false, foot);
+            return;
+        }
+
+        // Elegir ataque
+        const boost = BATON_BOOSTS[Math.min(b.batonChain.length, BATON_BOOSTS.length - 1)];
+        head.innerHTML = this.dinoHead(me, b.oneMore
+            ? `${pvp}🔁 ¡UNA MÁS!${boost > 1 ? ` · daño x${boost}` : ''}`
+            : `${pvp}¿Qué hará?`);
         const { elements } = this.cards.catalog;
         const move = b.moves[b.turn];
         const attackIds = move ? [...me.attacks, move] : me.attacks;
-        const foes = this.alive(foeSide);
-        const boost = BATON_BOOSTS[Math.min(b.batonChain.length, BATON_BOOSTS.length - 1)];
+        const foes = this.alive(this.foeSide);
         const useItem = b.turn === 'player' && b.useItems;
-
-        if (b.humans.rival) {
-            actions.insertAdjacentHTML('beforeend', `<p class="battle-wait pvp-turn">🎮 Turno de <strong>${escapeHtml(b.names[b.turn])}</strong></p>`);
-        }
-
         attackIds.forEach((id, i) => {
             const a = this.cards.getAttack(id);
             if (!a) return;
@@ -943,13 +1226,21 @@ class BattleSystem {
             const cd = this.cards.attackCooldown(me.attacks, id);
             const wait = Math.min(this.turnsToWait(me, id), cd);   // en el mismo turno en que se usó cuenta desde el siguiente
             const cooldown = wait > 0;
+            const role = cd ? `💥 recarga ${cd}` : '♾️ siempre';
             const btn = this.addButton(
-                `battle-atk-btn ${a.moveCard ? 'move' : ''}`,
-                `<span>${cd ? '💥' : ''}${ael ? ael.icon : '•'}${cat.icon} ${escapeHtml(a.name)}</span>
-                 <span class="atk-power">${cooldown ? `⏳ ${wait} turno${wait > 1 ? 's' : ''}` : `${a.power > 0 ? a.power + itemBoost : '—'}${itemBoost ? ` <em class="atk-boost">+${itemBoost}</em>` : ''}${eff ? ' <em class="atk-effective">DÉBIL</em>' : ''}${boost > 1 && a.power > 0 ? ` <em class="atk-boost">x${boost}</em>` : ''}`}</span>`,
+                `duel-atk ${cd ? 'strong' : ''} ${cooldown ? 'cooldown' : ''} ${eff ? 'eff' : ''}`,
+                `<span class="atk-icon">${ael ? ael.icon : '•'}</span>
+                 <span class="atk-main">
+                    <span class="atk-name">${escapeHtml(a.name)}</span>
+                    <span class="atk-meta">${cat.icon} ${cat.name} · ${role}</span>
+                 </span>
+                 <span class="atk-pow">${a.power > 0 ? a.power + itemBoost : '—'}${itemBoost ? `<em>+${itemBoost}</em>` : ''}</span>
+                 ${eff ? '<em class="atk-tag">DÉBIL</em>' : ''}
+                 ${cooldown ? `<span class="atk-wait">⏳ ${wait} turno${wait > 1 ? 's' : ''}</span>` : ''}`,
                 String(i + 1),
                 () => this.chooseAttack(id),
-                cooldown || b.busy
+                cooldown,
+                list
             );
             btn.style.setProperty('--el', ael ? ael.color : '#94a3b8');
             btn.title = `${cat.name}${cd ? ` · Ataque fuerte: después de usarlo espera ${cd} turno(s)` : ' · Ataque normal: siempre disponible'}`;
@@ -959,17 +1250,13 @@ class BattleSystem {
             const mates = this.alive(b.turn).filter(f => f.idx !== me.idx && !b.batonChain.includes(f.idx));
             const keys = ['z', 'x', 'c'];
             mates.forEach((m, i) => {
-                this.addButton('battle-btn baton', `🤝 Relevo a ${escapeHtml(m.name)}`, keys[i], () => this.batonPass(m.idx), b.busy);
+                this.addButton('duel-btn baton', `🤝 Relevo a ${escapeHtml(m.name)}`, keys[i], () => this.batonPass(m.idx), false, foot);
             });
-            this.addButton('battle-btn flee', '⏭ Terminar', 'q', () => this.skipExtra(), b.busy);
+            this.addButton('duel-btn flee', '⏭ Terminar', 'q', () => this.skipExtra(), false, foot);
             return;
         }
 
-        this.addButton('battle-btn guard', '🛡️ Defender', 'd', () => this.guard(), b.busy);
-        // Cambiar de dino antes de atacar
-        if (this.readyHumans().length > 1) {
-            this.addButton('battle-btn flee', '↩ Otro dino', 'Escape', () => { b.actor = null; this.nextHumanActor(); }, b.busy);
-        }
-        if (this.canFlee(b)) this.addButton('battle-btn flee', '🏃 Huir', 'h', () => this.flee(), b.busy);
+        this.addButton('duel-btn guard', '🛡️ Defender', 'd', () => this.guard(), false, foot);
+        if (this.canFlee(b)) this.addButton('duel-btn flee', '🏃 Huir', 'h', () => this.flee(), false, foot);
     }
 }

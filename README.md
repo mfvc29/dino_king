@@ -14,8 +14,8 @@ dino_king/
 ├── firebase.json           # Publicación en Firebase Hosting
 ├── deployment_guide.md     # Cómo está montado en la nube
 ├── sheet/                  # Apps Script de Google Sheets (guardado en la nube)
-├── css/                    # style.css + dinorey.css
-├── js/                     # game, tilemap, battle, cards, story, save, tournament...
+├── css/                    # style.css + dinorey.css + battle.css (arena del combate)
+├── js/                     # game, tilemap, battle (+ battleFx), cards, story, save, tournament...
 ├── tools/
 │   ├── map_editor/         # Editor de mapas (local en :8080, nube en /tools/map_editor/)
 │   ├── generar_rutas.py    # Genera Ruta 1, Cueva y Estadio
@@ -96,12 +96,31 @@ condiciones, personajes (posición, sprite, equipo, diálogos) y qué Guardián 
 - **2 ataques por dino:** el 💥 **fuerte** (el de más poder) necesita recarga después de usarlo — poder 70: 3 turnos,
   55-69: 2 turnos, menos: 1 turno — y el **normal** siempre se puede usar. Las partidas y entrenadores con 3
   ataques se ajustan solos (se quedan los 2 más fuertes).
-- **Orden de ataque:** en tu turno eliges qué dino actúa (clic en su carta o `1`-`3`); el equipo rival ataca
-  por **velocidad** (💨, campo `speed` de `dinos.json`): primero el más rápido.
-- En el campo se ve cada carta con su dino al lado (el tuyo mira al rival y el rival te mira a ti).
+- **Orden por velocidad (sin moneda):** en cada ronda actúan TODOS los dinos del campo, del más rápido al más
+  lento (💨 = `speed` de `dinos.json` x nivel; el cansancio la baja), sean tuyos o del rival. Empate: más nivel;
+  si sigue empatado, el tuyo primero. Cuando le toca a un dino tuyo eliges su ataque y objetivo. Si recibe un
+  relevo antes de su turno, ese ataque cuenta como su turno de la ronda. Los combates simulados del torneo
+  usan el mismo orden.
+- **Arena estilo duelo de cartas** (`css/battle.css`): cada dino tiene su carta acostada en una zona del
+  campo (en perspectiva, como en Yu-Gi-Oh) y el dino de pie sobre ella. Al empezar, las cartas llegan
+  volando, se dan vuelta y el dino sale de su carta con una columna de luz. Las placas de los entrenadores
+  muestran los **PV** de todo el equipo (bajan contando, como los LP).
+- **Animaciones** (`js/battleFx.js`): en un ataque **físico** el dino sale de su carta, cruza el campo con
+  estela, golpea a la otra carta y vuelve; en uno **especial** lanza un proyectil de su elemento (bola de
+  fuego, burbuja, rayo en zigzag, roca, hojas, ráfaga, estrella). Impacto con destello, onda, chispas del
+  elemento, zarpazos, retroceso, número de daño (¡DÉBIL! / ¡CRÍTICO!) y sacudida. El K.O. deshace al dino y
+  deja su carta boca abajo; el relevo pasa una esfera de luz; Defender pone un escudo.
+- **Tamaño 1-6** (`size` en `dinos.json`, según el tamaño real: 1 pequeño … 6 colosal): el dino se dibuja a
+  esa escala en el combate y en el almanaque. Los pterosaurios vuelan sobre su carta y los reptiles marinos
+  flotan (`pose`: `vuela` / `nada`). La tabla está en `SIZES` de `assets/dinos/actualizar_catalogo.py`.
+- **Velocidad de las animaciones:** botón `▶ x1` / `⏩ x2` arriba a la derecha, tecla `V` o Menú → Opciones.
+- El panel de la derecha muestra la carta del dino que actúa, sus ataques como cartas (poder, recarga,
+  DÉBIL) y el **orden de la ronda** (el que actúa resaltado, los que ya actuaron con ✔). Cada placa del campo
+  lleva su puesto (1º, 2º...).
 - Los rivales también aprovechan tus debilidades. De los combates de historia no se puede huir.
-- **Teclado:** `1`-`3` elegir dino, `1`-`2` ataques, `1`-`3` objetivo, `D` defender, `H` huir, `Z`/`X` relevo,
-  `Q` terminar la acción extra, `Esc` cancelar / elegir otro dino, `Espacio`/`Enter` continuar.
+- **Teclado:** `1`-`2` ataques, `1`-`3` objetivo, `D` defender, `H` huir, `Z`/`X` relevo, `Q` terminar la
+  acción extra, `Esc` cancelar, `V` velocidad, `Espacio`/`Enter` continuar. También se puede tocar a los dinos
+  en el campo (a quién atacar o a quién pasar el relevo).
 
 ### Niveles
 - Los dinos **no evolucionan**: solo suben de nivel (máx. 50). Ganar a un salvaje da +15% de nivel al
@@ -147,8 +166,21 @@ y al terminar valida, actualiza el minimapa, sube a GitHub y despliega en Fireba
   😴 ≥40 −10%, 😫 ≥70 −25%, 🥵 100 −40% de fuerza. Se quita hablando con Mamá (casa) o con objetos de un solo uso:
   🫐 Baya Vigor (hierba alta), 🍄 Hongo Luminoso (cueva), y combinados en el Taller: 🧪 Tónico Jurásico y ✨ Elixir de
   Meteorito. También hay tesoros 🎁 fijos (islas de la Ruta 1, lago y estanque del pueblo).
-- **Tabla de tipos**: eficaz x1.5, **poco eficaz x0.5** (contra el elemento que le gana y contra el mismo elemento);
-  Especial sólo es eficaz contra Especial (`typeChart` en `dinos.json`).
+- **Cambio automático:** si tras un combate un dino del equipo queda 😴 cansado (40%+), entra el dino más
+  descansado de la reserva (primero uno del mismo elemento, para no perder habilidades; en un gimnasio, sólo
+  uno que cumpla sus reglas). Se puede apagar en Opciones.
+- **Tabla de tipos** (`typeChart` en `dinos.json`): eficaz x1.5, **poco eficaz x0.5** (contra el elemento que le gana
+  y contra el mismo elemento). Balanceada: cada elemento gana a 2, pierde contra 2 y es neutro con 1.
+  Especial sólo es eficaz contra Especial (y no tiene debilidades); Normal siempre es neutro.
+
+  | Elemento | Gana a | Pierde contra |
+  |---|---|---|
+  | 🔥 Fuego | Planta, Rayo | Agua, Viento |
+  | 💧 Agua | Fuego, Tierra | Planta, Rayo |
+  | ⚡ Rayo | Agua, Viento | Fuego, Tierra |
+  | ⛰️ Tierra | Viento, Rayo | Planta, Agua |
+  | 🌿 Planta | Agua, Tierra | Fuego, Viento |
+  | 🌪️ Viento | Planta, Fuego | Tierra, Rayo |
 - **Experiencia compartida**: los dinos guardados ganan el 50%. Los salvajes salen al nivel **promedio** del equipo.
 - **Reglas de gimnasio** (`gymRules`): nivel máximo y un elemento prohibido; el guía las explica en la entrada.
 - **Almanaque**: 📖 marca a las especies ya registradas (no se capturan dos veces: dejan créditos y a veces una baya)
@@ -167,6 +199,10 @@ y al terminar valida, actualiza el minimapa, sube a GitHub y despliega en Fireba
 - **Taller** (ENTER → ⛏️ Taller): Pico Reforzado, Linterna, Radar, Cuerda de Escape, Cebo de Ámbar (próximo dino
   legendario), Amuletos de gema (+12 a un elemento, sólo se fabrican) y Elixir de Núcleo. Las recetas están en
   `MINE_RECIPES` y los materiales en `MINE_MATERIALS`.
+- **Objetos de la Mochila en el Taller:** los objetos de elemento (Colmillo Volcánico, Perla del Lago...) se
+  **funden** en la gema de su elemento (`BAG_GEMS`), uno por uno o todos los repetidos de una vez (deja 1 de
+  cada); el que tienes equipado no se gasta. Con uno de cada elemento se fabrica el **🧿 Talismán de los
+  Siete**: +8 a los ataques de todos los elementos menos Normal (premia llevar un equipo variado).
 - Rose ofrece **atajos** a los pisos 3 y 5 cuando ya llegaste a ellos.
 
 ### Gran Torneo Mesozoico (`js/tournament.js`, mapa `torneo`, al sur del pueblo)
