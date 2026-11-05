@@ -5,11 +5,11 @@
       "icon": "🔥",
       "color": "#ef4444",
       "statCaps": [
-        7,
-        8,
-        6,
-        8,
-        6
+        10,
+        10,
+        10,
+        10,
+        10
       ]
     },
     "agua": {
@@ -17,11 +17,11 @@
       "icon": "💧",
       "color": "#0ea5e9",
       "statCaps": [
-        7,
-        6,
-        7,
-        6,
-        7
+        10,
+        10,
+        10,
+        10,
+        10
       ]
     },
     "rayo": {
@@ -29,11 +29,11 @@
       "icon": "⚡",
       "color": "#eab308",
       "statCaps": [
-        8,
-        6,
-        9,
-        6,
-        9
+        10,
+        10,
+        10,
+        10,
+        10
       ]
     },
     "tierra": {
@@ -41,11 +41,11 @@
       "icon": "⛰️",
       "color": "#8b5cf6",
       "statCaps": [
-        7,
-        8,
-        6,
-        8,
-        6
+        10,
+        10,
+        10,
+        10,
+        10
       ]
     },
     "planta": {
@@ -53,11 +53,11 @@
       "icon": "🌿",
       "color": "#22c55e",
       "statCaps": [
-        8,
-        7,
-        6,
-        7,
-        6
+        10,
+        10,
+        10,
+        10,
+        10
       ]
     },
     "viento": {
@@ -65,11 +65,11 @@
       "icon": "🌪️",
       "color": "#93c5fd",
       "statCaps": [
-        6,
-        7,
-        7,
-        7,
-        7
+        10,
+        10,
+        10,
+        10,
+        10
       ]
     },
     "especial": {
@@ -77,11 +77,11 @@
       "icon": "✨",
       "color": "#f472b6",
       "statCaps": [
-        7,
-        7,
-        7,
-        7,
-        7
+        10,
+        10,
+        10,
+        10,
+        10
       ]
     },
     "normal": {
@@ -89,11 +89,11 @@
       "icon": "🦴",
       "color": "#94a3b8",
       "statCaps": [
-        5,
-        5,
-        5,
-        5,
-        5
+        10,
+        10,
+        10,
+        10,
+        10
       ]
     }
   },
@@ -105,18 +105,36 @@
       "element": "fuego",
       "card": "cards/fuego/Alioramus (games).jpeg",
       "stats": [
+        6,
         7,
-        7,
-        4,
+        5,
         8,
-        5
+        6
       ],
+      "speed": 8,
+      "size": 3,
       "art": {
         "left": "arte/fuego/alioramus_izq.webp",
         "right": "arte/fuego/alioramus_der.webp"
       },
-      "speed": 9,
-      "size": 3
+      "signatureAttack": {
+        "id": "mordedura_ignea_veloz",
+        "name": "Mordida Ígnea Fulminante",
+        "power": 90,
+        "element": "fuego",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Abalanzamiento a gran velocidad envolviendo sus mandíbulas alargadas en llamas directas. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "alioramus"
+      },
+      "attacks": [
+        "colmillo_igneo",
+        "llamarada_solar",
+        "mordedura_ignea_veloz"
+      ]
     },
     {
       "id": "alpha_acrocanthosaurus",
@@ -125,18 +143,36 @@
       "element": "fuego",
       "card": "cards/fuego/Alpha Acrocanthosaurus - Dinosaur King.jpeg",
       "stats": [
-        4,
-        7,
-        6,
-        6,
-        6
+        10,
+        10,
+        9,
+        9,
+        8
       ],
+      "speed": 6,
+      "size": 6,
       "art": {
         "left": "arte/fuego/alpha_acrocanthosaurus_izq.webp",
         "right": "arte/fuego/alpha_acrocanthosaurus_der.webp"
       },
-      "speed": 9,
-      "size": 6
+      "signatureAttack": {
+        "id": "erupcion_espinal_alfa",
+        "name": "Erupción Espinal Alfa",
+        "power": 115,
+        "element": "fuego",
+        "category": "especial",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Su cresta dorsal irradia un calor sobrehumano desatando un infierno magmático. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "alpha_acrocanthosaurus"
+      },
+      "attacks": [
+        "colmillo_igneo",
+        "llamarada_solar",
+        "erupcion_espinal_alfa"
+      ]
     },
     {
       "id": "black_tyrannosaurus_rex",
@@ -145,18 +181,36 @@
       "element": "fuego",
       "card": "cards/fuego/Black Tyrannosaurus Rex - Dinosaur King.jpeg",
       "stats": [
-        7,
-        5,
-        6,
-        6,
-        4
+        10,
+        10,
+        9,
+        10,
+        8
       ],
+      "speed": 6,
+      "size": 6,
       "art": {
         "left": "arte/fuego/black_tyrannosaurus_rex_izq.webp",
         "right": "arte/fuego/black_tyrannosaurus_rex_der.webp"
       },
-      "speed": 8,
-      "size": 6
+      "signatureAttack": {
+        "id": "apocalipsis_rex_oscuro",
+        "name": "Apocalipsis Rex Sombrío",
+        "power": 120,
+        "element": "fuego",
+        "category": "especial",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "El titán oscuro condensa fuego negro en un impacto tectónico demoledor. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "black_tyrannosaurus_rex"
+      },
+      "attacks": [
+        "colmillo_igneo",
+        "llamarada_solar",
+        "apocalipsis_rex_oscuro"
+      ]
     },
     {
       "id": "eocarcharia",
@@ -165,18 +219,36 @@
       "element": "fuego",
       "card": "cards/fuego/Eocarcharia.jpeg",
       "stats": [
+        6,
+        8,
+        6,
         7,
-        7,
-        4,
-        5,
-        4
+        5
       ],
+      "speed": 8,
+      "size": 3,
       "art": {
         "left": "arte/fuego/eocarcharia_izq.webp",
         "right": "arte/fuego/eocarcharia_der.webp"
       },
-      "speed": 6,
-      "size": 3
+      "signatureAttack": {
+        "id": "corte_flamigero_del_alba",
+        "name": "Corte Flamígero del Alba",
+        "power": 90,
+        "element": "fuego",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Cuchillada de garras al rojo vivo que abre surcos de brasas incandescentes. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "eocarcharia"
+      },
+      "attacks": [
+        "colmillo_igneo",
+        "llamarada_solar",
+        "corte_flamigero_del_alba"
+      ]
     },
     {
       "id": "giganotosaurus",
@@ -185,18 +257,36 @@
       "element": "fuego",
       "card": "cards/fuego/Giganotosaurus (games).jpeg",
       "stats": [
-        4,
-        4,
-        6,
-        7,
-        4
+        9,
+        10,
+        8,
+        8,
+        7
       ],
+      "speed": 6,
+      "size": 5,
       "art": {
         "left": "arte/fuego/giganotosaurus_izq.webp",
         "right": "arte/fuego/giganotosaurus_der.webp"
       },
-      "speed": 8,
-      "size": 5
+      "signatureAttack": {
+        "id": "furia_magmatica_del_sur",
+        "name": "Furia Magmática del Sur",
+        "power": 105,
+        "element": "fuego",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Mordida titánica que tritura el blindaje rival con la presión de un volcán activo. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "giganotosaurus"
+      },
+      "attacks": [
+        "colmillo_igneo",
+        "llamarada_solar",
+        "furia_magmatica_del_sur"
+      ]
     },
     {
       "id": "acrocanthosaurus",
@@ -205,18 +295,36 @@
       "element": "fuego",
       "card": "cards/fuego/acrocanthosaurus_dinosaur_king.jpg",
       "stats": [
-        4,
-        5,
-        4,
-        6,
-        4
+        9,
+        9,
+        8,
+        8,
+        7
       ],
+      "speed": 6,
+      "size": 5,
       "art": {
         "left": "arte/fuego/acrocanthosaurus_izq.webp",
         "right": "arte/fuego/acrocanthosaurus_der.webp"
       },
-      "speed": 9,
-      "size": 5
+      "signatureAttack": {
+        "id": "dorsal_volcanica",
+        "name": "Impacto Dorsal Volcánico",
+        "power": 100,
+        "element": "fuego",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Golpe con su lomo acorazado cargado de energía volcánica que hace estallar el suelo. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "acrocanthosaurus"
+      },
+      "attacks": [
+        "colmillo_igneo",
+        "llamarada_solar",
+        "dorsal_volcanica"
+      ]
     },
     {
       "id": "carcharodontosaurus",
@@ -225,18 +333,36 @@
       "element": "fuego",
       "card": "cards/fuego/carcharodontosaurus_dinosaur_king.jpg",
       "stats": [
+        9,
+        10,
         7,
-        4,
-        5,
-        7,
-        6
+        8,
+        7
       ],
+      "speed": 6,
+      "size": 5,
       "art": {
         "left": "arte/fuego/carcharodontosaurus_izq.webp",
         "right": "arte/fuego/carcharodontosaurus_der.webp"
       },
-      "speed": 7,
-      "size": 5
+      "signatureAttack": {
+        "id": "fauces_tiburonas_ardientes",
+        "name": "Fauces Tiburonas de Fuego",
+        "power": 105,
+        "element": "fuego",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Mandíbula aserrada que desgarra al oponente encendiendo una llamarada continua. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "carcharodontosaurus"
+      },
+      "attacks": [
+        "colmillo_igneo",
+        "llamarada_solar",
+        "fauces_tiburonas_ardientes"
+      ]
     },
     {
       "id": "daspletosaurus",
@@ -245,18 +371,36 @@
       "element": "fuego",
       "card": "cards/fuego/daspletosaurus_dinosaur_king.jpg",
       "stats": [
-        5,
-        6,
-        5,
-        5,
+        8,
+        9,
+        8,
+        7,
         6
       ],
+      "speed": 6,
+      "size": 4,
       "art": {
         "left": "arte/fuego/daspletosaurus_izq.webp",
         "right": "arte/fuego/daspletosaurus_der.webp"
       },
-      "speed": 9,
-      "size": 4
+      "signatureAttack": {
+        "id": "aplastamiento_igneo_brutal",
+        "name": "Aplastamiento Ígneo Brutal",
+        "power": 95,
+        "element": "fuego",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Embestida frontal de cráneo masivo con una detonación explosiva frontal. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "daspletosaurus"
+      },
+      "attacks": [
+        "colmillo_igneo",
+        "llamarada_solar",
+        "aplastamiento_igneo_brutal"
+      ]
     },
     {
       "id": "gigas",
@@ -265,18 +409,36 @@
       "element": "fuego",
       "card": "cards/fuego/gigas_dinosaur_king.jpg",
       "stats": [
-        7,
-        8,
-        5,
-        8,
-        6
+        10,
+        10,
+        9,
+        9,
+        8
       ],
+      "speed": 6,
+      "size": 6,
       "art": {
         "left": "arte/fuego/gigas_izq.webp",
         "right": "arte/fuego/gigas_der.webp"
       },
-      "speed": 8,
-      "size": 6
+      "signatureAttack": {
+        "id": "cataclismo_solar_gigas",
+        "name": "Cataclismo Solar de Gigas",
+        "power": 115,
+        "element": "fuego",
+        "category": "especial",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Emisión de un haz de plasma condensado desde el núcleo volcánico de su pecho. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "gigas"
+      },
+      "attacks": [
+        "colmillo_igneo",
+        "llamarada_solar",
+        "cataclismo_solar_gigas"
+      ]
     },
     {
       "id": "mapusaurus",
@@ -285,18 +447,36 @@
       "element": "fuego",
       "card": "cards/fuego/mapusaurus_dinosaur_king.jpg",
       "stats": [
-        5,
-        7,
-        6,
+        9,
+        9,
         8,
-        5
+        7,
+        7
       ],
+      "speed": 7,
+      "size": 5,
       "art": {
         "left": "arte/fuego/mapusaurus_izq.webp",
         "right": "arte/fuego/mapusaurus_der.webp"
       },
-      "speed": 7,
-      "size": 5
+      "signatureAttack": {
+        "id": "caceria_en_manada_de_brasas",
+        "name": "Cacería de Brasas Voraz",
+        "power": 100,
+        "element": "fuego",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Asalto implacable con zarpazos ardientes sucesivos sin dar tregua. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "mapusaurus"
+      },
+      "attacks": [
+        "colmillo_igneo",
+        "llamarada_solar",
+        "caceria_en_manada_de_brasas"
+      ]
     },
     {
       "id": "rajasaurus",
@@ -305,18 +485,36 @@
       "element": "fuego",
       "card": "cards/fuego/rajasaurus_dinosaur_king.jpg",
       "stats": [
-        6,
-        4,
-        4,
-        6,
-        5
+        7,
+        8,
+        7,
+        7,
+        6
       ],
+      "speed": 6,
+      "size": 3,
       "art": {
         "left": "arte/fuego/rajasaurus_izq.webp",
         "right": "arte/fuego/rajasaurus_der.webp"
       },
-      "speed": 6,
-      "size": 3
+      "signatureAttack": {
+        "id": "cuerno_imperial_de_lava",
+        "name": "Cuerno Imperial de Lava",
+        "power": 90,
+        "element": "fuego",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Su prominente cuerno frontal se funde en magma sólido para perforar cualquier defensa. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "rajasaurus"
+      },
+      "attacks": [
+        "colmillo_igneo",
+        "llamarada_solar",
+        "cuerno_imperial_de_lava"
+      ]
     },
     {
       "id": "saurophaganax",
@@ -325,18 +523,36 @@
       "element": "fuego",
       "card": "cards/fuego/saurophaganax_dinosaur_king.jpg",
       "stats": [
-        6,
-        5,
-        6,
+        9,
+        9,
         8,
-        6
+        8,
+        7
       ],
+      "speed": 7,
+      "size": 5,
       "art": {
         "left": "arte/fuego/saurophaganax_izq.webp",
         "right": "arte/fuego/saurophaganax_der.webp"
       },
-      "speed": 8,
-      "size": 5
+      "signatureAttack": {
+        "id": "devorador_de_llamas_supremo",
+        "name": "Devorador de Llamas Supremo",
+        "power": 110,
+        "element": "fuego",
+        "category": "especial",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Inhala el calor ambiental y desata una llamarada cónica que arrasa todo el frente. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "saurophaganax"
+      },
+      "attacks": [
+        "colmillo_igneo",
+        "llamarada_solar",
+        "devorador_de_llamas_supremo"
+      ]
     },
     {
       "id": "torvosaurus",
@@ -345,18 +561,36 @@
       "element": "fuego",
       "card": "cards/fuego/torvosaurus_dinosaur_king.jpg",
       "stats": [
-        4,
-        4,
-        6,
-        4,
-        4
+        8,
+        9,
+        8,
+        7,
+        6
       ],
+      "speed": 6,
+      "size": 4,
       "art": {
         "left": "arte/fuego/torvosaurus_izq.webp",
         "right": "arte/fuego/torvosaurus_der.webp"
       },
-      "speed": 8,
-      "size": 4
+      "signatureAttack": {
+        "id": "zarpazo_infernal_salvaje",
+        "name": "Zarpazo Infernal Salvaje",
+        "power": 95,
+        "element": "fuego",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Garras curvadas que prenden fuego al rozar el aire asestando un golpe crítico. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "torvosaurus"
+      },
+      "attacks": [
+        "colmillo_igneo",
+        "llamarada_solar",
+        "zarpazo_infernal_salvaje"
+      ]
     },
     {
       "id": "tyrannosaurus_rex",
@@ -365,18 +599,36 @@
       "element": "fuego",
       "card": "cards/fuego/tyrannosurus_rex_dinosaur_king.jpg",
       "stats": [
-        7,
+        10,
+        10,
         8,
-        6,
         8,
-        6
+        7
       ],
+      "speed": 6,
+      "size": 5,
       "art": {
         "left": "arte/fuego/tyrannosaurus_rex_izq.webp",
         "right": "arte/fuego/tyrannosaurus_rex_der.webp"
       },
-      "speed": 7,
-      "size": 5
+      "signatureAttack": {
+        "id": "erupcion_rex_t_crash",
+        "name": "Erupción Rex T-Crash",
+        "power": 110,
+        "element": "fuego",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "El clásico rey dinosaurio estrella su peso colosal y desata un géiser de lava ascendente. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "tyrannosaurus_rex"
+      },
+      "attacks": [
+        "colmillo_igneo",
+        "llamarada_solar",
+        "erupcion_rex_t_crash"
+      ]
     },
     {
       "id": "yangchuanosaurus",
@@ -385,18 +637,36 @@
       "element": "fuego",
       "card": "cards/fuego/yangchuanosaurus_dinosaur_king.jpg",
       "stats": [
-        6,
         8,
-        4,
+        8,
         7,
-        4
+        7,
+        6
       ],
+      "speed": 7,
+      "size": 4,
       "art": {
         "left": "arte/fuego/yangchuanosaurus_izq.webp",
         "right": "arte/fuego/yangchuanosaurus_der.webp"
       },
-      "speed": 8,
-      "size": 4
+      "signatureAttack": {
+        "id": "emboscada_de_fuego_oriental",
+        "name": "Emboscada de Fuego Oriental",
+        "power": 95,
+        "element": "fuego",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Salto ágil desde las sombras aterrizando con una explosión de calor sofocante. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "yangchuanosaurus"
+      },
+      "attacks": [
+        "colmillo_igneo",
+        "llamarada_solar",
+        "emboscada_de_fuego_oriental"
+      ]
     },
     {
       "id": "bajadasaurus",
@@ -405,18 +675,36 @@
       "element": "agua",
       "card": "cards/agua/Bajadasaurus.jpeg",
       "stats": [
-        7,
-        5,
-        7,
-        4,
-        5
+        9,
+        6,
+        9,
+        8,
+        8
       ],
+      "speed": 4,
+      "size": 5,
       "art": {
         "left": "arte/agua/bajadasaurus_izq.webp",
         "right": "arte/agua/bajadasaurus_der.webp"
       },
-      "speed": 7,
-      "size": 5
+      "signatureAttack": {
+        "id": "espinas_hidraulicas_gemelas",
+        "name": "Espinas Hidráulicas Gemelas",
+        "power": 95,
+        "element": "agua",
+        "category": "especial",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Sus espinas curvadas hacia adelante disparan chorros de agua a presión cortante. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "bajadasaurus"
+      },
+      "attacks": [
+        "chorro_agua",
+        "cascada_jurasica",
+        "espinas_hidraulicas_gemelas"
+      ]
     },
     {
       "id": "camarasaurus",
@@ -425,18 +713,36 @@
       "element": "agua",
       "card": "cards/agua/Camarasaurus .jpeg",
       "stats": [
-        4,
-        5,
-        4,
-        4,
-        5
+        10,
+        7,
+        9,
+        7,
+        8
       ],
+      "speed": 3,
+      "size": 6,
       "art": {
         "left": "arte/agua/camarasaurus_izq.webp",
         "right": "arte/agua/camarasaurus_der.webp"
       },
-      "speed": 6,
-      "size": 6
+      "signatureAttack": {
+        "id": "pisoton_abismal_de_marea",
+        "name": "Pisotón de Marea Abismal",
+        "power": 105,
+        "element": "agua",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Su descomunal pata delantera cae desatando una onda expansiva de agua marina. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "camarasaurus"
+      },
+      "attacks": [
+        "chorro_agua",
+        "cascada_jurasica",
+        "pisoton_abismal_de_marea"
+      ]
     },
     {
       "id": "elasmosaurus",
@@ -445,19 +751,37 @@
       "element": "agua",
       "card": "cards/agua/Elasmosaurus Aquatic Shot.jpeg",
       "stats": [
+        8,
         6,
-        6,
-        6,
-        4,
-        5
+        7,
+        9,
+        8
       ],
+      "speed": 7,
+      "size": 5,
+      "pose": "nada",
       "art": {
         "left": "arte/agua/elasmosaurus_izq.webp",
         "right": "arte/agua/elasmosaurus_der.webp"
       },
-      "speed": 5,
-      "size": 5,
-      "pose": "nada"
+      "signatureAttack": {
+        "id": "latigo_marino_serpentino",
+        "name": "Látigo Marino Serpentino",
+        "power": 95,
+        "element": "agua",
+        "category": "especial",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Su cuello de más de diez metros azota como un tifón líquido envolviendo al rival. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "elasmosaurus"
+      },
+      "attacks": [
+        "chorro_agua",
+        "cascada_jurasica",
+        "latigo_marino_serpentino"
+      ]
     },
     {
       "id": "irritator",
@@ -466,18 +790,36 @@
       "element": "agua",
       "card": "cards/agua/Irritator .jpeg",
       "stats": [
+        6,
         7,
         6,
-        4,
-        5,
-        7
+        8,
+        6
       ],
+      "speed": 8,
+      "size": 3,
       "art": {
         "left": "arte/agua/irritator_izq.webp",
         "right": "arte/agua/irritator_der.webp"
       },
-      "speed": 5,
-      "size": 3
+      "signatureAttack": {
+        "id": "mordedura_de_remolino",
+        "name": "Mordedura de Remolino Voraz",
+        "power": 90,
+        "element": "agua",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Giro giratorio de mandíbula cerrada atrapando al oponente en un vórtice. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "irritator"
+      },
+      "attacks": [
+        "chorro_agua",
+        "cascada_jurasica",
+        "mordedura_de_remolino"
+      ]
     },
     {
       "id": "ophthalmosaurus",
@@ -487,18 +829,36 @@
       "card": "cards/agua/Ophthalmosaurus.jpg",
       "stats": [
         6,
-        4,
-        7,
         6,
-        4
+        6,
+        8,
+        7
       ],
+      "speed": 9,
+      "size": 3,
+      "pose": "nada",
       "art": {
         "left": "arte/agua/ophthalmosaurus_izq.webp",
         "right": "arte/agua/ophthalmosaurus_der.webp"
       },
-      "speed": 4,
-      "size": 3,
-      "pose": "nada"
+      "signatureAttack": {
+        "id": "embestida_sonar_oceanica",
+        "name": "Embestida Sónar Oceánica",
+        "power": 85,
+        "element": "agua",
+        "category": "especial",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Ondas ultrasónicas que desorientan al objetivo antes de un torpedo acuático fulminante. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "ophthalmosaurus"
+      },
+      "attacks": [
+        "chorro_agua",
+        "cascada_jurasica",
+        "embestida_sonar_oceanica"
+      ]
     },
     {
       "id": "amargasaurus",
@@ -507,18 +867,36 @@
       "element": "agua",
       "card": "cards/agua/amargasaurus_dinosaur_king.jpg",
       "stats": [
-        4,
-        5,
-        7,
-        4,
-        5
+        8,
+        6,
+        8,
+        8,
+        8
       ],
+      "speed": 5,
+      "size": 4,
       "art": {
         "left": "arte/agua/amargasaurus_izq.webp",
         "right": "arte/agua/amargasaurus_der.webp"
       },
-      "speed": 5,
-      "size": 4
+      "signatureAttack": {
+        "id": "abanico_de_olas_espinoso",
+        "name": "Abanico de Olas Espinoso",
+        "power": 95,
+        "element": "agua",
+        "category": "especial",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Su doble cresta espinal vibra para lanzar proyectiles de hielo y agua presurizada. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "amargasaurus"
+      },
+      "attacks": [
+        "chorro_agua",
+        "cascada_jurasica",
+        "abanico_de_olas_espinoso"
+      ]
     },
     {
       "id": "ampelosaurus",
@@ -527,18 +905,36 @@
       "element": "agua",
       "card": "cards/agua/ampelosaurus_dinosaur_king.jpg",
       "stats": [
-        5,
-        4,
-        6,
-        4,
-        7
+        9,
+        7,
+        10,
+        7,
+        8
       ],
+      "speed": 3,
+      "size": 5,
       "art": {
         "left": "arte/agua/ampelosaurus_izq.webp",
         "right": "arte/agua/ampelosaurus_der.webp"
       },
-      "speed": 8,
-      "size": 5
+      "signatureAttack": {
+        "id": "armadura_de_arrecife_surgente",
+        "name": "Armadura de Arrecife Surgente",
+        "power": 100,
+        "element": "agua",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Osteodermos que reflejan el daño rival mediante una muralla de agua compacta. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "ampelosaurus"
+      },
+      "attacks": [
+        "chorro_agua",
+        "cascada_jurasica",
+        "armadura_de_arrecife_surgente"
+      ]
     },
     {
       "id": "baryonyx",
@@ -547,18 +943,36 @@
       "element": "agua",
       "card": "cards/agua/baryonyx_dinosaur_king.jpg",
       "stats": [
-        6,
-        5,
-        4,
-        5,
-        5
+        7,
+        8,
+        7,
+        8,
+        7
       ],
+      "speed": 7,
+      "size": 4,
       "art": {
         "left": "arte/agua/baryonyx_izq.webp",
         "right": "arte/agua/baryonyx_der.webp"
       },
-      "speed": 6,
-      "size": 4
+      "signatureAttack": {
+        "id": "garra_gancho_de_cascada",
+        "name": "Garra Gancho de Cascada",
+        "power": 95,
+        "element": "agua",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Su enorme pulgar ganchudo desciende con la fuerza de una catarata desbordada. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "baryonyx"
+      },
+      "attacks": [
+        "chorro_agua",
+        "cascada_jurasica",
+        "garra_gancho_de_cascada"
+      ]
     },
     {
       "id": "futabasaurus",
@@ -567,19 +981,37 @@
       "element": "agua",
       "card": "cards/agua/futabasaurus_super_cannon_dinosaur_king.jpg",
       "stats": [
+        8,
         6,
-        4,
         7,
-        6,
-        6
+        9,
+        8
       ],
+      "speed": 7,
+      "size": 4,
+      "pose": "nada",
       "art": {
         "left": "arte/agua/futabasaurus_izq.webp",
         "right": "arte/agua/futabasaurus_der.webp"
       },
-      "speed": 5,
-      "size": 4,
-      "pose": "nada"
+      "signatureAttack": {
+        "id": "rafaga_de_corriente_profunda",
+        "name": "Ráfaga de Corriente Profunda",
+        "power": 90,
+        "element": "agua",
+        "category": "especial",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Proyectil hidroeléctrico que brota del océano aplastando el campo de batalla. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "futabasaurus"
+      },
+      "attacks": [
+        "chorro_agua",
+        "cascada_jurasica",
+        "rafaga_de_corriente_profunda"
+      ]
     },
     {
       "id": "isisaurus",
@@ -588,18 +1020,36 @@
       "element": "agua",
       "card": "cards/agua/isisaurus_dinosaur_king.jpg",
       "stats": [
-        5,
-        6,
+        10,
         7,
-        5,
-        4
+        9,
+        7,
+        9
       ],
+      "speed": 3,
+      "size": 6,
       "art": {
         "left": "arte/agua/isisaurus_izq.webp",
         "right": "arte/agua/isisaurus_der.webp"
       },
-      "speed": 6,
-      "size": 6
+      "signatureAttack": {
+        "id": "columna_de_agua_continental",
+        "name": "Columna de Agua Continental",
+        "power": 105,
+        "element": "agua",
+        "category": "especial",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Eleva un géiser descomunal capaz de suspender en el aire a cualquier rival. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "isisaurus"
+      },
+      "attacks": [
+        "chorro_agua",
+        "cascada_jurasica",
+        "columna_de_agua_continental"
+      ]
     },
     {
       "id": "jobaria",
@@ -608,18 +1058,36 @@
       "element": "agua",
       "card": "cards/agua/jobaria_dinosaur_king.jpg",
       "stats": [
-        6,
-        6,
-        5,
-        5,
-        6
+        10,
+        7,
+        8,
+        7,
+        8
       ],
+      "speed": 3,
+      "size": 6,
       "art": {
         "left": "arte/agua/jobaria_izq.webp",
         "right": "arte/agua/jobaria_der.webp"
       },
-      "speed": 4,
-      "size": 6
+      "signatureAttack": {
+        "id": "aplastamiento_del_rio_ancestral",
+        "name": "Aplastamiento del Río Ancestral",
+        "power": 105,
+        "element": "agua",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Cuerpo masivo que cae sobre el oponente levantando una marea torrencial. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "jobaria"
+      },
+      "attacks": [
+        "chorro_agua",
+        "cascada_jurasica",
+        "aplastamiento_del_rio_ancestral"
+      ]
     },
     {
       "id": "saltasaurus",
@@ -628,18 +1096,36 @@
       "element": "agua",
       "card": "cards/agua/saltasaurus_dinosaur_king.jpg",
       "stats": [
+        9,
         7,
-        6,
-        6,
-        6,
-        7
+        9,
+        7,
+        8
       ],
+      "speed": 4,
+      "size": 4,
       "art": {
         "left": "arte/agua/saltasaurus_izq.webp",
         "right": "arte/agua/saltasaurus_der.webp"
       },
-      "speed": 8,
-      "size": 4
+      "signatureAttack": {
+        "id": "bombardeo_de_esferas_acuaticas",
+        "name": "Bombardeo de Perlas Acuáticas",
+        "power": 95,
+        "element": "agua",
+        "category": "especial",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Disparo rápido de proyectiles esféricos de agua densa desde su espalda acorazada. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "saltasaurus"
+      },
+      "attacks": [
+        "chorro_agua",
+        "cascada_jurasica",
+        "bombardeo_de_esferas_acuaticas"
+      ]
     },
     {
       "id": "shunosaurus",
@@ -648,18 +1134,36 @@
       "element": "agua",
       "card": "cards/agua/shunosaurus_dinosaur_king.jpg",
       "stats": [
-        4,
-        4,
+        8,
         7,
-        4,
-        4
+        9,
+        7,
+        7
       ],
+      "speed": 4,
+      "size": 4,
       "art": {
         "left": "arte/agua/shunosaurus_izq.webp",
         "right": "arte/agua/shunosaurus_der.webp"
       },
-      "speed": 7,
-      "size": 4
+      "signatureAttack": {
+        "id": "maza_de_esmeralda_oceanica",
+        "name": "Maza de Esmeralda Oceánica",
+        "power": 95,
+        "element": "agua",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Su cola con maza ósea golpea impregnada de agua sólida rompiendo defensas. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "shunosaurus"
+      },
+      "attacks": [
+        "chorro_agua",
+        "cascada_jurasica",
+        "maza_de_esmeralda_oceanica"
+      ]
     },
     {
       "id": "spinosaurus_atacando",
@@ -668,18 +1172,36 @@
       "element": "agua",
       "card": "cards/agua/spinosaurus atacando.jpg",
       "stats": [
-        5,
-        5,
-        5,
-        5,
-        7
+        10,
+        10,
+        8,
+        9,
+        8
       ],
+      "speed": 6,
+      "size": 6,
       "art": {
         "left": "arte/agua/spinosaurus_atacando_izq.webp",
         "right": "arte/agua/spinosaurus_atacando_der.webp"
       },
-      "speed": 6,
-      "size": 6
+      "signatureAttack": {
+        "id": "frenesi_tsunami_letal",
+        "name": "Frenesí Tsunami Letal",
+        "power": 115,
+        "element": "agua",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Despliegue furioso de mandíbulas y zarpas impulsado por una ola gigantesca. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "spinosaurus_atacando"
+      },
+      "attacks": [
+        "chorro_agua",
+        "cascada_jurasica",
+        "frenesi_tsunami_letal"
+      ]
     },
     {
       "id": "spinosaurus",
@@ -688,18 +1210,36 @@
       "element": "agua",
       "card": "cards/agua/spinosaurus_dinosaur_king.jpg",
       "stats": [
-        7,
-        6,
-        7,
-        6,
-        7
+        10,
+        9,
+        8,
+        9,
+        8
       ],
+      "speed": 6,
+      "size": 6,
       "art": {
         "left": "arte/agua/spinosaurus_izq.webp",
         "right": "arte/agua/spinosaurus_der.webp"
       },
-      "speed": 7,
-      "size": 6
+      "signatureAttack": {
+        "id": "vortice_de_la_vela_dorsal",
+        "name": "Vórtice de la Vela Dorsal",
+        "power": 110,
+        "element": "agua",
+        "category": "especial",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Su majestuosa aleta dorsal concentra la humedad creando un tifón acuático imparable. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "spinosaurus"
+      },
+      "attacks": [
+        "chorro_agua",
+        "cascada_jurasica",
+        "vortice_de_la_vela_dorsal"
+      ]
     },
     {
       "id": "suchomimus",
@@ -708,18 +1248,36 @@
       "element": "agua",
       "card": "cards/agua/suchomimus_dinosaur_king.jpg",
       "stats": [
-        6,
-        4,
-        5,
-        6,
-        6
+        8,
+        9,
+        7,
+        8,
+        7
       ],
+      "speed": 7,
+      "size": 4,
       "art": {
         "left": "arte/agua/suchomimus_izq.webp",
         "right": "arte/agua/suchomimus_der.webp"
       },
-      "speed": 6,
-      "size": 4
+      "signatureAttack": {
+        "id": "caza_pantano_del_cocodrilo",
+        "name": "Caza Pantano del Cocodrilo",
+        "power": 95,
+        "element": "agua",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Arrastra a la presa hacia una zona de fango acuático dejándola indefensa. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "suchomimus"
+      },
+      "attacks": [
+        "chorro_agua",
+        "cascada_jurasica",
+        "caza_pantano_del_cocodrilo"
+      ]
     },
     {
       "id": "centrosaurus",
@@ -728,18 +1286,36 @@
       "element": "rayo",
       "card": "cards/rayo/Centrosaurus (games).jpeg",
       "stats": [
-        5,
-        4,
-        4,
-        6,
-        9
+        7,
+        8,
+        8,
+        7,
+        6
       ],
+      "speed": 7,
+      "size": 3,
       "art": {
         "left": "arte/rayo/centrosaurus_izq.webp",
         "right": "arte/rayo/centrosaurus_der.webp"
       },
-      "speed": 8,
-      "size": 3
+      "signatureAttack": {
+        "id": "arpon_voltaico_singular",
+        "name": "Arpón Voltaico Singular",
+        "power": 95,
+        "element": "rayo",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Carga recta con su cuerno nasal canalizando un relámpago penetrante. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "centrosaurus"
+      },
+      "attacks": [
+        "chispazo_electrico",
+        "tormenta_electrica",
+        "arpon_voltaico_singular"
+      ]
     },
     {
       "id": "chasmosaurus",
@@ -748,18 +1324,36 @@
       "element": "rayo",
       "card": "cards/rayo/Chasmosaurus.jpeg",
       "stats": [
-        5,
-        6,
+        7,
+        7,
         8,
-        4,
-        4
+        8,
+        7
       ],
+      "speed": 7,
+      "size": 3,
       "art": {
         "left": "arte/rayo/chasmosaurus_izq.webp",
         "right": "arte/rayo/chasmosaurus_der.webp"
       },
-      "speed": 7,
-      "size": 3
+      "signatureAttack": {
+        "id": "gualdrapa_electrica_defensiva",
+        "name": "Gualdrapa Eléctrica Defensiva",
+        "power": 90,
+        "element": "rayo",
+        "category": "especial",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Su amplio volante óseo proyecta una cortina de chispas de alto voltaje. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "chasmosaurus"
+      },
+      "attacks": [
+        "chispazo_electrico",
+        "tormenta_electrica",
+        "gualdrapa_electrica_defensiva"
+      ]
     },
     {
       "id": "einiosaurus",
@@ -768,18 +1362,36 @@
       "element": "rayo",
       "card": "cards/rayo/Einiosaurus.jpeg",
       "stats": [
-        5,
-        5,
-        8,
         6,
+        8,
+        7,
+        7,
         6
       ],
+      "speed": 7,
+      "size": 2,
       "art": {
         "left": "arte/rayo/einiosaurus_izq.webp",
         "right": "arte/rayo/einiosaurus_der.webp"
       },
-      "speed": 7,
-      "size": 2
+      "signatureAttack": {
+        "id": "gancho_centella_descendente",
+        "name": "Gancho Centella Descendente",
+        "power": 90,
+        "element": "rayo",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Su cuerno curvado hacia adelante descarga un chispazo al enganchar al enemigo. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "einiosaurus"
+      },
+      "attacks": [
+        "chispazo_electrico",
+        "tormenta_electrica",
+        "gancho_centella_descendente"
+      ]
     },
     {
       "id": "machairoceratops",
@@ -788,18 +1400,36 @@
       "element": "rayo",
       "card": "cards/rayo/Machairoceratops.jpeg",
       "stats": [
-        8,
-        5,
         7,
-        5,
-        8
+        8,
+        8,
+        7,
+        6
       ],
+      "speed": 7,
+      "size": 3,
       "art": {
         "left": "arte/rayo/machairoceratops_izq.webp",
         "right": "arte/rayo/machairoceratops_der.webp"
       },
-      "speed": 9,
-      "size": 3
+      "signatureAttack": {
+        "id": "daga_del_trueno_bifurcada",
+        "name": "Dagas del Trueno Bifurcadas",
+        "power": 95,
+        "element": "rayo",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Doble impacto de sus cuernos occipitales que electrocuta al contacto. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "machairoceratops"
+      },
+      "attacks": [
+        "chispazo_electrico",
+        "tormenta_electrica",
+        "daga_del_trueno_bifurcada"
+      ]
     },
     {
       "id": "monoclonius",
@@ -808,18 +1438,36 @@
       "element": "rayo",
       "card": "cards/rayo/Monoclonius (games).jpeg",
       "stats": [
-        6,
-        6,
         7,
+        8,
+        8,
         6,
-        5
+        6
       ],
+      "speed": 6,
+      "size": 3,
       "art": {
         "left": "arte/rayo/monoclonius_izq.webp",
         "right": "arte/rayo/monoclonius_der.webp"
       },
-      "speed": 6,
-      "size": 3
+      "signatureAttack": {
+        "id": "ariete_relampagueante",
+        "name": "Ariete Relampagueante",
+        "power": 90,
+        "element": "rayo",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Aceleración a corta distancia que detona una descarga sónica en el blanco. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "monoclonius"
+      },
+      "attacks": [
+        "chispazo_electrico",
+        "tormenta_electrica",
+        "ariete_relampagueante"
+      ]
     },
     {
       "id": "zuniceratops",
@@ -828,18 +1476,36 @@
       "element": "rayo",
       "card": "cards/rayo/Zuniceratops (game).jpeg",
       "stats": [
-        7,
-        4,
         6,
-        5,
+        7,
+        7,
+        7,
         6
       ],
+      "speed": 8,
+      "size": 2,
       "art": {
         "left": "arte/rayo/zuniceratops_izq.webp",
         "right": "arte/rayo/zuniceratops_der.webp"
       },
-      "speed": 5,
-      "size": 2
+      "signatureAttack": {
+        "id": "chispazo_agil_de_ceja",
+        "name": "Chispazo Ágil de Ceja",
+        "power": 85,
+        "element": "rayo",
+        "category": "especial",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Doble haz eléctrico concentrado que paraliza momentáneamente las extremidades rivales. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "zuniceratops"
+      },
+      "attacks": [
+        "chispazo_electrico",
+        "tormenta_electrica",
+        "chispazo_agil_de_ceja"
+      ]
     },
     {
       "id": "achelousaurus",
@@ -848,18 +1514,36 @@
       "element": "rayo",
       "card": "cards/rayo/achelousaurus_dinosaur_king.jpg",
       "stats": [
-        5,
-        4,
-        4,
-        4,
+        7,
+        8,
+        8,
+        7,
         7
       ],
+      "speed": 6,
+      "size": 3,
       "art": {
         "left": "arte/rayo/achelousaurus_izq.webp",
         "right": "arte/rayo/achelousaurus_der.webp"
       },
-      "speed": 8,
-      "size": 3
+      "signatureAttack": {
+        "id": "testarazo_electrico_achelous",
+        "name": "Testarazo Eléctrico Achelous",
+        "power": 95,
+        "element": "rayo",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Su protuberancia ósea aplasta con la contundencia de un rayo caído del cielo. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "achelousaurus"
+      },
+      "attacks": [
+        "chispazo_electrico",
+        "tormenta_electrica",
+        "testarazo_electrico_achelous"
+      ]
     },
     {
       "id": "anchiceratops",
@@ -868,18 +1552,36 @@
       "element": "rayo",
       "card": "cards/rayo/anchiceratops_dinosaur_king.jpg",
       "stats": [
-        4,
-        5,
-        6,
-        4,
-        5
+        7,
+        8,
+        8,
+        7,
+        7
       ],
+      "speed": 6,
+      "size": 3,
       "art": {
         "left": "arte/rayo/anchiceratops_izq.webp",
         "right": "arte/rayo/anchiceratops_der.webp"
       },
-      "speed": 6,
-      "size": 3
+      "signatureAttack": {
+        "id": "muralla_de_arco_voltaico",
+        "name": "Muralla de Arco Voltaico",
+        "power": 95,
+        "element": "rayo",
+        "category": "especial",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Espinas de la gola que enlazan un circuito eléctrico que abrasa a quien se acerque. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "anchiceratops"
+      },
+      "attacks": [
+        "chispazo_electrico",
+        "tormenta_electrica",
+        "muralla_de_arco_voltaico"
+      ]
     },
     {
       "id": "maximus",
@@ -888,18 +1590,36 @@
       "element": "rayo",
       "card": "cards/rayo/maximus_dinosaur_king.jpg",
       "stats": [
-        7,
-        6,
-        9,
-        6,
-        9
+        10,
+        10,
+        10,
+        8,
+        8
       ],
+      "speed": 6,
+      "size": 5,
       "art": {
         "left": "arte/rayo/maximus_izq.webp",
         "right": "arte/rayo/maximus_der.webp"
       },
-      "speed": 6,
-      "size": 5
+      "signatureAttack": {
+        "id": "rayo_titanico_sobrecargado",
+        "name": "Rayo Titánico Sobrecargado",
+        "power": 115,
+        "element": "rayo",
+        "category": "especial",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Canaliza toda la energía de la tormenta en una descarga cósmica desintegradora. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "maximus"
+      },
+      "attacks": [
+        "chispazo_electrico",
+        "tormenta_electrica",
+        "rayo_titanico_sobrecargado"
+      ]
     },
     {
       "id": "nedoceratops",
@@ -908,18 +1628,36 @@
       "element": "rayo",
       "card": "cards/rayo/nedoceratops_dinosaur_king.jpg",
       "stats": [
-        6,
-        5,
-        5,
-        5,
-        6
+        8,
+        8,
+        8,
+        7,
+        7
       ],
+      "speed": 6,
+      "size": 4,
       "art": {
         "left": "arte/rayo/nedoceratops_izq.webp",
         "right": "arte/rayo/nedoceratops_der.webp"
       },
-      "speed": 9,
-      "size": 4
+      "signatureAttack": {
+        "id": "disparo_electromagnetico_frontal",
+        "name": "Disparo Electromagnético Frontal",
+        "power": 95,
+        "element": "rayo",
+        "category": "especial",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Alineación de cuernos frontales que disparan un pulso de plasma acelerado. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "nedoceratops"
+      },
+      "attacks": [
+        "chispazo_electrico",
+        "tormenta_electrica",
+        "disparo_electromagnetico_frontal"
+      ]
     },
     {
       "id": "pachyrhinosaurus",
@@ -929,17 +1667,35 @@
       "card": "cards/rayo/pachyrhinosaurus_dinosaur_king.jpg",
       "stats": [
         8,
-        4,
-        7,
+        9,
+        9,
         6,
-        6
+        7
       ],
+      "speed": 6,
+      "size": 4,
       "art": {
         "left": "arte/rayo/pachyrhinosaurus_izq.webp",
         "right": "arte/rayo/pachyrhinosaurus_der.webp"
       },
-      "speed": 9,
-      "size": 4
+      "signatureAttack": {
+        "id": "domo_del_trueno_aplastante",
+        "name": "Domo del Trueno Aplastante",
+        "power": 100,
+        "element": "rayo",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Su masiva masa nasal descarga un golpe contundente que sacude el sistema nervioso rival. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "pachyrhinosaurus"
+      },
+      "attacks": [
+        "chispazo_electrico",
+        "tormenta_electrica",
+        "domo_del_trueno_aplastante"
+      ]
     },
     {
       "id": "pentaceratops",
@@ -948,18 +1704,36 @@
       "element": "rayo",
       "card": "cards/rayo/pentaceratops_dinosaur_king.jpg",
       "stats": [
-        5,
-        5,
-        5,
-        4,
-        8
+        8,
+        9,
+        9,
+        7,
+        7
       ],
+      "speed": 5,
+      "size": 3,
       "art": {
         "left": "arte/rayo/pentaceratops_izq.webp",
         "right": "arte/rayo/pentaceratops_der.webp"
       },
-      "speed": 5,
-      "size": 3
+      "signatureAttack": {
+        "id": "pentarrayo_fulgurante",
+        "name": "Penta-Rayo Fulgurante",
+        "power": 105,
+        "element": "rayo",
+        "category": "especial",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Sus cinco cuernos se iluminan al unísono disparando cinco haces de electricidad pura. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "pentaceratops"
+      },
+      "attacks": [
+        "chispazo_electrico",
+        "tormenta_electrica",
+        "pentarrayo_fulgurante"
+      ]
     },
     {
       "id": "styracosaurus",
@@ -969,17 +1743,35 @@
       "card": "cards/rayo/styracosaurus_dinosaur_king.jpg",
       "stats": [
         8,
-        5,
         9,
-        6,
-        9
+        8,
+        8,
+        7
       ],
+      "speed": 7,
+      "size": 3,
       "art": {
         "left": "arte/rayo/styracosaurus_izq.webp",
         "right": "arte/rayo/styracosaurus_der.webp"
       },
-      "speed": 7,
-      "size": 3
+      "signatureAttack": {
+        "id": "corona_de_espinas_electricas",
+        "name": "Corona de Espinas Eléctricas",
+        "power": 105,
+        "element": "rayo",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Su gola repleta de espinas largas emite una tempestad de arcos voltaicos punzantes. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "styracosaurus"
+      },
+      "attacks": [
+        "chispazo_electrico",
+        "tormenta_electrica",
+        "corona_de_espinas_electricas"
+      ]
     },
     {
       "id": "torosaurus",
@@ -988,18 +1780,36 @@
       "element": "rayo",
       "card": "cards/rayo/torosaurus_dinosaur_king_by.jpg",
       "stats": [
-        4,
-        5,
         9,
-        4,
-        5
+        9,
+        9,
+        8,
+        7
       ],
+      "speed": 6,
+      "size": 4,
       "art": {
         "left": "arte/rayo/torosaurus_izq.webp",
         "right": "arte/rayo/torosaurus_der.webp"
       },
-      "speed": 6,
-      "size": 4
+      "signatureAttack": {
+        "id": "escudo_dinamo_de_choque",
+        "name": "Escudo Dínamo de Choque",
+        "power": 100,
+        "element": "rayo",
+        "category": "especial",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "La gola ósea más grande del reino genera una barrera electrificada repelente. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "torosaurus"
+      },
+      "attacks": [
+        "chispazo_electrico",
+        "tormenta_electrica",
+        "escudo_dinamo_de_choque"
+      ]
     },
     {
       "id": "triceratops",
@@ -1008,18 +1818,36 @@
       "element": "rayo",
       "card": "cards/rayo/triceratops_dinosaur_king.jpg",
       "stats": [
-        8,
-        6,
         9,
-        6,
-        9
+        10,
+        9,
+        7,
+        8
       ],
+      "speed": 6,
+      "size": 4,
       "art": {
         "left": "arte/rayo/triceratops_izq.webp",
         "right": "arte/rayo/triceratops_der.webp"
       },
-      "speed": 8,
-      "size": 4
+      "signatureAttack": {
+        "id": "ruptura_sismica_tri_cuerno",
+        "name": "Ruptura Sísmica Tri-Cuerno",
+        "power": 110,
+        "element": "rayo",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "El ataque definitivo de tres cuernos cargados con energía de trueno a máxima potencia. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "triceratops"
+      },
+      "attacks": [
+        "chispazo_electrico",
+        "tormenta_electrica",
+        "ruptura_sismica_tri_cuerno"
+      ]
     },
     {
       "id": "dacentrurus",
@@ -1028,18 +1856,36 @@
       "element": "tierra",
       "card": "cards/tierra/Dacentrurus.jpeg",
       "stats": [
-        5,
-        5,
-        5,
+        8,
+        8,
+        9,
         6,
-        5
+        7
       ],
+      "speed": 5,
+      "size": 4,
       "art": {
         "left": "arte/tierra/dacentrurus_izq.webp",
         "right": "arte/tierra/dacentrurus_der.webp"
       },
-      "speed": 5,
-      "size": 4
+      "signatureAttack": {
+        "id": "hilera_de_puñales_tectonicos",
+        "name": "Hilera de Puñales Tectónicos",
+        "power": 95,
+        "element": "tierra",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Sus dobles púas de la cola barren el suelo levantando esquirlas de roca afilada. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "dacentrurus"
+      },
+      "attacks": [
+        "bofeton_de_lodo",
+        "fisura_tectonica",
+        "hilera_de_puñales_tectonicos"
+      ]
     },
     {
       "id": "gigantspinosaurus",
@@ -1048,18 +1894,36 @@
       "element": "tierra",
       "card": "cards/tierra/Gigantspinosaurus (games).jpeg",
       "stats": [
+        7,
+        7,
+        9,
         6,
-        6,
-        5,
-        4,
-        6
+        7
       ],
+      "speed": 6,
+      "size": 2,
       "art": {
         "left": "arte/tierra/gigantspinosaurus_izq.webp",
         "right": "arte/tierra/gigantspinosaurus_der.webp"
       },
-      "speed": 4,
-      "size": 2
+      "signatureAttack": {
+        "id": "hoja_escapular_de_granito",
+        "name": "Hoja Escapular de Granito",
+        "power": 95,
+        "element": "tierra",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Sus colosales espinas de los hombros cortan y derriban estructuras rocosas. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "gigantspinosaurus"
+      },
+      "attacks": [
+        "bofeton_de_lodo",
+        "fisura_tectonica",
+        "hoja_escapular_de_granito"
+      ]
     },
     {
       "id": "kentrosaurus",
@@ -1068,18 +1932,36 @@
       "element": "tierra",
       "card": "cards/tierra/Kentrosaurus.jpeg",
       "stats": [
-        4,
+        7,
+        8,
+        9,
         6,
-        4,
-        6,
-        6
+        7
       ],
+      "speed": 6,
+      "size": 2,
       "art": {
         "left": "arte/tierra/kentrosaurus_izq.webp",
         "right": "arte/tierra/kentrosaurus_der.webp"
       },
-      "speed": 4,
-      "size": 2
+      "signatureAttack": {
+        "id": "puntas_del_cañon_de_roca",
+        "name": "Puntas del Cañón de Roca",
+        "power": 90,
+        "element": "tierra",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Giro giratorio de cola erizada que empala con la dureza del diamante. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "kentrosaurus"
+      },
+      "attacks": [
+        "bofeton_de_lodo",
+        "fisura_tectonica",
+        "puntas_del_cañon_de_roca"
+      ]
     },
     {
       "id": "pinacosaurus",
@@ -1088,18 +1970,36 @@
       "element": "tierra",
       "card": "cards/tierra/Pinacosaurus (games).jpeg",
       "stats": [
-        4,
-        8,
+        7,
+        7,
+        9,
         6,
-        8,
-        4
+        8
       ],
+      "speed": 5,
+      "size": 2,
       "art": {
         "left": "arte/tierra/pinacosaurus_izq.webp",
         "right": "arte/tierra/pinacosaurus_der.webp"
       },
-      "speed": 6,
-      "size": 2
+      "signatureAttack": {
+        "id": "aplasta_rocas_blindado",
+        "name": "Aplastador Blindado de Suelo",
+        "power": 90,
+        "element": "tierra",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Su cuerpo bajo golpea con fuerza tectónica hundiendo las patas del enemigo. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "pinacosaurus"
+      },
+      "attacks": [
+        "bofeton_de_lodo",
+        "fisura_tectonica",
+        "aplasta_rocas_blindado"
+      ]
     },
     {
       "id": "polacanthus",
@@ -1110,16 +2010,34 @@
       "stats": [
         7,
         7,
-        4,
+        9,
         6,
-        4
+        8
       ],
+      "speed": 5,
+      "size": 2,
       "art": {
         "left": "arte/tierra/polacanthus_izq.webp",
         "right": "arte/tierra/polacanthus_der.webp"
       },
-      "speed": 5,
-      "size": 2
+      "signatureAttack": {
+        "id": "alfombra_de_espinas_basalticas",
+        "name": "Alfombra de Espinas Basálticas",
+        "power": 90,
+        "element": "tierra",
+        "category": "especial",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Dispersa púas minerales en el terreno que estallan al contacto rival. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "polacanthus"
+      },
+      "attacks": [
+        "bofeton_de_lodo",
+        "fisura_tectonica",
+        "alfombra_de_espinas_basalticas"
+      ]
     },
     {
       "id": "sauropelta",
@@ -1128,18 +2046,36 @@
       "element": "tierra",
       "card": "cards/tierra/Sauropelta.jpeg",
       "stats": [
-        5,
+        8,
         7,
-        5,
-        7,
-        6
+        10,
+        6,
+        8
       ],
+      "speed": 4,
+      "size": 3,
       "art": {
         "left": "arte/tierra/sauropelta_izq.webp",
         "right": "arte/tierra/sauropelta_der.webp"
       },
-      "speed": 7,
-      "size": 3
+      "signatureAttack": {
+        "id": "blindaje_de_trinchera_ferrea",
+        "name": "Blindaje de Trinchera Férrea",
+        "power": 95,
+        "element": "tierra",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Placas sólidas de acero biológico que absorben y devuelven el golpe con furia sísmica. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "sauropelta"
+      },
+      "attacks": [
+        "bofeton_de_lodo",
+        "fisura_tectonica",
+        "blindaje_de_trinchera_ferrea"
+      ]
     },
     {
       "id": "ankylosaurus",
@@ -1148,18 +2084,36 @@
       "element": "tierra",
       "card": "cards/tierra/ankylosaurus_dinosaur_king.jpg",
       "stats": [
-        4,
-        8,
-        5,
-        7,
-        6
+        9,
+        9,
+        10,
+        6,
+        9
       ],
+      "speed": 4,
+      "size": 3,
       "art": {
         "left": "arte/tierra/ankylosaurus_izq.webp",
         "right": "arte/tierra/ankylosaurus_der.webp"
       },
-      "speed": 6,
-      "size": 3
+      "signatureAttack": {
+        "id": "martillo_meteoro_demoledor",
+        "name": "Martillo Meteoro Demoledor",
+        "power": 110,
+        "element": "tierra",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Su maza caudal de puro hueso macizo asesta un golpe capaz de fracturar montañas. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "ankylosaurus"
+      },
+      "attacks": [
+        "bofeton_de_lodo",
+        "fisura_tectonica",
+        "martillo_meteoro_demoledor"
+      ]
     },
     {
       "id": "armatus",
@@ -1168,18 +2122,36 @@
       "element": "tierra",
       "card": "cards/tierra/armatus_dinosaur_king.jpg",
       "stats": [
-        7,
-        7,
-        6,
+        10,
+        9,
+        10,
         8,
-        6
+        9
       ],
+      "speed": 4,
+      "size": 4,
       "art": {
         "left": "arte/tierra/armatus_izq.webp",
         "right": "arte/tierra/armatus_der.webp"
       },
-      "speed": 5,
-      "size": 4
+      "signatureAttack": {
+        "id": "fortaleza_impenetrable_armatus",
+        "name": "Fortaleza Impenetrable Armatus",
+        "power": 105,
+        "element": "tierra",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Carga blindada con placas reforzadas que convierte su cuerpo en un ariete. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "armatus"
+      },
+      "attacks": [
+        "bofeton_de_lodo",
+        "fisura_tectonica",
+        "fortaleza_impenetrable_armatus"
+      ]
     },
     {
       "id": "edmontonia",
@@ -1188,18 +2160,36 @@
       "element": "tierra",
       "card": "cards/tierra/edmontonia_dinosaur_king.jpg",
       "stats": [
-        4,
-        7,
-        5,
-        4,
-        6
+        8,
+        8,
+        10,
+        6,
+        8
       ],
+      "speed": 4,
+      "size": 3,
       "art": {
         "left": "arte/tierra/edmontonia_izq.webp",
         "right": "arte/tierra/edmontonia_der.webp"
       },
-      "speed": 6,
-      "size": 3
+      "signatureAttack": {
+        "id": "puas_del_acantilado_frontal",
+        "name": "Púas del Acantilado Frontal",
+        "power": 95,
+        "element": "tierra",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Espinas proyectadas hacia afuera que perforan defensas durante la carrera. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "edmontonia"
+      },
+      "attacks": [
+        "bofeton_de_lodo",
+        "fisura_tectonica",
+        "puas_del_acantilado_frontal"
+      ]
     },
     {
       "id": "scolosaurus",
@@ -1208,18 +2198,36 @@
       "element": "tierra",
       "card": "cards/tierra/escolossauro.jpeg",
       "stats": [
-        4,
         8,
-        4,
         8,
-        4
+        10,
+        6,
+        8
       ],
+      "speed": 4,
+      "size": 3,
       "art": {
         "left": "arte/tierra/scolosaurus_izq.webp",
         "right": "arte/tierra/scolosaurus_der.webp"
       },
-      "speed": 4,
-      "size": 3
+      "signatureAttack": {
+        "id": "quebrantahuesos_subterraneo",
+        "name": "Quebrantahuesos Subterráneo",
+        "power": 95,
+        "element": "tierra",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Impacto en ángulo bajo que desestabiliza y derriba al contendiente. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "scolosaurus"
+      },
+      "attacks": [
+        "bofeton_de_lodo",
+        "fisura_tectonica",
+        "quebrantahuesos_subterraneo"
+      ]
     },
     {
       "id": "euoplocephalus",
@@ -1228,18 +2236,36 @@
       "element": "tierra",
       "card": "cards/tierra/euoplocephalus_dinosaur_king.jpg",
       "stats": [
-        4,
-        6,
-        4,
         8,
-        4
+        8,
+        10,
+        6,
+        8
       ],
+      "speed": 4,
+      "size": 3,
       "art": {
         "left": "arte/tierra/euoplocephalus_izq.webp",
         "right": "arte/tierra/euoplocephalus_der.webp"
       },
-      "speed": 7,
-      "size": 3
+      "signatureAttack": {
+        "id": "torbellino_de_placas_acorazadas",
+        "name": "Torbellino de Placas Acorazadas",
+        "power": 95,
+        "element": "tierra",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Rotación defensiva que repele ataques proyectando fragmentos de piedra. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "euoplocephalus"
+      },
+      "attacks": [
+        "bofeton_de_lodo",
+        "fisura_tectonica",
+        "torbellino_de_placas_acorazadas"
+      ]
     },
     {
       "id": "lexovisaurus",
@@ -1249,17 +2275,35 @@
       "card": "cards/tierra/lexovisaurus_dinosaur_king.jpg",
       "stats": [
         7,
-        4,
-        6,
         8,
-        5
+        9,
+        6,
+        7
       ],
+      "speed": 5,
+      "size": 3,
       "art": {
         "left": "arte/tierra/lexovisaurus_izq.webp",
         "right": "arte/tierra/lexovisaurus_der.webp"
       },
-      "speed": 7,
-      "size": 3
+      "signatureAttack": {
+        "id": "corte_de_placas_en_sierra",
+        "name": "Corte de Placas en Sierra",
+        "power": 95,
+        "element": "tierra",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Movimiento lateral donde sus placas dorsales aserradas desgarran el flanco enemigo. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "lexovisaurus"
+      },
+      "attacks": [
+        "bofeton_de_lodo",
+        "fisura_tectonica",
+        "corte_de_placas_en_sierra"
+      ]
     },
     {
       "id": "saichania",
@@ -1268,18 +2312,36 @@
       "element": "tierra",
       "card": "cards/tierra/saichania_dinosaur_king.jpg",
       "stats": [
-        6,
         8,
-        6,
         8,
-        6
+        10,
+        6,
+        9
       ],
+      "speed": 4,
+      "size": 3,
       "art": {
         "left": "arte/tierra/saichania_izq.webp",
         "right": "arte/tierra/saichania_der.webp"
       },
-      "speed": 7,
-      "size": 3
+      "signatureAttack": {
+        "id": "baluarte_del_desierto_saichania",
+        "name": "Baluarte del Desierto Saichania",
+        "power": 100,
+        "element": "tierra",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Emerge de la arena con un impacto de coraza que nubla la visión del rival. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "saichania"
+      },
+      "attacks": [
+        "bofeton_de_lodo",
+        "fisura_tectonica",
+        "baluarte_del_desierto_saichania"
+      ]
     },
     {
       "id": "stegosaurus",
@@ -1288,18 +2350,36 @@
       "element": "tierra",
       "card": "cards/tierra/stegosaurus_dinosaur_king.jpg",
       "stats": [
-        7,
-        5,
+        9,
+        9,
+        9,
         6,
-        6,
-        5
+        8
       ],
+      "speed": 5,
+      "size": 4,
       "art": {
         "left": "arte/tierra/stegosaurus_izq.webp",
         "right": "arte/tierra/stegosaurus_der.webp"
       },
-      "speed": 5,
-      "size": 4
+      "signatureAttack": {
+        "id": "thagomizer_corta_rocas",
+        "name": "Thagomizer Corta-Rocas",
+        "power": 105,
+        "element": "tierra",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Las cuatro temibles púas de su cola impactan a la velocidad de un látigo de piedra. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "stegosaurus"
+      },
+      "attacks": [
+        "bofeton_de_lodo",
+        "fisura_tectonica",
+        "thagomizer_corta_rocas"
+      ]
     },
     {
       "id": "tuojiangosaurus",
@@ -1308,18 +2388,36 @@
       "element": "tierra",
       "card": "cards/tierra/tuojiangosaurus_dinosaur_king.jpg",
       "stats": [
-        6,
         8,
-        5,
-        7,
-        5
+        8,
+        9,
+        6,
+        7
       ],
+      "speed": 5,
+      "size": 3,
       "art": {
         "left": "arte/tierra/tuojiangosaurus_izq.webp",
         "right": "arte/tierra/tuojiangosaurus_der.webp"
       },
-      "speed": 4,
-      "size": 3
+      "signatureAttack": {
+        "id": "espinas_en_aguja_orientales",
+        "name": "Espinas en Aguja Orientales",
+        "power": 95,
+        "element": "tierra",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Púas cónicas extremadamente afiladas que causan daño continuo al blindaje. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "tuojiangosaurus"
+      },
+      "attacks": [
+        "bofeton_de_lodo",
+        "fisura_tectonica",
+        "espinas_en_aguja_orientales"
+      ]
     },
     {
       "id": "charonosaurus",
@@ -1328,18 +2426,36 @@
       "element": "planta",
       "card": "cards/planta/Charonosaurus (games).jpeg",
       "stats": [
-        6,
-        6,
-        4,
-        6,
-        4
+        9,
+        7,
+        7,
+        9,
+        8
       ],
+      "speed": 6,
+      "size": 5,
       "art": {
         "left": "arte/planta/charonosaurus_izq.webp",
         "right": "arte/planta/charonosaurus_der.webp"
       },
-      "speed": 4,
-      "size": 5
+      "signatureAttack": {
+        "id": "trompeta_de_polen_sonico",
+        "name": "Trompeta de Polen Sónico",
+        "power": 95,
+        "element": "planta",
+        "category": "especial",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Su cresta hueca emite una nota sónica que dispersa esporas narcóticas. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "charonosaurus"
+      },
+      "attacks": [
+        "latigo_cepa",
+        "tormenta_de_hojas",
+        "trompeta_de_polen_sonico"
+      ]
     },
     {
       "id": "corythosaurus",
@@ -1348,18 +2464,36 @@
       "element": "planta",
       "card": "cards/planta/Corythosaurus (games).jpeg",
       "stats": [
-        4,
-        4,
-        4,
+        8,
         6,
-        5
+        7,
+        8,
+        8
       ],
+      "speed": 7,
+      "size": 4,
       "art": {
         "left": "arte/planta/corythosaurus_izq.webp",
         "right": "arte/planta/corythosaurus_der.webp"
       },
-      "speed": 4,
-      "size": 4
+      "signatureAttack": {
+        "id": "casco_de_resonancia_vegetal",
+        "name": "Casco de Resonancia Vegetal",
+        "power": 95,
+        "element": "planta",
+        "category": "especial",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Ondas acústicas amplificadas por su casco que desintegran defensas. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "corythosaurus"
+      },
+      "attacks": [
+        "latigo_cepa",
+        "tormenta_de_hojas",
+        "casco_de_resonancia_vegetal"
+      ]
     },
     {
       "id": "olorotitan",
@@ -1368,18 +2502,36 @@
       "element": "planta",
       "card": "cards/planta/Olorotitan (games).jpeg",
       "stats": [
-        4,
-        6,
-        4,
-        6,
-        5
+        8,
+        7,
+        7,
+        9,
+        8
       ],
+      "speed": 6,
+      "size": 4,
       "art": {
         "left": "arte/planta/olorotitan_izq.webp",
         "right": "arte/planta/olorotitan_der.webp"
       },
-      "speed": 8,
-      "size": 4
+      "signatureAttack": {
+        "id": "onda_de_esporas_del_cisne",
+        "name": "Onda de Esporas del Cisne",
+        "power": 95,
+        "element": "planta",
+        "category": "especial",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Su estilizada cresta lanza un torrente de semillas explosivas de rápido crecimiento. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "olorotitan"
+      },
+      "attacks": [
+        "latigo_cepa",
+        "tormenta_de_hojas",
+        "onda_de_esporas_del_cisne"
+      ]
     },
     {
       "id": "pteranodon",
@@ -1388,19 +2540,37 @@
       "element": "planta",
       "card": "cards/planta/Pteranodon.jpg",
       "stats": [
+        6,
+        6,
+        5,
         8,
-        5,
-        4,
-        5,
-        5
+        7
       ],
+      "speed": 10,
+      "size": 3,
+      "pose": "vuela",
       "art": {
         "left": "arte/planta/pteranodon_izq.webp",
         "right": "arte/planta/pteranodon_der.webp"
       },
-      "speed": 7,
-      "size": 3,
-      "pose": "vuela"
+      "signatureAttack": {
+        "id": "vuelo_en_picada_de_lianas",
+        "name": "Picada de Lianas Aérea",
+        "power": 90,
+        "element": "planta",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Desciende desde las copas de los árboles arrastrando zarzas punzantes sobre la presa. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "pteranodon"
+      },
+      "attacks": [
+        "latigo_cepa",
+        "tormenta_de_hojas",
+        "vuelo_en_picada_de_lianas"
+      ]
     },
     {
       "id": "seismosaurus",
@@ -1409,18 +2579,36 @@
       "element": "planta",
       "card": "cards/planta/Seismosaurus.jpg",
       "stats": [
-        5,
-        5,
-        6,
-        4,
-        6
+        10,
+        7,
+        9,
+        8,
+        9
       ],
+      "speed": 3,
+      "size": 6,
       "art": {
         "left": "arte/planta/seismosaurus_izq.webp",
         "right": "arte/planta/seismosaurus_der.webp"
       },
-      "speed": 6,
-      "size": 6
+      "signatureAttack": {
+        "id": "terremoto_de_raices_seismo",
+        "name": "Terremoto de Raíces Seismo",
+        "power": 115,
+        "element": "planta",
+        "category": "especial",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Su andar hace emerger gigantescas raíces milenarias que aprisionan el campo. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "seismosaurus"
+      },
+      "attacks": [
+        "latigo_cepa",
+        "tormenta_de_hojas",
+        "terremoto_de_raices_seismo"
+      ]
     },
     {
       "id": "supersaurus",
@@ -1429,18 +2617,36 @@
       "element": "planta",
       "card": "cards/planta/Supersaurus.jpg",
       "stats": [
-        7,
-        5,
-        6,
-        7,
-        5
+        10,
+        8,
+        9,
+        8,
+        8
       ],
+      "speed": 3,
+      "size": 6,
       "art": {
         "left": "arte/planta/supersaurus_izq.webp",
         "right": "arte/planta/supersaurus_der.webp"
       },
-      "speed": 8,
-      "size": 6
+      "signatureAttack": {
+        "id": "latigo_de_secoya_gigante",
+        "name": "Látigo de Secoya Gigante",
+        "power": 115,
+        "element": "planta",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Su cola interminable azota como un tronco milenario barriendo a múltiples objetivos. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "supersaurus"
+      },
+      "attacks": [
+        "latigo_cepa",
+        "tormenta_de_hojas",
+        "latigo_de_secoya_gigante"
+      ]
     },
     {
       "id": "tupandactylus",
@@ -1450,19 +2656,37 @@
       "card": "cards/planta/Tupandactylus Move Card.jpeg",
       "frontSide": "right",
       "stats": [
-        4,
-        4,
         5,
-        7,
-        4
+        5,
+        5,
+        8,
+        7
       ],
+      "speed": 9,
+      "size": 2,
+      "pose": "vuela",
       "art": {
         "left": "arte/planta/tupandactylus_izq.webp",
         "right": "arte/planta/tupandactylus_der.webp"
       },
-      "speed": 5,
-      "size": 2,
-      "pose": "vuela"
+      "signatureAttack": {
+        "id": "cresta_solar_fotosintetica",
+        "name": "Cresta Solar Fotosintética",
+        "power": 85,
+        "element": "planta",
+        "category": "especial",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Su cresta gigante canaliza la luz del sol en un rayo vegetal deslumbrante. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "tupandactylus"
+      },
+      "attacks": [
+        "latigo_cepa",
+        "tormenta_de_hojas",
+        "cresta_solar_fotosintetica"
+      ]
     },
     {
       "id": "tupuxuara",
@@ -1471,19 +2695,37 @@
       "element": "planta",
       "card": "cards/planta/Tupuxuara.jpg",
       "stats": [
+        5,
         6,
-        4,
-        4,
-        4,
-        4
+        5,
+        8,
+        7
       ],
+      "speed": 9,
+      "size": 2,
+      "pose": "vuela",
       "art": {
         "left": "arte/planta/tupuxuara_izq.webp",
         "right": "arte/planta/tupuxuara_der.webp"
       },
-      "speed": 6,
-      "size": 2,
-      "pose": "vuela"
+      "signatureAttack": {
+        "id": "aguijon_aereo_de_espinas",
+        "name": "Aguijón Aéreo de Espinas",
+        "power": 85,
+        "element": "planta",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Ataque veloz con el pico apuntando a puntos vitales con energía clorofílica. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "tupuxuara"
+      },
+      "attacks": [
+        "latigo_cepa",
+        "tormenta_de_hojas",
+        "aguijon_aereo_de_espinas"
+      ]
     },
     {
       "id": "altirhinus",
@@ -1492,18 +2734,36 @@
       "element": "planta",
       "card": "cards/planta/altirhinus_dinosaur_king.jpg",
       "stats": [
-        4,
-        5,
-        5,
-        4,
-        4
+        7,
+        7,
+        7,
+        7,
+        7
       ],
+      "speed": 7,
+      "size": 3,
       "art": {
         "left": "arte/planta/altirhinus_izq.webp",
         "right": "arte/planta/altirhinus_der.webp"
       },
-      "speed": 5,
-      "size": 3
+      "signatureAttack": {
+        "id": "nariz_bomba_de_sauce",
+        "name": "Nariz Bomba de Sauce",
+        "power": 90,
+        "element": "planta",
+        "category": "especial",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Su cavidad nasal reforzada expele vainas de semillas que estallan al impactar. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "altirhinus"
+      },
+      "attacks": [
+        "latigo_cepa",
+        "tormenta_de_hojas",
+        "nariz_bomba_de_sauce"
+      ]
     },
     {
       "id": "fukuisaurus",
@@ -1512,18 +2772,36 @@
       "element": "planta",
       "card": "cards/planta/fukuisaurus_dinosaur_king.jpg",
       "stats": [
-        8,
+        6,
+        6,
+        6,
         7,
-        5,
-        7,
-        4
+        7
       ],
+      "speed": 8,
+      "size": 2,
       "art": {
         "left": "arte/planta/fukuisaurus_izq.webp",
         "right": "arte/planta/fukuisaurus_der.webp"
       },
-      "speed": 8,
-      "size": 2
+      "signatureAttack": {
+        "id": "brote_de_bambu_afilado",
+        "name": "Brote de Bambú Afilado",
+        "power": 90,
+        "element": "planta",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Abalanzamiento ágil donde sus garras simulan el corte rápido del bambú. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "fukuisaurus"
+      },
+      "attacks": [
+        "latigo_cepa",
+        "tormenta_de_hojas",
+        "brote_de_bambu_afilado"
+      ]
     },
     {
       "id": "iguanodon",
@@ -1532,18 +2810,36 @@
       "element": "planta",
       "card": "cards/planta/iguanodon_dinosaur_king.jpg",
       "stats": [
+        8,
+        8,
         7,
-        6,
-        4,
         7,
-        5
+        7
       ],
+      "speed": 7,
+      "size": 4,
       "art": {
         "left": "arte/planta/iguanodon_izq.webp",
         "right": "arte/planta/iguanodon_der.webp"
       },
-      "speed": 8,
-      "size": 4
+      "signatureAttack": {
+        "id": "puñalada_del_pulgar_esmeralda",
+        "name": "Puñalada del Pulgar Esmeralda",
+        "power": 100,
+        "element": "planta",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Su célebre garra en forma de espina perfora como un dardo vegetal venenoso. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "iguanodon"
+      },
+      "attacks": [
+        "latigo_cepa",
+        "tormenta_de_hojas",
+        "puñalada_del_pulgar_esmeralda"
+      ]
     },
     {
       "id": "lanzhousaurus",
@@ -1552,18 +2848,36 @@
       "element": "planta",
       "card": "cards/planta/lanzhousaurus_dinosaur_king.jpg",
       "stats": [
+        8,
+        8,
         7,
-        5,
-        5,
-        5,
-        6
+        7,
+        7
       ],
+      "speed": 6,
+      "size": 4,
       "art": {
         "left": "arte/planta/lanzhousaurus_izq.webp",
         "right": "arte/planta/lanzhousaurus_der.webp"
       },
-      "speed": 8,
-      "size": 4
+      "signatureAttack": {
+        "id": "mordida_de_mandibula_ancestral",
+        "name": "Mordida de Mandíbula Ancestral",
+        "power": 100,
+        "element": "planta",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Dientes colosales especializados en triturar madera que destrozan defensas. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "lanzhousaurus"
+      },
+      "attacks": [
+        "latigo_cepa",
+        "tormenta_de_hojas",
+        "mordida_de_mandibula_ancestral"
+      ]
     },
     {
       "id": "maiasaura",
@@ -1573,17 +2887,35 @@
       "card": "cards/planta/maiasaura_with_baby_dinosaur_king.jpg",
       "stats": [
         8,
-        5,
-        4,
         6,
-        4
+        7,
+        8,
+        8
       ],
+      "speed": 7,
+      "size": 4,
       "art": {
         "left": "arte/planta/maiasaura_izq.webp",
         "right": "arte/planta/maiasaura_der.webp"
       },
-      "speed": 5,
-      "size": 4
+      "signatureAttack": {
+        "id": "furia_maternal_de_la_arboleda",
+        "name": "Furia Maternal de la Arboleda",
+        "power": 95,
+        "element": "planta",
+        "category": "especial",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Invocación de una barrera de zarzas protectoras que contragolpea con espinas. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "maiasaura"
+      },
+      "attacks": [
+        "latigo_cepa",
+        "tormenta_de_hojas",
+        "furia_maternal_de_la_arboleda"
+      ]
     },
     {
       "id": "parasaurolophus",
@@ -1594,16 +2926,34 @@
       "stats": [
         8,
         7,
-        6,
         7,
-        6
+        9,
+        8
       ],
+      "speed": 7,
+      "size": 4,
       "art": {
         "left": "arte/planta/parasaurolophus_izq.webp",
         "right": "arte/planta/parasaurolophus_der.webp"
       },
-      "speed": 5,
-      "size": 4
+      "signatureAttack": {
+        "id": "melodia_sagrada_del_bosque",
+        "name": "Melodía Sagrada del Bosque",
+        "power": 105,
+        "element": "planta",
+        "category": "especial",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Emisión de un canto ultrasónico ancestral que sana aliados y aturde al rival. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "parasaurolophus"
+      },
+      "attacks": [
+        "latigo_cepa",
+        "tormenta_de_hojas",
+        "melodia_sagrada_del_bosque"
+      ]
     },
     {
       "id": "saurolophus_naranja",
@@ -1612,18 +2962,36 @@
       "element": "planta",
       "card": "cards/planta/sauralophus_orange_dinosaur_king.jpg",
       "stats": [
-        6,
+        8,
         7,
-        5,
         7,
-        5
+        8,
+        8
       ],
+      "speed": 7,
+      "size": 4,
       "art": {
         "left": "arte/planta/saurolophus_naranja_izq.webp",
         "right": "arte/planta/saurolophus_naranja_der.webp"
       },
-      "speed": 5,
-      "size": 4
+      "signatureAttack": {
+        "id": "rafaga_solar_de_otoño",
+        "name": "Ráfaga Solar de Otoño",
+        "power": 95,
+        "element": "planta",
+        "category": "especial",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Lanza una tormenta de hojas afiladas impregnadas de calor fotosintético. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "saurolophus_naranja"
+      },
+      "attacks": [
+        "latigo_cepa",
+        "tormenta_de_hojas",
+        "rafaga_solar_de_otoño"
+      ]
     },
     {
       "id": "saurolophus_verde",
@@ -1632,18 +3000,36 @@
       "element": "planta",
       "card": "cards/planta/saurolophus_green_dinosaur_king.jpg",
       "stats": [
-        4,
-        5,
-        4,
-        6,
-        6
+        8,
+        7,
+        7,
+        8,
+        8
       ],
+      "speed": 7,
+      "size": 4,
       "art": {
         "left": "arte/planta/saurolophus_verde_izq.webp",
         "right": "arte/planta/saurolophus_verde_der.webp"
       },
-      "speed": 5,
-      "size": 4
+      "signatureAttack": {
+        "id": "espiral_de_hiedra_primaveral",
+        "name": "Espiral de Hiedra Primaveral",
+        "power": 95,
+        "element": "planta",
+        "category": "especial",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Enreda al adversario con enredaderas constrictoras drenando su vigor. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "saurolophus_verde"
+      },
+      "attacks": [
+        "latigo_cepa",
+        "tormenta_de_hojas",
+        "espiral_de_hiedra_primaveral"
+      ]
     },
     {
       "id": "shantungosaurus",
@@ -1652,18 +3038,36 @@
       "element": "planta",
       "card": "cards/planta/shantungosaurus_dinosaur_king.jpg",
       "stats": [
-        4,
-        4,
-        5,
-        4,
-        4
+        10,
+        8,
+        8,
+        8,
+        8
       ],
+      "speed": 5,
+      "size": 6,
       "art": {
         "left": "arte/planta/shantungosaurus_izq.webp",
         "right": "arte/planta/shantungosaurus_der.webp"
       },
-      "speed": 7,
-      "size": 6
+      "signatureAttack": {
+        "id": "catapulta_forestal_titanica",
+        "name": "Catapulta Forestal Titánica",
+        "power": 110,
+        "element": "planta",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "El mayor de los hadrosaurios embiste con la masa de un bosque entero en movimiento. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "shantungosaurus"
+      },
+      "attacks": [
+        "latigo_cepa",
+        "tormenta_de_hojas",
+        "catapulta_forestal_titanica"
+      ]
     },
     {
       "id": "dilophosaurus",
@@ -1672,18 +3076,36 @@
       "element": "viento",
       "card": "cards/viento/Dilophosaurus (games).jpeg",
       "stats": [
-        4,
         6,
-        6,
-        6,
-        7
+        7,
+        5,
+        8,
+        6
       ],
+      "speed": 9,
+      "size": 3,
       "art": {
         "left": "arte/viento/dilophosaurus_izq.webp",
         "right": "arte/viento/dilophosaurus_der.webp"
       },
-      "speed": 7,
-      "size": 3
+      "signatureAttack": {
+        "id": "doble_cresta_huracanada",
+        "name": "Doble Cresta Huracanada",
+        "power": 95,
+        "element": "viento",
+        "category": "especial",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Corta el viento con sus crestas gemelas disparando ráfagas en medialuna. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "dilophosaurus"
+      },
+      "attacks": [
+        "cuchilla_de_aire",
+        "huracan_prehistorico",
+        "doble_cresta_huracanada"
+      ]
     },
     {
       "id": "liliensternus",
@@ -1692,18 +3114,36 @@
       "element": "viento",
       "card": "cards/viento/Liliensternus (games).jpeg",
       "stats": [
-        6,
-        4,
         5,
-        4,
-        4
+        7,
+        5,
+        7,
+        5
       ],
+      "speed": 9,
+      "size": 2,
       "art": {
         "left": "arte/viento/liliensternus_izq.webp",
         "right": "arte/viento/liliensternus_der.webp"
       },
-      "speed": 10,
-      "size": 2
+      "signatureAttack": {
+        "id": "danza_del_vendaval_veloz",
+        "name": "Danza del Vendaval Veloz",
+        "power": 90,
+        "element": "viento",
+        "category": "especial",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Movimientos acrobáticos que levantan un torbellino de arena y aire cortante. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "liliensternus"
+      },
+      "attacks": [
+        "cuchilla_de_aire",
+        "huracan_prehistorico",
+        "danza_del_vendaval_veloz"
+      ]
     },
     {
       "id": "neovenator",
@@ -1712,18 +3152,36 @@
       "element": "viento",
       "card": "cards/viento/Neovenator (game).jpeg",
       "stats": [
-        5,
-        5,
         7,
+        8,
+        6,
         7,
-        4
+        6
       ],
+      "speed": 8,
+      "size": 3,
       "art": {
         "left": "arte/viento/neovenator_izq.webp",
         "right": "arte/viento/neovenator_der.webp"
       },
-      "speed": 6,
-      "size": 3
+      "signatureAttack": {
+        "id": "cazador_del_viento_salvaje",
+        "name": "Cazador del Viento Salvaje",
+        "power": 95,
+        "element": "viento",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Salto impulsado por corrientes de aire cayendo con garras afiladas. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "neovenator"
+      },
+      "attacks": [
+        "cuchilla_de_aire",
+        "huracan_prehistorico",
+        "cazador_del_viento_salvaje"
+      ]
     },
     {
       "id": "sinraptor",
@@ -1732,18 +3190,36 @@
       "element": "viento",
       "card": "cards/viento/Sinraptor.jpeg",
       "stats": [
-        4,
-        4,
-        4,
-        5,
-        5
+        7,
+        8,
+        6,
+        7,
+        6
       ],
+      "speed": 8,
+      "size": 3,
       "art": {
         "left": "arte/viento/sinraptor_izq.webp",
         "right": "arte/viento/sinraptor_der.webp"
       },
-      "speed": 10,
-      "size": 3
+      "signatureAttack": {
+        "id": "garra_del_remolino_oriental",
+        "name": "Garra del Remolino Oriental",
+        "power": 95,
+        "element": "viento",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Ataque rápido y silencioso como una brisa mortal que no deja rastro. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "sinraptor"
+      },
+      "attacks": [
+        "cuchilla_de_aire",
+        "huracan_prehistorico",
+        "garra_del_remolino_oriental"
+      ]
     },
     {
       "id": "szechuanosaurus",
@@ -1752,18 +3228,36 @@
       "element": "viento",
       "card": "cards/viento/Szechuanosaurus.jpeg",
       "stats": [
-        5,
-        5,
         7,
-        4,
-        4
+        8,
+        6,
+        7,
+        6
       ],
+      "speed": 8,
+      "size": 3,
       "art": {
         "left": "arte/viento/szechuanosaurus_izq.webp",
         "right": "arte/viento/szechuanosaurus_der.webp"
       },
-      "speed": 10,
-      "size": 3
+      "signatureAttack": {
+        "id": "cuchilla_del_tifon_szechuan",
+        "name": "Cuchilla del Tifón Szechuan",
+        "power": 95,
+        "element": "viento",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Golpe con el filo de sus patas traseras aprovechando la inercia del viento. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "szechuanosaurus"
+      },
+      "attacks": [
+        "cuchilla_de_aire",
+        "huracan_prehistorico",
+        "cuchilla_del_tifon_szechuan"
+      ]
     },
     {
       "id": "afrovenator",
@@ -1772,18 +3266,36 @@
       "element": "viento",
       "card": "cards/viento/afrovenator_dinosaur_king.jpg",
       "stats": [
-        5,
-        4,
         7,
+        8,
         6,
-        4
+        7,
+        6
       ],
+      "speed": 8,
+      "size": 3,
       "art": {
         "left": "arte/viento/afrovenator_izq.webp",
         "right": "arte/viento/afrovenator_der.webp"
       },
-      "speed": 7,
-      "size": 3
+      "signatureAttack": {
+        "id": "torbellino_del_sahara",
+        "name": "Torbellino del Sahara",
+        "power": 95,
+        "element": "viento",
+        "category": "especial",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Genera un remolino abrasador que levanta y azota al rival contra el suelo. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "afrovenator"
+      },
+      "attacks": [
+        "cuchilla_de_aire",
+        "huracan_prehistorico",
+        "torbellino_del_sahara"
+      ]
     },
     {
       "id": "allosaurus",
@@ -1792,18 +3304,36 @@
       "element": "viento",
       "card": "cards/viento/allosaurus_dinosaur_king.jpg",
       "stats": [
-        5,
-        5,
+        8,
+        9,
         7,
-        6,
+        7,
         6
       ],
+      "speed": 8,
+      "size": 4,
       "art": {
         "left": "arte/viento/allosaurus_izq.webp",
         "right": "arte/viento/allosaurus_der.webp"
       },
-      "speed": 7,
-      "size": 4
+      "signatureAttack": {
+        "id": "hacha_aerea_devastadora",
+        "name": "Hacha Aérea Devastadora",
+        "power": 105,
+        "element": "viento",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Abre su mandíbula como un hacha arrojadiza cayendo con fuerza gravitatoria. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "allosaurus"
+      },
+      "attacks": [
+        "cuchilla_de_aire",
+        "huracan_prehistorico",
+        "hacha_aerea_devastadora"
+      ]
     },
     {
       "id": "carnotaurus",
@@ -1812,18 +3342,36 @@
       "element": "viento",
       "card": "cards/viento/carnotaurus_dinosaur_king.jpg",
       "stats": [
+        7,
+        9,
         6,
         7,
-        7,
-        7,
-        7
+        6
       ],
+      "speed": 10,
+      "size": 4,
       "art": {
         "left": "arte/viento/carnotaurus_izq.webp",
         "right": "arte/viento/carnotaurus_der.webp"
       },
-      "speed": 7,
-      "size": 4
+      "signatureAttack": {
+        "id": "embestida_ciclonica_del_toro",
+        "name": "Embestida Ciclónica del Toro",
+        "power": 105,
+        "element": "viento",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Sus cuernos frontales canalizan un vórtice huracanado que pulveriza defensas. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "carnotaurus"
+      },
+      "attacks": [
+        "cuchilla_de_aire",
+        "huracan_prehistorico",
+        "embestida_ciclonica_del_toro"
+      ]
     },
     {
       "id": "ceratosaurus",
@@ -1832,18 +3380,36 @@
       "element": "viento",
       "card": "cards/viento/ceratosaurus_dinosaur_king.jpg",
       "stats": [
-        4,
-        4,
-        4,
-        4,
-        4
+        7,
+        8,
+        7,
+        7,
+        6
       ],
+      "speed": 8,
+      "size": 3,
       "art": {
         "left": "arte/viento/ceratosaurus_izq.webp",
         "right": "arte/viento/ceratosaurus_der.webp"
       },
-      "speed": 8,
-      "size": 3
+      "signatureAttack": {
+        "id": "cuerno_corta_viento_letal",
+        "name": "Cuerno Corta-Viento Letal",
+        "power": 95,
+        "element": "viento",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Cuchillada ascendente con su cuerno nasal generando una navaja de viento comprimido. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "ceratosaurus"
+      },
+      "attacks": [
+        "cuchilla_de_aire",
+        "huracan_prehistorico",
+        "cuerno_corta_viento_letal"
+      ]
     },
     {
       "id": "deltadromeus",
@@ -1852,18 +3418,36 @@
       "element": "viento",
       "card": "cards/viento/deltadromeus_dinosaur_king.jpg",
       "stats": [
-        5,
-        5,
+        7,
+        8,
         6,
-        6,
-        4
+        7,
+        6
       ],
+      "speed": 9,
+      "size": 4,
       "art": {
         "left": "arte/viento/deltadromeus_izq.webp",
         "right": "arte/viento/deltadromeus_der.webp"
       },
-      "speed": 10,
-      "size": 4
+      "signatureAttack": {
+        "id": "estela_supersonica_delta",
+        "name": "Estela Supersónica Delta",
+        "power": 100,
+        "element": "viento",
+        "category": "especial",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Corre a velocidades que rompen la barrera del sonido desatando un boom sónico. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "deltadromeus"
+      },
+      "attacks": [
+        "cuchilla_de_aire",
+        "huracan_prehistorico",
+        "estela_supersonica_delta"
+      ]
     },
     {
       "id": "gojirasaurus",
@@ -1872,18 +3456,36 @@
       "element": "viento",
       "card": "cards/viento/gojirasaurus_dinosaur_king.jpg",
       "stats": [
-        5,
+        7,
+        8,
+        7,
         6,
-        6,
-        6,
-        5
+        6
       ],
+      "speed": 7,
+      "size": 3,
       "art": {
         "left": "arte/viento/gojirasaurus_izq.webp",
         "right": "arte/viento/gojirasaurus_der.webp"
       },
-      "speed": 8,
-      "size": 3
+      "signatureAttack": {
+        "id": "rugido_del_vendaval_primigenio",
+        "name": "Rugido del Vendaval Primigenio",
+        "power": 100,
+        "element": "viento",
+        "category": "especial",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Onda de choque eólica que repele ataques aéreos y derriba a la oposición. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "gojirasaurus"
+      },
+      "attacks": [
+        "cuchilla_de_aire",
+        "huracan_prehistorico",
+        "rugido_del_vendaval_primigenio"
+      ]
     },
     {
       "id": "majungasaurus",
@@ -1892,18 +3494,36 @@
       "element": "viento",
       "card": "cards/viento/majungasaurus_dinosaur_king.jpg",
       "stats": [
-        5,
+        7,
+        8,
         7,
         7,
-        6,
-        7
+        6
       ],
+      "speed": 7,
+      "size": 3,
       "art": {
         "left": "arte/viento/majungasaurus_izq.webp",
         "right": "arte/viento/majungasaurus_der.webp"
       },
-      "speed": 9,
-      "size": 3
+      "signatureAttack": {
+        "id": "ariete_del_monzon_majunga",
+        "name": "Ariete del Monzón Majunga",
+        "power": 95,
+        "element": "viento",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Su cabeza reforzada embiste con la fuerza destructiva de una tormenta monzónica. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "majungasaurus"
+      },
+      "attacks": [
+        "cuchilla_de_aire",
+        "huracan_prehistorico",
+        "ariete_del_monzon_majunga"
+      ]
     },
     {
       "id": "megaraptor",
@@ -1912,18 +3532,36 @@
       "element": "viento",
       "card": "cards/viento/megaraptor_dinosaur_king.jpg",
       "stats": [
-        6,
-        5,
+        8,
+        9,
         7,
         7,
-        5
+        6
       ],
+      "speed": 9,
+      "size": 4,
       "art": {
         "left": "arte/viento/megaraptor_izq.webp",
         "right": "arte/viento/megaraptor_der.webp"
       },
-      "speed": 10,
-      "size": 4
+      "signatureAttack": {
+        "id": "guadaña_de_viento_del_cazador",
+        "name": "Guadaña de Viento del Cazador",
+        "power": 105,
+        "element": "viento",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Garras de más de 30 cm que rasgan el aire despidiendo cuchillas eólicas. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "megaraptor"
+      },
+      "attacks": [
+        "cuchilla_de_aire",
+        "huracan_prehistorico",
+        "guadaña_de_viento_del_cazador"
+      ]
     },
     {
       "id": "utahraptor",
@@ -1932,18 +3570,36 @@
       "element": "viento",
       "card": "cards/viento/utahraptor_dinosaur_king.jpg",
       "stats": [
-        6,
+        8,
+        9,
         7,
-        6,
         7,
         7
       ],
+      "speed": 9,
+      "size": 3,
       "art": {
         "left": "arte/viento/utahraptor_izq.webp",
         "right": "arte/viento/utahraptor_der.webp"
       },
-      "speed": 8,
-      "size": 3
+      "signatureAttack": {
+        "id": "salto_del_halcon_rapaz",
+        "name": "Salto del Halcón Rapaz",
+        "power": 100,
+        "element": "viento",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Vuela rasante impulsado por una corriente ascendente clavando su garra curvada. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "utahraptor"
+      },
+      "attacks": [
+        "cuchilla_de_aire",
+        "huracan_prehistorico",
+        "salto_del_halcon_rapaz"
+      ]
     },
     {
       "id": "indoraptor",
@@ -1952,18 +3608,36 @@
       "element": "especial",
       "card": "cards/especial/Indoraptor Card.jpeg",
       "stats": [
-        5,
-        4,
+        7,
+        10,
         6,
-        4,
-        5
+        9,
+        7
       ],
+      "speed": 10,
+      "size": 3,
       "art": {
         "left": "arte/especial/indoraptor_izq.webp",
         "right": "arte/especial/indoraptor_der.webp"
       },
-      "speed": 7,
-      "size": 3
+      "signatureAttack": {
+        "id": "asalto_sombra_genetico",
+        "name": "Asalto Sombra Genético",
+        "power": 110,
+        "element": "especial",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Ataque quirúrgico con camuflaje y reflejos mejorados que ignora esquivas. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "indoraptor"
+      },
+      "attacks": [
+        "poder_ancestral",
+        "pulso_fosil",
+        "asalto_sombra_genetico"
+      ]
     },
     {
       "id": "brontosaurus",
@@ -1972,18 +3646,36 @@
       "element": "especial",
       "card": "cards/especial/brontosaurus (1).jpeg",
       "stats": [
+        10,
         7,
-        4,
-        4,
-        5,
-        5
+        9,
+        8,
+        9
       ],
+      "speed": 3,
+      "size": 6,
       "art": {
         "left": "arte/especial/brontosaurus_izq.webp",
         "right": "arte/especial/brontosaurus_der.webp"
       },
-      "speed": 9,
-      "size": 6
+      "signatureAttack": {
+        "id": "colapso_cosmico_bronto",
+        "name": "Colapso Cósmico Bronto",
+        "power": 115,
+        "element": "especial",
+        "category": "especial",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Concentra polvo estelar en su lomo liberándolo en un pulso que dobla el espacio. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "brontosaurus"
+      },
+      "attacks": [
+        "poder_ancestral",
+        "pulso_fosil",
+        "colapso_cosmico_bronto"
+      ]
     },
     {
       "id": "cryolophosaurus",
@@ -1993,18 +3685,36 @@
       "card": "cards/especial/cryolophosaurus_dinosaur_king.jpg",
       "frontSide": "right",
       "stats": [
-        6,
-        6,
-        6,
         7,
-        6
+        8,
+        6,
+        8,
+        7
       ],
+      "speed": 8,
+      "size": 3,
       "art": {
         "left": "arte/especial/cryolophosaurus_izq.webp",
         "right": "arte/especial/cryolophosaurus_der.webp"
       },
-      "speed": 8,
-      "size": 3
+      "signatureAttack": {
+        "id": "ventisca_criocosmica_antartica",
+        "name": "Ventisca Criocósmica Antártica",
+        "power": 100,
+        "element": "especial",
+        "category": "especial",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Su cresta curva congela la atmósfera congelando al enemigo en un glaciar sólido. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "cryolophosaurus"
+      },
+      "attacks": [
+        "poder_ancestral",
+        "pulso_fosil",
+        "ventisca_criocosmica_antartica"
+      ]
     },
     {
       "id": "deinonychus",
@@ -2015,17 +3725,35 @@
       "frontSide": "right",
       "stats": [
         6,
-        4,
-        6,
-        6,
-        7
+        8,
+        5,
+        8,
+        6
       ],
+      "speed": 9,
+      "size": 2,
       "art": {
         "left": "arte/especial/deinonychus_izq.webp",
         "right": "arte/especial/deinonychus_der.webp"
       },
-      "speed": 5,
-      "size": 2
+      "signatureAttack": {
+        "id": "danza_cuantica_de_la_garra",
+        "name": "Danza Cuántica de la Garra",
+        "power": 95,
+        "element": "especial",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Ataques multidireccionales rápidos que parecen multiplicarse en el tiempo. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "deinonychus"
+      },
+      "attacks": [
+        "poder_ancestral",
+        "pulso_fosil",
+        "danza_cuantica_de_la_garra"
+      ]
     },
     {
       "id": "indominus_rex",
@@ -2034,18 +3762,36 @@
       "element": "especial",
       "card": "cards/especial/indominus rex.jpeg",
       "stats": [
-        4,
-        7,
-        7,
-        4,
-        6
+        10,
+        10,
+        9,
+        9,
+        8
       ],
+      "speed": 7,
+      "size": 5,
       "art": {
         "left": "arte/especial/indominus_rex_izq.webp",
         "right": "arte/especial/indominus_rex_der.webp"
       },
-      "speed": 6,
-      "size": 5
+      "signatureAttack": {
+        "id": "furia_hibrida_dominante",
+        "name": "Furia Híbrida Dominante",
+        "power": 120,
+        "element": "especial",
+        "category": "especial",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Desata el ADN combinado de múltiples depredadores en una tormenta aniquiladora. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "indominus_rex"
+      },
+      "attacks": [
+        "poder_ancestral",
+        "pulso_fosil",
+        "furia_hibrida_dominante"
+      ]
     },
     {
       "id": "megalosaurus",
@@ -2055,18 +3801,36 @@
       "card": "cards/especial/megalosaurus_dinosaur_king.jpg",
       "frontSide": "right",
       "stats": [
+        8,
+        8,
         7,
-        5,
-        4,
         7,
-        5
+        6
       ],
+      "speed": 7,
+      "size": 3,
       "art": {
         "left": "arte/especial/megalosaurus_izq.webp",
         "right": "arte/especial/megalosaurus_der.webp"
       },
-      "speed": 9,
-      "size": 3
+      "signatureAttack": {
+        "id": "mordida_del_origen_ancestral",
+        "name": "Mordida del Origen Ancestral",
+        "power": 105,
+        "element": "especial",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "El primer dinosaurio descubierto invoca el poder puro de la era primitiva. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "megalosaurus"
+      },
+      "attacks": [
+        "poder_ancestral",
+        "pulso_fosil",
+        "mordida_del_origen_ancestral"
+      ]
     },
     {
       "id": "pachycephalosaurus",
@@ -2076,18 +3840,36 @@
       "card": "cards/especial/pachycephalosaurus_dinosaur_king.jpg",
       "frontSide": "right",
       "stats": [
-        6,
-        6,
         7,
+        8,
+        8,
         7,
-        5
+        7
       ],
+      "speed": 8,
+      "size": 2,
       "art": {
         "left": "arte/especial/pachycephalosaurus_izq.webp",
         "right": "arte/especial/pachycephalosaurus_der.webp"
       },
-      "speed": 9,
-      "size": 2
+      "signatureAttack": {
+        "id": "cometa_craneal_demoledor",
+        "name": "Cometa Craneal Demoledor",
+        "power": 105,
+        "element": "especial",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Su domo óseo de 25 cm de grosor impacta como un meteorito ardiente. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "pachycephalosaurus"
+      },
+      "attacks": [
+        "poder_ancestral",
+        "pulso_fosil",
+        "cometa_craneal_demoledor"
+      ]
     },
     {
       "id": "therizinosaurus",
@@ -2097,18 +3879,36 @@
       "card": "cards/especial/therizinosaurus_dinosaur_king.jpg",
       "frontSide": "right",
       "stats": [
-        6,
-        6,
-        4,
+        8,
+        10,
         7,
-        4
+        8,
+        7
       ],
+      "speed": 7,
+      "size": 4,
       "art": {
         "left": "arte/especial/therizinosaurus_izq.webp",
         "right": "arte/especial/therizinosaurus_der.webp"
       },
-      "speed": 9,
-      "size": 4
+      "signatureAttack": {
+        "id": "triple_espada_corta_dimensiones",
+        "name": "Triple Espada Corta-Dimensiones",
+        "power": 110,
+        "element": "especial",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Garras de un metro que cortan el aire con precisión de espadas legendarias. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "therizinosaurus"
+      },
+      "attacks": [
+        "poder_ancestral",
+        "pulso_fosil",
+        "triple_espada_corta_dimensiones"
+      ]
     },
     {
       "id": "pawpawsaurus",
@@ -2117,18 +3917,36 @@
       "element": "normal",
       "card": "cards/normal/Pawpawsaurus.jpeg",
       "stats": [
-        4,
-        4,
-        4,
-        4,
-        5
+        6,
+        6,
+        8,
+        5,
+        7
       ],
+      "speed": 5,
+      "size": 2,
       "art": {
         "left": "arte/normal/pawpawsaurus_izq.webp",
         "right": "arte/normal/pawpawsaurus_der.webp"
       },
-      "speed": 7,
-      "size": 2
+      "signatureAttack": {
+        "id": "escudo_acorazado_inquebrantable",
+        "name": "Escudo Acorazado Inquebrantable",
+        "power": 90,
+        "element": "normal",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Defensa implacable que repele el impacto y contraataca con un empellón seco. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "pawpawsaurus"
+      },
+      "attacks": [
+        "embestida_feroz",
+        "impacto_aplastante",
+        "escudo_acorazado_inquebrantable"
+      ]
     },
     {
       "id": "piatnitzkysaurus",
@@ -2137,18 +3955,36 @@
       "element": "normal",
       "card": "cards/normal/Piatnitzkysaurus.jpg",
       "stats": [
-        4,
-        4,
-        5,
-        5,
-        5
+        6,
+        7,
+        6,
+        6,
+        6
       ],
+      "speed": 8,
+      "size": 2,
       "art": {
         "left": "arte/normal/piatnitzkysaurus_izq.webp",
         "right": "arte/normal/piatnitzkysaurus_der.webp"
       },
-      "speed": 8,
-      "size": 2
+      "signatureAttack": {
+        "id": "frenesi_de_embestidas_tenaz",
+        "name": "Frenesí de Embestidas Tenaz",
+        "power": 90,
+        "element": "normal",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Serie de mordiscos y zarpazos pragmáticos sin ningún adorno mágico. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "piatnitzkysaurus"
+      },
+      "attacks": [
+        "embestida_feroz",
+        "impacto_aplastante",
+        "frenesi_de_embestidas_tenaz"
+      ]
     },
     {
       "id": "quetzalcoatlus",
@@ -2157,19 +3993,37 @@
       "element": "normal",
       "card": "cards/normal/Quetzalcoalt.jpeg",
       "stats": [
-        4,
-        5,
-        4,
-        5,
-        5
+        8,
+        8,
+        6,
+        9,
+        7
       ],
+      "speed": 9,
+      "size": 4,
+      "pose": "vuela",
       "art": {
         "left": "arte/normal/quetzalcoatlus_izq.webp",
         "right": "arte/normal/quetzalcoatlus_der.webp"
       },
-      "speed": 6,
-      "size": 4,
-      "pose": "vuela"
+      "signatureAttack": {
+        "id": "bombardeo_del_titan_del_cielo",
+        "name": "Bombardeo del Titán del Cielo",
+        "power": 105,
+        "element": "normal",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "El animal volador más grande de la historia cae como un bólido imparable. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "quetzalcoatlus"
+      },
+      "attacks": [
+        "embestida_feroz",
+        "impacto_aplastante",
+        "bombardeo_del_titan_del_cielo"
+      ]
     },
     {
       "id": "anhanguera",
@@ -2178,19 +4032,37 @@
       "element": "normal",
       "card": "cards/normal/anhanguera_dive_dinosaur_king.jpg",
       "stats": [
+        6,
+        6,
         5,
-        5,
-        5,
-        5,
-        4
+        7,
+        6
       ],
+      "speed": 9,
+      "size": 2,
+      "pose": "vuela",
       "art": {
         "left": "arte/normal/anhanguera_izq.webp",
         "right": "arte/normal/anhanguera_der.webp"
       },
-      "speed": 8,
-      "size": 2,
-      "pose": "vuela"
+      "signatureAttack": {
+        "id": "estocada_piscivora_quirurgica",
+        "name": "Estocada Piscívora Quirúrgica",
+        "power": 85,
+        "element": "normal",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Pico alargado con dientes entrelazados que perfora armaduras con precisión. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "anhanguera"
+      },
+      "attacks": [
+        "embestida_feroz",
+        "impacto_aplastante",
+        "estocada_piscivora_quirurgica"
+      ]
     },
     {
       "id": "velociraptor",
@@ -2200,355 +4072,1578 @@
       "card": "cards/normal/velociraptor_dinosaur_king.jpg",
       "stats": [
         5,
-        4,
+        8,
         5,
-        4,
-        5
+        8,
+        6
       ],
+      "speed": 10,
+      "size": 1,
       "art": {
         "left": "arte/normal/velociraptor_izq.webp",
         "right": "arte/normal/velociraptor_der.webp"
       },
-      "speed": 5,
-      "size": 1
+      "signatureAttack": {
+        "id": "emboscada_al_cuello_veloz",
+        "name": "Emboscada al Cuello Veloz",
+        "power": 90,
+        "element": "normal",
+        "category": "fisico",
+        "cooldown": 4,
+        "tier": "definitivo",
+        "level": 1,
+        "description": "Cálculo milimétrico de salto cayendo directamente sobre el punto débil del rival. Se activa cada 4 turnos.",
+        "isSignature": true,
+        "signatureDino": "velociraptor"
+      },
+      "attacks": [
+        "embestida_feroz",
+        "impacto_aplastante",
+        "emboscada_al_cuello_veloz"
+      ]
     }
   ],
   "attacks": [
     {
-      "id": "bola_fuego",
-      "name": "Bola de Fuego",
-      "element": "fuego",
-      "power": 40,
-      "category": "especial",
-      "level": 1
-    },
-    {
       "id": "colmillo_igneo",
       "name": "Colmillo Ígneo",
-      "element": "fuego",
       "power": 45,
-      "category": "fisico",
-      "level": 5
-    },
-    {
-      "id": "garra_ardiente",
-      "name": "Garra Ardiente",
       "element": "fuego",
-      "power": 50,
       "category": "fisico",
-      "level": 8
+      "cooldown": 0,
+      "tier": "basico",
+      "level": 1,
+      "description": "Mordisco ardiente rápido y continuo. Siempre disponible en cada turno."
     },
     {
-      "id": "volcan_furioso",
-      "name": "Volcán Furioso",
-      "element": "fuego",
-      "power": 60,
-      "category": "especial",
-      "level": 12
-    },
-    {
-      "id": "llamarada",
+      "id": "llamarada_solar",
       "name": "Llamarada Solar",
-      "element": "fuego",
       "power": 70,
+      "element": "fuego",
       "category": "especial",
-      "level": 20
+      "cooldown": 1,
+      "tier": "potente",
+      "level": 10,
+      "description": "Potente ráfaga de fuego concentrado. Requiere 1 turno de recarga (no se puede usar seguido)."
     },
     {
       "id": "chorro_agua",
       "name": "Chorro de Agua",
-      "element": "agua",
-      "power": 40,
-      "category": "especial",
-      "level": 1
-    },
-    {
-      "id": "acua_cola",
-      "name": "Acua Cola",
-      "element": "agua",
       "power": 45,
-      "category": "fisico",
-      "level": 5
-    },
-    {
-      "id": "hidropulso",
-      "name": "Hidropulso",
       "element": "agua",
-      "power": 50,
       "category": "especial",
-      "level": 8
+      "cooldown": 0,
+      "tier": "basico",
+      "level": 1,
+      "description": "Torrente de agua a presión continuo. Siempre disponible en cada turno."
     },
     {
-      "id": "tsunami",
-      "name": "Tsunami Prehistórico",
-      "element": "agua",
-      "power": 60,
-      "category": "especial",
-      "level": 12
-    },
-    {
-      "id": "cascada",
+      "id": "cascada_jurasica",
       "name": "Cascada Jurásica",
-      "element": "agua",
       "power": 70,
+      "element": "agua",
       "category": "fisico",
-      "level": 20
+      "cooldown": 1,
+      "tier": "potente",
+      "level": 10,
+      "description": "Descenso masivo de agua demoledora. Requiere 1 turno de recarga (no se puede usar seguido)."
     },
     {
-      "id": "choque_electrico",
-      "name": "Choque Eléctrico",
-      "element": "rayo",
-      "power": 40,
-      "category": "especial",
-      "level": 1
-    },
-    {
-      "id": "cuerno_voltio",
-      "name": "Cuerno Voltio",
-      "element": "rayo",
+      "id": "chispazo_electrico",
+      "name": "Chispazo Eléctrico",
       "power": 45,
-      "category": "fisico",
-      "level": 5
-    },
-    {
-      "id": "chispazo",
-      "name": "Chispazo",
       "element": "rayo",
-      "power": 50,
       "category": "especial",
-      "level": 8
-    },
-    {
-      "id": "canon_relampago",
-      "name": "Cañón Relámpago",
-      "element": "rayo",
-      "power": 60,
-      "category": "especial",
-      "level": 12
+      "cooldown": 0,
+      "tier": "basico",
+      "level": 1,
+      "description": "Descarga de voltaje continuo. Siempre disponible en cada turno."
     },
     {
       "id": "tormenta_electrica",
       "name": "Tormenta Eléctrica",
+      "power": 70,
       "element": "rayo",
-      "power": 70,
       "category": "especial",
-      "level": 20
+      "cooldown": 1,
+      "tier": "potente",
+      "level": 10,
+      "description": "Rayo concentrado de alta tensión. Requiere 1 turno de recarga (no se puede usar seguido)."
     },
     {
-      "id": "avalancha",
-      "name": "Avalancha de Rocas",
-      "element": "tierra",
-      "power": 40,
-      "category": "fisico",
-      "level": 1
-    },
-    {
-      "id": "bofeton_lodo",
+      "id": "bofeton_de_lodo",
       "name": "Bofetón de Lodo",
-      "element": "tierra",
       "power": 45,
-      "category": "especial",
-      "level": 5
-    },
-    {
-      "id": "cabezazo_roca",
-      "name": "Cabezazo Roca",
       "element": "tierra",
-      "power": 50,
       "category": "fisico",
-      "level": 8
+      "cooldown": 0,
+      "tier": "basico",
+      "level": 1,
+      "description": "Golpe mineral pesado y rápido. Siempre disponible en cada turno."
     },
     {
-      "id": "terremoto",
-      "name": "Terremoto",
-      "element": "tierra",
-      "power": 60,
-      "category": "fisico",
-      "level": 12
-    },
-    {
-      "id": "fisura",
+      "id": "fisura_tectonica",
       "name": "Fisura Tectónica",
-      "element": "tierra",
       "power": 70,
+      "element": "tierra",
       "category": "fisico",
-      "level": 20
+      "cooldown": 1,
+      "tier": "potente",
+      "level": 10,
+      "description": "Fractura sísmica de gran poder. Requiere 1 turno de recarga (no se puede usar seguido)."
     },
     {
       "id": "latigo_cepa",
       "name": "Látigo Cepa",
-      "element": "planta",
-      "power": 40,
-      "category": "fisico",
-      "level": 1
-    },
-    {
-      "id": "hoja_afilada",
-      "name": "Hoja Afilada",
-      "element": "planta",
       "power": 45,
-      "category": "fisico",
-      "level": 5
-    },
-    {
-      "id": "rayo_solar",
-      "name": "Rayo Solar",
       "element": "planta",
-      "power": 50,
-      "category": "especial",
-      "level": 8
+      "category": "fisico",
+      "cooldown": 0,
+      "tier": "basico",
+      "level": 1,
+      "description": "Azote ágil de zarzas prehistóricas. Siempre disponible en cada turno."
     },
     {
-      "id": "tormenta_hojas",
+      "id": "tormenta_de_hojas",
       "name": "Tormenta de Hojas",
-      "element": "planta",
-      "power": 60,
-      "category": "especial",
-      "level": 12
-    },
-    {
-      "id": "raiz_gigante",
-      "name": "Raíz Gigante",
-      "element": "planta",
       "power": 70,
-      "category": "fisico",
-      "level": 20
+      "element": "planta",
+      "category": "especial",
+      "cooldown": 1,
+      "tier": "potente",
+      "level": 10,
+      "description": "Ráfaga de follaje afilado como navajas. Requiere 1 turno de recarga (no se puede usar seguido)."
     },
     {
-      "id": "cuchilla_aire",
+      "id": "cuchilla_de_aire",
       "name": "Cuchilla de Aire",
-      "element": "viento",
-      "power": 40,
-      "category": "fisico",
-      "level": 1
-    },
-    {
-      "id": "ataque_aereo",
-      "name": "Ataque Aéreo",
-      "element": "viento",
       "power": 45,
-      "category": "fisico",
-      "level": 5
-    },
-    {
-      "id": "rafaga",
-      "name": "Ráfaga",
       "element": "viento",
-      "power": 50,
       "category": "especial",
-      "level": 8
+      "cooldown": 0,
+      "tier": "basico",
+      "level": 1,
+      "description": "Onda cortante de brisa veloz. Siempre disponible en cada turno."
     },
     {
-      "id": "ciclon",
-      "name": "Ciclón Jurásico",
-      "element": "viento",
-      "power": 60,
-      "category": "especial",
-      "level": 12
-    },
-    {
-      "id": "huracan",
+      "id": "huracan_prehistorico",
       "name": "Huracán Prehistórico",
-      "element": "viento",
       "power": 70,
+      "element": "viento",
       "category": "especial",
-      "level": 20
+      "cooldown": 1,
+      "tier": "potente",
+      "level": 10,
+      "description": "Vórtice eólico que azota el campo. Requiere 1 turno de recarga (no se puede usar seguido)."
     },
     {
       "id": "poder_ancestral",
       "name": "Poder Ancestral",
+      "power": 50,
       "element": "especial",
-      "power": 40,
       "category": "especial",
-      "level": 1
-    },
-    {
-      "id": "zarpazo_primigenio",
-      "name": "Zarpazo Primigenio",
-      "element": "especial",
-      "power": 45,
-      "category": "fisico",
-      "level": 5
-    },
-    {
-      "id": "furia_jurasica",
-      "name": "Furia Jurásica",
-      "element": "especial",
-      "power": 55,
-      "category": "fisico",
-      "level": 10
+      "cooldown": 0,
+      "tier": "basico",
+      "level": 1,
+      "description": "Emisión cósmica continua de energía fósil. Siempre disponible en cada turno."
     },
     {
       "id": "pulso_fosil",
       "name": "Pulso Fósil",
+      "power": 75,
       "element": "especial",
-      "power": 70,
       "category": "especial",
-      "level": 20
+      "cooldown": 1,
+      "tier": "potente",
+      "level": 10,
+      "description": "Descarga cuántica concentrada. Requiere 1 turno de recarga (no se puede usar seguido)."
     },
     {
-      "id": "rugido",
-      "name": "Rugido Intimidante",
+      "id": "embestida_feroz",
+      "name": "Embestida Feroz",
+      "power": 45,
       "element": "normal",
-      "power": 0,
-      "category": "estado",
-      "level": 1
-    },
-    {
-      "id": "embestida",
-      "name": "Embestida",
-      "element": "normal",
-      "power": 20,
       "category": "fisico",
-      "level": 1
+      "cooldown": 0,
+      "tier": "basico",
+      "level": 1,
+      "description": "Golpe directo y continuo de peso frontal. Siempre disponible en cada turno."
     },
     {
-      "id": "mordisco",
-      "name": "Mordisco",
+      "id": "impacto_aplastante",
+      "name": "Impacto Aplastante",
+      "power": 70,
       "element": "normal",
-      "power": 25,
       "category": "fisico",
-      "level": 1
+      "cooldown": 1,
+      "tier": "potente",
+      "level": 10,
+      "description": "Abalanzamiento contundente de máxima masa. Requiere 1 turno de recarga (no se puede usar seguido)."
     },
     {
-      "id": "coletazo",
-      "name": "Coletazo",
-      "element": "normal",
-      "power": 25,
+      "id": "mordedura_ignea_veloz",
+      "name": "Mordida Ígnea Fulminante",
+      "power": 90,
+      "element": "fuego",
       "category": "fisico",
-      "level": 3
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Abalanzamiento a gran velocidad envolviendo sus mandíbulas alargadas en llamas directas. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "alioramus"
     },
     {
-      "id": "pisoton",
-      "name": "Pisotón",
-      "element": "normal",
-      "power": 30,
+      "id": "erupcion_espinal_alfa",
+      "name": "Erupción Espinal Alfa",
+      "power": 115,
+      "element": "fuego",
+      "category": "especial",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Su cresta dorsal irradia un calor sobrehumano desatando un infierno magmático. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "alpha_acrocanthosaurus"
+    },
+    {
+      "id": "apocalipsis_rex_oscuro",
+      "name": "Apocalipsis Rex Sombrío",
+      "power": 120,
+      "element": "fuego",
+      "category": "especial",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "El titán oscuro condensa fuego negro en un impacto tectónico demoledor. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "black_tyrannosaurus_rex"
+    },
+    {
+      "id": "corte_flamigero_del_alba",
+      "name": "Corte Flamígero del Alba",
+      "power": 90,
+      "element": "fuego",
       "category": "fisico",
-      "level": 6
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Cuchillada de garras al rojo vivo que abre surcos de brasas incandescentes. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "eocarcharia"
     },
     {
-      "id": "grito_salvaje",
-      "name": "Grito Salvaje",
-      "element": "normal",
-      "power": 0,
-      "category": "estado",
-      "level": 8
-    },
-    {
-      "id": "doble_golpe",
-      "name": "Doble Golpe",
-      "element": "normal",
-      "power": 35,
+      "id": "furia_magmatica_del_sur",
+      "name": "Furia Magmática del Sur",
+      "power": 105,
+      "element": "fuego",
       "category": "fisico",
-      "level": 10
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Mordida titánica que tritura el blindaje rival con la presión de un volcán activo. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "giganotosaurus"
     },
     {
-      "id": "hiper_colmillo",
-      "name": "Hiper Colmillo",
-      "element": "normal",
-      "power": 50,
+      "id": "dorsal_volcanica",
+      "name": "Impacto Dorsal Volcánico",
+      "power": 100,
+      "element": "fuego",
       "category": "fisico",
-      "level": 15
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Golpe con su lomo acorazado cargado de energía volcánica que hace estallar el suelo. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "acrocanthosaurus"
+    },
+    {
+      "id": "fauces_tiburonas_ardientes",
+      "name": "Fauces Tiburonas de Fuego",
+      "power": 105,
+      "element": "fuego",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Mandíbula aserrada que desgarra al oponente encendiendo una llamarada continua. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "carcharodontosaurus"
+    },
+    {
+      "id": "aplastamiento_igneo_brutal",
+      "name": "Aplastamiento Ígneo Brutal",
+      "power": 95,
+      "element": "fuego",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Embestida frontal de cráneo masivo con una detonación explosiva frontal. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "daspletosaurus"
+    },
+    {
+      "id": "cataclismo_solar_gigas",
+      "name": "Cataclismo Solar de Gigas",
+      "power": 115,
+      "element": "fuego",
+      "category": "especial",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Emisión de un haz de plasma condensado desde el núcleo volcánico de su pecho. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "gigas"
+    },
+    {
+      "id": "caceria_en_manada_de_brasas",
+      "name": "Cacería de Brasas Voraz",
+      "power": 100,
+      "element": "fuego",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Asalto implacable con zarpazos ardientes sucesivos sin dar tregua. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "mapusaurus"
+    },
+    {
+      "id": "cuerno_imperial_de_lava",
+      "name": "Cuerno Imperial de Lava",
+      "power": 90,
+      "element": "fuego",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Su prominente cuerno frontal se funde en magma sólido para perforar cualquier defensa. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "rajasaurus"
+    },
+    {
+      "id": "devorador_de_llamas_supremo",
+      "name": "Devorador de Llamas Supremo",
+      "power": 110,
+      "element": "fuego",
+      "category": "especial",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Inhala el calor ambiental y desata una llamarada cónica que arrasa todo el frente. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "saurophaganax"
+    },
+    {
+      "id": "zarpazo_infernal_salvaje",
+      "name": "Zarpazo Infernal Salvaje",
+      "power": 95,
+      "element": "fuego",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Garras curvadas que prenden fuego al rozar el aire asestando un golpe crítico. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "torvosaurus"
+    },
+    {
+      "id": "erupcion_rex_t_crash",
+      "name": "Erupción Rex T-Crash",
+      "power": 110,
+      "element": "fuego",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "El clásico rey dinosaurio estrella su peso colosal y desata un géiser de lava ascendente. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "tyrannosaurus_rex"
+    },
+    {
+      "id": "emboscada_de_fuego_oriental",
+      "name": "Emboscada de Fuego Oriental",
+      "power": 95,
+      "element": "fuego",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Salto ágil desde las sombras aterrizando con una explosión de calor sofocante. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "yangchuanosaurus"
+    },
+    {
+      "id": "espinas_hidraulicas_gemelas",
+      "name": "Espinas Hidráulicas Gemelas",
+      "power": 95,
+      "element": "agua",
+      "category": "especial",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Sus espinas curvadas hacia adelante disparan chorros de agua a presión cortante. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "bajadasaurus"
+    },
+    {
+      "id": "pisoton_abismal_de_marea",
+      "name": "Pisotón de Marea Abismal",
+      "power": 105,
+      "element": "agua",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Su descomunal pata delantera cae desatando una onda expansiva de agua marina. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "camarasaurus"
+    },
+    {
+      "id": "latigo_marino_serpentino",
+      "name": "Látigo Marino Serpentino",
+      "power": 95,
+      "element": "agua",
+      "category": "especial",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Su cuello de más de diez metros azota como un tifón líquido envolviendo al rival. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "elasmosaurus"
+    },
+    {
+      "id": "mordedura_de_remolino",
+      "name": "Mordedura de Remolino Voraz",
+      "power": 90,
+      "element": "agua",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Giro giratorio de mandíbula cerrada atrapando al oponente en un vórtice. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "irritator"
+    },
+    {
+      "id": "embestida_sonar_oceanica",
+      "name": "Embestida Sónar Oceánica",
+      "power": 85,
+      "element": "agua",
+      "category": "especial",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Ondas ultrasónicas que desorientan al objetivo antes de un torpedo acuático fulminante. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "ophthalmosaurus"
+    },
+    {
+      "id": "abanico_de_olas_espinoso",
+      "name": "Abanico de Olas Espinoso",
+      "power": 95,
+      "element": "agua",
+      "category": "especial",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Su doble cresta espinal vibra para lanzar proyectiles de hielo y agua presurizada. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "amargasaurus"
+    },
+    {
+      "id": "armadura_de_arrecife_surgente",
+      "name": "Armadura de Arrecife Surgente",
+      "power": 100,
+      "element": "agua",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Osteodermos que reflejan el daño rival mediante una muralla de agua compacta. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "ampelosaurus"
+    },
+    {
+      "id": "garra_gancho_de_cascada",
+      "name": "Garra Gancho de Cascada",
+      "power": 95,
+      "element": "agua",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Su enorme pulgar ganchudo desciende con la fuerza de una catarata desbordada. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "baryonyx"
+    },
+    {
+      "id": "rafaga_de_corriente_profunda",
+      "name": "Ráfaga de Corriente Profunda",
+      "power": 90,
+      "element": "agua",
+      "category": "especial",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Proyectil hidroeléctrico que brota del océano aplastando el campo de batalla. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "futabasaurus"
+    },
+    {
+      "id": "columna_de_agua_continental",
+      "name": "Columna de Agua Continental",
+      "power": 105,
+      "element": "agua",
+      "category": "especial",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Eleva un géiser descomunal capaz de suspender en el aire a cualquier rival. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "isisaurus"
+    },
+    {
+      "id": "aplastamiento_del_rio_ancestral",
+      "name": "Aplastamiento del Río Ancestral",
+      "power": 105,
+      "element": "agua",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Cuerpo masivo que cae sobre el oponente levantando una marea torrencial. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "jobaria"
+    },
+    {
+      "id": "bombardeo_de_esferas_acuaticas",
+      "name": "Bombardeo de Perlas Acuáticas",
+      "power": 95,
+      "element": "agua",
+      "category": "especial",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Disparo rápido de proyectiles esféricos de agua densa desde su espalda acorazada. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "saltasaurus"
+    },
+    {
+      "id": "maza_de_esmeralda_oceanica",
+      "name": "Maza de Esmeralda Oceánica",
+      "power": 95,
+      "element": "agua",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Su cola con maza ósea golpea impregnada de agua sólida rompiendo defensas. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "shunosaurus"
+    },
+    {
+      "id": "frenesi_tsunami_letal",
+      "name": "Frenesí Tsunami Letal",
+      "power": 115,
+      "element": "agua",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Despliegue furioso de mandíbulas y zarpas impulsado por una ola gigantesca. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "spinosaurus_atacando"
+    },
+    {
+      "id": "vortice_de_la_vela_dorsal",
+      "name": "Vórtice de la Vela Dorsal",
+      "power": 110,
+      "element": "agua",
+      "category": "especial",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Su majestuosa aleta dorsal concentra la humedad creando un tifón acuático imparable. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "spinosaurus"
+    },
+    {
+      "id": "caza_pantano_del_cocodrilo",
+      "name": "Caza Pantano del Cocodrilo",
+      "power": 95,
+      "element": "agua",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Arrastra a la presa hacia una zona de fango acuático dejándola indefensa. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "suchomimus"
+    },
+    {
+      "id": "arpon_voltaico_singular",
+      "name": "Arpón Voltaico Singular",
+      "power": 95,
+      "element": "rayo",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Carga recta con su cuerno nasal canalizando un relámpago penetrante. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "centrosaurus"
+    },
+    {
+      "id": "gualdrapa_electrica_defensiva",
+      "name": "Gualdrapa Eléctrica Defensiva",
+      "power": 90,
+      "element": "rayo",
+      "category": "especial",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Su amplio volante óseo proyecta una cortina de chispas de alto voltaje. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "chasmosaurus"
+    },
+    {
+      "id": "gancho_centella_descendente",
+      "name": "Gancho Centella Descendente",
+      "power": 90,
+      "element": "rayo",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Su cuerno curvado hacia adelante descarga un chispazo al enganchar al enemigo. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "einiosaurus"
+    },
+    {
+      "id": "daga_del_trueno_bifurcada",
+      "name": "Dagas del Trueno Bifurcadas",
+      "power": 95,
+      "element": "rayo",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Doble impacto de sus cuernos occipitales que electrocuta al contacto. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "machairoceratops"
+    },
+    {
+      "id": "ariete_relampagueante",
+      "name": "Ariete Relampagueante",
+      "power": 90,
+      "element": "rayo",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Aceleración a corta distancia que detona una descarga sónica en el blanco. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "monoclonius"
+    },
+    {
+      "id": "chispazo_agil_de_ceja",
+      "name": "Chispazo Ágil de Ceja",
+      "power": 85,
+      "element": "rayo",
+      "category": "especial",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Doble haz eléctrico concentrado que paraliza momentáneamente las extremidades rivales. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "zuniceratops"
+    },
+    {
+      "id": "testarazo_electrico_achelous",
+      "name": "Testarazo Eléctrico Achelous",
+      "power": 95,
+      "element": "rayo",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Su protuberancia ósea aplasta con la contundencia de un rayo caído del cielo. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "achelousaurus"
+    },
+    {
+      "id": "muralla_de_arco_voltaico",
+      "name": "Muralla de Arco Voltaico",
+      "power": 95,
+      "element": "rayo",
+      "category": "especial",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Espinas de la gola que enlazan un circuito eléctrico que abrasa a quien se acerque. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "anchiceratops"
+    },
+    {
+      "id": "rayo_titanico_sobrecargado",
+      "name": "Rayo Titánico Sobrecargado",
+      "power": 115,
+      "element": "rayo",
+      "category": "especial",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Canaliza toda la energía de la tormenta en una descarga cósmica desintegradora. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "maximus"
+    },
+    {
+      "id": "disparo_electromagnetico_frontal",
+      "name": "Disparo Electromagnético Frontal",
+      "power": 95,
+      "element": "rayo",
+      "category": "especial",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Alineación de cuernos frontales que disparan un pulso de plasma acelerado. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "nedoceratops"
+    },
+    {
+      "id": "domo_del_trueno_aplastante",
+      "name": "Domo del Trueno Aplastante",
+      "power": 100,
+      "element": "rayo",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Su masiva masa nasal descarga un golpe contundente que sacude el sistema nervioso rival. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "pachyrhinosaurus"
+    },
+    {
+      "id": "pentarrayo_fulgurante",
+      "name": "Penta-Rayo Fulgurante",
+      "power": 105,
+      "element": "rayo",
+      "category": "especial",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Sus cinco cuernos se iluminan al unísono disparando cinco haces de electricidad pura. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "pentaceratops"
+    },
+    {
+      "id": "corona_de_espinas_electricas",
+      "name": "Corona de Espinas Eléctricas",
+      "power": 105,
+      "element": "rayo",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Su gola repleta de espinas largas emite una tempestad de arcos voltaicos punzantes. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "styracosaurus"
+    },
+    {
+      "id": "escudo_dinamo_de_choque",
+      "name": "Escudo Dínamo de Choque",
+      "power": 100,
+      "element": "rayo",
+      "category": "especial",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "La gola ósea más grande del reino genera una barrera electrificada repelente. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "torosaurus"
+    },
+    {
+      "id": "ruptura_sismica_tri_cuerno",
+      "name": "Ruptura Sísmica Tri-Cuerno",
+      "power": 110,
+      "element": "rayo",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "El ataque definitivo de tres cuernos cargados con energía de trueno a máxima potencia. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "triceratops"
+    },
+    {
+      "id": "hilera_de_puñales_tectonicos",
+      "name": "Hilera de Puñales Tectónicos",
+      "power": 95,
+      "element": "tierra",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Sus dobles púas de la cola barren el suelo levantando esquirlas de roca afilada. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "dacentrurus"
+    },
+    {
+      "id": "hoja_escapular_de_granito",
+      "name": "Hoja Escapular de Granito",
+      "power": 95,
+      "element": "tierra",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Sus colosales espinas de los hombros cortan y derriban estructuras rocosas. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "gigantspinosaurus"
+    },
+    {
+      "id": "puntas_del_cañon_de_roca",
+      "name": "Puntas del Cañón de Roca",
+      "power": 90,
+      "element": "tierra",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Giro giratorio de cola erizada que empala con la dureza del diamante. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "kentrosaurus"
+    },
+    {
+      "id": "aplasta_rocas_blindado",
+      "name": "Aplastador Blindado de Suelo",
+      "power": 90,
+      "element": "tierra",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Su cuerpo bajo golpea con fuerza tectónica hundiendo las patas del enemigo. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "pinacosaurus"
+    },
+    {
+      "id": "alfombra_de_espinas_basalticas",
+      "name": "Alfombra de Espinas Basálticas",
+      "power": 90,
+      "element": "tierra",
+      "category": "especial",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Dispersa púas minerales en el terreno que estallan al contacto rival. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "polacanthus"
+    },
+    {
+      "id": "blindaje_de_trinchera_ferrea",
+      "name": "Blindaje de Trinchera Férrea",
+      "power": 95,
+      "element": "tierra",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Placas sólidas de acero biológico que absorben y devuelven el golpe con furia sísmica. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "sauropelta"
+    },
+    {
+      "id": "martillo_meteoro_demoledor",
+      "name": "Martillo Meteoro Demoledor",
+      "power": 110,
+      "element": "tierra",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Su maza caudal de puro hueso macizo asesta un golpe capaz de fracturar montañas. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "ankylosaurus"
+    },
+    {
+      "id": "fortaleza_impenetrable_armatus",
+      "name": "Fortaleza Impenetrable Armatus",
+      "power": 105,
+      "element": "tierra",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Carga blindada con placas reforzadas que convierte su cuerpo en un ariete. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "armatus"
+    },
+    {
+      "id": "puas_del_acantilado_frontal",
+      "name": "Púas del Acantilado Frontal",
+      "power": 95,
+      "element": "tierra",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Espinas proyectadas hacia afuera que perforan defensas durante la carrera. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "edmontonia"
+    },
+    {
+      "id": "quebrantahuesos_subterraneo",
+      "name": "Quebrantahuesos Subterráneo",
+      "power": 95,
+      "element": "tierra",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Impacto en ángulo bajo que desestabiliza y derriba al contendiente. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "scolosaurus"
+    },
+    {
+      "id": "torbellino_de_placas_acorazadas",
+      "name": "Torbellino de Placas Acorazadas",
+      "power": 95,
+      "element": "tierra",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Rotación defensiva que repele ataques proyectando fragmentos de piedra. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "euoplocephalus"
+    },
+    {
+      "id": "corte_de_placas_en_sierra",
+      "name": "Corte de Placas en Sierra",
+      "power": 95,
+      "element": "tierra",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Movimiento lateral donde sus placas dorsales aserradas desgarran el flanco enemigo. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "lexovisaurus"
+    },
+    {
+      "id": "baluarte_del_desierto_saichania",
+      "name": "Baluarte del Desierto Saichania",
+      "power": 100,
+      "element": "tierra",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Emerge de la arena con un impacto de coraza que nubla la visión del rival. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "saichania"
+    },
+    {
+      "id": "thagomizer_corta_rocas",
+      "name": "Thagomizer Corta-Rocas",
+      "power": 105,
+      "element": "tierra",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Las cuatro temibles púas de su cola impactan a la velocidad de un látigo de piedra. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "stegosaurus"
+    },
+    {
+      "id": "espinas_en_aguja_orientales",
+      "name": "Espinas en Aguja Orientales",
+      "power": 95,
+      "element": "tierra",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Púas cónicas extremadamente afiladas que causan daño continuo al blindaje. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "tuojiangosaurus"
+    },
+    {
+      "id": "trompeta_de_polen_sonico",
+      "name": "Trompeta de Polen Sónico",
+      "power": 95,
+      "element": "planta",
+      "category": "especial",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Su cresta hueca emite una nota sónica que dispersa esporas narcóticas. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "charonosaurus"
+    },
+    {
+      "id": "casco_de_resonancia_vegetal",
+      "name": "Casco de Resonancia Vegetal",
+      "power": 95,
+      "element": "planta",
+      "category": "especial",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Ondas acústicas amplificadas por su casco que desintegran defensas. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "corythosaurus"
+    },
+    {
+      "id": "onda_de_esporas_del_cisne",
+      "name": "Onda de Esporas del Cisne",
+      "power": 95,
+      "element": "planta",
+      "category": "especial",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Su estilizada cresta lanza un torrente de semillas explosivas de rápido crecimiento. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "olorotitan"
+    },
+    {
+      "id": "vuelo_en_picada_de_lianas",
+      "name": "Picada de Lianas Aérea",
+      "power": 90,
+      "element": "planta",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Desciende desde las copas de los árboles arrastrando zarzas punzantes sobre la presa. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "pteranodon"
+    },
+    {
+      "id": "terremoto_de_raices_seismo",
+      "name": "Terremoto de Raíces Seismo",
+      "power": 115,
+      "element": "planta",
+      "category": "especial",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Su andar hace emerger gigantescas raíces milenarias que aprisionan el campo. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "seismosaurus"
+    },
+    {
+      "id": "latigo_de_secoya_gigante",
+      "name": "Látigo de Secoya Gigante",
+      "power": 115,
+      "element": "planta",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Su cola interminable azota como un tronco milenario barriendo a múltiples objetivos. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "supersaurus"
+    },
+    {
+      "id": "cresta_solar_fotosintetica",
+      "name": "Cresta Solar Fotosintética",
+      "power": 85,
+      "element": "planta",
+      "category": "especial",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Su cresta gigante canaliza la luz del sol en un rayo vegetal deslumbrante. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "tupandactylus"
+    },
+    {
+      "id": "aguijon_aereo_de_espinas",
+      "name": "Aguijón Aéreo de Espinas",
+      "power": 85,
+      "element": "planta",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Ataque veloz con el pico apuntando a puntos vitales con energía clorofílica. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "tupuxuara"
+    },
+    {
+      "id": "nariz_bomba_de_sauce",
+      "name": "Nariz Bomba de Sauce",
+      "power": 90,
+      "element": "planta",
+      "category": "especial",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Su cavidad nasal reforzada expele vainas de semillas que estallan al impactar. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "altirhinus"
+    },
+    {
+      "id": "brote_de_bambu_afilado",
+      "name": "Brote de Bambú Afilado",
+      "power": 90,
+      "element": "planta",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Abalanzamiento ágil donde sus garras simulan el corte rápido del bambú. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "fukuisaurus"
+    },
+    {
+      "id": "puñalada_del_pulgar_esmeralda",
+      "name": "Puñalada del Pulgar Esmeralda",
+      "power": 100,
+      "element": "planta",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Su célebre garra en forma de espina perfora como un dardo vegetal venenoso. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "iguanodon"
+    },
+    {
+      "id": "mordida_de_mandibula_ancestral",
+      "name": "Mordida de Mandíbula Ancestral",
+      "power": 100,
+      "element": "planta",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Dientes colosales especializados en triturar madera que destrozan defensas. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "lanzhousaurus"
+    },
+    {
+      "id": "furia_maternal_de_la_arboleda",
+      "name": "Furia Maternal de la Arboleda",
+      "power": 95,
+      "element": "planta",
+      "category": "especial",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Invocación de una barrera de zarzas protectoras que contragolpea con espinas. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "maiasaura"
+    },
+    {
+      "id": "melodia_sagrada_del_bosque",
+      "name": "Melodía Sagrada del Bosque",
+      "power": 105,
+      "element": "planta",
+      "category": "especial",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Emisión de un canto ultrasónico ancestral que sana aliados y aturde al rival. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "parasaurolophus"
+    },
+    {
+      "id": "rafaga_solar_de_otoño",
+      "name": "Ráfaga Solar de Otoño",
+      "power": 95,
+      "element": "planta",
+      "category": "especial",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Lanza una tormenta de hojas afiladas impregnadas de calor fotosintético. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "saurolophus_naranja"
+    },
+    {
+      "id": "espiral_de_hiedra_primaveral",
+      "name": "Espiral de Hiedra Primaveral",
+      "power": 95,
+      "element": "planta",
+      "category": "especial",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Enreda al adversario con enredaderas constrictoras drenando su vigor. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "saurolophus_verde"
+    },
+    {
+      "id": "catapulta_forestal_titanica",
+      "name": "Catapulta Forestal Titánica",
+      "power": 110,
+      "element": "planta",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "El mayor de los hadrosaurios embiste con la masa de un bosque entero en movimiento. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "shantungosaurus"
+    },
+    {
+      "id": "doble_cresta_huracanada",
+      "name": "Doble Cresta Huracanada",
+      "power": 95,
+      "element": "viento",
+      "category": "especial",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Corta el viento con sus crestas gemelas disparando ráfagas en medialuna. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "dilophosaurus"
+    },
+    {
+      "id": "danza_del_vendaval_veloz",
+      "name": "Danza del Vendaval Veloz",
+      "power": 90,
+      "element": "viento",
+      "category": "especial",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Movimientos acrobáticos que levantan un torbellino de arena y aire cortante. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "liliensternus"
+    },
+    {
+      "id": "cazador_del_viento_salvaje",
+      "name": "Cazador del Viento Salvaje",
+      "power": 95,
+      "element": "viento",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Salto impulsado por corrientes de aire cayendo con garras afiladas. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "neovenator"
+    },
+    {
+      "id": "garra_del_remolino_oriental",
+      "name": "Garra del Remolino Oriental",
+      "power": 95,
+      "element": "viento",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Ataque rápido y silencioso como una brisa mortal que no deja rastro. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "sinraptor"
+    },
+    {
+      "id": "cuchilla_del_tifon_szechuan",
+      "name": "Cuchilla del Tifón Szechuan",
+      "power": 95,
+      "element": "viento",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Golpe con el filo de sus patas traseras aprovechando la inercia del viento. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "szechuanosaurus"
+    },
+    {
+      "id": "torbellino_del_sahara",
+      "name": "Torbellino del Sahara",
+      "power": 95,
+      "element": "viento",
+      "category": "especial",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Genera un remolino abrasador que levanta y azota al rival contra el suelo. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "afrovenator"
+    },
+    {
+      "id": "hacha_aerea_devastadora",
+      "name": "Hacha Aérea Devastadora",
+      "power": 105,
+      "element": "viento",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Abre su mandíbula como un hacha arrojadiza cayendo con fuerza gravitatoria. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "allosaurus"
+    },
+    {
+      "id": "embestida_ciclonica_del_toro",
+      "name": "Embestida Ciclónica del Toro",
+      "power": 105,
+      "element": "viento",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Sus cuernos frontales canalizan un vórtice huracanado que pulveriza defensas. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "carnotaurus"
+    },
+    {
+      "id": "cuerno_corta_viento_letal",
+      "name": "Cuerno Corta-Viento Letal",
+      "power": 95,
+      "element": "viento",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Cuchillada ascendente con su cuerno nasal generando una navaja de viento comprimido. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "ceratosaurus"
+    },
+    {
+      "id": "estela_supersonica_delta",
+      "name": "Estela Supersónica Delta",
+      "power": 100,
+      "element": "viento",
+      "category": "especial",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Corre a velocidades que rompen la barrera del sonido desatando un boom sónico. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "deltadromeus"
+    },
+    {
+      "id": "rugido_del_vendaval_primigenio",
+      "name": "Rugido del Vendaval Primigenio",
+      "power": 100,
+      "element": "viento",
+      "category": "especial",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Onda de choque eólica que repele ataques aéreos y derriba a la oposición. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "gojirasaurus"
+    },
+    {
+      "id": "ariete_del_monzon_majunga",
+      "name": "Ariete del Monzón Majunga",
+      "power": 95,
+      "element": "viento",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Su cabeza reforzada embiste con la fuerza destructiva de una tormenta monzónica. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "majungasaurus"
+    },
+    {
+      "id": "guadaña_de_viento_del_cazador",
+      "name": "Guadaña de Viento del Cazador",
+      "power": 105,
+      "element": "viento",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Garras de más de 30 cm que rasgan el aire despidiendo cuchillas eólicas. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "megaraptor"
+    },
+    {
+      "id": "salto_del_halcon_rapaz",
+      "name": "Salto del Halcón Rapaz",
+      "power": 100,
+      "element": "viento",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Vuela rasante impulsado por una corriente ascendente clavando su garra curvada. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "utahraptor"
+    },
+    {
+      "id": "asalto_sombra_genetico",
+      "name": "Asalto Sombra Genético",
+      "power": 110,
+      "element": "especial",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Ataque quirúrgico con camuflaje y reflejos mejorados que ignora esquivas. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "indoraptor"
+    },
+    {
+      "id": "colapso_cosmico_bronto",
+      "name": "Colapso Cósmico Bronto",
+      "power": 115,
+      "element": "especial",
+      "category": "especial",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Concentra polvo estelar en su lomo liberándolo en un pulso que dobla el espacio. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "brontosaurus"
+    },
+    {
+      "id": "ventisca_criocosmica_antartica",
+      "name": "Ventisca Criocósmica Antártica",
+      "power": 100,
+      "element": "especial",
+      "category": "especial",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Su cresta curva congela la atmósfera congelando al enemigo en un glaciar sólido. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "cryolophosaurus"
+    },
+    {
+      "id": "danza_cuantica_de_la_garra",
+      "name": "Danza Cuántica de la Garra",
+      "power": 95,
+      "element": "especial",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Ataques multidireccionales rápidos que parecen multiplicarse en el tiempo. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "deinonychus"
+    },
+    {
+      "id": "furia_hibrida_dominante",
+      "name": "Furia Híbrida Dominante",
+      "power": 120,
+      "element": "especial",
+      "category": "especial",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Desata el ADN combinado de múltiples depredadores en una tormenta aniquiladora. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "indominus_rex"
+    },
+    {
+      "id": "mordida_del_origen_ancestral",
+      "name": "Mordida del Origen Ancestral",
+      "power": 105,
+      "element": "especial",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "El primer dinosaurio descubierto invoca el poder puro de la era primitiva. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "megalosaurus"
+    },
+    {
+      "id": "cometa_craneal_demoledor",
+      "name": "Cometa Craneal Demoledor",
+      "power": 105,
+      "element": "especial",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Su domo óseo de 25 cm de grosor impacta como un meteorito ardiente. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "pachycephalosaurus"
+    },
+    {
+      "id": "triple_espada_corta_dimensiones",
+      "name": "Triple Espada Corta-Dimensiones",
+      "power": 110,
+      "element": "especial",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Garras de un metro que cortan el aire con precisión de espadas legendarias. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "therizinosaurus"
+    },
+    {
+      "id": "escudo_acorazado_inquebrantable",
+      "name": "Escudo Acorazado Inquebrantable",
+      "power": 90,
+      "element": "normal",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Defensa implacable que repele el impacto y contraataca con un empellón seco. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "pawpawsaurus"
+    },
+    {
+      "id": "frenesi_de_embestidas_tenaz",
+      "name": "Frenesí de Embestidas Tenaz",
+      "power": 90,
+      "element": "normal",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Serie de mordiscos y zarpazos pragmáticos sin ningún adorno mágico. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "piatnitzkysaurus"
+    },
+    {
+      "id": "bombardeo_del_titan_del_cielo",
+      "name": "Bombardeo del Titán del Cielo",
+      "power": 105,
+      "element": "normal",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "El animal volador más grande de la historia cae como un bólido imparable. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "quetzalcoatlus"
+    },
+    {
+      "id": "estocada_piscivora_quirurgica",
+      "name": "Estocada Piscívora Quirúrgica",
+      "power": 85,
+      "element": "normal",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Pico alargado con dientes entrelazados que perfora armaduras con precisión. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "anhanguera"
+    },
+    {
+      "id": "emboscada_al_cuello_veloz",
+      "name": "Emboscada al Cuello Veloz",
+      "power": 90,
+      "element": "normal",
+      "category": "fisico",
+      "cooldown": 4,
+      "tier": "definitivo",
+      "level": 1,
+      "description": "Cálculo milimétrico de salto cayendo directamente sobre el punto débil del rival. Se activa cada 4 turnos.",
+      "isSignature": true,
+      "signatureDino": "velociraptor"
     }
   ],
   "typeChart": {

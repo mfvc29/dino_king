@@ -1,0 +1,1122 @@
+{
+  "version": 1,
+  "escala": "1 unidad = 1 metro",
+  "categorias": {
+    "arboles": "🌳 Árboles",
+    "piedras": "🪨 Piedras y Cuevas",
+    "troncos": "🪵 Troncos",
+    "plantas": "🌿 Plantas",
+    "estructuras": "🏠 Estructuras",
+    "casas": "🏡 Casas",
+    "decoraciones": "🏮 Decoraciones",
+    "personajes": "🧍 Personajes",
+    "mini dino": "🦖 Mini Dinos",
+    "terrenos": "⛰️ Terrenos"
+  },
+  "mallas": [
+    {
+      "id": "pino_bonsai",
+      "categoria": "arboles",
+      "archivo": "arboles/pino_bonsai.js",
+      "imagen": "assets/arboles/imagenes/Gemini_Generated_Image_e97u9le97u9le97u.png"
+    },
+    {
+      "id": "roble",
+      "categoria": "arboles",
+      "archivo": "arboles/roble.js",
+      "imagen": "assets/arboles/imagenes/Gemini_Generated_Image_j6w315j6w315j6w3.png"
+    },
+    {
+      "id": "abedul",
+      "categoria": "arboles",
+      "archivo": "arboles/abedul.js",
+      "imagen": "assets/arboles/imagenes/Gemini_Generated_Image_n5ti47n5ti47n5ti.png"
+    },
+    {
+      "id": "pino_capas",
+      "categoria": "arboles",
+      "archivo": "arboles/pino_capas.js",
+      "imagen": ""
+    },
+    {
+      "id": "cumulo_rocas",
+      "categoria": "piedras",
+      "archivo": "piedras/cumulo_rocas.js",
+      "imagen": "assets/arboles/imagenes/Gemini_Generated_Image_e35u1fe35u1fe35u.png"
+    },
+    {
+      "id": "penasco",
+      "categoria": "piedras",
+      "archivo": "piedras/penasco.js",
+      "imagen": "assets/arboles/imagenes/Gemini_Generated_Image_y35gq1y35gq1y35g.png"
+    },
+    {
+      "id": "cueva_rocosa",
+      "categoria": "piedras",
+      "archivo": "piedras/cueva_rocosa.js",
+      "imagen": ""
+    },
+    {
+      "id": "troncos_caidos",
+      "categoria": "troncos",
+      "archivo": "troncos/troncos_caidos.js",
+      "imagen": "assets/arboles/imagenes/Gemini_Generated_Image_54ntb054ntb054nt.png"
+    },
+    {
+      "id": "tronco_hueco",
+      "categoria": "troncos",
+      "archivo": "troncos/tronco_hueco.js",
+      "imagen": "assets/arboles/imagenes/Gemini_Generated_Image_fquohmfquohmfquo.png"
+    },
+    {
+      "id": "mata_hierba",
+      "categoria": "plantas",
+      "archivo": "plantas/mata_hierba.js",
+      "imagen": "assets/arboles/imagenes/Gemini_Generated_Image_b2rf1db2rf1db2rf.png"
+    },
+    {
+      "id": "ayuntamiento_isla",
+      "categoria": "casas",
+      "archivo": "casas/ayuntamiento_isla.js",
+      "imagen": ""
+    },
+    {
+      "id": "casa_isometrica",
+      "categoria": "casas",
+      "archivo": "casas/casa_isometrica.js",
+      "imagen": ""
+    },
+    {
+      "id": "casa_marinero",
+      "categoria": "casas",
+      "archivo": "casas/casa_marinero.js",
+      "imagen": ""
+    },
+    {
+      "id": "cabana_medieval",
+      "categoria": "casas",
+      "archivo": "casas/cabana_medieval.js",
+      "imagen": ""
+    },
+    {
+      "id": "casa_puerto_viento",
+      "categoria": "casas",
+      "archivo": "casas/casa_puerto_viento.js",
+      "imagen": ""
+    },
+    {
+      "id": "casa_aldea_valle",
+      "categoria": "casas",
+      "archivo": "casas/casa_aldea_valle.js",
+      "imagen": ""
+    },
+    {
+      "id": "casa_ciudad_forja",
+      "categoria": "casas",
+      "archivo": "casas/casa_ciudad_forja.js",
+      "imagen": ""
+    },
+    {
+      "id": "casa_refugio_bosque",
+      "categoria": "casas",
+      "archivo": "casas/casa_refugio_bosque.js",
+      "imagen": ""
+    },
+    {
+      "id": "casa_dino",
+      "categoria": "casas",
+      "archivo": "casas/casa_dino.js",
+      "imagen": ""
+    },
+    {
+      "id": "casa_puerto",
+      "categoria": "casas",
+      "archivo": "casas/casa_puerto.js",
+      "imagen": ""
+    },
+    {
+      "id": "casa_valle",
+      "categoria": "casas",
+      "archivo": "casas/casa_valle.js",
+      "imagen": ""
+    },
+    {
+      "id": "casa_forja",
+      "categoria": "casas",
+      "archivo": "casas/casa_forja.js",
+      "imagen": ""
+    },
+    {
+      "id": "faro_costero",
+      "categoria": "decoraciones",
+      "archivo": "decoraciones/faro_costero.js",
+      "imagen": ""
+    },
+    {
+      "id": "maceta_flores",
+      "categoria": "decoraciones",
+      "archivo": "decoraciones/maceta_flores.js",
+      "imagen": ""
+    },
+    {
+      "id": "farola_forja",
+      "categoria": "decoraciones",
+      "archivo": "decoraciones/farola_forja.js",
+      "imagen": ""
+    },
+    {
+      "id": "cantero_flores",
+      "categoria": "decoraciones",
+      "archivo": "decoraciones/cantero_flores.js",
+      "imagen": ""
+    },
+    {
+      "id": "brasero_forja",
+      "categoria": "decoraciones",
+      "archivo": "decoraciones/brasero_forja.js",
+      "imagen": ""
+    },
+    {
+      "id": "farol_poste_madera",
+      "categoria": "decoraciones",
+      "archivo": "decoraciones/farol_poste_madera.js",
+      "imagen": ""
+    },
+    {
+      "id": "valla_madera",
+      "categoria": "decoraciones",
+      "archivo": "decoraciones/valla_madera.js",
+      "imagen": ""
+    },
+    {
+      "id": "valla_madera_esquina",
+      "categoria": "decoraciones",
+      "archivo": "decoraciones/valla_madera_esquina.js",
+      "imagen": ""
+    },
+    {
+      "id": "valla_madera_puerta",
+      "categoria": "decoraciones",
+      "archivo": "decoraciones/valla_madera_puerta.js",
+      "imagen": ""
+    },
+    {
+      "id": "torre_tesla",
+      "categoria": "decoraciones",
+      "archivo": "decoraciones/torre_tesla.js",
+      "imagen": ""
+    },
+    {
+      "id": "farola_electrica",
+      "categoria": "decoraciones",
+      "archivo": "decoraciones/farola_electrica.js",
+      "imagen": ""
+    },
+    {
+      "id": "banco_forja",
+      "categoria": "decoraciones",
+      "archivo": "decoraciones/banco_forja.js",
+      "imagen": ""
+    },
+    {
+      "id": "nucleo_energia",
+      "categoria": "decoraciones",
+      "archivo": "decoraciones/nucleo_energia.js",
+      "imagen": ""
+    },
+    {
+      "id": "jardinera_moderna",
+      "categoria": "decoraciones",
+      "archivo": "decoraciones/jardinera_moderna.js",
+      "imagen": ""
+    },
+    {
+      "id": "panel_holografico",
+      "categoria": "decoraciones",
+      "archivo": "decoraciones/panel_holografico.js",
+      "imagen": ""
+    },
+    {
+      "id": "estandarte_forja",
+      "categoria": "decoraciones",
+      "archivo": "decoraciones/estandarte_forja.js",
+      "imagen": ""
+    },
+    {
+      "id": "sombrilla_playa",
+      "categoria": "decoraciones",
+      "archivo": "decoraciones/sombrilla_playa.js",
+      "imagen": ""
+    },
+    {
+      "id": "tumbona_playa",
+      "categoria": "decoraciones",
+      "archivo": "decoraciones/tumbona_playa.js",
+      "imagen": ""
+    },
+    {
+      "id": "muelle_madera",
+      "categoria": "estructuras",
+      "archivo": "estructuras/muelle_madera.js",
+      "imagen": ""
+    },
+    {
+      "id": "letrero_ruta",
+      "categoria": "estructuras",
+      "archivo": "estructuras/letrero_ruta.js",
+      "imagen": ""
+    },
+    {
+      "id": "alvin",
+      "categoria": "personajes",
+      "archivo": "personajes/alvin.js",
+      "imagen": "assets/chibi/personajes/alvin.png"
+    },
+    {
+      "id": "amelia",
+      "categoria": "personajes",
+      "archivo": "personajes/amelia.js",
+      "imagen": "assets/personajes 3d/Amelia.jpeg"
+    },
+    {
+      "id": "ander",
+      "categoria": "personajes",
+      "archivo": "personajes/ander.js",
+      "imagen": "assets/personajes 3d/ander.jpeg"
+    },
+    {
+      "id": "beatriz",
+      "categoria": "personajes",
+      "archivo": "personajes/beatriz.js",
+      "imagen": "assets/personajes 3d/beatriz.jpeg"
+    },
+    {
+      "id": "blanche",
+      "categoria": "personajes",
+      "archivo": "personajes/blanche.js",
+      "imagen": "assets/personajes 3d/blanche.jpeg"
+    },
+    {
+      "id": "cross",
+      "categoria": "personajes",
+      "archivo": "personajes/cross.js",
+      "imagen": "assets/personajes 3d/cross.jpeg"
+    },
+    {
+      "id": "darius",
+      "categoria": "personajes",
+      "archivo": "personajes/darius.js",
+      "imagen": "assets/personajes 3d/darius.jpeg"
+    },
+    {
+      "id": "eldon",
+      "categoria": "personajes",
+      "archivo": "personajes/eldon.js",
+      "imagen": "assets/personajes 3d/eldon.jpeg"
+    },
+    {
+      "id": "fer",
+      "categoria": "personajes",
+      "archivo": "personajes/fer.js",
+      "imagen": "assets/personajes 3d/fer.jpeg"
+    },
+    {
+      "id": "helmep",
+      "categoria": "personajes",
+      "archivo": "personajes/helmep.js",
+      "imagen": "assets/personajes 3d/helmep.jpeg"
+    },
+    {
+      "id": "irena",
+      "categoria": "personajes",
+      "archivo": "personajes/irena.js",
+      "imagen": "assets/personajes 3d/irena.jpeg"
+    },
+    {
+      "id": "iris",
+      "categoria": "personajes",
+      "archivo": "personajes/iris.js",
+      "imagen": "assets/personajes 3d/Iris.jpeg"
+    },
+    {
+      "id": "jack",
+      "categoria": "personajes",
+      "archivo": "personajes/jack.js",
+      "imagen": "assets/personajes 3d/jack.jpeg"
+    },
+    {
+      "id": "livia",
+      "categoria": "personajes",
+      "archivo": "personajes/livia.js",
+      "imagen": "assets/personajes 3d/livia.jpeg"
+    },
+    {
+      "id": "luter",
+      "categoria": "personajes",
+      "archivo": "personajes/luter.js",
+      "imagen": "assets/personajes 3d/luter.jpeg"
+    },
+    {
+      "id": "macy",
+      "categoria": "personajes",
+      "archivo": "personajes/macy.js",
+      "imagen": "assets/personajes 3d/macy.jpeg"
+    },
+    {
+      "id": "rolando",
+      "categoria": "personajes",
+      "archivo": "personajes/rolando.js",
+      "imagen": "assets/personajes 3d/rolando.jpeg"
+    },
+    {
+      "id": "maxwell",
+      "categoria": "personajes",
+      "archivo": "personajes/maxwell.js",
+      "imagen": "assets/personajes 3d/maxwell.jpeg"
+    },
+    {
+      "id": "nelly",
+      "categoria": "personajes",
+      "archivo": "personajes/nelly.js",
+      "imagen": "assets/personajes 3d/nelly.jpeg"
+    },
+    {
+      "id": "ritza",
+      "categoria": "personajes",
+      "archivo": "personajes/ritza.js",
+      "imagen": "assets/personajes 3d/ritza.jpeg"
+    },
+    {
+      "id": "roderick",
+      "categoria": "personajes",
+      "archivo": "personajes/roderick.js",
+      "imagen": "assets/personajes 3d/roderick.jpeg"
+    },
+    {
+      "id": "rose",
+      "categoria": "personajes",
+      "archivo": "personajes/rose.js",
+      "imagen": "assets/personajes 3d/rose.jpeg"
+    },
+    {
+      "id": "tiberius",
+      "categoria": "personajes",
+      "archivo": "personajes/tiberius.js",
+      "imagen": "assets/personajes 3d/Tiberius.jpeg"
+    },
+    {
+      "id": "trebor",
+      "categoria": "personajes",
+      "archivo": "personajes/trebor.js",
+      "imagen": "assets/personajes 3d/trebor.jpeg"
+    },
+    {
+      "id": "ulises",
+      "categoria": "personajes",
+      "archivo": "personajes/ulises.js",
+      "imagen": "assets/personajes 3d/ulises.jpeg"
+    },
+    {
+      "id": "vivian",
+      "categoria": "personajes",
+      "archivo": "personajes/vivian.js",
+      "imagen": "assets/personajes 3d/vivian.jpeg"
+    },
+    {
+      "id": "kaela",
+      "categoria": "personajes",
+      "archivo": "personajes/kaela.js",
+      "imagen": "assets/personajes 3d/kaela.jpeg"
+    },
+    {
+      "id": "mirela",
+      "categoria": "personajes",
+      "archivo": "personajes/mirela.js",
+      "imagen": "assets/personajes 3d/mirela.jpeg"
+    },
+    {
+      "id": "selene",
+      "categoria": "personajes",
+      "archivo": "personajes/selene.js",
+      "imagen": "assets/personajes 3d/selene.jpeg"
+    },
+    {
+      "id": "mini_amargasaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/amargasaurus.js",
+      "imagen": "assets/dinos/arte/agua/amargasaurus_der.webp"
+    },
+    {
+      "id": "mini_ampelosaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/ampelosaurus.js",
+      "imagen": "assets/dinos/arte/agua/ampelosaurus_der.webp"
+    },
+    {
+      "id": "mini_bajadasaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/bajadasaurus.js",
+      "imagen": "assets/dinos/arte/agua/bajadasaurus_der.webp"
+    },
+    {
+      "id": "mini_baryonyx",
+      "categoria": "mini dino",
+      "archivo": "mini dino/baryonyx.js",
+      "imagen": "assets/dinos/arte/agua/baryonyx_izq.webp"
+    },
+    {
+      "id": "mini_elasmosaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/elasmosaurus.js",
+      "imagen": "assets/dinos/arte/agua/elasmosaurus_der.webp"
+    },
+    {
+      "id": "mini_futabasaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/futabasaurus.js",
+      "imagen": "assets/dinos/arte/agua/futabasaurus_der.webp"
+    },
+    {
+      "id": "mini_irritator",
+      "categoria": "mini dino",
+      "archivo": "mini dino/irritator.js",
+      "imagen": "assets/dinos/arte/agua/irritator_der.webp"
+    },
+    {
+      "id": "mini_isisaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/isisaurus.js",
+      "imagen": "assets/dinos/arte/agua/isisaurus_der.webp"
+    },
+    {
+      "id": "mini_jobaria",
+      "categoria": "mini dino",
+      "archivo": "mini dino/jobaria.js",
+      "imagen": "assets/dinos/arte/agua/jobaria_der.webp"
+    },
+    {
+      "id": "mini_ophthalmosaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/ophthalmosaurus.js",
+      "imagen": "assets/dinos/arte/agua/ophthalmosaurus_izq.webp"
+    },
+    {
+      "id": "mini_suchomimus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/suchomimus.js",
+      "imagen": "assets/dinos/arte/agua/suchomimus_der.webp"
+    },
+    {
+      "id": "mini_spinosaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/spinosaurus.js",
+      "imagen": "assets/dinos/arte/agua/spinosaurus_der.webp"
+    },
+    {
+      "id": "mini_spinosaurus_atacando",
+      "categoria": "mini dino",
+      "archivo": "mini dino/spinosaurus_atacando.js",
+      "imagen": "assets/dinos/arte/agua/spinosaurus_atacando_der.webp"
+    },
+    {
+      "id": "mini_shunosaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/shunosaurus.js",
+      "imagen": "assets/dinos/arte/agua/shunosaurus_der.webp"
+    },
+    {
+      "id": "mini_saltasaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/saltasaurus.js",
+      "imagen": "assets/dinos/arte/agua/saltasaurus_der.webp"
+    },
+    {
+      "id": "mini_camarasaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/camarasaurus.js",
+      "imagen": "assets/dinos/arte/agua/camarasaurus_der.webp"
+    },
+    {
+      "id": "mini_tyrannosaurus_rex",
+      "categoria": "mini dino",
+      "archivo": "mini dino/tyrannosaurus_rex.js",
+      "imagen": "assets/dinos/arte/fuego/tyrannosaurus_rex_der.webp"
+    },
+    {
+      "id": "mini_acrocanthosaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/acrocanthosaurus.js",
+      "imagen": "assets/dinos/arte/fuego/acrocanthosaurus_der.webp"
+    },
+    {
+      "id": "mini_alioramus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/alioramus.js",
+      "imagen": "assets/dinos/arte/fuego/alioramus_der.webp"
+    },
+    {
+      "id": "mini_alpha_acrocanthosaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/alpha_acrocanthosaurus.js",
+      "imagen": "assets/dinos/arte/fuego/alpha_acrocanthosaurus_der.webp"
+    },
+    {
+      "id": "mini_black_tyrannosaurus_rex",
+      "categoria": "mini dino",
+      "archivo": "mini dino/black_tyrannosaurus_rex.js",
+      "imagen": "assets/dinos/arte/fuego/black_tyrannosaurus_rex_der.webp"
+    },
+    {
+      "id": "mini_carcharodontosaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/carcharodontosaurus.js",
+      "imagen": "assets/dinos/arte/fuego/carcharodontosaurus_der.webp"
+    },
+    {
+      "id": "mini_daspletosaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/daspletosaurus.js",
+      "imagen": "assets/dinos/arte/fuego/daspletosaurus_der.webp"
+    },
+    {
+      "id": "mini_eocarcharia",
+      "categoria": "mini dino",
+      "archivo": "mini dino/eocarcharia.js",
+      "imagen": "assets/dinos/arte/fuego/eocarcharia_der.webp"
+    },
+    {
+      "id": "mini_giganotosaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/giganotosaurus.js",
+      "imagen": "assets/dinos/arte/fuego/giganotosaurus_der.webp"
+    },
+    {
+      "id": "mini_gigas",
+      "categoria": "mini dino",
+      "archivo": "mini dino/gigas.js",
+      "imagen": "assets/dinos/arte/fuego/gigas_der.webp"
+    },
+    {
+      "id": "mini_mapusaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/mapusaurus.js",
+      "imagen": "assets/dinos/arte/fuego/mapusaurus_der.webp"
+    },
+    {
+      "id": "mini_rajasaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/rajasaurus.js",
+      "imagen": "assets/dinos/arte/fuego/rajasaurus_der.webp"
+    },
+    {
+      "id": "mini_saurophaganax",
+      "categoria": "mini dino",
+      "archivo": "mini dino/saurophaganax.js",
+      "imagen": "assets/dinos/arte/fuego/saurophaganax_der.webp"
+    },
+    {
+      "id": "mini_torvosaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/torvosaurus.js",
+      "imagen": "assets/dinos/arte/fuego/torvosaurus_der.webp"
+    },
+    {
+      "id": "mini_yangchuanosaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/yangchuanosaurus.js",
+      "imagen": "assets/dinos/arte/fuego/yangchuanosaurus_der.webp"
+    },
+    {
+      "id": "mini_brontosaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/brontosaurus.js",
+      "imagen": "assets/dinos/arte/especial/brontosaurus_der.webp"
+    },
+    {
+      "id": "mini_cryolophosaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/cryolophosaurus.js",
+      "imagen": "assets/dinos/arte/especial/cryolophosaurus_der.webp"
+    },
+    {
+      "id": "mini_deinonychus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/deinonychus.js",
+      "imagen": "assets/dinos/arte/especial/deinonychus_der.webp"
+    },
+    {
+      "id": "mini_indominus_rex",
+      "categoria": "mini dino",
+      "archivo": "mini dino/indominus_rex.js",
+      "imagen": "assets/dinos/arte/especial/indominus_rex_der.webp"
+    },
+    {
+      "id": "mini_indoraptor",
+      "categoria": "mini dino",
+      "archivo": "mini dino/indoraptor.js",
+      "imagen": "assets/dinos/arte/especial/indoraptor_der.webp"
+    },
+    {
+      "id": "mini_megalosaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/megalosaurus.js",
+      "imagen": "assets/dinos/arte/especial/megalosaurus_der.webp"
+    },
+    {
+      "id": "mini_pachycephalosaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/pachycephalosaurus.js",
+      "imagen": "assets/dinos/arte/especial/pachycephalosaurus_der.webp"
+    },
+    {
+      "id": "mini_therizinosaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/therizinosaurus.js",
+      "imagen": "assets/dinos/arte/especial/therizinosaurus_der.webp"
+    },
+    {
+      "id": "mini_piatnitzkysaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/piatnitzkysaurus.js",
+      "imagen": "assets/dinos/arte/normal/piatnitzkysaurus_der.webp"
+    },
+    {
+      "id": "mini_velociraptor",
+      "categoria": "mini dino",
+      "archivo": "mini dino/velociraptor.js",
+      "imagen": "assets/dinos/arte/normal/velociraptor_der.webp"
+    },
+    {
+      "id": "mini_pawpawsaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/pawpawsaurus.js",
+      "imagen": "assets/dinos/arte/normal/pawpawsaurus_der.webp"
+    },
+    {
+      "id": "mini_anhanguera",
+      "categoria": "mini dino",
+      "archivo": "mini dino/anhanguera.js",
+      "imagen": "assets/dinos/arte/normal/anhanguera_der.webp"
+    },
+    {
+      "id": "mini_quetzalcoatlus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/quetzalcoatlus.js",
+      "imagen": "assets/dinos/arte/normal/quetzalcoatlus_der.webp"
+    },
+    {
+      "id": "montana_alpina",
+      "categoria": "terrenos",
+      "archivo": "terrenos/montana_alpina.js",
+      "imagen": ""
+    },
+    {
+      "id": "estanque_isla",
+      "categoria": "terrenos",
+      "archivo": "terrenos/estanque_isla.js",
+      "imagen": ""
+    },
+    {
+      "id": "terreno_aldea",
+      "categoria": "terrenos",
+      "archivo": "terrenos/terreno_aldea.js",
+      "imagen": ""
+    },
+    {
+      "id": "puerto_viento",
+      "categoria": "terrenos",
+      "archivo": "terrenos/puerto_viento.js",
+      "imagen": ""
+    },
+    {
+      "id": "ciudad_forja",
+      "categoria": "terrenos",
+      "archivo": "terrenos/ciudad_forja.js",
+      "imagen": ""
+    },
+    {
+      "id": "isla_mar",
+      "categoria": "terrenos",
+      "archivo": "terrenos/isla_mar.js",
+      "imagen": ""
+    },
+    {
+      "id": "mini_parasaurolophus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/parasaurolophus.js",
+      "imagen": "assets/dinos/arte/planta/parasaurolophus_der.webp"
+    },
+    {
+      "id": "mini_corythosaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/corythosaurus.js",
+      "imagen": "assets/dinos/arte/planta/corythosaurus_der.webp"
+    },
+    {
+      "id": "mini_charonosaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/charonosaurus.js",
+      "imagen": "assets/dinos/arte/planta/charonosaurus_der.webp"
+    },
+    {
+      "id": "mini_olorotitan",
+      "categoria": "mini dino",
+      "archivo": "mini dino/olorotitan.js",
+      "imagen": "assets/dinos/arte/planta/olorotitan_der.webp"
+    },
+    {
+      "id": "mini_saurolophus_verde",
+      "categoria": "mini dino",
+      "archivo": "mini dino/saurolophus_verde.js",
+      "imagen": "assets/dinos/arte/planta/saurolophus_verde_der.webp"
+    },
+    {
+      "id": "mini_saurolophus_naranja",
+      "categoria": "mini dino",
+      "archivo": "mini dino/saurolophus_naranja.js",
+      "imagen": "assets/dinos/arte/planta/saurolophus_naranja_der.webp"
+    },
+    {
+      "id": "mini_maiasaura",
+      "categoria": "mini dino",
+      "archivo": "mini dino/maiasaura.js",
+      "imagen": "assets/dinos/arte/planta/maiasaura_der.webp"
+    },
+    {
+      "id": "mini_shantungosaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/shantungosaurus.js",
+      "imagen": "assets/dinos/arte/planta/shantungosaurus_der.webp"
+    },
+    {
+      "id": "mini_iguanodon",
+      "categoria": "mini dino",
+      "archivo": "mini dino/iguanodon.js",
+      "imagen": "assets/dinos/arte/planta/iguanodon_der.webp"
+    },
+    {
+      "id": "mini_altirhinus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/altirhinus.js",
+      "imagen": "assets/dinos/arte/planta/altirhinus_der.webp"
+    },
+    {
+      "id": "mini_fukuisaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/fukuisaurus.js",
+      "imagen": "assets/dinos/arte/planta/fukuisaurus_der.webp"
+    },
+    {
+      "id": "mini_lanzhousaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/lanzhousaurus.js",
+      "imagen": "assets/dinos/arte/planta/lanzhousaurus_der.webp"
+    },
+    {
+      "id": "mini_seismosaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/seismosaurus.js",
+      "imagen": "assets/dinos/arte/planta/seismosaurus_der.webp"
+    },
+    {
+      "id": "mini_supersaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/supersaurus.js",
+      "imagen": "assets/dinos/arte/planta/supersaurus_der.webp"
+    },
+    {
+      "id": "mini_pteranodon",
+      "categoria": "mini dino",
+      "archivo": "mini dino/pteranodon.js",
+      "imagen": "assets/dinos/arte/planta/pteranodon_der.webp"
+    },
+    {
+      "id": "mini_tupandactylus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/tupandactylus.js",
+      "imagen": "assets/dinos/arte/planta/tupandactylus_der.webp"
+    },
+    {
+      "id": "mini_tupuxuara",
+      "categoria": "mini dino",
+      "archivo": "mini dino/tupuxuara.js",
+      "imagen": "assets/dinos/arte/planta/tupuxuara_der.webp"
+    },
+    {
+      "id": "mini_triceratops",
+      "categoria": "mini dino",
+      "archivo": "mini dino/triceratops.js",
+      "imagen": "assets/dinos/arte/rayo/triceratops_der.webp"
+    },
+    {
+      "id": "mini_torosaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/torosaurus.js",
+      "imagen": "assets/dinos/arte/rayo/torosaurus_der.webp"
+    },
+    {
+      "id": "mini_styracosaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/styracosaurus.js",
+      "imagen": "assets/dinos/arte/rayo/styracosaurus_der.webp"
+    },
+    {
+      "id": "mini_centrosaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/centrosaurus.js",
+      "imagen": "assets/dinos/arte/rayo/centrosaurus_der.webp"
+    },
+    {
+      "id": "mini_pachyrhinosaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/pachyrhinosaurus.js",
+      "imagen": "assets/dinos/arte/rayo/pachyrhinosaurus_der.webp"
+    },
+    {
+      "id": "mini_einiosaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/einiosaurus.js",
+      "imagen": "assets/dinos/arte/rayo/einiosaurus_der.webp"
+    },
+    {
+      "id": "mini_achelousaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/achelousaurus.js",
+      "imagen": "assets/dinos/arte/rayo/achelousaurus_der.webp"
+    },
+    {
+      "id": "mini_pentaceratops",
+      "categoria": "mini dino",
+      "archivo": "mini dino/pentaceratops.js",
+      "imagen": "assets/dinos/arte/rayo/pentaceratops_der.webp"
+    },
+    {
+      "id": "mini_chasmosaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/chasmosaurus.js",
+      "imagen": "assets/dinos/arte/rayo/chasmosaurus_der.webp"
+    },
+    {
+      "id": "mini_anchiceratops",
+      "categoria": "mini dino",
+      "archivo": "mini dino/anchiceratops.js",
+      "imagen": "assets/dinos/arte/rayo/anchiceratops_der.webp"
+    },
+    {
+      "id": "mini_machairoceratops",
+      "categoria": "mini dino",
+      "archivo": "mini dino/machairoceratops.js",
+      "imagen": "assets/dinos/arte/rayo/machairoceratops_der.webp"
+    },
+    {
+      "id": "mini_monoclonius",
+      "categoria": "mini dino",
+      "archivo": "mini dino/monoclonius.js",
+      "imagen": "assets/dinos/arte/rayo/monoclonius_der.webp"
+    },
+    {
+      "id": "mini_nedoceratops",
+      "categoria": "mini dino",
+      "archivo": "mini dino/nedoceratops.js",
+      "imagen": "assets/dinos/arte/rayo/nedoceratops_der.webp"
+    },
+    {
+      "id": "mini_zuniceratops",
+      "categoria": "mini dino",
+      "archivo": "mini dino/zuniceratops.js",
+      "imagen": "assets/dinos/arte/rayo/zuniceratops_der.webp"
+    },
+    {
+      "id": "mini_maximus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/maximus.js",
+      "imagen": "assets/dinos/arte/rayo/maximus_der.webp"
+    },
+    {
+      "id": "mini_stegosaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/stegosaurus.js",
+      "imagen": "assets/dinos/arte/tierra/stegosaurus_der.webp"
+    },
+    {
+      "id": "mini_armatus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/armatus.js",
+      "imagen": "assets/dinos/arte/tierra/armatus_der.webp"
+    },
+    {
+      "id": "mini_kentrosaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/kentrosaurus.js",
+      "imagen": "assets/dinos/arte/tierra/kentrosaurus_der.webp"
+    },
+    {
+      "id": "mini_dacentrurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/dacentrurus.js",
+      "imagen": "assets/dinos/arte/tierra/dacentrurus_der.webp"
+    },
+    {
+      "id": "mini_gigantspinosaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/gigantspinosaurus.js",
+      "imagen": "assets/dinos/arte/tierra/gigantspinosaurus_der.webp"
+    },
+    {
+      "id": "mini_tuojiangosaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/tuojiangosaurus.js",
+      "imagen": "assets/dinos/arte/tierra/tuojiangosaurus_der.webp"
+    },
+    {
+      "id": "mini_lexovisaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/lexovisaurus.js",
+      "imagen": "assets/dinos/arte/tierra/lexovisaurus_der.webp"
+    },
+    {
+      "id": "mini_ankylosaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/ankylosaurus.js",
+      "imagen": "assets/dinos/arte/tierra/ankylosaurus_der.webp"
+    },
+    {
+      "id": "mini_saichania",
+      "categoria": "mini dino",
+      "archivo": "mini dino/saichania.js",
+      "imagen": "assets/dinos/arte/tierra/saichania_der.webp"
+    },
+    {
+      "id": "mini_euoplocephalus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/euoplocephalus.js",
+      "imagen": "assets/dinos/arte/tierra/euoplocephalus_der.webp"
+    },
+    {
+      "id": "mini_pinacosaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/pinacosaurus.js",
+      "imagen": "assets/dinos/arte/tierra/pinacosaurus_der.webp"
+    },
+    {
+      "id": "mini_scolosaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/scolosaurus.js",
+      "imagen": "assets/dinos/arte/tierra/scolosaurus_der.webp"
+    },
+    {
+      "id": "mini_edmontonia",
+      "categoria": "mini dino",
+      "archivo": "mini dino/edmontonia.js",
+      "imagen": "assets/dinos/arte/tierra/edmontonia_der.webp"
+    },
+    {
+      "id": "mini_sauropelta",
+      "categoria": "mini dino",
+      "archivo": "mini dino/sauropelta.js",
+      "imagen": "assets/dinos/arte/tierra/sauropelta_der.webp"
+    },
+    {
+      "id": "mini_polacanthus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/polacanthus.js",
+      "imagen": "assets/dinos/arte/tierra/polacanthus_der.webp"
+    },
+    {
+      "id": "mini_carnotaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/carnotaurus.js",
+      "imagen": "assets/dinos/arte/viento/carnotaurus_der.webp"
+    },
+    {
+      "id": "mini_allosaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/allosaurus.js",
+      "imagen": "assets/dinos/arte/viento/allosaurus_der.webp"
+    },
+    {
+      "id": "mini_ceratosaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/ceratosaurus.js",
+      "imagen": "assets/dinos/arte/viento/ceratosaurus_der.webp"
+    },
+    {
+      "id": "mini_dilophosaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/dilophosaurus.js",
+      "imagen": "assets/dinos/arte/viento/dilophosaurus_der.webp"
+    },
+    {
+      "id": "mini_utahraptor",
+      "categoria": "mini dino",
+      "archivo": "mini dino/utahraptor.js",
+      "imagen": "assets/dinos/arte/viento/utahraptor_der.webp"
+    },
+    {
+      "id": "mini_majungasaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/majungasaurus.js",
+      "imagen": "assets/dinos/arte/viento/majungasaurus_der.webp"
+    },
+    {
+      "id": "mini_megaraptor",
+      "categoria": "mini dino",
+      "archivo": "mini dino/megaraptor.js",
+      "imagen": "assets/dinos/arte/viento/megaraptor_der.webp"
+    },
+    {
+      "id": "mini_deltadromeus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/deltadromeus.js",
+      "imagen": "assets/dinos/arte/viento/deltadromeus_der.webp"
+    },
+    {
+      "id": "mini_afrovenator",
+      "categoria": "mini dino",
+      "archivo": "mini dino/afrovenator.js",
+      "imagen": "assets/dinos/arte/viento/afrovenator_der.webp"
+    },
+    {
+      "id": "mini_neovenator",
+      "categoria": "mini dino",
+      "archivo": "mini dino/neovenator.js",
+      "imagen": "assets/dinos/arte/viento/neovenator_der.webp"
+    },
+    {
+      "id": "mini_sinraptor",
+      "categoria": "mini dino",
+      "archivo": "mini dino/sinraptor.js",
+      "imagen": "assets/dinos/arte/viento/sinraptor_der.webp"
+    },
+    {
+      "id": "mini_szechuanosaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/szechuanosaurus.js",
+      "imagen": "assets/dinos/arte/viento/szechuanosaurus_der.webp"
+    },
+    {
+      "id": "mini_gojirasaurus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/gojirasaurus.js",
+      "imagen": "assets/dinos/arte/viento/gojirasaurus_der.webp"
+    },
+    {
+      "id": "mini_liliensternus",
+      "categoria": "mini dino",
+      "archivo": "mini dino/liliensternus.js",
+      "imagen": "assets/dinos/arte/viento/liliensternus_der.webp"
+    }
+  ],
+  "descartadas_por_repetidas": [
+    {
+      "imagen": "assets/arboles/imagenes/Gemini_Generated_Image_wj7ga3wj7ga3wj7g.png",
+      "igual_a": "cumulo_rocas",
+      "motivo": "Misma silueta que e35u1fe3 (99,8 %); solo cambia el color (roca oscura)."
+    },
+    {
+      "imagen": "assets/arboles/imagenes/Gemini_Generated_Image_xvjtvkxvjtvkxvjt.png",
+      "igual_a": "tronco_hueco",
+      "motivo": "Misma silueta que fquohmfq (99,9 %)."
+    }
+  ]
+}

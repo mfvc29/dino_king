@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dino Rey · La leyenda de las siete piedras</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+    /* Pantalla de inicio de Dino Rey con el estilo chibi de la isla (sustituye al título del juego 2D antiguo) */
+    :root { --madera: #7c2d12; --crema: #fffbeb; --naranja: #fb923c; --tinta: #44403c; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; }
+    body {
+      font-family: 'Nunito', system-ui, sans-serif; color: var(--tinta); overflow: hidden;
+      background: linear-gradient(180deg, #7cc8fb, #cdeeff 55%, #fef9c3);
+    }
+    .cielo { position: fixed; inset: 0; background: url('/static/cielo_nubes.jpg') center top / cover no-repeat; opacity: 0.6; }
+    .sol { position: fixed; top: -90px; right: -60px; width: 340px; height: 340px; border-radius: 50%; background: radial-gradient(circle, #fef08a, rgba(254, 240, 138, 0) 70%); }
+    .colinas { position: fixed; left: -10%; right: -10%; bottom: -60px; height: 300px; }
+    .colinas i { position: absolute; bottom: 0; border-radius: 50% 50% 0 0; }
+    .colinas i:nth-child(1) { left: 0; width: 55%; height: 230px; background: #86efac; }
+    .colinas i:nth-child(2) { right: 0; width: 60%; height: 260px; background: #6ee7a0; }
+    .colinas i:nth-child(3) { left: 25%; width: 55%; height: 180px; background: #4ade80; }
+    .mar { position: fixed; left: 0; right: 0; bottom: 0; height: 40px; background: repeating-linear-gradient(90deg, #38bdf8 0 40px, #7dd3fc 40px 80px); opacity: 0.9; }
+
+    main { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; padding: 16px; }
+
+    /* Logo */
+    .logo { text-align: center; animation: entra 0.7s cubic-bezier(0.2, 1.5, 0.4, 1); }
+    @keyframes entra { from { transform: scale(0.4) rotate(-6deg); opacity: 0; } }
+    .lema {
+      display: inline-block; font-family: 'Fredoka', sans-serif; font-weight: 600; letter-spacing: 0.08em; font-size: 1rem;
+      padding: 5px 16px; border-radius: 999px; background: var(--crema); color: var(--madera); border: 3px solid var(--madera);
+      box-shadow: 0 4px 0 var(--madera); transform: rotate(-2deg);
+    }
+    .titulo { font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: clamp(4rem, 12vw, 8.5rem); line-height: 0.95; margin: 10px 0 0; }
+    .titulo span { display: inline-block; -webkit-text-stroke: 7px var(--madera); paint-order: stroke fill; text-shadow: 0 9px 0 var(--madera); }
+    .titulo .dino { color: #fff7ed; }
+    .titulo .rey { color: #fbbf24; animation: rebote 2.4s ease-in-out infinite; }
+    @keyframes rebote { 50% { transform: translateY(-8px) rotate(2deg); } }
+
+    /* Escenario: menú con los hermanos y sus dinos a los lados */
+    .escenario { display: flex; align-items: flex-end; justify-content: center; gap: 18px; width: 100%; max-width: 1100px; }
+    .lado { position: relative; width: 300px; height: 330px; flex: none; }
+    .lado img { position: absolute; bottom: 0; object-fit: contain; filter: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.25)); }
+    .lado .heroe { width: 210px; height: 270px; animation: flota 2.6s ease-in-out infinite alternate; }
+    .lado .dino { width: 200px; height: 200px; animation: flota 3.1s ease-in-out infinite alternate-reverse; }
+    .lado.izq .heroe { left: 0; } .lado.izq .dino { right: -10px; }
+    .lado.der .heroe { right: 0; } .lado.der .dino { left: -10px; transform: scaleX(-1); }
+    .lado.der .dino { animation-name: flotaEspejo; }
+    @keyframes flota { to { translate: 0 -10px; } }
+    @keyframes flotaEspejo { to { translate: 0 -10px; } }
+    .nombre { position: absolute; bottom: -14px; font-family: 'Fredoka', sans-serif; font-weight: 600; padding: 2px 12px; border-radius: 999px; background: var(--crema); border: 3px solid var(--madera); color: var(--madera); }
+    .lado.izq .nombre { left: 60px; } .lado.der .nombre { right: 60px; }
+
+    .menu { display: flex; flex-direction: column; gap: 12px; width: 360px; flex: none; }
+    .boton {
+      display: flex; flex-direction: column; align-items: flex-start; width: 100%; padding: 12px 20px; cursor: pointer; text-align: left;
+      font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 1.35rem; text-decoration: none;
+      color: var(--madera); background: var(--crema); border: 4px solid var(--madera); border-radius: 20px;
+      box-shadow: 0 6px 0 var(--madera), 0 14px 22px rgba(0, 0, 0, 0.15); transition: transform 0.08s, box-shadow 0.08s, filter 0.15s;
+    }
+    .boton:hover { filter: brightness(1.04); transform: translateY(-2px) rotate(-0.6deg); }
+    .boton:active { transform: translateY(5px); box-shadow: 0 1px 0 var(--madera); }
+    .boton small { font-family: 'Nunito', sans-serif; font-size: 0.82rem; opacity: 0.9; }
+    .boton.principal { background: linear-gradient(160deg, #ffc46b, #fb923c 55%, #ea580c); color: #fff; text-shadow: 0 3px 0 var(--madera); font-size: 1.7rem; }
+    .boton.principal small { text-shadow: none; }
+    .boton.fantasma { background: rgba(255, 251, 235, 0.65); font-size: 1.1rem; }
+    .pie { font-size: 0.85rem; color: var(--madera); background: rgba(255, 251, 235, 0.8); padding: 4px 14px; border-radius: 999px; border: 2px solid var(--madera); }
+
+    /* Aviso de nueva partida */
+    .aviso { position: fixed; inset: 0; z-index: 5; display: none; place-items: center; background: rgba(12, 74, 110, 0.4); }
+    .aviso.visible { display: grid; }
+    .aviso > div { width: min(420px, 92vw); padding: 20px; text-align: center; background: var(--crema); border: 4px solid var(--madera); border-radius: 26px; box-shadow: 0 8px 0 var(--madera); animation: entra 0.4s cubic-bezier(0.2, 1.5, 0.4, 1); }
+    .aviso h2 { font-family: 'Fredoka', sans-serif; color: var(--madera); margin: 0 0 6px; }
+    .aviso .fila { display: flex; gap: 10px; justify-content: center; margin-top: 14px; }
+    .aviso .boton { width: auto; font-size: 1.05rem; align-items: center; }
+
+    /* ¿Con quién quieres jugar? */
+    .aviso.eleccion > .caja { width: min(700px, 94vw); }
+    .eleccion h2 { font-size: 2rem; }
+    .heroes { display: flex; gap: 18px; justify-content: center; margin-top: 12px; flex-wrap: wrap; }
+    .heroe-btn {
+      position: relative; width: 300px; padding: 12px 12px 14px; cursor: pointer; text-align: center;
+      border: 4px solid var(--madera); border-radius: 24px; box-shadow: 0 6px 0 var(--madera); font-family: 'Fredoka', sans-serif;
+      transition: transform 0.1s, box-shadow 0.1s;
+    }
+    .heroe-btn.fer { background: linear-gradient(180deg, #e0f2fe, #fffbeb 70%); }
+    .heroe-btn.ander { background: linear-gradient(180deg, #fee2e2, #fffbeb 70%); }
+    .heroe-btn:hover { transform: translateY(-4px) rotate(-1deg); }
+    .heroe-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 var(--madera); }
+    .heroe-btn .figuras { position: relative; height: 210px; }
+    .heroe-btn .figuras img { position: absolute; bottom: 0; object-fit: contain; filter: drop-shadow(0 8px 6px rgba(0, 0, 0, 0.25)); }
+    .heroe-btn .figuras .h { left: 12px; width: 150px; height: 205px; }
+    .heroe-btn .figuras .d { right: 0; width: 150px; height: 150px; }
+    .heroe-btn.ander .figuras .d { transform: scaleX(-1); }
+    .heroe-btn b { display: block; font-size: 1.8rem; color: var(--madera); }
+    .heroe-btn span { display: block; font-family: 'Nunito', sans-serif; font-size: 0.9rem; }
+    .heroe-btn em { display: inline-block; margin-top: 6px; padding: 2px 12px; border-radius: 999px; font-style: normal; color: #fff; border: 2px solid var(--madera); }
+    .heroe-btn.fer em { background: #38bdf8; } .heroe-btn.ander em { background: #ef4444; }
+
+    @media (max-width: 1000px) { .lado { display: none; } }
+    @media (max-height: 760px) { .lado { height: 260px; } .lado .heroe { height: 220px; } .lado .dino { width: 160px; height: 160px; } }
+  </style>
+</head>
+<body>
+  <div class="cielo"></div>
+  <div class="sol"></div>
+  <div class="colinas"><i></i><i></i><i></i></div>
+  <div class="mar"></div>
+
+  <main>
+    <div class="logo">
+      <span class="lema">LA LEYENDA DE LAS SIETE PIEDRAS</span>
+      <h1 class="titulo"><span class="dino">DINO</span> <span class="rey">REY</span></h1>
+    </div>
+
+    <div class="escenario">
+      <div class="lado izq">
+        <img class="heroe" src="/assets/chibi/personajes/fer.png" alt="Fer">
+        <img class="dino" src="/assets/chibi/dinos/viento/deltadromeus.png" alt="Deltadromeus">
+        <span class="nombre">Fer</span>
+      </div>
+
+      <nav class="menu">
+        <a class="boton principal" id="btn-jugar" href="/jugar" onclick="event.preventDefault(); elegirHeroe();">
+          <span>▶ Jugar</span>
+          <small>Explora la Isla Pangea</small>
+        </a>
+        <button class="boton" id="btn-nueva" type="button">✦ Nueva partida</button>
+        <a class="boton" href="/dino_lector/">🦖 Dino Lector</a>
+        <a class="boton" href="/editor" id="btn-editor">🛠️ Editar mapa</a>
+        <button class="boton fantasma" id="btn-pantalla" type="button">⛶ Pantalla completa</button>
+      </nav>
+
+      <div class="lado der">
+        <img class="heroe" src="/assets/chibi/personajes/ander.png" alt="Ander">
+        <img class="dino" src="/assets/chibi/dinos/fuego/acrocanthosaurus.png" alt="Acrocanthosaurus">
+        <span class="nombre">Ander</span>
+      </div>
+    </div>
+
+    <p class="pie">Isla Pangea</p>
+  </main>
+
+  <div class="aviso eleccion" id="aviso-heroe">
+    <div class="caja">
+      <h2>¿Con quién quieres jugar?</h2>
+      <div class="heroes">
+        <button class="heroe-btn fer" type="button" data-heroe="fer">
+          <div class="figuras"><img class="h" src="/assets/chibi/personajes/fer.png" alt=""><img class="d" src="/assets/chibi/dinos/viento/deltadromeus.png" alt=""></div>
+          <b>Fer</b>
+          <span>El hermano mayor · calmado y estratega</span>
+          <em>🌪️ Viento · Deltadromeus</em>
+        </button>
+        <button class="heroe-btn ander" type="button" data-heroe="ander">
+          <div class="figuras"><img class="h" src="/assets/chibi/personajes/ander.png" alt=""><img class="d" src="/assets/chibi/dinos/fuego/acrocanthosaurus.png" alt=""></div>
+          <b>Ander</b>
+          <span>El hermano menor · impulsivo y valiente</span>
+          <em>🔥 Fuego · Acrocanthosaurus</em>
+        </button>
+      </div>
+      <div class="fila"><button class="boton" id="btn-heroe-cancelar" type="button">Volver</button></div>
+    </div>
+  </div>
+
+  <div class="aviso" id="aviso-nueva">
+    <div>
+      <h2>¿Empezar de cero?</h2>
+      <p>Se borrará todo el avance de esta partida.</p>
+      <div class="fila">
+        <button class="boton principal" id="btn-confirmar" type="button">Sí, nueva partida</button>
+        <button class="boton" id="btn-cancelar" type="button">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/cartas_isla.js"></script>
+  <script>
+    (function () {
+      const C = window.CartasIsla;
+      // En el juego publicado (Render) no hay editor
+      fetch('/api/modo').then((r) => r.json()).then((m) => { if (m.publico) document.getElementById('btn-editor').remove(); }).catch(() => {});
+      const p = C ? C.leer() : { encontradas: [], guardianes: [] };
+      const aviso = document.getElementById('aviso-nueva');
+      const avisoHeroe = document.getElementById('aviso-heroe');
+      // ¿Con quién quieres jugar? Se guarda el personaje elegido y el juego lo pone al entrar
+      window.elegirHeroe = () => { aviso.classList.remove('visible'); avisoHeroe.classList.add('visible'); };
+      document.querySelectorAll('.heroe-btn').forEach((b) => {
+        b.onclick = () => {
+          try { localStorage.setItem('dino_personaje_jugable', b.dataset.heroe); } catch (e) {}
+          location.href = '/jugar';
+        };
+      });
+      document.getElementById('btn-heroe-cancelar').onclick = () => avisoHeroe.classList.remove('visible');
+      document.getElementById('btn-nueva').onclick = () => {
+        if (!p.encontradas.length && !p.guardianes.length) { elegirHeroe(); return; }
+        aviso.classList.add('visible');
+      };
+      document.getElementById('btn-cancelar').onclick = () => aviso.classList.remove('visible');
+      document.getElementById('btn-confirmar').onclick = () => {
+        if (C) C.guardar({ encontradas: [], guardianes: [] });
+        elegirHeroe();
+      };
+      document.getElementById('btn-pantalla').onclick = () => {
+        if (document.fullscreenElement) document.exitFullscreen();
+        else document.documentElement.requestFullscreen().catch(() => {});
+      };
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dino King - 3D Mesh Studio (Clay + Wireframe)</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <script>
+    // /jugar (botón "Jugar" de la pantalla de inicio): solo el juego, sin los paneles del editor, con pantalla de carga
+    if (location.pathname.startsWith('/jugar') || new URLSearchParams(location.search).has('jugar')) {
+      document.documentElement.classList.add('solo-juego');
+      document.title = 'Dino Rey · Isla Pangea';
+    }
+  </script>
+  <style>
+    html.solo-juego #top-bar, html.solo-juego #left-panel, html.solo-juego #mesh-stats, html.solo-juego #vertex-sculpt-panel,
+    html.solo-juego #mesh-inspector, html.solo-juego #world-route-connector { display: none !important; }
+    html.solo-juego #canvas-container { position: fixed !important; inset: 0 !important; width: 100vw !important; height: 100vh !important; z-index: 1; }
+    html.solo-juego #game-physics-hud { display: none !important; }
+    #carga-juego { display: none; }
+    html.solo-juego #carga-juego {
+      position: fixed; inset: 0; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px;
+      background: url('/static/cielo_nubes.jpg') center / cover, linear-gradient(180deg, #7cc8fb, #fef9c3);
+      font-family: 'Fredoka', 'Nunito', system-ui, sans-serif; transition: opacity 0.6s;
+    }
+    html.solo-juego.juego-listo #carga-juego { opacity: 0; pointer-events: none; }
+    #carga-juego img { width: 220px; height: 220px; object-fit: contain; filter: drop-shadow(0 10px 8px rgba(0,0,0,.25)); animation: cargaSalto .6s ease-in-out infinite alternate; }
+    @keyframes cargaSalto { to { transform: translateY(-16px) rotate(-3deg); } }
+    #carga-juego .t { font-size: 3.2rem; font-weight: 700; color: #fbbf24; -webkit-text-stroke: 5px #7c2d12; paint-order: stroke fill; text-shadow: 0 6px 0 #7c2d12; }
+    #carga-juego .s { padding: 6px 18px; border-radius: 999px; background: #fffbeb; border: 3px solid #7c2d12; color: #7c2d12; font-weight: 600; font-size: 1.1rem; box-shadow: 0 4px 0 #7c2d12; }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+  <script src="/static/three.min.js"></script>
+  <script src="/static/OrbitControls.js"></script>
+</head>
+<body>
+  <div id="carga-juego">
+    <img src="/assets/chibi/dinos/viento/deltadromeus.png" alt="">
+    <div class="t">DINO REY</div>
+    <div class="s" id="carga-texto">Cargando la Isla Pangea…</div>
+  </div>
+  <div id="app-container">
+
+    <!-- BARRA SUPERIOR -->
+    <header id="top-bar">
+      <div class="brand">
+        <span>🕸️ DINO KING MESH STUDIO</span>
+        <span class="badge-ai" id="active-route-badge">RUTA 1: TRAMO NORTE</span>
+      </div>
+
+      <!-- ESTILO DE MALLA (CLAY + WIREFRAME) -->
+      <div class="view-modes">
+        <button id="style-clay_wire" class="mode-btn style-btn active" onclick="setRenderStyle('clay_wire')">
+          🧱 Clay + Wireframe
+        </button>
+        <button id="style-clay_only" class="mode-btn style-btn" onclick="setRenderStyle('clay_only')">
+          ⚪ Solo Clay (Volumen)
+        </button>
+        <button id="style-wire_only" class="mode-btn style-btn" onclick="setRenderStyle('wire_only')">
+          🕸️ Solo Alambre (X-Ray)
+        </button>
+      </div>
+
+      <!-- PROYECCIÓN / CÁMARA -->
+      <div class="view-modes">
+        <button id="dim-2.5D" class="mode-btn dim-btn active" onclick="setDimension('2.5D')">
+          📐 Vista 3/4 (2.5D)
+        </button>
+        <button id="dim-3D" class="mode-btn dim-btn" onclick="setDimension('3D')">
+          🌐 3D Orbital
+        </button>
+        <button id="dim-2D" class="mode-btn dim-btn" onclick="setDimension('2D')">
+          🗺️ 2D Cenital
+        </button>
+      </div>
+
+      <!-- ACCIONES DE UNIÓN Y GUARDADO -->
+      <div style="display: flex; gap: 6px; align-items: center;">
+        <a href="/dino_lector/" target="_blank" class="action-btn" style="background: linear-gradient(135deg, #f59e0b, #ef4444); color: #fff; border: none; font-weight: 800; text-decoration: none; display: flex; align-items: center; gap: 5px; box-shadow: 0 0 10px rgba(239,68,68,0.4);" title="Abrir el Dino Lector (Pokédex y Escáner de Tarjetas)">
+          🦖 Dino Lector
+        </a>
+        <button id="btn-physics-mode" class="action-btn" style="background: linear-gradient(135deg, #10b981, #06b6d4); color: #fff; border: none; font-weight: 800;" onclick="togglePlayableAvatar()" title="Controlar avatar explorador con físicas, colisiones de rocas/árboles, gravedad y nado en agua">
+          🎮 Modo Juego (Físicas)
+        </button>
+        <button class="action-btn" style="background: linear-gradient(135deg, #0ea5e9, #38bdf8); color: #082f49; border: none; font-weight: 800;" onclick="if(window.BibliotecaMallas && window.BibliotecaMallas.abrirSelector) window.BibliotecaMallas.abrirSelector();" title="Abrir vista individual para explorar y seleccionar mallas de la carpeta mallas/">
+          🧩 Seleccionar Mallas
+        </button>
+        <button class="action-btn" style="background: linear-gradient(135deg, #059669, #10b981); color: #fff; border: none; font-weight: 800;" onclick="createNewRoutePrompt()" title="Crear un nuevo editor de ruta independiente que se suma a Ruta Completa">
+          ➕ Nueva Ruta
+        </button>
+        <button class="action-btn" style="background: linear-gradient(135deg, #7c3aed, #a855f7); color: #fff; border: none; font-weight: 800;" onclick="mergeTerrainsHorizontally()" title="Une dos o más mallas de terreno (horizontal o norte-sur) y completa el espacio entre ellas suavemente">
+          🔗 Unir Malla
+        </button>
+        <select id="scene-select" class="action-btn" onchange="loadSavedDesign(this.value)" title="Cargar un diseño guardado">
+          <option value="">📂 Cargar...</option>
+        </select>
+        <button class="action-btn" style="background: linear-gradient(135deg, #0284c7, #38bdf8); color: #082f49; border: none; font-weight: 800;" onclick="saveCurrentDesign()">
+          💾 Guardar
+        </button>
+        <button class="action-btn" style="background: rgba(245, 158, 11, 0.18); border-color: #f59e0b; color: #fbbf24; font-weight: 700;" onclick="restoreCurrentRouteToDefault()" title="Restaurar la ruta actual (o todas las rutas) a su diseño original">
+          ↺ Restaurar
+        </button>
+        <button class="action-btn" onclick="exportToOBJ()" title="Descargar malla 3D en formato estándar .OBJ">
+          📥 .OBJ
+        </button>
+        <button class="action-btn" onclick="clearAllMeshes(true)">
+          🗑️ Limpiar
+        </button>
+      </div>
+    </header>
+
+    <!-- ÁREA PRINCIPAL -->
+    <main id="main-view">
+
+      <!-- PANEL IZQUIERDO: EDITORES DE RUTA, CONECTOR DE MUNDO, DIVISIONES Y BIBLIOTECA -->
+      <aside id="left-panel">
+
+        <!-- 1. EDITORES DE RUTA Y RUTA COMPLETA (AUTO-ACTUALIZABLE) -->
+        <div class="panel-section">
+          <div class="panel-title">
+            <span>1. Editores de Ruta y Mundo</span>
+            <button type="button" onclick="restoreCurrentRouteToDefault()" style="background: rgba(245, 158, 11, 0.2); border: 1px solid #f59e0b; color: #fbbf24; border-radius: 5px; padding: 2px 8px; font-size: 0.72rem; font-weight: 700; cursor: pointer;" title="Restaurar la ruta actual o todas las rutas a su diseño base">↺ Restaurar</button>
+          </div>
+
+          <!-- BOTÓN PRINCIPAL: RUTA COMPLETA (MUNDO CONECTADO) -->
+          <div class="blueprint-list">
+            <button id="btn-ruta-completa" class="blueprint-btn" style="border-color: #38bdf8; background: rgba(56, 189, 248, 0.12);" onclick="openFullWorldRoute()">
+              <strong>🗺️ Ruta Completa (Todas las Rutas Unidas)</strong>
+              <span>Auto-actualizable: muestra todos los tramos y rutas juntos en el mundo. Aquí puedes mover rutas enteras para conectarlas y unirlas.</span>
+            </button>
+          </div>
+
+          <!-- LISTA DINÁMICA DE EDITORES DE RUTA INDIVIDUALES -->
+          <div style="font-size: 0.72rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 4px;">
+            Editores por Tramo / Ruta (Se sincronizan con Ruta Completa):
+          </div>
+          <div id="routes-editor-list" class="blueprint-list">
+            <button class="blueprint-btn" onclick="openRouteEditor('ruta_1_norte')" style="border-color: #38bdf8; background: rgba(56, 189, 248, 0.18);">
+              <strong>⛰️ Ruta 1: Tramo Norte</strong>
+              <span>Pendiente gradual + Cueva 3D lateral + Montaña Alpina + Camino L + Estanque 1</span>
+            </button>
+            <button class="blueprint-btn" onclick="openRouteEditor('ruta_1_centro')">
+              <strong>💧 Ruta 1: Tramo Centro</strong>
+              <span>Estanques 2 y 3 con islas + Barreras de pinos en zigzag + Hierba alta</span>
+            </button>
+            <button class="blueprint-btn" onclick="openRouteEditor('ruta_1_sur')">
+              <strong>🪧 Ruta 1: Tramo Sur (Entrada)</strong>
+              <span>Camino en L de entrada sur + Letrero de ruta + Cerca de pinos</span>
+            </button>
+          </div>
+
+          <button class="ai-generate-btn" style="padding: 8px 10px; font-size: 0.78rem; background: linear-gradient(135deg, #059669, #10b981); color: #fff;" onclick="createNewRoutePrompt()">
+            ➕ Añadir Nueva Ruta / Tramo al Mundo
+          </button>
+
+          <!-- PANEL PARA MOVER Y CONECTAR RUTAS EN EL MUNDO -->
+          <div id="world-route-connector" style="background: rgba(15, 23, 42, 0.65); border: 1px solid var(--border); border-radius: 8px; padding: 9px; margin-top: 4px; display: flex; flex-direction: column; gap: 6px;">
+            <div style="font-size: 0.75rem; font-weight: 700; color: #38bdf8; display: flex; justify-content: space-between; align-items: center;">
+              <span>🧭 Mover / Conectar Ruta en el Mundo</span>
+            </div>
+
+            <select id="select-route-to-move" class="action-btn" style="width: 100%; justify-content: space-between;" onchange="onSelectRouteToMove(this.value)">
+            </select>
+
+            <div class="slider-row">
+              <div class="slider-header">
+                <span>Posición Mundo X (Este/Oeste):</span>
+                <span id="val-route-wx">0.0</span>
+              </div>
+              <input type="range" id="slider-route-wx" min="-120" max="120" step="0.5" value="0" oninput="onRouteWorldOffsetSlider()">
+            </div>
+
+            <div class="slider-row">
+              <div class="slider-header">
+                <span>Posición Mundo Z (Norte/Sur):</span>
+                <span id="val-route-wz">0.0</span>
+              </div>
+              <input type="range" id="slider-route-wz" min="-120" max="120" step="0.5" value="0" oninput="onRouteWorldOffsetSlider()">
+            </div>
+
+            <div class="slider-row">
+              <div class="slider-header">
+                <span>Desnivel Ruta Y (Altura):</span>
+                <span id="val-route-wy">0.0</span>
+              </div>
+              <input type="range" id="slider-route-wy" min="-15" max="25" step="0.25" value="0" oninput="onRouteWorldOffsetSlider()">
+            </div>
+
+            <div style="font-size: 0.7rem; color: var(--text-muted);">Encajar junto a otra ruta:</div>
+            <div class="module-grid">
+              <button class="module-btn" onclick="snapSelectedRoute('north')" title="Colocar justo al Norte de la ruta previa">⬆️ Al Norte</button>
+              <button class="module-btn" onclick="snapSelectedRoute('south')" title="Colocar justo al Sur de la ruta previa">⬇️ Al Sur</button>
+              <button class="module-btn" onclick="snapSelectedRoute('west')" title="Colocar justo al Oeste (Izquierda)">⬅️ Al Oeste</button>
+              <button class="module-btn" onclick="snapSelectedRoute('east')" title="Colocar justo al Este (Derecha)">➡️ Al Este</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. DIVISIONES MODULARES DE TERRENO (AÑADIR O EDITAR POR PARTES) -->
+        <div class="panel-section">
+          <div class="panel-title">
+            <span>2. Divisiones de Terreno (Tramos)</span>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.74rem; color: var(--text-muted); margin-bottom: 4px;">
+            <label for="chk-append-horiz">Añadir al lado en horizontal:</label>
+            <input type="checkbox" id="chk-append-horiz" checked>
+          </div>
+          <div class="module-grid">
+            <button class="module-btn" onclick="spawnTerrainDivision('div_mountain_cave')" title="Tramo con rampa de subida, cueva lateral y montaña detrás">
+              🏔️ 1. Subida + Cueva + Montaña
+            </button>
+            <button class="module-btn" onclick="spawnTerrainDivision('div_lpath')" title="Tramo con el camino en L y rocas">
+              🛤️ 2. Camino en L + Pinos
+            </button>
+            <button class="module-btn" onclick="spawnTerrainDivision('div_pond1')" title="Tramo con el Estanque 1 hundido y su isla cuadrada">
+              💧 3. Zona Estanque 1
+            </button>
+            <button class="module-btn" onclick="spawnTerrainDivision('div_pond2')" title="Tramo con el Estanque 2 a la izquierda e isla">
+              💧 4. Zona Estanque 2
+            </button>
+            <button class="module-btn" onclick="spawnTerrainDivision('div_pond3')" title="Tramo con el Estanque 3 grande central">
+              💧 5. Zona Estanque 3
+            </button>
+            <button class="module-btn" onclick="spawnTerrainDivision('div_south_entry')" title="Tramo de entrada sur con camino en L y letrero">
+              🪧 6. Entrada Sur
+            </button>
+            <button class="module-btn" onclick="spawnTerrainDivision('div_grass_patch')" title="Tramo de pradera con campo de matas de hierba 3D sobre el terreno">
+              🌾 7. Campo con Hierba
+            </button>
+            <button class="module-btn" onclick="spawnSingleMataHierba()" title="Añadir una Mata de Hierba 3D individual a la escena">
+              🌿 8. Mata de Hierba
+            </button>
+          </div>
+          <button class="ai-generate-btn" style="margin-top: 6px; padding: 8px 12px; font-size: 0.8rem;" onclick="mergeTerrainsHorizontally()">
+            🔗 Unir Mallas de Terreno (Completar Unión)
+          </button>
+        </div>
+
+        <!-- 3. BIBLIOTECA DE MALLAS (CARPETA MALLAS/) SE INYECTA AQUÍ AUTOMÁTICAMENTE DESDE /mallas/biblioteca.js -->
+
+        <!-- 4. TOPOLOGÍA Y WIREFRAME -->
+        <div class="panel-section">
+          <div class="panel-title">4. Topología y Wireframe</div>
+
+          <div class="slider-row">
+            <div class="slider-header">
+              <span>Opacidad de Líneas:</span>
+              <span id="wire-opacity-val">50%</span>
+            </div>
+            <input type="range" id="wire-opacity-slider" min="0.1" max="1.0" step="0.05" value="0.50">
+          </div>
+
+          <div class="slider-row">
+            <div class="slider-header">
+              <span>Densidad de Polígonos:</span>
+              <span id="subdiv-val">1.0x</span>
+            </div>
+            <input type="range" id="subdiv-slider" min="0.5" max="2.0" step="0.25" value="1.0">
+          </div>
+        </div>
+
+      </aside>
+
+      <!-- VISOR 3D -->
+      <div id="canvas-container">
+
+        <!-- CONTADOR DE TOPOLOGÍA Y ATAJO DE ESCULPIDO -->
+        <div id="mesh-stats">
+          <span>Modo: <b id="stat-mode">Ruta 1: Tramo Norte</b></span>
+          <span>Piezas: <b id="stat-objects">0</b></span>
+          <span>Vértices: <b id="stat-verts">0</b></span>
+          <span>Polígonos: <b id="stat-faces">0</b></span>
+          <span style="color: #fbbf24; font-weight: 700;">🎯 Ctrl + Click Der: Marcar Puntos</span>
+        </div>
+
+        <!-- HUD FLOTANTE DE MODO JUEGO / FÍSICAS -->
+        <div id="game-physics-hud" class="hidden" style="position: absolute; top: 56px; left: 50%; transform: translateX(-50%); background: rgba(15, 23, 42, 0.94); backdrop-filter: blur(12px); border: 1px solid #10b981; border-radius: 12px; padding: 8px 16px; display: flex; align-items: center; gap: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.6); z-index: 30; color: #fff; font-size: 0.82rem;">
+          <span style="font-weight: 800; color: #34d399;">🎮 Modo Explorador:</span>
+          <span><b>[W][A][S][D]</b> / <b>Flechas</b>: Mover</span>
+          <span><b>[Espacio]</b>: Saltar</span>
+          <span><b>[Shift]</b>: Correr</span>
+          <span><b>[A][D]</b>: Girar · <b>[Q][E]</b>: Mirar · <b>[R]</b>: Excavar carta · <b>[C]</b>: Colisiones · <b>[P]</b>: Panel</span>
+          <span id="physics-status" style="background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; padding: 2px 8px; border-radius: 6px; font-weight: 700; color: #6ee7b7;">⛰️ Suelo Firme</span>
+          <button class="action-btn" style="padding: 3px 10px; font-size: 0.75rem; background: #ef4444; color: #fff; border: none; font-weight: 700;" onclick="togglePlayableAvatar()">✕ Salir</button>
+        </div>
+
+        <!-- PANEL DE EDICIÓN DE PUNTOS DE SUPERFICIE (CTRL + CLICK DERECHO) - UBICADO ABAJO A LA IZQUIERDA PARA NO CHOCAR CON EL INSPECTOR -->
+        <div id="vertex-sculpt-panel" class="hidden" style="position: absolute; bottom: 16px; left: 16px; width: 305px; background: rgba(15, 23, 42, 0.94); backdrop-filter: blur(10px); border: 1px solid #f59e0b; border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 10px 28px rgba(0,0,0,0.55); z-index: 25;">
+          <div class="floating-panel-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 6px; cursor: move; gap: 4px;" title="Arrastra para mover este panel">
+            <h4 style="font-size: 0.82rem; color: #fbbf24; margin: 0;">🎯 Puntos (<span id="sculpt-point-count">0</span>)</h4>
+            <div style="display: flex; gap: 4px;">
+              <button class="action-btn" style="padding: 2px 7px; font-size: 0.7rem; background: rgba(245, 158, 11, 0.22); border-color: #f59e0b; color: #fde68a; font-weight: 700;" onclick="restoreMarkedVerticesToOriginal()" title="Restaurar los puntos marcados a su forma original">↺ Restaurar</button>
+              <button class="action-btn" style="padding: 2px 7px; font-size: 0.7rem;" onclick="clearMarkedVertices()" title="Desmarcar todos los puntos (Tecla Esc)">🧹 Desmarcar</button>
+            </div>
+          </div>
+
+          <div style="font-size: 0.71rem; color: var(--text-muted); line-height: 1.3;">
+            Haz <b>Ctrl + Click Derecho</b> en cualquier superficie para sumar/quitar puntos. Usa los botones, el deslizador o las teclas <b>↑ / ↓</b> para subir, bajar o suavizar.
+          </div>
+
+          <div class="slider-row">
+            <div class="slider-header">
+              <span>⭕ Radio de Influencia Suave:</span>
+              <span id="val-sculpt-radius">1.8m</span>
+            </div>
+            <input type="range" id="sculpt-radius-slider" min="0.0" max="6.0" step="0.2" value="1.8">
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px;">
+            <button class="action-btn" style="justify-content: center; background: rgba(16, 185, 129, 0.2); border-color: #10b981; color: #6ee7b7; font-weight: 700;" onclick="nudgeMarkedVertices(0, 0.30, 0)">
+              ⬆️ Subir (+0.30)
+            </button>
+            <button class="action-btn" style="justify-content: center; background: rgba(244, 63, 94, 0.2); border-color: #f43f5e; color: #fda4af; font-weight: 700;" onclick="nudgeMarkedVertices(0, -0.30, 0)">
+              ⬇️ Bajar (-0.30)
+            </button>
+            <button class="action-btn" style="justify-content: center; background: rgba(56, 189, 248, 0.2); border-color: #38bdf8; color: #bae6fd; font-weight: 700;" onclick="smoothMarkedVertices()">
+              ✨ Suavizar Bordes
+            </button>
+            <button class="action-btn" style="justify-content: center; background: rgba(168, 85, 247, 0.2); border-color: #a855f7; color: #e9d5ff; font-weight: 700;" onclick="flattenMarkedVertices()">
+              📏 Nivelar / Aplanar
+            </button>
+            <button class="action-btn" style="grid-column: 1 / -1; justify-content: center; background: rgba(245, 158, 11, 0.2); border-color: #f59e0b; color: #fde68a; font-weight: 700;" onclick="restoreMarkedVerticesToOriginal()" title="Restaura los puntos marcados y su zona a la forma original sin deformaciones">
+              ↺ Restaurar Puntos a su Forma Original
+            </button>
+          </div>
+
+          <div class="slider-row">
+            <div class="slider-header">
+              <span>↕️ Elevar / Hundir Superficie (ΔY):</span>
+              <span id="val-sculpt-dy">0.00</span>
+            </div>
+            <input type="range" id="sculpt-dy-slider" min="-5.0" max="5.0" step="0.05" value="0">
+          </div>
+
+          <div class="slider-row">
+            <div class="slider-header">
+              <span>↔️ Desplazar Puntos X (ΔX):</span>
+              <span id="val-sculpt-dx">0.00</span>
+            </div>
+            <input type="range" id="sculpt-dx-slider" min="-4.0" max="4.0" step="0.05" value="0">
+          </div>
+
+          <div class="slider-row">
+            <div class="slider-header">
+              <span>↕️ Desplazar Puntos Z (ΔZ):</span>
+              <span id="val-sculpt-dz">0.00</span>
+            </div>
+            <input type="range" id="sculpt-dz-slider" min="-4.0" max="4.0" step="0.05" value="0">
+          </div>
+        </div>
+
+        <!-- INSPECTOR DE PIEZA / DIVISIÓN SELECCIONADA (CON OPCIONES DE ALARGAR X/Z/Y) -->
+        <div id="mesh-inspector" class="hidden" style="width: 275px;">
+          <div class="floating-panel-header" style="display: flex; justify-content: space-between; align-items: center; gap: 6px; cursor: move;" title="Arrastra para mover este panel">
+            <h4 id="insp-title" style="margin: 0; flex: 1;">División / Malla Seleccionada</h4>
+            <button type="button" class="action-btn" style="padding: 1px 6px; font-size: 0.7rem;" onclick="selectMeshGroup(null)" title="Cerrar inspector">✕</button>
+          </div>
+          <div id="insp-route-tag" style="font-size: 0.7rem; color: #38bdf8; margin-top: -4px; margin-bottom: 4px;"></div>
+
+          <div id="insp-move-whole-route-row" style="display: none; align-items: center; justify-content: space-between; background: rgba(56,189,248,0.12); padding: 5px 8px; border-radius: 5px; font-size: 0.73rem; color: #bae6fd; margin-bottom: 4px;">
+            <label for="chk-move-whole-route" style="cursor: pointer; font-weight: 700;">📦 Mover toda su Ruta en bloque:</label>
+            <input type="checkbox" id="chk-move-whole-route">
+          </div>
+
+          <div class="slider-row">
+            <div class="slider-header">
+              <span>Posición Horizontal (X):</span>
+              <span id="val-pos-x">0.0</span>
+            </div>
+            <input type="range" id="insp-pos-x" min="-100" max="100" step="0.5" value="0">
+          </div>
+
+          <div class="slider-row">
+            <div class="slider-header">
+              <span>Desnivel / Altura (Y):</span>
+              <span id="val-pos-y">0.0</span>
+            </div>
+            <input type="range" id="insp-pos-y" min="-15" max="25" step="0.2" value="0">
+          </div>
+
+          <div class="slider-row">
+            <div class="slider-header">
+              <span>Posición Profundidad (Z):</span>
+              <span id="val-pos-z">0.0</span>
+            </div>
+            <input type="range" id="insp-pos-z" min="-100" max="100" step="0.5" value="0">
+          </div>
+
+          <hr style="border: none; border-top: 1px solid var(--border); margin: 4px 0;">
+
+          <div class="slider-row">
+            <div class="slider-header">
+              <span>↔️ Alargar Ancho (X):</span>
+              <span id="val-scale-x">1.00x</span>
+            </div>
+            <input type="range" id="insp-scale-x" min="0.25" max="3.5" step="0.05" value="1">
+          </div>
+
+          <div class="slider-row">
+            <div class="slider-header">
+              <span>↕️ Alargar Largo (Z):</span>
+              <span id="val-scale-z">1.00x</span>
+            </div>
+            <input type="range" id="insp-scale-z" min="0.25" max="3.5" step="0.05" value="1">
+          </div>
+
+          <div class="slider-row">
+            <div class="slider-header">
+              <span>⛰️ Escalar Relieve (Y):</span>
+              <span id="val-scale-y">1.00x</span>
+            </div>
+            <input type="range" id="insp-scale-y" min="0.25" max="3.5" step="0.05" value="1">
+          </div>
+
+          <div class="slider-row">
+            <div class="slider-header">
+              <span>🔄 Rotación:</span>
+              <span id="val-rot-y">0.00</span>
+            </div>
+            <input type="range" id="insp-rot-y" min="-3.14" max="3.14" step="0.05" value="0">
+          </div>
+
+          <div style="display: flex; gap: 6px; margin-top: 4px; flex-wrap: wrap;">
+            <button class="action-btn" style="flex: 1 1 100%; justify-content: center; background: rgba(245, 158, 11, 0.2); border-color: #f59e0b; color: #fde68a; font-weight: 700;" onclick="restoreSelectedMeshToOriginal()" title="Restaurar posición, escala, rotación y relieve original de esta pieza">
+              ↺ Restaurar Pieza / Relieve
+            </button>
+            <button class="action-btn" style="flex: 1; justify-content: center; background: #1e3a8a; border-color: #3b82f6;" onclick="duplicateSelectedHorizontally()">
+              ➕ Clonar al Lado
+            </button>
+            <button class="action-btn" style="flex: 1; justify-content: center; background: var(--danger); border-color: var(--danger);" onclick="deleteSelectedMesh()">
+              🗑️ Eliminar
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <div id="toast"></div>
+    </main>
+  </div>
+
+  <!-- Biblioteca de mallas y utilidades compartidas -->
+  <script src="/mallas/biblioteca.js"></script>
+  <script src="/static/cartas_isla.js"></script>
+  <script src="/static/app.js"></script>
+</body>
+</html>

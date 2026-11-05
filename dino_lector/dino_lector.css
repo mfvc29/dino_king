@@ -1,0 +1,313 @@
+/* ==========================================================================
+   DINO LECTOR · Isla Pangea
+   Estilo del mundo de la isla: cielo con nubes, paneles color crema con borde marrón grueso y sombra de
+   juguete, tipografías redondeadas (Fredoka / Nunito) y acentos del color del elemento de cada dino.
+   (El diseño anterior, oscuro y neón, está respaldado en tools/cartas_mapa/dino_lector_antes/.)
+   ========================================================================== */
+
+:root {
+  --cielo-1: #8fd3fe;
+  --cielo-2: #dff4ff;
+  --crema: #fffbeb;
+  --crema-2: #fef3c7;
+  --arena: #fde68a;
+  --madera: #7c2d12;
+  --madera-2: #9a3412;
+  --tinta: #44403c;
+  --tinta-suave: #78716c;
+  --hoja: #65a30d;
+  --sombra: 0 6px 0 rgba(124, 45, 18, 0.9);
+  --sombra-suave: 0 4px 0 rgba(124, 45, 18, 0.85);
+  --radio: 22px;
+
+  --elem-fuego: #ef4444;
+  --elem-agua: #0ea5e9;
+  --elem-rayo: #eab308;
+  --elem-tierra: #b45309;
+  --elem-planta: #22c55e;
+  --elem-viento: #38bdf8;
+  --elem-especial: #d946ef;
+  --elem-normal: #a8a29e;
+
+  --theme-color: var(--elem-fuego);
+  --theme-suave: #fee2e2;
+  --theme-gradient: linear-gradient(135deg, #f87171, #fb923c);
+}
+
+body.theme-fuego { --theme-color: var(--elem-fuego); --theme-suave: #fee2e2; --theme-gradient: linear-gradient(135deg, #f87171, #fb923c); }
+body.theme-agua { --theme-color: var(--elem-agua); --theme-suave: #e0f2fe; --theme-gradient: linear-gradient(135deg, #38bdf8, #22d3ee); }
+body.theme-rayo { --theme-color: var(--elem-rayo); --theme-suave: #fef9c3; --theme-gradient: linear-gradient(135deg, #facc15, #fb923c); }
+body.theme-tierra { --theme-color: var(--elem-tierra); --theme-suave: #ffedd5; --theme-gradient: linear-gradient(135deg, #d97706, #a16207); }
+body.theme-planta { --theme-color: var(--elem-planta); --theme-suave: #dcfce7; --theme-gradient: linear-gradient(135deg, #4ade80, #84cc16); }
+body.theme-viento { --theme-color: var(--elem-viento); --theme-suave: #e0f2fe; --theme-gradient: linear-gradient(135deg, #7dd3fc, #a5b4fc); }
+body.theme-especial { --theme-color: var(--elem-especial); --theme-suave: #fae8ff; --theme-gradient: linear-gradient(135deg, #e879f9, #a78bfa); }
+body.theme-normal { --theme-color: var(--elem-normal); --theme-suave: #f5f5f4; --theme-gradient: linear-gradient(135deg, #d6d3d1, #a8a29e); }
+
+* { box-sizing: border-box; }
+.hidden { display: none !important; }
+
+html, body { margin: 0; min-height: 100%; }
+body {
+  font-family: 'Nunito', system-ui, sans-serif;
+  font-weight: 700;
+  color: var(--tinta);
+  background: linear-gradient(180deg, var(--cielo-1), var(--cielo-2) 55%, #fef9c3);
+  overflow-x: hidden;
+}
+
+h1, h2, h3, .brand-title, .summon-title, .roster-title, .dino-display-name { font-family: 'Fredoka', 'Nunito', sans-serif; }
+
+/* ---------------- Fondo: cielo, nubes e islas lejanas ---------------- */
+#cyber-bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+#cyber-bg .elemental-wallpaper {
+  position: absolute; inset: 0;
+  background: url('/static/cielo_nubes.jpg') center top / cover no-repeat !important;
+  opacity: 0.55;
+}
+#cyber-bg .wallpaper-vignette {
+  position: absolute; left: -10%; right: -10%; bottom: -40px; height: 210px;
+  background:
+    radial-gradient(ellipse 30% 70% at 12% 100%, #4ade80 0 60%, transparent 61%),
+    radial-gradient(ellipse 35% 80% at 50% 105%, #22c55e 0 60%, transparent 61%),
+    radial-gradient(ellipse 30% 70% at 88% 100%, #4ade80 0 60%, transparent 61%);
+  opacity: 0.55;
+}
+#cyber-bg .grid-overlay, #cyber-bg .scanner-laser-scan { display: none; }
+#cyber-bg .elemental-ambient-glow {
+  position: absolute; top: -120px; right: -80px; width: 380px; height: 380px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(254, 240, 138, 0.95), rgba(254, 240, 138, 0) 70%);
+}
+
+/* ---------------- Chasis ---------------- */
+#device-chassis { position: relative; z-index: 1; max-width: 1480px; margin: 0 auto; padding: 18px 18px 30px; display: flex; flex-direction: column; gap: 18px; }
+
+.tech-panel, .dino-id-banner, #device-header, .card-stage-container, #cards-roster-drawer {
+  background: var(--crema);
+  border: 3px solid var(--madera);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra), 0 14px 28px rgba(15, 23, 42, 0.12);
+}
+
+/* ---------------- Cabecera ---------------- */
+#device-header {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  padding: 12px 18px;
+  background: linear-gradient(160deg, #ffc46b, #fb923c 55%, #ea580c);
+  color: #fff;
+}
+.header-left { display: flex; align-items: center; gap: 14px; }
+.brand-logo { display: flex; align-items: center; gap: 12px; }
+.logo-symbol {
+  width: 56px; height: 56px; display: grid; place-items: center; font-size: 2rem;
+  background: var(--crema); border: 3px solid var(--madera); border-radius: 50%; box-shadow: var(--sombra-suave);
+}
+.brand-text { display: flex; flex-direction: column; line-height: 1.05; }
+.brand-series { font-size: 0.68rem; letter-spacing: 0.08em; color: #fff7ed; opacity: 0.95; }
+.brand-title { font-size: 1.9rem; font-weight: 700; color: #fff; text-shadow: 0 3px 0 var(--madera); }
+.brand-title small { font-size: 0.85rem; font-weight: 600; background: var(--madera); padding: 2px 8px; border-radius: 999px; margin-left: 6px; vertical-align: middle; text-shadow: none; }
+.telemetry-bar { display: flex; gap: 10px; }
+.telemetry-item {
+  display: flex; flex-direction: column; align-items: center; min-width: 120px; padding: 5px 12px;
+  background: var(--crema); color: var(--tinta); border: 3px solid var(--madera); border-radius: 16px;
+}
+.telemetry-label { font-size: 0.68rem; color: var(--tinta-suave); }
+.telemetry-value { font-family: 'Fredoka', sans-serif; font-size: 1.15rem; font-weight: 600; color: var(--madera-2); }
+.header-right { display: flex; align-items: center; gap: 8px; }
+.device-action-link, .nav-arrow-btn, .mode-tab, .element-filter-btn {
+  font-family: 'Nunito', sans-serif; font-weight: 800; cursor: pointer; text-decoration: none;
+  border: 3px solid var(--madera); border-radius: 14px; background: var(--crema); color: var(--madera);
+  box-shadow: var(--sombra-suave); transition: transform 0.08s, box-shadow 0.08s, background 0.15s;
+}
+.device-action-link:active, .nav-arrow-btn:active, .mode-tab:active, .element-filter-btn:active {
+  transform: translateY(3px); box-shadow: 0 1px 0 var(--madera);
+}
+.device-action-link { padding: 9px 14px; display: inline-flex; align-items: center; }
+
+/* ---------------- Cuerpo ---------------- */
+#scanner-deck { display: grid; grid-template-columns: minmax(330px, 410px) 1fr; gap: 18px; align-items: start; }
+#card-scanner-column, #dino-reading-column { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+
+/* Escenario de la carta */
+.card-stage-container { padding: 14px; display: flex; flex-direction: column; gap: 12px; }
+.view-mode-tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.mode-tab { padding: 7px 6px; font-size: 0.86rem; }
+.mode-tab.active { background: var(--theme-gradient); color: #fff; text-shadow: 0 2px 0 rgba(124, 45, 18, 0.5); }
+
+.card-viewport {
+  position: relative; height: 430px; border-radius: 18px; border: 3px solid var(--madera);
+  background: var(--fondo, radial-gradient(circle at 50% 35%, #fff, var(--theme-suave) 60%, #fde68a)) center / cover no-repeat;
+  perspective: 1000px; display: grid; place-items: center; overflow: hidden;
+}
+/* Velo sobre el paisaje: suave si la carta es tuya, más fuerte si aún no (para que destaque la sombra) */
+.card-viewport::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(180deg, rgba(255, 251, 235, 0) 45%, rgba(255, 251, 235, 0.35));
+}
+.card-viewport.no-encontrada::before { background: rgba(255, 251, 235, 0.62); backdrop-filter: blur(2px); }
+
+/* Vista chibi */
+.chibi-wrapper { position: relative; width: 100%; height: 100%; display: grid; place-items: center; }
+.chibi-islote {
+  position: absolute; bottom: 44px; left: 50%; width: 260px; height: 46px; transform: translateX(-50%);
+  background: radial-gradient(ellipse, rgba(0, 0, 0, 0.38), rgba(0, 0, 0, 0) 70%);
+}
+#chibi-img {
+  position: relative; width: 330px; height: 330px; object-fit: contain; margin-bottom: 40px;
+  filter: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.25)); animation: flotar 2.6s ease-in-out infinite alternate;
+}
+@keyframes flotar { to { transform: translateY(-9px); } }
+.chibi-wrapper.grande #chibi-img { width: 370px; height: 290px; margin-bottom: 52px; }
+.chibi-sello {
+  position: absolute; top: 14px; right: 14px; width: 54px; height: 54px; display: none; place-items: center; font-size: 1.6rem;
+  background: var(--crema); border: 3px solid var(--madera); border-radius: 50%; box-shadow: var(--sombra-suave);
+}
+.no-encontrada #chibi-img, .no-encontrada #card-front-img, .no-encontrada #art-2d-img { filter: brightness(0) opacity(0.55) drop-shadow(0 6px 6px rgba(0, 0, 0, 0.2)); }
+.sellada .chibi-sello { display: grid; }
+
+/* Vista tarjeta */
+.card-3d-wrapper { width: 250px; transition: transform 0.15s ease-out; transform-style: preserve-3d; }
+.card-face { position: relative; border-radius: 16px; overflow: hidden; border: 4px solid var(--madera); box-shadow: 0 10px 0 rgba(124, 45, 18, 0.6); background: #fff; }
+.card-image-box { position: relative; }
+.card-image-box img { display: block; width: 100%; }
+.card-holo-foil { position: absolute; inset: 0; opacity: 0; mix-blend-mode: color-dodge; background: linear-gradient(115deg, transparent 20%, rgba(255, 0, 200, 0.5), rgba(0, 255, 255, 0.5), rgba(255, 255, 0, 0.5), transparent 80%); transition: opacity 0.3s; }
+.card-scanline { display: none; }
+.card-front-overlay { position: absolute; left: 8px; right: 8px; bottom: 8px; display: flex; justify-content: space-between; }
+.card-code-pill, .card-element-pill { font-size: 0.72rem; padding: 2px 8px; border-radius: 999px; background: var(--crema); border: 2px solid var(--madera); color: var(--madera); }
+.card-element-pill { background: var(--theme-color); color: #fff; }
+
+/* Vista ilustración */
+.art-2d-wrapper { position: relative; width: 100%; height: 100%; display: grid; place-items: center; }
+.art-2d-backdrop { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0.35; }
+.art-pedestal { position: relative; display: grid; place-items: center; }
+.pedestal-rings { position: absolute; bottom: -10px; width: 260px; height: 60px; border-radius: 50%; background: radial-gradient(ellipse, rgba(124, 45, 18, 0.35), transparent 70%); }
+#art-2d-img { position: relative; max-width: 330px; max-height: 330px; object-fit: contain; filter: drop-shadow(0 8px 8px rgba(0, 0, 0, 0.3)); }
+
+/* Insignia elemental */
+.elemental-stone-badge { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 18px; background: var(--theme-suave); border: 3px solid var(--madera); }
+.stone-icon { width: 46px; height: 46px; display: grid; place-items: center; font-size: 1.5rem; background: var(--theme-gradient); border: 3px solid var(--madera); border-radius: 50%; }
+.stone-info { display: flex; flex-direction: column; flex: 1; }
+.stone-label { font-size: 0.68rem; color: var(--tinta-suave); }
+.stone-name { font-family: 'Fredoka', sans-serif; font-size: 0.95rem; color: var(--madera-2); }
+.element-advantage-tag { font-size: 0.75rem; max-width: 150px; padding: 5px 9px; border-radius: 12px; background: var(--crema); border: 2px solid var(--madera); }
+
+/* ---------------- Columna de lectura ---------------- */
+.dino-id-banner { display: flex; justify-content: space-between; gap: 14px; padding: 14px 18px; flex-wrap: wrap; }
+.dino-id-left { min-width: 0; flex: 1; }
+.dino-registry-number { font-size: 0.75rem; color: var(--tinta-suave); letter-spacing: 0.04em; }
+.dino-display-name { margin: 2px 0 6px; font-size: 2.3rem; line-height: 1; color: var(--madera); text-transform: capitalize; }
+.dino-subtitle-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 0.9rem; }
+.dino-taxonomy { color: var(--tinta-suave); }
+.dino-sig-badge { font-size: 0.75rem; padding: 3px 10px; border-radius: 999px; background: var(--arena); border: 2px solid var(--madera); color: var(--madera); }
+.coleccion-estado {
+  margin-top: 10px; display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 14px;
+  border: 3px solid var(--madera); background: var(--crema-2); font-size: 0.92rem;
+}
+.coleccion-estado.encontrada { background: #dcfce7; color: #166534; }
+.coleccion-estado.escondida { background: #e0f2fe; color: #075985; }
+.coleccion-estado.sellada { background: #f3e8ff; color: #6b21a8; }
+.nivel-chip { flex: none; white-space: nowrap; padding: 1px 9px; border-radius: 999px; color: #fff; font-size: 0.78rem; border: 2px solid var(--madera); }
+.dino-quick-nav { display: flex; align-items: center; gap: 8px; }
+.nav-arrow-btn { width: 44px; height: 44px; font-size: 1rem; }
+.nav-index-counter { font-family: 'Fredoka', sans-serif; font-size: 1.05rem; min-width: 76px; text-align: center; color: var(--madera); }
+
+/* Paneles */
+.reading-panels-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.lore-panel { grid-column: 1 / -1; }
+.tech-panel { padding: 14px 16px; min-width: 0; }
+.tech-panel-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.tech-panel-header h3 { margin: 0; flex: 1; font-size: 1.2rem; color: var(--madera); }
+.panel-icon { font-size: 1.25rem; }
+.panel-pill { font-size: 0.72rem; padding: 3px 10px; border-radius: 999px; background: var(--theme-color); color: #fff; border: 2px solid var(--madera); }
+.stats-bars-container { display: flex; flex-direction: column; gap: 9px; }
+.stat-meta { display: flex; align-items: center; gap: 7px; font-size: 0.9rem; margin-bottom: 3px; }
+.stat-name { flex: 1; }
+.stat-val { font-family: 'Fredoka', sans-serif; font-size: 1.05rem; color: var(--madera); }
+.meter-track { height: 14px; border-radius: 999px; background: #e7e5e4; border: 2px solid var(--madera); overflow: hidden; }
+.meter-fill { height: 100%; border-radius: 999px; transition: width 0.45s cubic-bezier(0.2, 1.4, 0.4, 1); box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.45); }
+.fill-hp { background: #f87171; }
+.fill-atk { background: #fb923c; }
+.fill-def { background: #60a5fa; }
+.fill-spa { background: #c084fc; }
+.fill-spd { background: #4ade80; }
+.physical-metrics-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; }
+.metric-badge { display: flex; align-items: center; gap: 7px; padding: 7px 9px; border-radius: 14px; background: var(--crema-2); border: 2px solid var(--madera); }
+.m-icon { font-size: 1.15rem; }
+.m-info { display: flex; flex-direction: column; font-size: 0.8rem; line-height: 1.15; }
+.m-label { font-size: 0.68rem; color: var(--tinta-suave); }
+
+/* Técnicas */
+.attacks-list-scroll { display: flex; flex-direction: column; gap: 9px; max-height: 330px; overflow-y: auto; padding-right: 4px; }
+.attack-card-chip { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 9px 11px; border-radius: 16px; border: 3px solid var(--madera); background: #fff; cursor: pointer; box-shadow: var(--sombra-suave); }
+.attack-card-chip.tier-definitivo { background: linear-gradient(135deg, #fef3c7, #fde68a); }
+.attack-card-chip.tier-potente { background: var(--theme-suave); }
+.atk-chip-left { display: flex; align-items: center; gap: 9px; min-width: 0; }
+.atk-type-icon { font-size: 1.3rem; }
+.atk-chip-info { display: flex; flex-direction: column; min-width: 0; }
+.atk-title-row { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+.atk-chip-name { font-family: 'Fredoka', sans-serif; font-size: 1rem; color: var(--madera); }
+.atk-tier-tag { font-size: 0.62rem; padding: 1px 7px; border-radius: 999px; border: 2px solid var(--madera); background: var(--crema); }
+.tag-definitivo { background: #f59e0b; color: #fff; }
+.tag-potente { background: var(--theme-color); color: #fff; }
+.atk-chip-sub { font-size: 0.76rem; color: var(--tinta-suave); font-weight: 600; }
+.atk-power-badge { flex: none; font-family: 'Fredoka', sans-serif; padding: 4px 9px; border-radius: 12px; background: var(--theme-gradient); color: #fff; border: 2px solid var(--madera); }
+
+/* Notas de campo */
+.lore-text { margin: 0 0 10px; line-height: 1.5; font-weight: 600; padding: 10px 14px; background: var(--crema-2); border-radius: 14px; border: 2px dashed var(--madera-2); }
+.lore-text small { color: var(--tinta-suave) !important; font-family: 'Nunito', sans-serif !important; }
+/* ---------------- Álbum ---------------- */
+#cards-roster-drawer { padding: 14px 16px; }
+.roster-toolbar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+.toolbar-left { display: flex; align-items: center; gap: 10px; }
+.roster-title { font-size: 1.35rem; font-weight: 700; color: var(--madera); }
+.roster-count-badge { font-size: 0.78rem; padding: 3px 10px; border-radius: 999px; background: var(--arena); border: 2px solid var(--madera); }
+.element-filters-row { display: flex; gap: 6px; flex-wrap: wrap; flex: 1; }
+.element-filter-btn { padding: 5px 10px; font-size: 0.82rem; }
+.element-filter-btn.active { background: var(--theme-gradient); color: #fff; }
+.badge-num { font-size: 0.7rem; padding: 0 6px; border-radius: 999px; background: rgba(124, 45, 18, 0.15); }
+.toolbar-right { display: flex; gap: 8px; flex-wrap: wrap; }
+.search-box { position: relative; display: flex; align-items: center; background: #fff; border: 3px solid var(--madera); border-radius: 14px; padding: 0 8px; }
+.search-box input { border: none; outline: none; padding: 7px 6px; font-family: inherit; font-weight: 700; width: 170px; background: transparent; color: var(--tinta); }
+.btn-clear-search { border: none; background: none; cursor: pointer; color: var(--madera); font-weight: 800; }
+.sort-select { font-family: inherit; font-weight: 800; padding: 7px 10px; border-radius: 14px; border: 3px solid var(--madera); background: var(--crema); color: var(--madera); }
+
+.cards-grid-scroll { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; max-height: 560px; overflow-y: auto; padding: 6px 6px 12px; }
+.roster-card-item {
+  position: relative; cursor: pointer; border-radius: 20px; border: 3px solid var(--madera); background: #fff;
+  box-shadow: var(--sombra-suave); transition: transform 0.12s; overflow: hidden;
+}
+.roster-card-item:hover { transform: translateY(-3px); }
+.roster-card-item.active-dino { outline: 4px solid var(--theme-color); outline-offset: 2px; }
+/* Escenario de cada ficha: cielo del color del elemento y un suelo de hierba donde se apoya el dino */
+.roster-card-img-box {
+  position: relative; height: 128px; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 6px;
+  background:
+    radial-gradient(ellipse 70% 22% at 50% 92%, rgba(101, 163, 13, 0.55), transparent 70%),
+    linear-gradient(180deg, #fff 0%, var(--fondo-elem, #f5f5f4) 100%);
+  border-bottom: 3px solid var(--madera);
+}
+.roster-card-img-box::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 6px; background: var(--color-elem, #a8a29e); }
+.roster-card-img-box img { position: relative; width: 92%; height: 112px; object-fit: contain; object-position: center bottom; filter: drop-shadow(0 5px 4px rgba(0, 0, 0, 0.25)); }
+.roster-card-item.no-encontrada .roster-card-img-box img { width: 100px; height: 100px; filter: brightness(0) opacity(0.4); }
+.roster-card-item.no-encontrada .roster-card-img-box { background: linear-gradient(180deg, #fafaf9, #e7e5e4); }
+.roster-card-item.encontrada .roster-card-img-box { background: var(--fondo-img) center 40% / cover no-repeat; }
+.roster-card-item.sellada .roster-card-img-box::after { content: '🔒'; position: absolute; top: 10px; right: 9px; font-size: 1.05rem; }
+.roster-card-item.encontrada::after { content: '✓'; position: absolute; top: 11px; left: 9px; width: 24px; height: 24px; display: grid; place-items: center; border-radius: 50%; background: #22c55e; color: #fff; font-size: 0.85rem; border: 2px solid var(--madera); }
+.roster-card-footer { position: relative; padding: 6px 10px 8px; background: var(--crema); }
+.roster-nivel { position: absolute; right: 8px; top: -13px; padding: 1px 8px; border-radius: 999px; border: 2px solid var(--madera); color: #fff; font-size: 0.66rem; white-space: nowrap; }
+.roster-card-name { display: block; font-family: 'Fredoka', sans-serif; font-size: 1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--madera); }
+.roster-card-meta { display: flex; justify-content: space-between; align-items: center; font-size: 0.7rem; color: var(--tinta-suave); }
+.roster-card-element-dot { width: 13px; height: 13px; border-radius: 50%; border: 2px solid var(--madera); }
+
+/* ---------------- Responsive ---------------- */
+@media (max-width: 1100px) {
+  #scanner-deck { grid-template-columns: 1fr; }
+  .reading-panels-grid { grid-template-columns: 1fr; }
+  .telemetry-bar { flex-wrap: wrap; }
+}
+@media (max-width: 640px) {
+  #device-chassis { padding: 10px; }
+  .dino-display-name { font-size: 1.7rem; }
+  .card-viewport { height: 340px; }
+  #chibi-img { width: 250px; height: 250px; }
+  .physical-metrics-row { grid-template-columns: 1fr; }
+}

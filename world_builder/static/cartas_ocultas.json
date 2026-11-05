@@ -1,0 +1,1056 @@
+{
+ "version": 1,
+ "semilla": 7,
+ "cartas": [
+  {
+   "id": "alioramus",
+   "elemento": "fuego",
+   "nivel": "comun",
+   "zona": "forja",
+   "x": -12.27,
+   "y": 0,
+   "z": 50.54,
+   "escondida": true
+  },
+  {
+   "id": "alpha_acrocanthosaurus",
+   "elemento": "fuego",
+   "nivel": "mitica",
+   "zona": "forja",
+   "x": 5.57,
+   "y": -0.016,
+   "z": 41.43,
+   "escondida": true
+  },
+  {
+   "id": "black_tyrannosaurus_rex",
+   "elemento": "fuego",
+   "nivel": "mitica",
+   "zona": "forja",
+   "x": -2.65,
+   "y": -0.041,
+   "z": 40.32,
+   "escondida": true
+  },
+  {
+   "id": "eocarcharia",
+   "elemento": "fuego",
+   "nivel": "comun",
+   "zona": "forja",
+   "x": -6.78,
+   "y": 0.053,
+   "z": 34.12,
+   "escondida": true
+  },
+  {
+   "id": "giganotosaurus",
+   "elemento": "fuego",
+   "nivel": "epica",
+   "zona": "montana",
+   "x": 13.98,
+   "y": 0,
+   "z": -11.39,
+   "escondida": true
+  },
+  {
+   "id": "acrocanthosaurus",
+   "elemento": "fuego",
+   "nivel": "epica",
+   "zona": "montana",
+   "x": -5.08,
+   "y": 0.195,
+   "z": -18.09,
+   "escondida": true
+  },
+  {
+   "id": "carcharodontosaurus",
+   "elemento": "fuego",
+   "nivel": "epica",
+   "zona": "forja",
+   "x": 10.95,
+   "y": 0,
+   "z": 50.21,
+   "escondida": true
+  },
+  {
+   "id": "daspletosaurus",
+   "elemento": "fuego",
+   "nivel": "rara",
+   "zona": "montana",
+   "x": 13.3,
+   "y": 0,
+   "z": -6.17,
+   "escondida": true
+  },
+  {
+   "id": "gigas",
+   "elemento": "fuego",
+   "nivel": "legendaria",
+   "zona": "forja",
+   "x": 3.66,
+   "y": 0.02,
+   "z": 31.29,
+   "escondida": true
+  },
+  {
+   "id": "mapusaurus",
+   "elemento": "fuego",
+   "nivel": "rara",
+   "zona": "forja",
+   "x": 9.24,
+   "y": 0.055,
+   "z": 33.78,
+   "escondida": true
+  },
+  {
+   "id": "rajasaurus",
+   "elemento": "fuego",
+   "nivel": "comun",
+   "zona": "montana",
+   "x": 0.21,
+   "y": 0,
+   "z": -12.83,
+   "escondida": true
+  },
+  {
+   "id": "saurophaganax",
+   "elemento": "fuego",
+   "nivel": "epica",
+   "zona": "forja",
+   "x": -2.91,
+   "y": 0.043,
+   "z": 35.21,
+   "escondida": true
+  },
+  {
+   "id": "torvosaurus",
+   "elemento": "fuego",
+   "nivel": "rara",
+   "zona": "montana",
+   "x": 13.66,
+   "y": 0,
+   "z": -14.77,
+   "escondida": true
+  },
+  {
+   "id": "tyrannosaurus_rex",
+   "elemento": "fuego",
+   "nivel": "legendaria",
+   "zona": "forja",
+   "x": -7.57,
+   "y": 0,
+   "z": 42.68,
+   "escondida": true
+  },
+  {
+   "id": "yangchuanosaurus",
+   "elemento": "fuego",
+   "nivel": "comun",
+   "zona": "montana",
+   "x": 10.62,
+   "y": 2.156,
+   "z": -22.25,
+   "escondida": true
+  },
+  {
+   "id": "bajadasaurus",
+   "elemento": "agua",
+   "nivel": "rara",
+   "zona": "puerto",
+   "x": -24.19,
+   "y": -0.009,
+   "z": -7.32,
+   "escondida": true
+  },
+  {
+   "id": "camarasaurus",
+   "elemento": "agua",
+   "nivel": "epica",
+   "zona": "bosque",
+   "x": 9.91,
+   "y": 0,
+   "z": 10.72,
+   "escondida": true
+  },
+  {
+   "id": "elasmosaurus",
+   "elemento": "agua",
+   "nivel": "rara",
+   "zona": "bosque",
+   "x": 2.17,
+   "y": 0,
+   "z": 27.6,
+   "escondida": true
+  },
+  {
+   "id": "irritator",
+   "elemento": "agua",
+   "nivel": "comun",
+   "zona": "bosque",
+   "x": 5.93,
+   "y": 0,
+   "z": 26,
+   "escondida": true
+  },
+  {
+   "id": "ophthalmosaurus",
+   "elemento": "agua",
+   "nivel": "comun",
+   "zona": "puerto",
+   "x": -28.2,
+   "y": 0.042,
+   "z": -18.23,
+   "escondida": true
+  },
+  {
+   "id": "amargasaurus",
+   "elemento": "agua",
+   "nivel": "rara",
+   "zona": "puerto",
+   "x": -23.32,
+   "y": -0.007,
+   "z": -18.4,
+   "escondida": true
+  },
+  {
+   "id": "ampelosaurus",
+   "elemento": "agua",
+   "nivel": "epica",
+   "zona": "puerto",
+   "x": -27.04,
+   "y": -0.002,
+   "z": -3.88,
+   "escondida": true
+  },
+  {
+   "id": "baryonyx",
+   "elemento": "agua",
+   "nivel": "comun",
+   "zona": "puerto",
+   "x": -20.12,
+   "y": -0.018,
+   "z": -22.34,
+   "escondida": true
+  },
+  {
+   "id": "futabasaurus",
+   "elemento": "agua",
+   "nivel": "rara",
+   "zona": "bosque",
+   "x": -10.81,
+   "y": 0,
+   "z": 19.95,
+   "escondida": true
+  },
+  {
+   "id": "isisaurus",
+   "elemento": "agua",
+   "nivel": "epica",
+   "zona": "puerto",
+   "x": -22.36,
+   "y": -0.027,
+   "z": -4.17,
+   "escondida": true
+  },
+  {
+   "id": "jobaria",
+   "elemento": "agua",
+   "nivel": "rara",
+   "zona": "puerto",
+   "x": -33.1,
+   "y": 0.009,
+   "z": -5.3,
+   "escondida": true
+  },
+  {
+   "id": "saltasaurus",
+   "elemento": "agua",
+   "nivel": "rara",
+   "zona": "puerto",
+   "x": -27.41,
+   "y": 0.004,
+   "z": -26.56,
+   "escondida": true
+  },
+  {
+   "id": "shunosaurus",
+   "elemento": "agua",
+   "nivel": "rara",
+   "zona": "puerto",
+   "x": -33.46,
+   "y": 0,
+   "z": -26.23,
+   "escondida": true
+  },
+  {
+   "id": "spinosaurus_atacando",
+   "elemento": "agua",
+   "nivel": "legendaria",
+   "zona": "puerto",
+   "x": -25.62,
+   "y": 0.041,
+   "z": -23.94,
+   "escondida": true
+  },
+  {
+   "id": "spinosaurus",
+   "elemento": "agua",
+   "nivel": "legendaria",
+   "zona": "puerto",
+   "x": -22.59,
+   "y": 0.017,
+   "z": -27.23,
+   "escondida": true
+  },
+  {
+   "id": "suchomimus",
+   "elemento": "agua",
+   "nivel": "rara",
+   "zona": "puerto",
+   "x": -31.14,
+   "y": -0.02,
+   "z": -9.96,
+   "escondida": true
+  },
+  {
+   "id": "centrosaurus",
+   "elemento": "rayo",
+   "nivel": "comun",
+   "zona": "bosque",
+   "x": -4.57,
+   "y": -0.031,
+   "z": 22.01,
+   "escondida": true
+  },
+  {
+   "id": "chasmosaurus",
+   "elemento": "rayo",
+   "nivel": "comun",
+   "zona": "bosque",
+   "x": 10.98,
+   "y": 0,
+   "z": 21.43,
+   "escondida": true
+  },
+  {
+   "id": "einiosaurus",
+   "elemento": "rayo",
+   "nivel": "comun",
+   "zona": "bosque",
+   "x": 6.06,
+   "y": 0,
+   "z": 18.95,
+   "escondida": true
+  },
+  {
+   "id": "machairoceratops",
+   "elemento": "rayo",
+   "nivel": "comun",
+   "zona": "forja",
+   "x": 5.91,
+   "y": 0.269,
+   "z": 35.83,
+   "escondida": true
+  },
+  {
+   "id": "monoclonius",
+   "elemento": "rayo",
+   "nivel": "comun",
+   "zona": "bosque",
+   "x": 6.37,
+   "y": 0,
+   "z": 13.84,
+   "escondida": true
+  },
+  {
+   "id": "zuniceratops",
+   "elemento": "rayo",
+   "nivel": "comun",
+   "zona": "bosque",
+   "x": -13.11,
+   "y": 0,
+   "z": 21.12,
+   "escondida": true
+  },
+  {
+   "id": "achelousaurus",
+   "elemento": "rayo",
+   "nivel": "comun",
+   "zona": "forja",
+   "x": -13.82,
+   "y": -0.034,
+   "z": 40.64,
+   "escondida": true
+  },
+  {
+   "id": "anchiceratops",
+   "elemento": "rayo",
+   "nivel": "comun",
+   "zona": "bosque",
+   "x": 13.21,
+   "y": 0,
+   "z": 7.52,
+   "escondida": true
+  },
+  {
+   "id": "maximus",
+   "elemento": "rayo",
+   "nivel": "legendaria",
+   "zona": "forja",
+   "x": 1.31,
+   "y": -0.09,
+   "z": 40.07,
+   "escondida": true
+  },
+  {
+   "id": "nedoceratops",
+   "elemento": "rayo",
+   "nivel": "rara",
+   "zona": "bosque",
+   "x": 2.25,
+   "y": 0,
+   "z": 21.54,
+   "escondida": true
+  },
+  {
+   "id": "pachyrhinosaurus",
+   "elemento": "rayo",
+   "nivel": "rara",
+   "zona": "forja",
+   "x": 3.22,
+   "y": -0.04,
+   "z": 42.99,
+   "escondida": true
+  },
+  {
+   "id": "pentaceratops",
+   "elemento": "rayo",
+   "nivel": "rara",
+   "zona": "bosque",
+   "x": -9.51,
+   "y": 0,
+   "z": 8.49,
+   "escondida": true
+  },
+  {
+   "id": "styracosaurus",
+   "elemento": "rayo",
+   "nivel": "rara",
+   "zona": "bosque",
+   "x": 4.38,
+   "y": 0,
+   "z": 8.52,
+   "escondida": true
+  },
+  {
+   "id": "torosaurus",
+   "elemento": "rayo",
+   "nivel": "epica",
+   "zona": "forja",
+   "x": -3.72,
+   "y": -0.054,
+   "z": 44.23,
+   "escondida": true
+  },
+  {
+   "id": "triceratops",
+   "elemento": "rayo",
+   "nivel": "legendaria",
+   "zona": "forja",
+   "x": 10.15,
+   "y": 0,
+   "z": 31.31,
+   "escondida": true
+  },
+  {
+   "id": "dacentrurus",
+   "elemento": "tierra",
+   "nivel": "rara",
+   "zona": "valle",
+   "x": 26.01,
+   "y": -0.058,
+   "z": 7.32,
+   "escondida": true
+  },
+  {
+   "id": "gigantspinosaurus",
+   "elemento": "tierra",
+   "nivel": "comun",
+   "zona": "valle",
+   "x": 20.18,
+   "y": 0,
+   "z": 12.86,
+   "escondida": true
+  },
+  {
+   "id": "kentrosaurus",
+   "elemento": "tierra",
+   "nivel": "comun",
+   "zona": "valle",
+   "x": 32.72,
+   "y": 0.06,
+   "z": 16.3,
+   "escondida": true
+  },
+  {
+   "id": "pinacosaurus",
+   "elemento": "tierra",
+   "nivel": "comun",
+   "zona": "montana",
+   "x": 14.57,
+   "y": 0,
+   "z": -2.96,
+   "escondida": true
+  },
+  {
+   "id": "polacanthus",
+   "elemento": "tierra",
+   "nivel": "comun",
+   "zona": "valle",
+   "x": 39.23,
+   "y": 0.153,
+   "z": 19.62,
+   "escondida": true
+  },
+  {
+   "id": "sauropelta",
+   "elemento": "tierra",
+   "nivel": "rara",
+   "zona": "valle",
+   "x": 33.94,
+   "y": 0.574,
+   "z": -1.9,
+   "escondida": true
+  },
+  {
+   "id": "ankylosaurus",
+   "elemento": "tierra",
+   "nivel": "legendaria",
+   "zona": "valle",
+   "x": 21.45,
+   "y": -0.056,
+   "z": 7.06,
+   "escondida": true
+  },
+  {
+   "id": "armatus",
+   "elemento": "tierra",
+   "nivel": "legendaria",
+   "zona": "valle",
+   "x": 25.31,
+   "y": -0.045,
+   "z": 13.93,
+   "escondida": true
+  },
+  {
+   "id": "edmontonia",
+   "elemento": "tierra",
+   "nivel": "rara",
+   "zona": "montana",
+   "x": 8.43,
+   "y": 0,
+   "z": -14.41,
+   "escondida": true
+  },
+  {
+   "id": "scolosaurus",
+   "elemento": "tierra",
+   "nivel": "rara",
+   "zona": "montana",
+   "x": -4.84,
+   "y": 0,
+   "z": -4.26,
+   "escondida": true
+  },
+  {
+   "id": "euoplocephalus",
+   "elemento": "tierra",
+   "nivel": "rara",
+   "zona": "montana",
+   "x": 13.75,
+   "y": 0,
+   "z": -8.67,
+   "escondida": true
+  },
+  {
+   "id": "lexovisaurus",
+   "elemento": "tierra",
+   "nivel": "comun",
+   "zona": "valle",
+   "x": 42.07,
+   "y": 0.06,
+   "z": 15.74,
+   "escondida": true
+  },
+  {
+   "id": "saichania",
+   "elemento": "tierra",
+   "nivel": "epica",
+   "zona": "montana",
+   "x": 8.72,
+   "y": 0,
+   "z": -4.05,
+   "escondida": true
+  },
+  {
+   "id": "stegosaurus",
+   "elemento": "tierra",
+   "nivel": "epica",
+   "zona": "valle",
+   "x": 32.33,
+   "y": 0.281,
+   "z": 20.6,
+   "escondida": true
+  },
+  {
+   "id": "tuojiangosaurus",
+   "elemento": "tierra",
+   "nivel": "rara",
+   "zona": "montana",
+   "x": 9.48,
+   "y": 0.568,
+   "z": -19.06,
+   "escondida": true
+  },
+  {
+   "id": "charonosaurus",
+   "elemento": "planta",
+   "nivel": "rara",
+   "zona": "valle",
+   "x": 33.56,
+   "y": -0.038,
+   "z": 12.19,
+   "escondida": true
+  },
+  {
+   "id": "corythosaurus",
+   "elemento": "planta",
+   "nivel": "comun",
+   "zona": "bosque",
+   "x": 14.14,
+   "y": 0,
+   "z": 0.84,
+   "escondida": true
+  },
+  {
+   "id": "olorotitan",
+   "elemento": "planta",
+   "nivel": "rara",
+   "zona": "valle",
+   "x": 34.89,
+   "y": 0.019,
+   "z": 1.32,
+   "escondida": true
+  },
+  {
+   "id": "pteranodon",
+   "elemento": "planta",
+   "nivel": "comun",
+   "zona": "valle",
+   "x": 46.95,
+   "y": 0.072,
+   "z": 13.81,
+   "escondida": true
+  },
+  {
+   "id": "seismosaurus",
+   "elemento": "planta",
+   "nivel": "legendaria",
+   "zona": "bosque",
+   "x": -14.03,
+   "y": 0,
+   "z": 4.36,
+   "escondida": true
+  },
+  {
+   "id": "supersaurus",
+   "elemento": "planta",
+   "nivel": "legendaria",
+   "zona": "bosque",
+   "x": -0.65,
+   "y": 0,
+   "z": 18.96,
+   "escondida": true
+  },
+  {
+   "id": "tupandactylus",
+   "elemento": "planta",
+   "nivel": "comun",
+   "zona": "valle",
+   "x": 33.62,
+   "y": -0.008,
+   "z": 5.82,
+   "escondida": true
+  },
+  {
+   "id": "tupuxuara",
+   "elemento": "planta",
+   "nivel": "comun",
+   "zona": "bosque",
+   "x": 3.59,
+   "y": 0,
+   "z": 24.95,
+   "escondida": true
+  },
+  {
+   "id": "altirhinus",
+   "elemento": "planta",
+   "nivel": "comun",
+   "zona": "bosque",
+   "x": 5.33,
+   "y": 0,
+   "z": 10.91,
+   "escondida": true
+  },
+  {
+   "id": "fukuisaurus",
+   "elemento": "planta",
+   "nivel": "comun",
+   "zona": "valle",
+   "x": 39.27,
+   "y": 0.225,
+   "z": 4.21,
+   "escondida": true
+  },
+  {
+   "id": "iguanodon",
+   "elemento": "planta",
+   "nivel": "comun",
+   "zona": "bosque",
+   "x": 13.46,
+   "y": 0,
+   "z": 22.99,
+   "escondida": true
+  },
+  {
+   "id": "lanzhousaurus",
+   "elemento": "planta",
+   "nivel": "comun",
+   "zona": "bosque",
+   "x": -13.67,
+   "y": 0,
+   "z": 24.19,
+   "escondida": true
+  },
+  {
+   "id": "maiasaura",
+   "elemento": "planta",
+   "nivel": "comun",
+   "zona": "valle",
+   "x": 23.93,
+   "y": 0.002,
+   "z": 0.63,
+   "escondida": true
+  },
+  {
+   "id": "parasaurolophus",
+   "elemento": "planta",
+   "nivel": "rara",
+   "zona": "valle",
+   "x": 45.72,
+   "y": -0.02,
+   "z": 8.07,
+   "escondida": true
+  },
+  {
+   "id": "saurolophus_naranja",
+   "elemento": "planta",
+   "nivel": "rara",
+   "zona": "valle",
+   "x": 42.25,
+   "y": 0.05,
+   "z": 6.93,
+   "escondida": true
+  },
+  {
+   "id": "saurolophus_verde",
+   "elemento": "planta",
+   "nivel": "rara",
+   "zona": "bosque",
+   "x": 1.84,
+   "y": 0,
+   "z": -0.82,
+   "escondida": true
+  },
+  {
+   "id": "shantungosaurus",
+   "elemento": "planta",
+   "nivel": "epica",
+   "zona": "bosque",
+   "x": 9.22,
+   "y": 0,
+   "z": -0.46,
+   "escondida": true
+  },
+  {
+   "id": "dilophosaurus",
+   "elemento": "viento",
+   "nivel": "comun",
+   "zona": "montana",
+   "x": -4.66,
+   "y": 0,
+   "z": -13,
+   "escondida": true
+  },
+  {
+   "id": "liliensternus",
+   "elemento": "viento",
+   "nivel": "comun",
+   "zona": "puerto",
+   "x": -31.79,
+   "y": -0.003,
+   "z": -21.1,
+   "escondida": true
+  },
+  {
+   "id": "neovenator",
+   "elemento": "viento",
+   "nivel": "comun",
+   "zona": "puerto",
+   "x": -24.44,
+   "y": -0.009,
+   "z": -21.21,
+   "escondida": true
+  },
+  {
+   "id": "sinraptor",
+   "elemento": "viento",
+   "nivel": "comun",
+   "zona": "montana",
+   "x": 1.5,
+   "y": 0,
+   "z": -8.3,
+   "escondida": true
+  },
+  {
+   "id": "szechuanosaurus",
+   "elemento": "viento",
+   "nivel": "comun",
+   "zona": "puerto",
+   "x": -19.87,
+   "y": -0.016,
+   "z": -14.83,
+   "escondida": true
+  },
+  {
+   "id": "afrovenator",
+   "elemento": "viento",
+   "nivel": "comun",
+   "zona": "puerto",
+   "x": -21.27,
+   "y": 0.015,
+   "z": -11.61,
+   "escondida": true
+  },
+  {
+   "id": "allosaurus",
+   "elemento": "viento",
+   "nivel": "comun",
+   "zona": "puerto",
+   "x": -30.3,
+   "y": -0.025,
+   "z": -23.72,
+   "escondida": true
+  },
+  {
+   "id": "carnotaurus",
+   "elemento": "viento",
+   "nivel": "comun",
+   "zona": "puerto",
+   "x": -20.04,
+   "y": -0.018,
+   "z": -5.14,
+   "escondida": true
+  },
+  {
+   "id": "ceratosaurus",
+   "elemento": "viento",
+   "nivel": "comun",
+   "zona": "montana",
+   "x": 4.15,
+   "y": -0.059,
+   "z": -16.81,
+   "escondida": true
+  },
+  {
+   "id": "deltadromeus",
+   "elemento": "viento",
+   "nivel": "comun",
+   "zona": "montana",
+   "x": -13.48,
+   "y": 0,
+   "z": -4.47,
+   "escondida": true
+  },
+  {
+   "id": "gojirasaurus",
+   "elemento": "viento",
+   "nivel": "comun",
+   "zona": "puerto",
+   "x": -29.83,
+   "y": 0.023,
+   "z": -27.67,
+   "escondida": true
+  },
+  {
+   "id": "majungasaurus",
+   "elemento": "viento",
+   "nivel": "comun",
+   "zona": "puerto",
+   "x": -32.24,
+   "y": -0.03,
+   "z": -12.59,
+   "escondida": true
+  },
+  {
+   "id": "megaraptor",
+   "elemento": "viento",
+   "nivel": "comun",
+   "zona": "puerto",
+   "x": -28.99,
+   "y": 0.019,
+   "z": -11.32,
+   "escondida": true
+  },
+  {
+   "id": "utahraptor",
+   "elemento": "viento",
+   "nivel": "rara",
+   "zona": "puerto",
+   "x": -25.31,
+   "y": 0.004,
+   "z": -11.95,
+   "escondida": true
+  },
+  {
+   "id": "indoraptor",
+   "elemento": "especial",
+   "nivel": "mitica",
+   "zona": "forja",
+   "x": -6.3,
+   "y": 0.052,
+   "z": 38.93,
+   "escondida": true
+  },
+  {
+   "id": "brontosaurus",
+   "elemento": "especial",
+   "nivel": "mitica",
+   "zona": "valle",
+   "x": 36.26,
+   "y": -0.07,
+   "z": 12.63,
+   "escondida": true
+  },
+  {
+   "id": "cryolophosaurus",
+   "elemento": "especial",
+   "nivel": "mitica",
+   "zona": "montana",
+   "x": -7.48,
+   "y": 0,
+   "z": -14.86,
+   "escondida": true
+  },
+  {
+   "id": "deinonychus",
+   "elemento": "especial",
+   "nivel": "mitica",
+   "zona": "montana",
+   "x": -13.64,
+   "y": 0,
+   "z": -10.92,
+   "escondida": true
+  },
+  {
+   "id": "indominus_rex",
+   "elemento": "especial",
+   "nivel": "mitica",
+   "zona": "bosque",
+   "x": 14.28,
+   "y": 0,
+   "z": 4.17,
+   "escondida": true
+  },
+  {
+   "id": "megalosaurus",
+   "elemento": "especial",
+   "nivel": "mitica",
+   "zona": "puerto",
+   "x": -32.03,
+   "y": -0.059,
+   "z": -17.97,
+   "escondida": true
+  },
+  {
+   "id": "pachycephalosaurus",
+   "elemento": "especial",
+   "nivel": "mitica",
+   "zona": "montana",
+   "x": -12.81,
+   "y": 0.11,
+   "z": -17.88,
+   "escondida": true
+  },
+  {
+   "id": "therizinosaurus",
+   "elemento": "especial",
+   "nivel": "mitica",
+   "zona": "bosque",
+   "x": 1.53,
+   "y": 0,
+   "z": 11.24,
+   "escondida": true
+  },
+  {
+   "id": "pawpawsaurus",
+   "elemento": "normal",
+   "nivel": "comun",
+   "zona": "bosque",
+   "x": 13.75,
+   "y": 0,
+   "z": 18.11,
+   "escondida": true
+  },
+  {
+   "id": "piatnitzkysaurus",
+   "elemento": "normal",
+   "nivel": "comun",
+   "zona": "bosque",
+   "x": -2.48,
+   "y": -0.001,
+   "z": 27.94,
+   "escondida": true
+  },
+  {
+   "id": "quetzalcoatlus",
+   "elemento": "normal",
+   "nivel": "rara",
+   "zona": "bosque",
+   "x": 5.91,
+   "y": 0,
+   "z": 2.22,
+   "escondida": true
+  },
+  {
+   "id": "anhanguera",
+   "elemento": "normal",
+   "nivel": "comun",
+   "zona": "montana",
+   "x": -13.93,
+   "y": 0,
+   "z": -14.89,
+   "escondida": true
+  },
+  {
+   "id": "velociraptor",
+   "elemento": "normal",
+   "nivel": "comun",
+   "zona": "forja",
+   "x": 11.52,
+   "y": 0,
+   "z": 36.71,
+   "escondida": true
+  }
+ ]
+}

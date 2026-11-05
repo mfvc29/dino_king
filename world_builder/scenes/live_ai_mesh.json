@@ -1,0 +1,14 @@
+{
+  "clear": true,
+  "objects": [
+    {
+      "type": "floor",
+      "width": 100,
+      "depth": 100,
+      "cell": 1,
+      "label": "Piso 100 × 100 m"
+    }
+  ],
+  "frame": { "width": 100, "depth": 100 },
+  "message": "Piso de 100 × 100 m (cada cuadro = 1 m)"
+}
