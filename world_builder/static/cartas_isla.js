@@ -95,10 +95,11 @@
         guardianes: Array.isArray(p.guardianes) ? p.guardianes : [],
         invocado: typeof p.invocado === 'string' ? p.invocado : null, // dino que te acompaña por la isla
         vinculos: Array.isArray(p.vinculos) ? p.vinculos : [],         // misión de vínculo cumplida → puede combatir
-        metros: p.metros && typeof p.metros === 'object' ? p.metros : {} // metros caminados junto a cada dino
+        metros: p.metros && typeof p.metros === 'object' ? p.metros : {}, // metros caminados junto a cada dino
+        caricias: p.caricias && typeof p.caricias === 'object' ? p.caricias : {} // veces que jugaste con él ([G])
       };
     } catch (e) {
-      return { encontradas: [], guardianes: [], invocado: null, vinculos: [], metros: {} };
+      return { encontradas: [], guardianes: [], invocado: null, vinculos: [], metros: {}, caricias: {} };
     }
   }
 
@@ -186,8 +187,19 @@
     return id;
   }
 
+  // Jugar/acariciar al compañero ([G] en el juego). Las misiones "Acariciarlo N veces" se cumplen solas.
+  function sumarCaricia(id) {
+    const p = leer();
+    p.caricias[id] = (p.caricias[id] || 0) + 1;
+    let nuevo = false;
+    const r = REQ[id], m = r && /Acariciarlo (\d+) veces/i.exec(r.texto);
+    if (m && p.caricias[id] >= parseInt(m[1], 10) && !p.vinculos.includes(id)) { p.vinculos.push(id); nuevo = true; }
+    guardar(p);
+    return { p, nuevo };
+  }
+
   window.CartasIsla = {
-    INICIALES, otorgarInicial,
+    INICIALES, otorgarInicial, sumarCaricia,
     cargarRequisitos, requisitoVinculo, metaMetros, estadoVinculo, invocar, guardarCompanero, sumarMetros,
     CLAVE, GUARDIANES, CAMPEON, MITICAS, NIVELES, ZONAS,
     usarDinos, poder, nivel, requisitos, leer, guardar, esMitica, sellada, requisitoCumplido, textoRequisito,

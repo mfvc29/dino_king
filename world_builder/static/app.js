@@ -4232,23 +4232,43 @@ function showToast(msg) {
 /**
  * Actualiza la ondulación de las láminas de agua en tiempo real
  */
+// Lista de láminas de agua con oleaje (se recalcula solo cuando cambian los objetos del mundo, no en cada fotograma:
+// recorrer los ~28 000 objetos de la isla para buscarlas costaba ~11 ms por fotograma)
+let _aguaCache = null, _aguaN = -1;
 function updateWaterSurfaces(time) {
-  state.meshObjects.forEach((group) => {
-    group.traverse((c) => {
-      if (c.userData && c.userData.isWaterSurface && c.geometry) {
-        const pos = c.geometry.attributes.position;
-        const orig = c.userData.origY;
-        if (!orig || orig.length !== pos.count) return;
-        for (let i = 0; i < pos.count; i++) {
-          const x = pos.getX(i);
-          const z = pos.getZ(i);
-          const wave = Math.sin(x * 1.6 + time * 2.4) * 0.045 + Math.cos(z * 2.0 + time * 1.9) * 0.038;
-          pos.setY(i, orig[i] + wave);
-        }
-        pos.needsUpdate = true;
-      }
-    });
+  if (_aguaN !== state.meshObjects.length || !_aguaCache) {
+    _aguaN = state.meshObjects.length;
+    _aguaCache = [];
+    state.meshObjects.forEach((group) => group.traverse((c) => { if (c.userData && c.userData.isWaterSurface && c.geometry) _aguaCache.push(c); }));
+  }
+  _aguaCache.forEach((c) => {
+    const pos = c.geometry.attributes.position;
+    const orig = c.userData.origY;
+    if (!orig || orig.length !== pos.count) return;
+    for (let i = 0; i < pos.count; i++) {
+      const x = pos.getX(i);
+      const z = pos.getZ(i);
+      const wave = Math.sin(x * 1.6 + time * 2.4) * 0.045 + Math.cos(z * 2.0 + time * 1.9) * 0.038;
+      pos.setY(i, orig[i] + wave);
+    }
+    pos.needsUpdate = true;
   });
+}
+
+// Modo /jugar: el mundo no se mueve, así que se quitan las mallas de alambre del editor (ocultas en el juego) y se
+// congelan las matrices de los objetos fijos. Antes la escena recalculaba ~28 000 objetos en cada fotograma (~25 ms).
+// Los personajes (huesos animados), el avatar, el compañero y los efectos siguen actualizándose.
+function congelarMundoEstatico() {
+  let quitadas = 0, congelados = 0;
+  state.meshObjects.forEach((group) => {
+    const alambres = [];
+    group.traverse((o) => { if (o.name === 'wireOverlay') alambres.push(o); });
+    alambres.forEach((o) => { if (o.parent) { o.parent.remove(o); quitadas++; } });
+    if (group.userData.category === 'personajes') return; // tienen huesos que se animan
+    group.updateMatrixWorld(true);
+    group.traverse((o) => { o.matrixAutoUpdate = false; o.matrixWorldNeedsUpdate = false; congelados++; });
+  });
+  console.info(`Mundo congelado: ${congelados} objetos fijos, ${quitadas} mallas de alambre retiradas`);
 }
 
 // -------------------------------------------------------------
@@ -4317,6 +4337,7 @@ window.DinoPhysics = {
     if (k === 'f') this.celebrar();
     if (k === 'p') this.mostrarPanelEntrada(!this.panelVisible);
     if (k === 'r') this.excavar();
+    if (k === 'g') this.jugarConCompanero();
     const iEnt = '123456'.indexOf(k);
     if (iEnt >= 0 && this.ENTRADAS[iEnt]) this.teletransportar(iEnt);
   },
@@ -4463,7 +4484,7 @@ window.DinoPhysics = {
     this.vel.set(0, 0, 0);
     this.rapidez = 0; this.giroVel = 0;
     this.visY = this.camBaseY = this.pos.y;
-    this.heading = Math.PI; this.camYaw = 0;
+    this.heading = Math.PI; this.camYaw = 0; this.camYawVel = 0;
     if (this.avatar) { this.avatar.position.copy(this.pos); this.avatar.rotation.y = this.heading; }
     const cam = this.camaraDeseada();
     activeCamera.position.copy(cam.pos);
@@ -4749,7 +4770,7 @@ window.DinoPhysics = {
     g.scale.setScalar(0.8);
     g.traverse((o) => { if (o.isMesh) { o.castShadow = true; o.frustumCulled = false; if (o.name !== 'wireOverlay') applyRenderStyleToMesh(o); } });
     const fx = Math.sin(this.heading), fz = Math.cos(this.heading);
-    const pos = new THREE.Vector3(this.pos.x - fx * 1.5, this.pos.y, this.pos.z - fz * 1.5);
+    const pos = new THREE.Vector3(this.pos.x + fx * 2.2 + fz * 0.8, this.pos.y, this.pos.z + fz * 2.2 - fx * 0.8);
     g.position.copy(pos);
     scene.add(g);
     const c = { g, pos, rumbo: this.heading, mixer: null, acciones: {}, actual: null, ultimo: this.pos.clone(), pendientes: 0 };
@@ -4761,6 +4782,55 @@ window.DinoPhysics = {
     const nombre = ((this.infoDinos || {})[id] || {}).name || id;
     showToast(`🐾 ${nombre} te acompaña por la isla`);
     if (c.acciones.Rugir) { c.acciones.Rugir.setLoop(THREE.LoopOnce); c.acciones.Rugir.clampWhenFinished = false; c.acciones.Rugir.reset().play(); c.actual = c.acciones.Rugir; }
+  },
+
+  // [G] Jugar con el compañero: se gira hacia ti, ruge contento y salen corazones. Cuenta caricias para su misión.
+  jugarConCompanero() {
+    const c = this.companero, C = window.CartasIsla;
+    const nombre = ((this.infoDinos || {})[this.companeroId] || {}).name || 'tu dino';
+    if (!c || !C) { showToast('🦖 Invoca un dino desde el Dino Lector para jugar con él'); return; }
+    const d = Math.hypot(c.pos.x - this.pos.x, c.pos.z - this.pos.z);
+    if (d > 3) { showToast(`🐾 Acércate a ${nombre} para jugar con él`); return; }
+    c.rumbo = Math.atan2(this.pos.x - c.pos.x, this.pos.z - c.pos.z);
+    c.quieto = 1.6; // se queda mirándote un momento
+    const rugir = c.acciones.Rugir;
+    if (rugir) { if (c.actual && c.actual !== rugir) c.actual.fadeOut(0.15); rugir.setLoop(THREE.LoopOnce); rugir.reset().fadeIn(0.15).play(); c.actual = rugir; }
+    this.corazones(c);
+    const r = C.sumarCaricia(this.companeroId);
+    this._prog = r.p;
+    showToast(r.nuevo ? `✅ ¡Vínculo creado con ${nombre}! Ya puede usarse en combate.` : `❤️ ¡${nombre} está feliz! (${r.p.caricias[this.companeroId]} caricias)`);
+  },
+
+  corazones(c) {
+    if (!this._texCorazon) {
+      const cv = document.createElement('canvas');
+      cv.width = cv.height = 64;
+      const x = cv.getContext('2d');
+      x.font = '52px serif'; x.textAlign = 'center'; x.textBaseline = 'middle';
+      x.fillText('❤️', 32, 36);
+      this._texCorazon = new THREE.CanvasTexture(cv);
+    }
+    for (let i = 0; i < 4; i++) {
+      const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: this._texCorazon, transparent: true, depthWrite: false }));
+      sp.scale.setScalar(0.22);
+      sp.position.set(c.pos.x + (Math.random() - 0.5) * 0.6, c.pos.y + 1.0, c.pos.z + (Math.random() - 0.5) * 0.6);
+      scene.add(sp);
+      (this._corazones = this._corazones || []).push({ sp, t: -i * 0.15, x0: sp.position.x });
+    }
+  },
+
+  animarCorazones(dt) {
+    if (!this._corazones || !this._corazones.length) return;
+    this._corazones = this._corazones.filter((h) => {
+      h.t += dt;
+      if (h.t < 0) { h.sp.visible = false; return true; }
+      h.sp.visible = true;
+      h.sp.position.y += dt * 0.9;
+      h.sp.position.x = h.x0 + Math.sin(h.t * 6) * 0.08;
+      h.sp.material.opacity = Math.max(0, 1 - h.t / 1.3);
+      if (h.t > 1.3) { scene.remove(h.sp); h.sp.material.dispose(); return false; }
+      return true;
+    });
   },
 
   animarCompanero(c, nombre, ritmo) {
@@ -4782,13 +4852,15 @@ window.DinoPhysics = {
     if (id !== this.companeroId && window.BibliotecaMallas && window.BibliotecaMallas.mallas) this.ponerCompanero(id);
     const c = this.companero;
     if (!c) return;
-    // Lugar al que va: detrás del jugador y un poco a su izquierda
+    // Lugar al que va: a tu lado y un poco por delante, donde la cámara (que va detrás de ti) lo ve
     const fx = Math.sin(this.heading), fz = Math.cos(this.heading);
-    const tx = this.pos.x - fx * 1.5 + fz * 0.7, tz = this.pos.z - fz * 1.5 - fx * 0.7;
+    const tx = this.pos.x + fx * 2.2 + fz * 0.8, tz = this.pos.z + fz * 2.2 - fx * 0.8;
     let dx = tx - c.pos.x, dz = tz - c.pos.z, d = Math.hypot(dx, dz);
     if (d > 12) { c.pos.set(tx, this.pos.y, tz); dx = dz = d = 0; } // se quedó muy atrás: te alcanza
+    this.animarCorazones(dt);
+    if (c.quieto > 0) { c.quieto -= dt; dx = dz = d = 0; } // jugando: se queda mirándote
     const vel = d > 0.3 ? Math.min(d * 2.0, 4.2) : 0;
-    let objetivo = this.heading;
+    let objetivo = c.quieto > 0 ? c.rumbo : this.heading;
     if (vel > 0) {
       c.pos.x += (dx / d) * vel * dt;
       c.pos.z += (dz / d) * vel * dt;
@@ -4873,7 +4945,7 @@ window.DinoPhysics = {
         <div style="color:#94a3b8;line-height:1.45;font-size:0.72rem;">
           <b>W / S</b> avanzar / retroceder · <b>A / D</b> girar · <b>Shift</b> correr · <b>Espacio</b> saltar<br>
           La cámara va sobre tu cabeza mirando al frente, hacia donde mira el personaje · <b>Q / E</b> vistazo a los lados · <b>Rueda</b> alejar para verte entero<br>
-          <b>C</b> ver colisiones · <b>F</b> celebrar · <b>1-6</b> ir a un lugar · <b>Esc</b> salir</div>`;
+          <b>R</b> excavar carta · <b>G</b> jugar con tu dino · <b>C</b> ver colisiones · <b>F</b> celebrar · <b>1-6</b> ir a un lugar · <b>Esc</b> salir</div>`;
       (document.getElementById('canvas-container') || document.body).appendChild(el);
       el.querySelector('#pem-cerrar').onclick = () => this.mostrarPanelEntrada(false);
       const sel = el.querySelector('#pem-personaje');
@@ -5611,7 +5683,11 @@ window.DinoPhysics = {
     const vistazo = (this.keys.q ? 1.1 : 0) - (this.keys.e ? 1.1 : 0);
     let dYaw = this.heading + Math.PI + vistazo - this.camYaw;
     dYaw = Math.atan2(Math.sin(dYaw), Math.cos(dYaw));
-    this.camYaw += dYaw * (1 - Math.exp(-dt * 9)); // sigue el giro de cerca (el personaje no se ve en la vista por defecto)
+    // Resorte críticamente amortiguado: la cámara acompaña el giro acelerando y frenando con suavidad (sin tirones al
+    // empezar o dejar de girar) y sin quedarse atrás ni pasarse de largo
+    const W_CAM = 7;
+    this.camYawVel = (this.camYawVel || 0) + (W_CAM * W_CAM * dYaw - 2 * W_CAM * (this.camYawVel || 0)) * dt;
+    this.camYaw += this.camYawVel * dt;
 
     if (this.shadowMesh) {
       this.shadowMesh.visible = !this.isSwimming;
@@ -5704,8 +5780,9 @@ function iniciarSoloJuego() {
     clearInterval(espera);
     setRenderStyle('clay_only');
     togglePlayableAvatar();
+    congelarMundoEstatico();
     window.DinoPhysics.mostrarPanelEntrada(false);
-    setTimeout(() => showToast('W/S avanzar · A/D girar · Shift correr · R excavar carta · P panel · Esc salir'), 1500);
+    setTimeout(() => showToast('W/S avanzar · A/D girar · Shift correr · R excavar carta · G jugar con tu dino · P panel · Esc salir'), 1500);
     onWindowResize();
     // Se quita la pantalla de carga cuando ya hay cartas cargadas y un par de fotogramas del juego dibujados
     const listoJuego = setInterval(() => {
