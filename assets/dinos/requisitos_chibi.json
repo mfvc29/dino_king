@@ -1,0 +1,635 @@
+{
+ "_comentario": "Requisito único por dino para poder usar su chibi en combate (generado por tools/chibis_combate/requisitos.py)",
+ "requisitos": {
+  "alioramus": {
+   "tipo": "caminar",
+   "texto": "Correr 2 km por las calles de Ciudad de la Forja",
+   "zona": "forja",
+   "personaje": null
+  },
+  "alpha_acrocanthosaurus": {
+   "tipo": "mision",
+   "texto": "Encender a la vez los 4 braseros volcánicos de la plaza de la Forja",
+   "zona": "forja",
+   "personaje": null
+  },
+  "black_tyrannosaurus_rex": {
+   "tipo": "mision",
+   "texto": "Llevarle a Nelly 5 cafés del laboratorio sin que se quede dormida",
+   "zona": "forja",
+   "personaje": "nelly"
+  },
+  "eocarcharia": {
+   "tipo": "jugar",
+   "texto": "Ganarle 5 carreras alrededor del Núcleo de Energía",
+   "zona": "forja",
+   "personaje": null
+  },
+  "giganotosaurus": {
+   "tipo": "mision",
+   "texto": "Acompañar a Luter en sus 3 entrenamientos al amanecer en la Arena",
+   "zona": "forja",
+   "personaje": "luter"
+  },
+  "acrocanthosaurus": {
+   "tipo": "mision",
+   "texto": "Llevar 6 cargas de carbón a la herrería de la Casa de la Forja",
+   "zona": "forja",
+   "personaje": null
+  },
+  "carcharodontosaurus": {
+   "tipo": "caminar",
+   "texto": "Patrullar el borde de la muralla de la Forja dando la vuelta 3 veces",
+   "zona": "forja",
+   "personaje": null
+  },
+  "daspletosaurus": {
+   "tipo": "jugar",
+   "texto": "Bailar con Beatriz entre los braseros 4 veces",
+   "zona": "forja",
+   "personaje": "beatriz"
+  },
+  "gigas": {
+   "tipo": "caminar",
+   "texto": "Subir con él a la terraza de la Montaña Alpina 3 veces",
+   "zona": "montana",
+   "personaje": null
+  },
+  "mapusaurus": {
+   "tipo": "coleccion",
+   "texto": "Reunir su manada: tener otras 4 cartas de fuego en la colección",
+   "zona": null,
+   "personaje": null
+  },
+  "rajasaurus": {
+   "tipo": "jugar",
+   "texto": "Jugar al escondite en la hierba alta del bosque y encontrarlo 5 veces",
+   "zona": "bosque",
+   "personaje": null
+  },
+  "saurophaganax": {
+   "tipo": "alimentar",
+   "texto": "Darle 10 carnes asadas en los braseros de la Forja",
+   "zona": "forja",
+   "personaje": null
+  },
+  "torvosaurus": {
+   "tipo": "mision",
+   "texto": "Quedarse 3 minutos junto al yunque mientras Roderick forja",
+   "zona": "forja",
+   "personaje": "roderick"
+  },
+  "tyrannosaurus_rex": {
+   "tipo": "caminar",
+   "texto": "Recorrer las tres aldeas de un tirón (Forja → Valle → Puerto) sin separarse",
+   "zona": null,
+   "personaje": null
+  },
+  "yangchuanosaurus": {
+   "tipo": "jugar",
+   "texto": "Atrapar 10 chispas que saltan de las Torres Tesla",
+   "zona": "forja",
+   "personaje": null
+  },
+  "bajadasaurus": {
+   "tipo": "caminar",
+   "texto": "Pasear 1,5 km por la orilla de la bahía del Puerto",
+   "zona": "puerto",
+   "personaje": null
+  },
+  "camarasaurus": {
+   "tipo": "alimentar",
+   "texto": "Darle 12 helechos del bosque",
+   "zona": "bosque",
+   "personaje": null
+  },
+  "elasmosaurus": {
+   "tipo": "jugar",
+   "texto": "Nadar con él 5 minutos en la bahía",
+   "zona": "puerto",
+   "personaje": null
+  },
+  "irritator": {
+   "tipo": "alimentar",
+   "texto": "Darle 6 cangrejos de la playa del Puerto",
+   "zona": "puerto",
+   "personaje": null
+  },
+  "ophthalmosaurus": {
+   "tipo": "jugar",
+   "texto": "Ganarle 3 carreras de nado desde el muelle",
+   "zona": "puerto",
+   "personaje": null
+  },
+  "amargasaurus": {
+   "tipo": "mision",
+   "texto": "Revisar los 4 amarres del muelle del Puerto",
+   "zona": "puerto",
+   "personaje": null
+  },
+  "ampelosaurus": {
+   "tipo": "caminar",
+   "texto": "Pisar todos los peldaños de piedra y madera de la playa del Puerto",
+   "zona": "puerto",
+   "personaje": null
+  },
+  "baryonyx": {
+   "tipo": "mision",
+   "texto": "Hacer 3 rondas de guardia frente al faro con Maxwell",
+   "zona": "puerto",
+   "personaje": "maxwell"
+  },
+  "futabasaurus": {
+   "tipo": "jugar",
+   "texto": "Saltar 15 olas en la orilla",
+   "zona": "puerto",
+   "personaje": null
+  },
+  "isisaurus": {
+   "tipo": "alimentar",
+   "texto": "Darle 10 algas de la bahía",
+   "zona": "puerto",
+   "personaje": null
+  },
+  "jobaria": {
+   "tipo": "caminar",
+   "texto": "Llevarlo del Puerto hasta la Montaña Alpina sin parar",
+   "zona": null,
+   "personaje": null
+  },
+  "saltasaurus": {
+   "tipo": "mision",
+   "texto": "Llenar 5 cubos en el pozo del Valle para regar los canteros",
+   "zona": "valle",
+   "personaje": null
+  },
+  "shunosaurus": {
+   "tipo": "jugar",
+   "texto": "Devolver 10 cocos golpeándolos con la cola",
+   "zona": "puerto",
+   "personaje": null
+  },
+  "spinosaurus_atacando": {
+   "tipo": "alimentar",
+   "texto": "Darle 15 pescados frescos del muelle",
+   "zona": "puerto",
+   "personaje": null
+  },
+  "spinosaurus": {
+   "tipo": "mision",
+   "texto": "Pescar con Alvin 3 veces al final del muelle",
+   "zona": "puerto",
+   "personaje": "alvin"
+  },
+  "suchomimus": {
+   "tipo": "mision",
+   "texto": "Vigilar el Faro Costero con Macy durante una noche entera",
+   "zona": "puerto",
+   "personaje": "macy"
+  },
+  "centrosaurus": {
+   "tipo": "jugar",
+   "texto": "Embestir 10 dianas de paja",
+   "zona": null,
+   "personaje": null
+  },
+  "chasmosaurus": {
+   "tipo": "caminar",
+   "texto": "Visitar de noche las 6 farolas eléctricas de la Forja",
+   "zona": "forja",
+   "personaje": null
+  },
+  "einiosaurus": {
+   "tipo": "alimentar",
+   "texto": "Darle 8 bayas chispeantes que crecen junto a las Torres Tesla",
+   "zona": "forja",
+   "personaje": null
+  },
+  "machairoceratops": {
+   "tipo": "coleccion",
+   "texto": "Recoger 6 chispas caídas al pie de las Torres Tesla",
+   "zona": "forja",
+   "personaje": null
+  },
+  "monoclonius": {
+   "tipo": "caminar",
+   "texto": "Caminar 1 km por el bosque central",
+   "zona": "bosque",
+   "personaje": null
+  },
+  "zuniceratops": {
+   "tipo": "jugar",
+   "texto": "Jugar al pilla-pilla con él y atraparlo 5 veces",
+   "zona": null,
+   "personaje": null
+  },
+  "achelousaurus": {
+   "tipo": "mision",
+   "texto": "Llevar 4 piezas de repuesto al taller de la Casa Alta de la Forja",
+   "zona": "forja",
+   "personaje": null
+  },
+  "anchiceratops": {
+   "tipo": "alimentar",
+   "texto": "Darle 8 hojas de palmera del Puerto",
+   "zona": "puerto",
+   "personaje": null
+  },
+  "maximus": {
+   "tipo": "mision",
+   "texto": "Cargar el Núcleo de Energía: quedarse 5 minutos junto a él una noche",
+   "zona": "forja",
+   "personaje": null
+  },
+  "nedoceratops": {
+   "tipo": "caminar",
+   "texto": "Subir y bajar 5 veces la rampa de la Forja al mar",
+   "zona": "forja",
+   "personaje": null
+  },
+  "pachyrhinosaurus": {
+   "tipo": "jugar",
+   "texto": "Empujar 6 troncos caídos del bosque",
+   "zona": "bosque",
+   "personaje": null
+  },
+  "pentaceratops": {
+   "tipo": "mision",
+   "texto": "Hacer 3 minutos de guardia en el control de la entrada de la Forja",
+   "zona": "bosque",
+   "personaje": null
+  },
+  "styracosaurus": {
+   "tipo": "mision",
+   "texto": "Ayudar a Eldon a recalibrar las 2 Torres Tesla",
+   "zona": "forja",
+   "personaje": "eldon"
+  },
+  "torosaurus": {
+   "tipo": "alimentar",
+   "texto": "Darle 10 calabazas del huerto del Valle",
+   "zona": "valle",
+   "personaje": null
+  },
+  "triceratops": {
+   "tipo": "mision",
+   "texto": "Desfilar ante el Ayuntamiento para que Vivian lo apruebe",
+   "zona": "forja",
+   "personaje": "vivian"
+  },
+  "dacentrurus": {
+   "tipo": "jugar",
+   "texto": "Rodar 5 piedras cuesta abajo por la ladera de la cueva",
+   "zona": "montana",
+   "personaje": null
+  },
+  "gigantspinosaurus": {
+   "tipo": "alimentar",
+   "texto": "Darle 8 raíces dulces del Valle",
+   "zona": "valle",
+   "personaje": null
+  },
+  "kentrosaurus": {
+   "tipo": "mision",
+   "texto": "Ayudar a Kaela a seguir 5 huellas junto a la Cueva Meteoro",
+   "zona": "montana",
+   "personaje": "kaela"
+  },
+  "pinacosaurus": {
+   "tipo": "caminar",
+   "texto": "Caminar 1,2 km por la arena del Puerto",
+   "zona": "puerto",
+   "personaje": null
+  },
+  "polacanthus": {
+   "tipo": "jugar",
+   "texto": "Jugar al escondite entre las rocas de la montaña y encontrarlo 4 veces",
+   "zona": "montana",
+   "personaje": null
+  },
+  "sauropelta": {
+   "tipo": "mision",
+   "texto": "Acompañar a Ulises en su ronda completa por el bosque",
+   "zona": "bosque",
+   "personaje": "ulises"
+  },
+  "ankylosaurus": {
+   "tipo": "mision",
+   "texto": "Entrenar golpes de cola con Tiberius junto al pozo (3 sesiones)",
+   "zona": "valle",
+   "personaje": "tiberius"
+  },
+  "armatus": {
+   "tipo": "caminar",
+   "texto": "Dar la vuelta completa a la isla siguiendo la costa",
+   "zona": null,
+   "personaje": null
+  },
+  "edmontonia": {
+   "tipo": "alimentar",
+   "texto": "Darle 6 setas de la Casa Seta del Valle",
+   "zona": "valle",
+   "personaje": null
+  },
+  "scolosaurus": {
+   "tipo": "mision",
+   "texto": "Superar la prueba de resistencia de Rolando en el puesto de la guarnición",
+   "zona": "valle",
+   "personaje": "rolando"
+  },
+  "euoplocephalus": {
+   "tipo": "caminar",
+   "texto": "Visitar con él los 3 estanques del bosque",
+   "zona": "bosque",
+   "personaje": null
+  },
+  "lexovisaurus": {
+   "tipo": "jugar",
+   "texto": "Saltar 20 veces por los peldaños de la playa del Puerto",
+   "zona": "puerto",
+   "personaje": null
+  },
+  "saichania": {
+   "tipo": "mision",
+   "texto": "Aguantar firme 3 minutos sobre la muralla de la Forja",
+   "zona": "forja",
+   "personaje": null
+  },
+  "stegosaurus": {
+   "tipo": "mision",
+   "texto": "Recorrer con Ritza la frontera entre el bosque y el Valle",
+   "zona": "valle",
+   "personaje": "ritza"
+  },
+  "tuojiangosaurus": {
+   "tipo": "caminar",
+   "texto": "Ir y volver 3 veces al Refugio del Bosque",
+   "zona": "valle",
+   "personaje": null
+  },
+  "charonosaurus": {
+   "tipo": "jugar",
+   "texto": "Hacer sonar su cresta 5 veces desde la terraza de la montaña",
+   "zona": "montana",
+   "personaje": null
+  },
+  "corythosaurus": {
+   "tipo": "mision",
+   "texto": "Plantar 5 brotes en el Gran Pinar con Livia",
+   "zona": "bosque",
+   "personaje": "livia"
+  },
+  "olorotitan": {
+   "tipo": "caminar",
+   "texto": "Caminar 2 km por el Gran Pinar",
+   "zona": "bosque",
+   "personaje": null
+  },
+  "pteranodon": {
+   "tipo": "jugar",
+   "texto": "Lanzarle 10 peces al aire en el muelle y que los atrape",
+   "zona": "puerto",
+   "personaje": null
+  },
+  "seismosaurus": {
+   "tipo": "caminar",
+   "texto": "Caminar 5 km en total con él (es lento, ten paciencia)",
+   "zona": null,
+   "personaje": null
+  },
+  "supersaurus": {
+   "tipo": "alimentar",
+   "texto": "Darle 20 ramas altas de los robles del Valle",
+   "zona": "valle",
+   "personaje": null
+  },
+  "tupandactylus": {
+   "tipo": "jugar",
+   "texto": "Perseguir mariposas en los canteros de flores 6 veces",
+   "zona": "valle",
+   "personaje": null
+  },
+  "tupuxuara": {
+   "tipo": "mision",
+   "texto": "Ayudar a Amelia a guiar a 3 viajeros por el camino del Bosque Sur",
+   "zona": "bosque",
+   "personaje": "amelia"
+  },
+  "altirhinus": {
+   "tipo": "alimentar",
+   "texto": "Darle 10 bayas del Valle",
+   "zona": "valle",
+   "personaje": null
+  },
+  "fukuisaurus": {
+   "tipo": "jugar",
+   "texto": "Esconder 5 piñas en el bosque y que las encuentre",
+   "zona": "bosque",
+   "personaje": null
+  },
+  "iguanodon": {
+   "tipo": "mision",
+   "texto": "Marcar 4 puntos nuevos en el mapa de Mirela",
+   "zona": null,
+   "personaje": "mirela"
+  },
+  "lanzhousaurus": {
+   "tipo": "caminar",
+   "texto": "Visitar con él todas las casas del Valle",
+   "zona": "valle",
+   "personaje": null
+  },
+  "maiasaura": {
+   "tipo": "mision",
+   "texto": "Cuidar con Iris un nido de 3 huevos en el Valle",
+   "zona": "valle",
+   "personaje": "iris"
+  },
+  "parasaurolophus": {
+   "tipo": "mision",
+   "texto": "Cantar con Rose a la orilla del Estanque del Norte",
+   "zona": "montana",
+   "personaje": "rose"
+  },
+  "saurolophus_naranja": {
+   "tipo": "jugar",
+   "texto": "Jugar al pilla-pilla con el Saurolophus Verde invocado",
+   "zona": null,
+   "personaje": null
+  },
+  "saurolophus_verde": {
+   "tipo": "alimentar",
+   "texto": "Darle 8 brotes tiernos del pinar",
+   "zona": "bosque",
+   "personaje": null
+  },
+  "shantungosaurus": {
+   "tipo": "caminar",
+   "texto": "Cruzar 10 veces el Muelle de Madera del bosque",
+   "zona": "bosque",
+   "personaje": null
+  },
+  "dilophosaurus": {
+   "tipo": "jugar",
+   "texto": "Hacer la danza de las crestas en la plaza del Puerto 3 veces",
+   "zona": "puerto",
+   "personaje": null
+  },
+  "liliensternus": {
+   "tipo": "caminar",
+   "texto": "Correr 3 km con él",
+   "zona": null,
+   "personaje": null
+  },
+  "neovenator": {
+   "tipo": "jugar",
+   "texto": "Ganarle 4 carreras contra el viento en la terraza de la montaña",
+   "zona": "montana",
+   "personaje": null
+  },
+  "sinraptor": {
+   "tipo": "alimentar",
+   "texto": "Darle 8 pescados secos del Puerto",
+   "zona": "puerto",
+   "personaje": null
+  },
+  "szechuanosaurus": {
+   "tipo": "jugar",
+   "texto": "Hacer una carrera de saltos por las dunas del Puerto",
+   "zona": "puerto",
+   "personaje": null
+  },
+  "afrovenator": {
+   "tipo": "caminar",
+   "texto": "Explorar los cuatro extremos de la isla (norte, sur, este y oeste)",
+   "zona": null,
+   "personaje": null
+  },
+  "allosaurus": {
+   "tipo": "mision",
+   "texto": "Seguir sin detenerse la ruta táctica que marca Darius",
+   "zona": "valle",
+   "personaje": "darius"
+  },
+  "carnotaurus": {
+   "tipo": "mision",
+   "texto": "Ganar la carrera clandestina de Cross por las calles del Puerto",
+   "zona": "puerto",
+   "personaje": "cross"
+  },
+  "ceratosaurus": {
+   "tipo": "mision",
+   "texto": "Tomar 3 lecciones de duelo con Irena",
+   "zona": "valle",
+   "personaje": "irena"
+  },
+  "deltadromeus": {
+   "tipo": "caminar",
+   "texto": "Correr 4 km con él",
+   "zona": null,
+   "personaje": null
+  },
+  "gojirasaurus": {
+   "tipo": "jugar",
+   "texto": "Ganar un concurso de rugidos contra 3 chibis invocados",
+   "zona": null,
+   "personaje": null
+  },
+  "majungasaurus": {
+   "tipo": "mision",
+   "texto": "Dejar que Trebor ajuste su arnés en la plaza del Puerto",
+   "zona": "puerto",
+   "personaje": "trebor"
+  },
+  "megaraptor": {
+   "tipo": "jugar",
+   "texto": "Lanzarle el disco 15 veces y que lo atrape en el aire",
+   "zona": null,
+   "personaje": null
+  },
+  "utahraptor": {
+   "tipo": "mision",
+   "texto": "Entrenar 3 ráfagas de viento con Blanche en la terraza",
+   "zona": "montana",
+   "personaje": "blanche"
+  },
+  "indoraptor": {
+   "tipo": "jugar",
+   "texto": "Encontrarlo 5 veces escondido de noche por la Forja",
+   "zona": "forja",
+   "personaje": null
+  },
+  "brontosaurus": {
+   "tipo": "caminar",
+   "texto": "Caminar 10 km en total con él",
+   "zona": null,
+   "personaje": null
+  },
+  "cryolophosaurus": {
+   "tipo": "mision",
+   "texto": "Mirar las estrellas con Selene desde la terraza 3 noches",
+   "zona": "montana",
+   "personaje": "selene"
+  },
+  "deinonychus": {
+   "tipo": "jugar",
+   "texto": "Cazar en manada: jugar con 3 chibis invocados a la vez",
+   "zona": null,
+   "personaje": null
+  },
+  "indominus_rex": {
+   "tipo": "alimentar",
+   "texto": "Ganarse su confianza: alimentarlo 7 días seguidos",
+   "zona": null,
+   "personaje": null
+  },
+  "megalosaurus": {
+   "tipo": "alimentar",
+   "texto": "Darle un festín de 30 comidas de cualquier tipo",
+   "zona": null,
+   "personaje": null
+  },
+  "pachycephalosaurus": {
+   "tipo": "mision",
+   "texto": "Patrullar con Helmep las tres aldeas",
+   "zona": null,
+   "personaje": "helmep"
+  },
+  "therizinosaurus": {
+   "tipo": "mision",
+   "texto": "Podar con sus garras 8 arbustos del bosque",
+   "zona": "bosque",
+   "personaje": null
+  },
+  "pawpawsaurus": {
+   "tipo": "jugar",
+   "texto": "Acariciarlo 20 veces",
+   "zona": null,
+   "personaje": null
+  },
+  "piatnitzkysaurus": {
+   "tipo": "caminar",
+   "texto": "Dar un paseo de 500 m con él (el vínculo más fácil)",
+   "zona": null,
+   "personaje": null
+  },
+  "quetzalcoatlus": {
+   "tipo": "mision",
+   "texto": "Llevarlo al punto más alto al que se pueda subir en la montaña",
+   "zona": "montana",
+   "personaje": null
+  },
+  "anhanguera": {
+   "tipo": "alimentar",
+   "texto": "Darle 6 peces pequeños de los estanques del bosque",
+   "zona": "bosque",
+   "personaje": null
+  },
+  "velociraptor": {
+   "tipo": "mision",
+   "texto": "Pasar la prueba de Jack en la puerta del club",
+   "zona": "puerto",
+   "personaje": "jack"
+  }
+ }
+}

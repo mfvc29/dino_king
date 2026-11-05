@@ -90,9 +90,15 @@
   function leer() {
     try {
       const p = JSON.parse(localStorage.getItem(CLAVE) || '{}');
-      return { encontradas: Array.isArray(p.encontradas) ? p.encontradas : [], guardianes: Array.isArray(p.guardianes) ? p.guardianes : [] };
+      return {
+        encontradas: Array.isArray(p.encontradas) ? p.encontradas : [],
+        guardianes: Array.isArray(p.guardianes) ? p.guardianes : [],
+        invocado: typeof p.invocado === 'string' ? p.invocado : null, // dino que te acompaña por la isla
+        vinculos: Array.isArray(p.vinculos) ? p.vinculos : [],         // misión de vínculo cumplida → puede combatir
+        metros: p.metros && typeof p.metros === 'object' ? p.metros : {} // metros caminados junto a cada dino
+      };
     } catch (e) {
-      return { encontradas: [], guardianes: [] };
+      return { encontradas: [], guardianes: [], invocado: null, vinculos: [], metros: {} };
     }
   }
 
@@ -134,7 +140,55 @@
     return p;
   }
 
+  // ---------------- Invocación y misiones de vínculo (assets/dinos/requisitos_chibi.json) ----------------
+  let REQ = {};
+  async function cargarRequisitos() {
+    try { REQ = (await (await fetch('/assets/dinos/requisitos_chibi.json')).json()).requisitos || {}; } catch (e) { REQ = {}; }
+    return REQ;
+  }
+  const requisitoVinculo = (id) => REQ[id] || null;
+  // Metros a recorrer si la misión es de distancia ("Correr 2 km", "paseo de 500 m"); null si no se mide así todavía
+  function metaMetros(id) {
+    const r = REQ[id];
+    if (!r || r.tipo !== 'caminar') return null;
+    let m = /(\d+(?:,\d+)?)\s*km\b/.exec(r.texto);
+    if (m) return Math.round(parseFloat(m[1].replace(',', '.')) * 1000);
+    m = /(\d+)\s*m\b/.exec(r.texto);
+    return m ? parseInt(m[1], 10) : null;
+  }
+  function estadoVinculo(id, p = leer()) {
+    const meta = metaMetros(id), hechos = Math.round(p.metros[id] || 0);
+    return { hecho: p.vinculos.includes(id), meta, hechos, medible: meta !== null };
+  }
+  function invocar(id) { const p = leer(); p.invocado = id; guardar(p); return p; }
+  function guardarCompanero() { const p = leer(); p.invocado = null; guardar(p); return p; }
+  // Suma metros caminados con el dino invocado; si su misión es de distancia y se alcanza, se crea el vínculo
+  function sumarMetros(id, m) {
+    const p = leer();
+    p.metros[id] = (p.metros[id] || 0) + m;
+    let nuevo = false;
+    const meta = metaMetros(id);
+    if (meta !== null && p.metros[id] >= meta && !p.vinculos.includes(id)) { p.vinculos.push(id); nuevo = true; }
+    guardar(p);
+    return { p, nuevo };
+  }
+
+  // Dinos iniciales de los hermanos protagonistas: ya vienen con la carta y el vínculo (listos para combatir)
+  const INICIALES = { fer: 'deltadromeus', ander: 'acrocanthosaurus' };
+  function otorgarInicial(heroe) {
+    const id = INICIALES[heroe];
+    if (!id) return null;
+    const p = leer();
+    let cambio = false;
+    if (!p.encontradas.includes(id)) { p.encontradas.push(id); cambio = true; }
+    if (!p.vinculos.includes(id)) { p.vinculos.push(id); cambio = true; }
+    if (cambio) guardar(p);
+    return id;
+  }
+
   window.CartasIsla = {
+    INICIALES, otorgarInicial,
+    cargarRequisitos, requisitoVinculo, metaMetros, estadoVinculo, invocar, guardarCompanero, sumarMetros,
     CLAVE, GUARDIANES, CAMPEON, MITICAS, NIVELES, ZONAS,
     usarDinos, poder, nivel, requisitos, leer, guardar, esMitica, sellada, requisitoCumplido, textoRequisito,
     marcarEncontrada, marcarGuardian

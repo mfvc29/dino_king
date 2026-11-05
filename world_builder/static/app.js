@@ -4289,6 +4289,11 @@ window.DinoPhysics = {
 
   onKey(e, isDown) {
     const k = e.key.toLowerCase();
+    // Con el Dino Lector abierto, Esc solo lo cierra y el juego no recibe teclas
+    if (window.dinoLectorAbierto && window.dinoLectorAbierto()) {
+      if (isDown && k === 'escape') window.cerrarDinoLector();
+      return;
+    }
     if (k === 'w' || k === 'arrowup') this.keys.w = isDown;
     if (k === 's' || k === 'arrowdown') this.keys.s = isDown;
     if (k === 'a' || k === 'arrowleft') this.keys.a = isDown;
@@ -4486,7 +4491,10 @@ window.DinoPhysics = {
       this.infoDinos = {};
       (dj.dinos || []).forEach((d) => { this.infoDinos[d.id] = d; });
       window.CartasIsla.usarDinos(dj.dinos || []);
+      await window.CartasIsla.cargarRequisitos(); // misiones de vínculo de los compañeros
       this.cartas = oc.cartas || [];
+      // Fer y Ander ya tienen su dino inicial (carta y vínculo)
+      if (window.CartasIsla.otorgarInicial(this.personajeId)) this._prog = null;
       this._prog = window.CartasIsla.leer();
       this.desbloqueadas = new Set(this.cartas.filter((c) => !window.CartasIsla.sellada(c.id, this._prog)).map((c) => c.id));
       window.addEventListener('storage', (e) => { if (e.key === window.CartasIsla.CLAVE) { this._prog = null; this.revisarDesbloqueos(); } });
@@ -4571,8 +4579,11 @@ window.DinoPhysics = {
         </div>
         <button class="dlh-sonido" title="Sonido del lector">🔊</button>
       </div>
-      <a class="dlh-abrir" href="/dino_lector/" target="_blank" title="Ver tu colección en el Dino Lector">Abrir Dino Lector ↗</a>`;
+      <a class="dlh-abrir" href="/dino_lector/" title="Ver tu colección en el Dino Lector">Abrir Dino Lector</a>`;
     (document.getElementById('canvas-container') || document.body).appendChild(el);
+    el.querySelector('.dlh-abrir').onclick = (e) => { if (window.abrirDinoLector) { e.preventDefault(); window.abrirDinoLector(); } };
+    // Con el Dino Lector abierto el personaje se queda quieto (teclas sueltas)
+    window.addEventListener('dino-lector-abierto', () => { Object.keys(this.keys).forEach((k) => { this.keys[k] = false; }); });
     const bs = el.querySelector('.dlh-sonido');
     bs.onclick = () => { this.sonidoLector = this.sonidoLector === false; bs.textContent = this.sonidoLector === false ? '🔇' : '🔊'; bs.blur(); };
   },
@@ -4707,14 +4718,104 @@ window.DinoPhysics = {
         <div class="ce-nombre">${d.name}</div>
         <div class="ce-sub">${this.ICONO_ELEMENTO[d.element] || ''} ${(d.element || '').replace(/^./, (m) => m.toUpperCase())} · Colección ${p.encontradas.length} / ${this.cartas.length}</div>
         <div class="ce-botones">
-          <a href="/dino_lector/?dino=${encodeURIComponent(c.id)}" target="_blank">Ver en el Dino Lector</a>
+          <a href="/dino_lector/?dino=${encodeURIComponent(c.id)}" class="ce-ver">Ver en el Dino Lector</a>
           <button type="button">Seguir explorando</button>
         </div>
       </div>`;
     (document.getElementById('canvas-container') || document.body).appendChild(el);
     const cerrar = () => { if (el.parentNode) el.remove(); };
     el.querySelector('button').onclick = cerrar;
+    el.querySelector('.ce-ver').onclick = (e) => { if (window.abrirDinoLector) { e.preventDefault(); cerrar(); window.abrirDinoLector(c.id); } };
     setTimeout(cerrar, 7000);
+  },
+
+  // ================= COMPAÑERO: el dino invocado desde el Dino Lector te sigue por la isla =================
+  // Mientras te acompaña se cuentan los metros que caminan juntos; las misiones de vínculo de distancia se cumplen solas
+  // (ver CartasIsla.sumarMetros). Las demás misiones (jugar, alimentar, misiones con personajes) se programarán después.
+  ponerCompanero(id) {
+    if (this.companero) {
+      scene.remove(this.companero.g);
+      if (this.companero.mixer) this.companero.mixer.stopAllAction();
+      this.companero = null;
+    }
+    this.companeroId = id || null;
+    const B = window.BibliotecaMallas && window.BibliotecaMallas.mallas;
+    const def = id && B && B['mini_' + id];
+    if (!def || !this.avatar) return;
+    const multAntes = state.subdivisionMultiplier;
+    state.subdivisionMultiplier = (multAntes || 1) * 0.7;
+    let g;
+    try { g = def.construir(window.MallasComun); } finally { state.subdivisionMultiplier = multAntes; }
+    g.scale.setScalar(0.8);
+    g.traverse((o) => { if (o.isMesh) { o.castShadow = true; o.frustumCulled = false; if (o.name !== 'wireOverlay') applyRenderStyleToMesh(o); } });
+    const fx = Math.sin(this.heading), fz = Math.cos(this.heading);
+    const pos = new THREE.Vector3(this.pos.x - fx * 1.5, this.pos.y, this.pos.z - fz * 1.5);
+    g.position.copy(pos);
+    scene.add(g);
+    const c = { g, pos, rumbo: this.heading, mixer: null, acciones: {}, actual: null, ultimo: this.pos.clone(), pendientes: 0 };
+    if (g.animations && g.animations.length) {
+      c.mixer = new THREE.AnimationMixer(g);
+      g.animations.forEach((clip) => { c.acciones[clip.name] = c.mixer.clipAction(clip); });
+    }
+    this.companero = c;
+    const nombre = ((this.infoDinos || {})[id] || {}).name || id;
+    showToast(`🐾 ${nombre} te acompaña por la isla`);
+    if (c.acciones.Rugir) { c.acciones.Rugir.setLoop(THREE.LoopOnce); c.acciones.Rugir.clampWhenFinished = false; c.acciones.Rugir.reset().play(); c.actual = c.acciones.Rugir; }
+  },
+
+  animarCompanero(c, nombre, ritmo) {
+    const a = c.acciones[nombre];
+    if (!a) return;
+    a.timeScale = ritmo;
+    if (c.actual === a) return;
+    if (c.actual && c.actual.isRunning() && c.actual.getClip().name === 'Rugir' && c.actual.time < c.actual.getClip().duration * 0.9) return;
+    if (c.actual) c.actual.fadeOut(0.25);
+    a.reset().fadeIn(0.25).play();
+    c.actual = a;
+  },
+
+  actualizarCompanero(dt) {
+    const C = window.CartasIsla;
+    if (!C || !this.avatar) return;
+    const p = this.progreso();
+    const id = p.invocado && p.encontradas.includes(p.invocado) ? p.invocado : null;
+    if (id !== this.companeroId && window.BibliotecaMallas && window.BibliotecaMallas.mallas) this.ponerCompanero(id);
+    const c = this.companero;
+    if (!c) return;
+    // Lugar al que va: detrás del jugador y un poco a su izquierda
+    const fx = Math.sin(this.heading), fz = Math.cos(this.heading);
+    const tx = this.pos.x - fx * 1.5 + fz * 0.7, tz = this.pos.z - fz * 1.5 - fx * 0.7;
+    let dx = tx - c.pos.x, dz = tz - c.pos.z, d = Math.hypot(dx, dz);
+    if (d > 12) { c.pos.set(tx, this.pos.y, tz); dx = dz = d = 0; } // se quedó muy atrás: te alcanza
+    const vel = d > 0.3 ? Math.min(d * 2.0, 4.2) : 0;
+    let objetivo = this.heading;
+    if (vel > 0) {
+      c.pos.x += (dx / d) * vel * dt;
+      c.pos.z += (dz / d) * vel * dt;
+      objetivo = Math.atan2(dx, dz);
+    }
+    let dr = objetivo - c.rumbo;
+    dr = Math.atan2(Math.sin(dr), Math.cos(dr));
+    c.rumbo += dr * (1 - Math.exp(-dt * 6));
+    const suelo = this.getGroundHeight(c.pos.x, c.pos.z);
+    c.pos.y += (suelo.height - c.pos.y) * (1 - Math.exp(-dt * 12));
+    c.g.position.copy(c.pos);
+    c.g.rotation.y = c.rumbo;
+    if (c.mixer) {
+      if (vel > 0.25) this.animarCompanero(c, 'Caminar', Math.max(0.6, Math.min(2.5, vel / 1.1)));
+      else this.animarCompanero(c, 'Reposo', 1);
+      c.mixer.update(dt);
+    }
+    // Metros caminados juntos (se guardan cada 5 m)
+    const paso = Math.hypot(this.pos.x - c.ultimo.x, this.pos.z - c.ultimo.z);
+    c.ultimo.copy(this.pos);
+    if (paso > 0 && paso < 2) c.pendientes += paso;
+    if (c.pendientes >= 5) {
+      const r = C.sumarMetros(id, c.pendientes);
+      c.pendientes = 0;
+      this._prog = r.p;
+      if (r.nuevo) showToast(`✅ ¡Vínculo creado con ${((this.infoDinos || {})[id] || {}).name || id}! Ya puede usarse en combate.`);
+    }
   },
 
   toggleColisiones() {
@@ -5506,6 +5607,7 @@ window.DinoPhysics = {
     this.animarNPCs(dt);
     this.actualizarLector(dt);
     this.animarEfectosCarta(dt);
+    this.actualizarCompanero(dt);
     const vistazo = (this.keys.q ? 1.1 : 0) - (this.keys.e ? 1.1 : 0);
     let dYaw = this.heading + Math.PI + vistazo - this.camYaw;
     dYaw = Math.atan2(Math.sin(dYaw), Math.cos(dYaw));
@@ -5673,6 +5775,7 @@ function togglePlayableAvatar() {
   } else {
     p.active = false;
     p.pararNPCs(); // vuelven a su pose del editor
+    p.ponerCompanero(null);
     if (activeCamera && activeCamera.isPerspectiveCamera && p.fovEditor) {
       activeCamera.fov = p.fovEditor;
       activeCamera.updateProjectionMatrix();

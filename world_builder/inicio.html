@@ -130,7 +130,7 @@
           <small>Explora la Isla Pangea</small>
         </a>
         <button class="boton" id="btn-nueva" type="button">✦ Nueva partida</button>
-        <a class="boton" href="/dino_lector/">🦖 Dino Lector</a>
+        <a class="boton" href="/dino_lector/" onclick="if (window.abrirDinoLector) { event.preventDefault(); abrirDinoLector(); }">🦖 Dino Lector</a>
         <a class="boton" href="/editor" id="btn-editor">🛠️ Editar mapa</a>
         <button class="boton fantasma" id="btn-pantalla" type="button">⛶ Pantalla completa</button>
       </nav>
@@ -178,6 +178,7 @@
   </div>
 
   <script src="/static/cartas_isla.js"></script>
+  <script src="/static/lector_modal.js"></script>
   <script>
     (function () {
       const C = window.CartasIsla;
@@ -191,6 +192,7 @@
       document.querySelectorAll('.heroe-btn').forEach((b) => {
         b.onclick = () => {
           try { localStorage.setItem('dino_personaje_jugable', b.dataset.heroe); } catch (e) {}
+          if (C) C.otorgarInicial(b.dataset.heroe); // su dino inicial, ya desbloqueado por completo
           location.href = '/jugar';
         };
       });

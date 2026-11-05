@@ -173,8 +173,11 @@
     state.attacks = data.attacks || {};
     state.elements = data.elements || {};
 
-    // Cartas de la isla: niveles, requisitos y zona donde está escondida cada una
-    if (window.CartasIsla) window.CartasIsla.usarDinos(state.dinos);
+    // Cartas de la isla: niveles, requisitos y zona donde está escondida cada una; misiones de vínculo de cada dino
+    if (window.CartasIsla) {
+      window.CartasIsla.usarDinos(state.dinos);
+      await window.CartasIsla.cargarRequisitos();
+    }
     try {
       const oc = await (await fetch('/static/cartas_ocultas.json', { cache: 'no-store' })).json();
       (oc.cartas || []).forEach((c) => { state.ocultas[c.id] = c.zona; });
@@ -315,6 +318,16 @@
       estadoEl.className = `coleccion-estado ${estado}`;
       estadoEl.innerHTML = `${chip}<span>${txt}</span>`;
     }
+    // Sin la carta: estadísticas, técnicas y notas de campo ocultas (y su técnica estrella)
+    const tiene = estado === 'encontrada';
+    const grid = document.querySelector('.reading-panels-grid');
+    if (grid) grid.classList.toggle('hidden', !tiene);
+    const bloqueado = document.getElementById('panel-bloqueado');
+    if (bloqueado) bloqueado.classList.toggle('hidden', tiene);
+    const sigOculto = document.getElementById('reading-sig-badge');
+    if (sigOculto) sigOculto.classList.toggle('hidden', !tiene);
+    renderCompanero(dino, tiene, p);
+
     const viewport = document.getElementById('card-viewport');
     if (viewport) {
       // Paisaje ilustrado del elemento detrás del dino (assets/dinos/fondos)
@@ -343,7 +356,8 @@
     const artPath = getAssetUrl((dino.art && (dino.art.right || dino.art.left)) || dino.card || '');
 
     if (cardImg) cardImg.src = cardPath;
-    if (artImg) artImg.src = artPath;
+    // Pestaña "Chibi": el modelo chibi del mundo (en sombra si la carta aún no es tuya); si no tiene render, la ilustración
+    if (artImg) { artImg.onerror = () => { artImg.onerror = null; artImg.src = artPath; }; artImg.src = chibiUrl(dino); }
     // Pestaña "Dino": la versión grande (todas miran a la derecha) si la carta es tuya; si no, la sombra chibi
     const arteDer = getAssetUrl((dino.art && dino.art.right) || dino.card || '');
     const chibiImg = document.getElementById('chibi-img');
@@ -406,6 +420,43 @@
 
     // 8. Marcar tarjeta activa en la cuadrícula inferior
     updateActiveRosterCard(index);
+  }
+
+  // Panel Compañero: misión de vínculo única del dino, su progreso y el botón Invocar / Guardar en la carta
+  const TIPOS_MISION = { caminar: '🚶 Caminar', jugar: '🎾 Jugar', alimentar: '🍖 Alimentar', mision: '📜 Misión', coleccion: '📚 Colección' };
+  function renderCompanero(dino, tiene, p) {
+    const panel = document.getElementById('panel-companero');
+    const C = window.CartasIsla;
+    if (!panel || !C) return;
+    panel.classList.toggle('hidden', !tiene);
+    if (!tiene) return;
+    const req = C.requisitoVinculo(dino.id) || { tipo: 'mision', texto: 'Misión por definir' };
+    const ev = C.estadoVinculo(dino.id, p);
+    const invocado = p.invocado === dino.id;
+    document.getElementById('mision-tipo').textContent = TIPOS_MISION[req.tipo] || '📜 Misión';
+    document.getElementById('mision-texto').textContent = req.texto;
+    const pill = document.getElementById('vinculo-pill');
+    pill.textContent = ev.hecho ? '✅ Vínculo creado' : invocado ? '🐾 Te acompaña' : 'Sin vínculo';
+    const barra = document.getElementById('mision-progreso');
+    const detalle = document.getElementById('mision-detalle');
+    if (ev.hecho) {
+      barra.style.width = '100%';
+      detalle.textContent = '¡Misión cumplida! Ya puede usarse en combate.';
+    } else if (ev.medible) {
+      barra.style.width = `${Math.min(100, (100 * ev.hechos) / ev.meta)}%`;
+      const f = (m) => (m >= 1000 ? `${(m / 1000).toFixed(1).replace('.', ',')} km` : `${m} m`);
+      detalle.textContent = `${f(ev.hechos)} de ${f(ev.meta)} caminando juntos${invocado ? '' : ' · invócalo para seguir'}`;
+    } else {
+      barra.style.width = '0%';
+      detalle.textContent = invocado ? 'Te acompaña por la isla. Este tipo de misión se activará pronto.' : 'Invócalo para que te acompañe por la isla.';
+    }
+    const btn = document.getElementById('btn-invocar');
+    btn.textContent = invocado ? '🌙 Guardar en la carta' : '✨ Invocar';
+    btn.classList.toggle('guardar', invocado);
+    btn.onclick = () => {
+      if (invocado) C.guardarCompanero(); else C.invocar(dino.id);
+      applyDinoToUI(state.activeDino, state.activeDinoIndex);
+    };
   }
 
   function setStatBar(id, val) {
@@ -702,6 +753,13 @@
     const nextBtn = document.getElementById('btn-nav-next');
     if (prevBtn) prevBtn.onclick = () => selectDinoByIndex(state.activeDinoIndex - 1);
     if (nextBtn) nextBtn.onclick = () => selectDinoByIndex(state.activeDinoIndex + 1);
+
+    // Abierto como ventana flotante sobre el juego: "Volver a la isla" y Esc solo cierran la ventana
+    const enModal = window.self !== window.top;
+    const cerrarModal = () => window.parent.postMessage('cerrar-dino-lector', location.origin);
+    const volver = document.getElementById('btn-volver-isla');
+    if (volver && enModal) volver.onclick = (e) => { e.preventDefault(); cerrarModal(); };
+    if (enModal) window.addEventListener('keydown', (e) => { if (e.key === 'Escape') cerrarModal(); });
 
     // Filtro del álbum por colección
     const colSelect = document.getElementById('select-coleccion');

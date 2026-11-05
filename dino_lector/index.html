@@ -48,7 +48,7 @@
       </div>
 
       <div class="header-right">
-        <a href="/" class="device-action-link" title="Volver a la pantalla de inicio">
+        <a href="/" class="device-action-link" id="btn-volver-isla" title="Volver a la isla">
           <span>🏝️ Volver a la isla</span>
         </a>
       </div>
@@ -71,7 +71,7 @@
               🎴 Tarjeta
             </button>
             <button class="mode-tab" data-mode="art">
-              🎨 Ilustración
+              🧸 Chibi
             </button>
           </div>
 
@@ -147,6 +147,30 @@
             <span class="nav-index-counter" id="reading-nav-counter">1 / 105</span>
             <button id="btn-nav-next" class="nav-arrow-btn" title="Dinosaurio Siguiente (Flecha Derecha)">▶</button>
           </div>
+        </div>
+
+        <!-- COMPAÑERO: invocar al dino para cumplir su misión de vínculo (requisito para poder usarlo en combate) -->
+        <div class="tech-panel companero-panel" id="panel-companero">
+          <div class="tech-panel-header">
+            <span class="panel-icon">🧸</span>
+            <h3>Compañero</h3>
+            <span class="panel-pill" id="vinculo-pill">Sin vínculo</span>
+          </div>
+          <div class="companero-cuerpo">
+            <div class="mision">
+              <span class="mision-tipo" id="mision-tipo">🚶 Caminar</span>
+              <p class="mision-texto" id="mision-texto">—</p>
+              <div class="mision-barra"><i id="mision-progreso"></i></div>
+              <small class="mision-detalle" id="mision-detalle"></small>
+            </div>
+            <button class="btn-invocar" id="btn-invocar" type="button">✨ Invocar</button>
+          </div>
+        </div>
+
+        <!-- Carta aún no obtenida: estadísticas, técnicas y notas ocultas -->
+        <div class="tech-panel panel-bloqueado" id="panel-bloqueado">
+          <span class="candado">🔒</span>
+          <p>Encuentra esta carta en la isla para ver sus <b>estadísticas</b>, sus <b>técnicas</b> y sus <b>notas de campo</b>.</p>
         </div>
 
         <!-- PANELES DE LECTURA BIOMÉTRICA CON TABS O CUADRÍCULA TECNOLÓGICA -->

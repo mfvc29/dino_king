@@ -254,6 +254,27 @@ h1, h2, h3, .brand-title, .summon-title, .roster-title, .dino-display-name { fon
 /* Notas de campo */
 .lore-text { margin: 0 0 10px; line-height: 1.5; font-weight: 600; padding: 10px 14px; background: var(--crema-2); border-radius: 14px; border: 2px dashed var(--madera-2); }
 .lore-text small { color: var(--tinta-suave) !important; font-family: 'Nunito', sans-serif !important; }
+/* Compañero (invocar) y paneles bloqueados */
+.companero-panel { background: linear-gradient(135deg, #fffbeb, var(--theme-suave)); }
+.companero-cuerpo { display: flex; align-items: center; gap: 16px; }
+.mision { flex: 1; min-width: 0; }
+.mision-tipo { display: inline-block; font-size: 0.78rem; padding: 2px 10px; border-radius: 999px; background: var(--crema); border: 2px solid var(--madera); color: var(--madera); }
+.mision-texto { margin: 6px 0; font-family: 'Fredoka', sans-serif; font-size: 1.15rem; color: var(--madera); }
+.mision-barra { height: 12px; border-radius: 999px; background: #e7e5e4; border: 2px solid var(--madera); overflow: hidden; }
+.mision-barra i { display: block; height: 100%; width: 0; background: var(--theme-gradient); transition: width 0.4s; }
+.mision-detalle { display: block; margin-top: 4px; color: var(--tinta-suave); }
+.btn-invocar {
+  flex: none; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 1.2rem; padding: 12px 20px; cursor: pointer;
+  color: #fff; background: var(--theme-gradient); border: 3px solid var(--madera); border-radius: 18px; box-shadow: var(--sombra);
+  text-shadow: 0 2px 0 rgba(124, 45, 18, 0.5); transition: transform 0.08s, box-shadow 0.08s;
+}
+.btn-invocar:active { transform: translateY(4px); box-shadow: 0 2px 0 var(--madera); }
+.btn-invocar.guardar { background: linear-gradient(135deg, #a5b4fc, #818cf8); }
+.panel-bloqueado { display: flex; align-items: center; gap: 14px; padding: 22px; background: repeating-linear-gradient(135deg, #fffbeb 0 14px, #fef3c7 14px 28px); }
+.panel-bloqueado .candado { font-size: 2.4rem; }
+.panel-bloqueado p { margin: 0; font-size: 1.05rem; }
+@media (max-width: 640px) { .companero-cuerpo { flex-direction: column; align-items: stretch; } }
+
 /* ---------------- Álbum ---------------- */
 #cards-roster-drawer { padding: 14px 16px; }
 .roster-toolbar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
