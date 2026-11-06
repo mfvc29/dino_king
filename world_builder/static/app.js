@@ -4944,7 +4944,7 @@ window.DinoPhysics = {
           ${this.ENTRADAS.map((E, i) => `<button class="action-btn pem-ent" data-i="${i}" style="text-align:left;padding:4px 8px;font-size:0.76rem;">[${i + 1}] ${E.nombre}</button>`).join('')}</div>
         <div style="color:#94a3b8;line-height:1.45;font-size:0.72rem;">
           <b>W / S</b> avanzar / retroceder · <b>A / D</b> girar · <b>Shift</b> correr · <b>Espacio</b> saltar<br>
-          La cámara va sobre tu cabeza mirando al frente, hacia donde mira el personaje · <b>Q / E</b> vistazo a los lados · <b>Rueda</b> alejar para verte entero<br>
+          La cámara va detrás de ti mirando al frente, hacia donde mira el personaje · <b>Q / E</b> vistazo a los lados<br>
           <b>R</b> excavar carta · <b>G</b> jugar con tu dino · <b>C</b> ver colisiones · <b>F</b> celebrar · <b>1-6</b> ir a un lugar · <b>Esc</b> salir</div>`;
       (document.getElementById('canvas-container') || document.body).appendChild(el);
       el.querySelector('#pem-cerrar').onclick = () => this.mostrarPanelEntrada(false);
@@ -4972,18 +4972,21 @@ window.DinoPhysics = {
     return false;
   },
 
+  // Cámara FIJA (elegida por el usuario el 2026-11-06): la rueda ya no la mueve, solo se evita que la página se desplace
   alRueda(e) {
     if (!this.active) return;
     e.preventDefault();
-    this.camZoom = Math.max(1, Math.min(5, (this.camZoom || 1) * (e.deltaY > 0 ? 1.12 : 0.89)));
   },
 
-  // Cámara de juego: dos cabezas por encima de la cabeza y una cabeza por detrás (perspectiva de altura),
-  // mirando AL FRENTE, hacia donde mira el personaje, apenas inclinada hacia abajo (~10°).
-  // La rueda la aleja (camZoom 1 → 5): retrocede, sube un poco y se inclina para ver al personaje entero.
+  // Distancia fija de la cámara: equivale a alejar 6 pasos de rueda desde la vista "sobre la cabeza" (1,12^6 ≈ 1,97).
+  // Queda detrás y por encima del personaje, mirando al frente, con la parte de arriba de su cabeza asomando abajo.
+  CAM_ZOOM_FIJO: 1.97,
+
+  // Cámara de juego: detrás y por encima del personaje, mirando AL FRENTE (hacia donde mira el personaje), algo
+  // inclinada hacia abajo. La posición sale de camZoom (1 = sobre la cabeza … 5 = vista amplia), hoy fijo en CAM_ZOOM_FIJO.
   camaraDeseada() {
     const alto = this.altoModelo || 1.4, cabeza = alto * 0.38;
-    const t = Math.max(0, Math.min(1, ((this.camZoom || 1) - 1) / 4));
+    const t = Math.max(0, Math.min(1, (this.CAM_ZOOM_FIJO - 1) / 4));
     const atras = cabeza + t * 4.5, sobreCabeza = cabeza * 2 + t * 1.2, inclina = 0.17 + t * 0.28;
     const sy = Math.sin(this.camYaw), cy = Math.cos(this.camYaw);
     const baseY = this.camBaseY != null ? this.camBaseY : this.pos.y;
